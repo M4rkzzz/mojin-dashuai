@@ -1,6 +1,6 @@
 # 启动器更新
 
-beta.8 起，启动器从 `https://launcher-direct.boshan.uk:21708/v1/launcher` 读取 ECDSA P-256 签名清单。未开放时返回 404；当前已发布版本以 `packs/beta-release.json` 为准。更新文件从同一入口的 SHA256 对象路径下载，不附带账号凭据，也不在玩家侧切换其他来源。
+beta.10 起，启动器从 `https://launcher-direct.boshan.uk:21708/v1/launcher` 读取 ECDSA P-256 签名清单。未开放时返回 404；当前已发布版本以 `packs/beta-release.json` 为准。更新文件从同一入口的 SHA256 对象路径下载，不附带账号凭据，也不在玩家侧切换其他来源。
 
 每次打开在返回账号信息或显示可操作的登录页面前检查一次更新，准备完成后自动静默切换，无需运行安装程序。更新暂存至 `%LOCALAPPDATA%/Boshan/Launcher/updates`，核对发布序号和每个文件的大小、SHA256。新版位于独立目录，复用当前版本及缓存中未变化的文件，只下载新增或变化文件；旧程序、账号数据、游戏实例与 Java 均不覆盖。
 
@@ -13,7 +13,7 @@ beta.8 起，启动器从 `https://launcher-direct.boshan.uk:21708/v1/launcher` 
 完成 UI 构建与 Windows x64 自包含发布后执行：
 
 ```powershell
-dotnet src/Publisher/bin/Release/net10.0/Publisher.dll bundle-launcher artifacts/MojinDashuai 0.1.2-beta.8 8 https://launcher-direct.boshan.uk:21708 artifacts/launcher-release
+dotnet src/Publisher/bin/Release/net10.0/Publisher.dll bundle-launcher artifacts/MojinDashuai 0.1.2-beta.10 10 https://launcher-direct.boshan.uk:21708 artifacts/launcher-release
 dotnet src/Publisher/bin/Release/net10.0/Publisher.dll sign-launcher artifacts/launcher-release/launcher-release.json PRIVATE_KEY_PATH artifacts/launcher-release/launcher.signed.json
 python tools/publish-launcher-update.py artifacts/launcher-release
 ```
@@ -35,7 +35,7 @@ GitHub Release 工作流生成 ZIP、文件清单和 SHA256，创建草稿；签
 - .NET 测试覆盖无效签名、旧序号、同序号替换、路径穿越、缺失/重复/损坏文件、旧版保留及失败回退。
 - Windows 辅助进程实际启动并完成握手；提前退出的候选被拒绝，旧版仍可启动。没有使用游戏或账号目录。
 - 无窗口浏览器检查进度、就绪、重启阻塞和错误后重试。
-- API 0.1.5 已部署。既有公开版本的哈希及下载结果见 `packs/launcher-update-acceptance.json`；beta.8 的最终公开下载和激活结果另见 `packs/beta8-acceptance.json`，未回填项不视为通过。
+- API 0.1.5 已部署。既有公开版本的哈希及下载结果见 `packs/launcher-update-acceptance.json`；beta.10 的最终公开下载和激活结果另见 `packs/beta10-acceptance.json`，未回填项不视为通过。
 - 实际 beta.3 → beta.4 WPF 启动接管通过：旧进程 47416 正常退出，新进程 39004 打开窗口并报告就绪，随后正常关闭；原账号及游戏数据保留。此项使用真实发行构建和实际更新目录，不是辅助进程替身。设置中的“重启更新”按钮尚未人工点击，前端状态与命令测试已通过。
 
 2026-09-05 用户明确同意先开放内测。发布命令使用 `--activate --beta`，读取 `packs/beta-authorization.json` 与逐服 beta 验收记录；稳定版默认门槛保持不变。玩家下载使用 `/launcher/0.1.2-beta.5/MojinDashuai-windows-x64.zip` 命名路径，内容与签名清单的哈希对象相同，已验证大小与可用性。

@@ -28,7 +28,7 @@ API 0.1.5 按用户要求放开超级邀请码的保护名限制：尚未绑定�
 
 按用户最新要求，Cloudflare Global API Key 明文保存在本机 `D:/project/cfapi/credentials.json`，不依赖 GitHub Secrets。通过 `python tools/cloudflare-local.py inspect` 验证，`provision-launcher` 配置专用 Tunnel/DNS。主密钥不上传服务器；仅将单独生成的 Tunnel 凭据安装至 `secrets/tunnel-token`。完整说明见 [共用凭据](CLOUDFLARE-CREDENTIALS.md)。
 
-旧入口 `https://launcher.boshan.uk` 保留兼容，cloudflared 使用 HTTP/2。beta.8 使用 `https://launcher-direct.boshan.uk:21708` 的统一 HTTPS FRP 入口，不在玩家侧回退到旧域名或第三方文件源。Cloudflare 在此用于 DNS 等维护，不再是新版客户端的内容分发必经入口。
+旧入口 `https://launcher.boshan.uk` 保留兼容，cloudflared 使用 HTTP/2。beta.10 使用 `https://launcher-direct.boshan.uk:21708` 的统一 HTTPS FRP 入口，不在玩家侧回退到旧域名或第三方文件源。Cloudflare 在此用于 DNS 等维护，不再是新版客户端的内容分发必经入口。
 
 ```sh
 docker compose --profile tunnel up -d --no-deps cloudflared
@@ -73,7 +73,7 @@ Windows 默认使用 CmlLib 的官方文档接法，`microsoftClientId` 留空�
 
 ## 启动器更新与当前 API
 
-API 0.1.5 已部署。beta.8 的专项及最终发布状态见 `packs/beta8-acceptance.json`；不沿用 API 0.1.4 的检查次数作为本次结果。`/v1/launcher` 提供公开签名清单；尚未激活时返回 404。打包、签名、上传及激活见 [启动器更新](LAUNCHER-UPDATES.md)。历史 API 0.1.4 的升级备份与验收记录仍保留。
+API 0.1.5 已部署。beta.10 的专项及最终发布状态见 `packs/beta10-acceptance.json`；不沿用 API 0.1.4 的检查次数作为本次结果。`/v1/launcher` 提供公开签名清单；尚未激活时返回 404。打包、签名、上传及激活见 [启动器更新](LAUNCHER-UPDATES.md)。历史 API 0.1.4 的升级备份与验收记录仍保留。
 
 ## 统一下载对象
 
@@ -85,11 +85,13 @@ API 0.1.5 已部署。beta.8 的专项及最终发布状态见 `packs/beta8-acce
 
 ## 内测目录发布
 
-0.1.2-beta.7 已开放，用户批准暂缓干净 Windows 验收，记录见 `packs/beta-authorization.json`。`Publisher sign-beta` 只允许 beta 验收记录延后这一项，真实入服、正确 Java、自动来源以及三服地图/任务书/机器要求仍保留。稳定版 `sign` 不接受未通过干净 Windows 的记录。
+0.1.2-beta.10 已开放，用户批准暂缓干净 Windows 验收，记录见 `packs/beta-authorization.json`。`Publisher sign-beta` 只允许 beta 验收记录延后这一项，真实入服、正确 Java、自动来源以及三服地图/任务书/机器要求仍保留。稳定版 `sign` 不接受未通过干净 Windows 的记录。
 
 ```powershell
 python tools/publish-catalog.py --beta --sequence 1 --key PRIVATE_KEY_PATH
-python tools/publish-launcher-update.py artifacts/launcher-update-0.1.2-beta.7 --activate --beta
+python tools/publish-launcher-update.py artifacts/launcher-update-0.1.2-beta.10 --activate --beta
 ```
 
-后续目录发布必须提高序号；脚本先上传不可变清单，保留旧目录备份，再原子切换。当前目录序号 1，启动器更新序号 7。本次 beta.7 未重启三服生产进程；beta.6 的图标重启已另有授权及记录。
+后续目录发布必须提高序号；脚本先上传不可变清单，保留旧目录备份，再原子切换。当前目录序号 1，启动器更新序号 10。本次 beta.10 未重启三服生产进程；beta.6 的图标重启已另有授权及记录。
+
+三服统一入口空缓存安装、真实中断续传及文件校验均已通过，证据见 `packs/acceptance/beta8-network-install.json`。beta.10 的 UI、Windows 和 API 构建检查通过；已切换启动器签名清单，未重启三服。

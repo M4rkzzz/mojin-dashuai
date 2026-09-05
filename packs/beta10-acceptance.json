@@ -2,7 +2,7 @@
   "version": "0.1.2-beta.10",
   "channel": "beta",
   "recordedOn": "2026-09-05",
-  "status": "final-automated-checks-passed-publication-pending",
+  "status": "published-beta",
   "completeDeliveryClaimed": false,
   "changes": {
     "independentConcurrentInstanceDownloads": true,
@@ -30,7 +30,8 @@
     "finalApiAcceptanceChecksPassed": 47,
     "finalApiAcceptanceEvidence": "/tmp/mojin-api-0.1.5-result.log",
     "publicAccountFlowChecksPassed": 10,
-    "publicAccountFlowEvidence": "packs/acceptance/beta8-public-auth.json"
+    "publicAccountFlowEvidence": "packs/acceptance/beta8-public-auth.json",
+    "publicCatalogEvidence": "packs/acceptance/beta10-public-catalog.json"
   },
   "contentInventory": {
     "requiredObjects": 33962,
@@ -85,7 +86,7 @@
     "localMirrorStagingAndIdempotentImportFixture": true,
     "finalUnitTestsPassed": 160,
     "finalUnitTestsEvidence": "tests/Hub.Tests/TestResults/beta9-final.trx",
-    "ci": null,
+    "ci": "https://github.com/M4rkzzz/mojin-dashuai/actions/runs/33967597197",
     "nativeInstanceChecksPassed": 13,
     "dispatcherFixtureFiles": 1200,
     "dispatcherMaxGapMs": 25,
@@ -96,25 +97,31 @@
     "contentDialogLayoutCasesPassed": 8,
     "contentDialogLayoutEvidence": "packs/acceptance/beta9-content-layout.json",
     "maintenanceUiPassed": true,
-    "silentRouteSaveAndExplicitSaveFeedbackPassed": true
+    "silentRouteSaveAndExplicitSaveFeedbackPassed": true,
+    "ciPassed": true
   },
   "launcherUpdate": {
     "sequence": 10,
     "differentialPerFile": true,
     "unchangedFilesReusedLocally": true,
     "legacyBeta7UsesArchiveForFirstUpgrade": true,
-    "activated": false,
-    "publicFilesVerified": null,
-    "archiveSha256": null,
-    "archiveBytes": null
+    "activated": true,
+    "publicFilesVerified": true,
+    "archiveSha256": "ad95b814fa58f5edfbc7ab1e955d5ffd88280c40969ef9d8c20f53f358a5ac30",
+    "archiveBytes": 78342118,
+    "actualDifferentialDownloadBytes": 1152003,
+    "expectedDifferentialDownloadBytes": 1152003,
+    "differentialEvidence": "packs/acceptance/beta10-differential-update.json",
+    "publicArchiveRoundTripVerified": true,
+    "publicActivationEvidence": "packs/acceptance/beta10-public-activation.json"
   },
   "installer": {
     "version": "0.1.2-beta.10",
-    "downloadUrl": null,
-    "sha256": null,
-    "bytes": null,
-    "lifecyclePassed": null,
-    "publicDownloadVerified": null,
+    "downloadUrl": "https://launcher-direct.boshan.uk:21708/launcher/0.1.2-beta.10/MojinDashuai-Setup-0.1.2-beta.10-x64.exe",
+    "sha256": "d56e955be46b11273259aaa8a903dcc231da992b7e48858cbb14bc920a18be38",
+    "bytes": 55615916,
+    "lifecyclePassed": true,
+    "publicDownloadVerified": true,
     "localInstallationVerified": false
   },
   "notAccepted": {
@@ -134,12 +141,15 @@
     "Null final-publication fields mean pending, not passed.",
     "Prior clean-cache installs and real game joins remain historical evidence and do not replace beta.8 single-origin installation checks.",
     "LittleSkin protocol/cache/configuration checks do not establish the new provider's appearance in a real game window.",
-    "Windows per-Java high-performance preference is enabled by default and reversible; actual dual-GPU renderer and frame-rate have not been verified."
+    "Windows per-Java high-performance preference is enabled by default and reversible; actual dual-GPU renderer and frame-rate have not been verified.",
+    "Python urllib intermittently reported TLS EOF during a supplementary probe; the same catalog and all manifests succeeded through direct .NET HttpClient, and full downloads were verified. This local network is not a clean mainland-network acceptance environment."
   ],
   "baseline": "packs/beta9-acceptance.json",
   "cleanup": {
     "attempted": true,
     "completed": false,
     "reason": "Automatic approval review rejected deletion with blocked by policy; test content retained"
-  }
+  },
+  "codeCommit": "17f470b234c5bd4eded122720560cf9b50050e22",
+  "publishedAt": "2026-09-05T13:07:01.249769+00:00"
 }

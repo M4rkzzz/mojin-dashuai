@@ -1,0 +1,22 @@
+[
+  {
+    "route": "/v1/catalog",
+    "status": 200,
+    "sequence": 1
+  },
+  {
+    "route": "/v1/manifests/m3e/1",
+    "status": 200,
+    "sequence": 1
+  },
+  {
+    "route": "/v1/manifests/dc2/1",
+    "status": 200,
+    "sequence": 1
+  },
+  {
+    "route": "/v1/manifests/mb/1",
+    "status": 200,
+    "sequence": 1
+  }
+]

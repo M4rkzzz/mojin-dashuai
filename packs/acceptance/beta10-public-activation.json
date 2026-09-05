@@ -1,0 +1,14 @@
+[
+  {
+    "endpoint": "https://launcher-direct.boshan.uk:21708",
+    "sequence": 10,
+    "matchesSignedCandidate": true,
+    "version": "0.1.2-beta.10"
+  },
+  {
+    "endpoint": "https://launcher.boshan.uk",
+    "sequence": 10,
+    "matchesSignedCandidate": true,
+    "version": "0.1.2-beta.10"
+  }
+]
