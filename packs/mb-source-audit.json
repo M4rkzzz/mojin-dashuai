@@ -14969,6 +14969,7 @@
   "betaReady": true,
   "betaSequence": 3,
   "betaManifestSha256": "a2c8c2263d2845e879f40a054e09810dab1757524311977bdd4ea33ac23b1bfd",
-  "betaPublished": false,
-  "guiScaleRevision": "packs/revisions/mb-gui-scale.json"
+  "betaPublished": true,
+  "guiScaleRevision": "packs/revisions/mb-gui-scale.json",
+  "publishedCatalogSequence": 4
 }

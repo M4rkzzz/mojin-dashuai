@@ -26,13 +26,13 @@
   "packCatalogChanged": true,
   "catalogSequence": 4,
   "cleanWindows": false,
-  "ciPending": true,
+  "ciPending": false,
   "releaseOnHold": false,
   "reason": "Fourth server accepted and unified-client actual join passed; fresh installer rebuilt.",
   "publicLauncherVersion": "0.1.2-beta.12",
   "published": false,
   "activationAllowed": true,
-  "ciPassed": false,
+  "ciPassed": true,
   "fourthServerAccepted": true,
   "fourthServerUnifiedJoin": true,
   "sourceAudit": "packs/vw-source-audit.json",
@@ -40,11 +40,18 @@
   "framebufferScalePatch": "packs/revisions/mb-gui-scale.json",
   "unitTestsPassed": 213,
   "apiIsolatedChecksPassed": 47,
-  "ci": "https://github.com/M4rkzzz/mojin-dashuai/actions/runs/33975756826",
+  "ci": "https://github.com/M4rkzzz/mojin-dashuai/actions/runs/33975951100",
   "pythonDistributionTestsPassed": 44,
   "launcherDifferentialUpdateVerified": true,
   "launcherDifferentialDownloadBytes": 1408085,
   "launcherDifferentialBaseline": "0.1.2-beta.12",
   "playerConfirmedFourthServer": true,
-  "windowsCachePublicationRaceFixed": true
+  "windowsCachePublicationRaceFixed": true,
+  "ciJobs": {
+    "api": "success",
+    "ui": "success",
+    "windows": "success"
+  },
+  "installerBytes": 55859208,
+  "installerSha256": "5926b36cb1e7c458a47e50ab34a78bbcb4392c8bb8afb5540a3286ff2a674f80"
 }
