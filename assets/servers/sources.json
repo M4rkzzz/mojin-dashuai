@@ -1,0 +1,5 @@
+{
+  "m3e": {"source": "User-provided MSE client / manametalmod-8.0.4-2.jar", "entry": "assets/manametalmod/textures/misc/icon_32x32.png"},
+  "dc2": {"source": "https://www.curseforge.com/minecraft/modpacks/deceasedcraft", "image": "https://media.forgecdn.net/avatars/thumbnails/1577/605/256/256/639022081315858417.png"},
+  "mb": {"source": "User-provided Meatballcraft client", "entry": "config/itlt/icon.png"}
+}

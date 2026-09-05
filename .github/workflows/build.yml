@@ -29,6 +29,7 @@ jobs:
         with:
           name: launcher-ui-checks
           path: .local/*.png
+          include-hidden-files: true
           retention-days: 14
   windows:
     runs-on: windows-latest
@@ -52,6 +53,17 @@ jobs:
       - run: dotnet publish tests/LauncherUpdateFixture/LauncherUpdateFixture.csproj -c Release -r win-x64 --self-contained true -o .local/launcher-update-fixture
       - run: dotnet tests/NativeAccountSmoke/bin/Release/net10.0-windows/NativeAccountSmoke.dll --launcher-update-smoke .local/launcher-update-fixture
       - run: dotnet publish src/Launcher.Desktop/Launcher.Desktop.csproj -c Release -r win-x64 --self-contained true -o artifacts/MojinDashuai
+      - name: Build and verify Windows installer
+        shell: pwsh
+        run: |
+          $compiler = ./tools/ensure-inno.ps1
+          ./tools/build-installer.ps1 -Version 0.1.2-beta.6 -Source artifacts/MojinDashuai -Output artifacts/installer -Compiler $compiler
+          ./tools/check-installer.ps1 -Version 0.1.2-beta.6 -Source artifacts/MojinDashuai -Compiler $compiler
+      - uses: actions/upload-artifact@v4
+        with:
+          name: MojinDashuai-windows-x64-installer
+          path: artifacts/installer/
+          retention-days: 14
       - uses: actions/upload-artifact@v4
         with:
           name: MojinDashuai-windows-x64-preview

@@ -110,3 +110,12 @@ dialog{border-color:#454545;color:#f2f2f2}dialog::backdrop{background:#000b}.ski
 .detail-heading{display:flex;align-items:center;gap:14px}.detail-heading .detail-mark{width:52px;height:52px}
 .instance-picker button{display:inline-flex;align-items:center;gap:8px}.instance-picker .instance-mark{width:24px;height:24px}
 @media(max-width:850px){.card-top{justify-content:space-between}.brand.small .brand-logo{width:28px;height:28px}.detail-heading{gap:10px}.detail-heading .detail-mark{width:42px;height:42px}}
+
+.server-logo{image-rendering:auto}.server-logo[src$="m3e.png"]{image-rendering:pixelated}
+.card-routes{display:grid;gap:8px;margin:16px 0 18px;padding-top:13px;border-top:1px solid #ffffff24;font-size:12px}
+.card-route{display:flex;justify-content:space-between;align-items:center;gap:12px;color:#eeeeee}
+.route-latency{display:inline-flex;align-items:center;gap:7px;font-size:12px;font-weight:500;white-space:nowrap;font-variant-numeric:tabular-nums;letter-spacing:0}
+.latency-good{color:#8ed5a0}.latency-fair{color:#e7c56d}.latency-poor,.latency-offline{color:#ef9090}.latency-pending{color:#aaa}
+.latency-signal{flex-shrink:0}.route div>.route-latency{margin-top:6px}
+@media(min-width:851px){.world-card{min-height:420px}}
+@media(max-width:850px){.card-routes{margin:12px 0;gap:7px}.world-card{min-height:290px}}

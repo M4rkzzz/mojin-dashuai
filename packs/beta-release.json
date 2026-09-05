@@ -1,12 +1,12 @@
 {
-  "version": "0.1.2-beta.5",
+  "version": "0.1.2-beta.6",
   "channel": "beta",
-  "publishedAt": "2026-09-05T10:02:35.514917+00:00",
-  "downloadUrl": "http://103.40.14.100:21708/launcher/0.1.2-beta.5/MojinDashuai-windows-x64.zip",
-  "bytes": 78192763,
-  "sha256": "ffb1bb2a10e09c174229d821f61ec416ba3798f0aea052be0e4509e700a6f194",
+  "publishedAt": "2026-09-05T10:23:53.151158+00:00",
+  "downloadUrl": "http://103.40.14.100:21708/launcher/0.1.2-beta.6/MojinDashuai-Setup-0.1.2-beta.6-x64.exe",
+  "bytes": 55577360,
+  "sha256": "a9fb72d439a8fd4b3c68c4663ec39a10d83f9b5d908efb294f4993b8fb057d15",
   "catalogSequence": 1,
-  "launcherSequence": 5,
+  "launcherSequence": 6,
   "api": "https://launcher.boshan.uk",
   "publicCatalogVerified": true,
   "publicManifestsVerified": [
@@ -24,14 +24,34 @@
   "completeDeliveryClaimed": false,
   "approval": "packs/beta-authorization.json",
   "validationBaselineLauncherVersion": "0.1.2-beta.4",
-  "brandingOnly": true,
+  "brandingOnly": false,
   "gamePacksChanged": false,
   "uiBrandingVerified": true,
   "publicLauncherArchiveRoundTripVerified": true,
   "desktopShortcutUpdated": true,
   "playerDataUnchanged": true,
-  "productionServerProcessesUnchanged": true,
+  "productionServerProcessesUnchanged": false,
   "productionServerIconsChanged": true,
-  "liveServerIconsVerified": false,
-  "serverIconReport": "packs/server-icons.json"
+  "liveServerIconsVerified": true,
+  "serverIconReport": "packs/server-icons.json",
+  "delivery": "windows-installer",
+  "installerVerified": true,
+  "localInstallationVerified": true,
+  "serverSelectionOriginalIcons": true,
+  "serverSelectionRouteLatency": true,
+  "latencySignalThresholdsMs": {
+    "greenBelow": 100,
+    "yellowBelow": 200,
+    "redFrom": 200
+  },
+  "productionServerRestartApproved": true,
+  "updateArchive": {
+    "version": "0.1.2-beta.6",
+    "sequence": 6,
+    "sha256": "6a96f092a25b29fab6c7d0a9b454b5cd3d2ef754c06332b8e287a574bdb32616",
+    "bytes": 78275070,
+    "downloadUrl": "http://103.40.14.100:21708/launcher/0.1.2-beta.6/MojinDashuai-windows-x64.zip",
+    "publicDownloadVerified": true,
+    "activated": true
+  }
 }

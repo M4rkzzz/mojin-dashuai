@@ -1,0 +1,30 @@
+{
+  "version": "0.1.2-beta.6",
+  "passed": true,
+  "realInstallerExecuted": true,
+  "separateTestAppId": true,
+  "silent": true,
+  "unicodeAndSpacePath": true,
+  "shortcutsVerified": true,
+  "perUserUninstallRegistration": true,
+  "upgradeKeepsInstallDirectory": true,
+  "upgradedFilesVerified": true,
+  "uninstallVerified": true,
+  "playerFilesPreservedInsideAndOutsideInstall": true,
+  "gameOrLauncherStarted": false,
+  "cleanWindows": false,
+  "publication": {
+    "version": "0.1.2-beta.6",
+    "fileName": "MojinDashuai-Setup-0.1.2-beta.6-x64.exe",
+    "bytes": 55577360,
+    "sha256": "a9fb72d439a8fd4b3c68c4663ec39a10d83f9b5d908efb294f4993b8fb057d15",
+    "format": "inno-setup",
+    "perUser": true,
+    "acceptanceFixture": false,
+    "downloadUrl": "http://103.40.14.100:21708/launcher/0.1.2-beta.6/MojinDashuai-Setup-0.1.2-beta.6-x64.exe",
+    "publicDownloadVerified": true,
+    "publicArchiveRoundTripVerified": true
+  },
+  "productionInstallerInstalledSilently": true,
+  "actualProductionWindowOpened": false
+}

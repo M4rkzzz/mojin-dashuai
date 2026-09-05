@@ -18,6 +18,7 @@ try {
   if(!ready) throw new Error('UI preview server did not become ready.');
   await check('chrome-check.mjs');
   await check('visual-check.mjs');
+  await check('routes-check.mjs');
   await check('avatar-check.mjs');
   await check('storage-check.mjs');
   await check('microsoft-check.mjs');

@@ -22,67 +22,75 @@
       "backup": null
     }
   ],
-  "gameServicesRestarted": false,
+  "gameServicesRestarted": true,
   "checkedAt": "2026-09-05T09:57:59.717372+00:00",
   "source": "ui/public/brand/server-icon.png",
   "sha256": "876e7a8a5c8aa5d2c46572c9d8720c90df00a6eeccd609bf7ed3e2a27563730a",
   "gameMenusChanged": false,
-  "liveStatusIconVerified": false,
-  "liveStatusCheckedAt": "2026-09-05T10:00:25.258942+00:00",
+  "liveStatusIconVerified": true,
+  "liveStatusCheckedAt": "2026-09-05T10:17:43.915857+00:00",
   "liveStatus": [
     {
       "instance": "m3e",
       "domain": "mc.m3e.boshan.uk",
       "reachable": true,
       "onlinePlayers": 0,
-      "hasIcon": false,
-      "sha256": null,
-      "matchesApprovedIcon": false
+      "hasIcon": true,
+      "sha256": "223d7e198624c02f7ce299a598dd512df3d36ef7dcb025c3c7a4209ec44fc9ef",
+      "pixelSha256": "bb54507afa3d9ebdf15da390415a47be9493fc0b651105a7764f88338962809d",
+      "matchesApprovedIcon": true
     },
     {
       "instance": "m3e",
       "domain": "mc.m3e.bk.boshan.uk",
       "reachable": true,
       "onlinePlayers": 0,
-      "hasIcon": false,
-      "sha256": null,
-      "matchesApprovedIcon": false
+      "hasIcon": true,
+      "sha256": "223d7e198624c02f7ce299a598dd512df3d36ef7dcb025c3c7a4209ec44fc9ef",
+      "pixelSha256": "bb54507afa3d9ebdf15da390415a47be9493fc0b651105a7764f88338962809d",
+      "matchesApprovedIcon": true
     },
     {
       "instance": "dc2",
       "domain": "dc2.mc.boshan.uk",
       "reachable": true,
       "onlinePlayers": 0,
-      "hasIcon": false,
-      "sha256": null,
-      "matchesApprovedIcon": false
+      "hasIcon": true,
+      "sha256": "223d7e198624c02f7ce299a598dd512df3d36ef7dcb025c3c7a4209ec44fc9ef",
+      "pixelSha256": "bb54507afa3d9ebdf15da390415a47be9493fc0b651105a7764f88338962809d",
+      "matchesApprovedIcon": true
     },
     {
       "instance": "dc2",
       "domain": "dc2.bk.mc.boshan.uk",
       "reachable": true,
       "onlinePlayers": 0,
-      "hasIcon": false,
-      "sha256": null,
-      "matchesApprovedIcon": false
+      "hasIcon": true,
+      "sha256": "223d7e198624c02f7ce299a598dd512df3d36ef7dcb025c3c7a4209ec44fc9ef",
+      "pixelSha256": "bb54507afa3d9ebdf15da390415a47be9493fc0b651105a7764f88338962809d",
+      "matchesApprovedIcon": true
     },
     {
       "instance": "mb",
       "domain": "mb.mc.boshan.uk",
       "reachable": true,
       "onlinePlayers": 0,
-      "hasIcon": false,
-      "sha256": null,
-      "matchesApprovedIcon": false
+      "hasIcon": true,
+      "sha256": "223d7e198624c02f7ce299a598dd512df3d36ef7dcb025c3c7a4209ec44fc9ef",
+      "pixelSha256": "bb54507afa3d9ebdf15da390415a47be9493fc0b651105a7764f88338962809d",
+      "matchesApprovedIcon": true
     },
     {
       "instance": "mb",
       "domain": "mb.bk.mc.boshan.uk",
       "reachable": true,
       "onlinePlayers": 0,
-      "hasIcon": false,
-      "sha256": null,
-      "matchesApprovedIcon": false
+      "hasIcon": true,
+      "sha256": "223d7e198624c02f7ce299a598dd512df3d36ef7dcb025c3c7a4209ec44fc9ef",
+      "pixelSha256": "bb54507afa3d9ebdf15da390415a47be9493fc0b651105a7764f88338962809d",
+      "matchesApprovedIcon": true
     }
-  ]
+  ],
+  "pixelSha256": "bb54507afa3d9ebdf15da390415a47be9493fc0b651105a7764f88338962809d",
+  "restartReport": "packs/server-icon-restart.json"
 }

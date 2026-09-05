@@ -33,6 +33,12 @@ jobs:
         working-directory: ui
       - run: dotnet test tests/Hub.Tests/Hub.Tests.csproj -c Release
       - run: dotnet publish src/Launcher.Desktop/Launcher.Desktop.csproj -c Release -r win-x64 --self-contained true "-p:Version=$env:VERSION" -o artifacts/MojinDashuai
+      - name: Build and verify player installer
+        shell: pwsh
+        run: |
+          $compiler = ./tools/ensure-inno.ps1
+          ./tools/build-installer.ps1 -Version $env:VERSION -Source artifacts/MojinDashuai -Output artifacts/installer -Compiler $compiler
+          ./tools/check-installer.ps1 -Version $env:VERSION -Source artifacts/MojinDashuai -Compiler $compiler
       - run: dotnet build src/Publisher/Publisher.csproj -c Release
       - name: Package and create draft
         env:
@@ -43,5 +49,6 @@ jobs:
           $sequence = [DateTimeOffset]::UtcNow.ToUnixTimeSeconds()
           dotnet src/Publisher/bin/Release/net10.0/Publisher.dll bundle-launcher artifacts/MojinDashuai $env:VERSION $sequence http://103.40.14.100:21708 artifacts/launcher-release
           if ($LASTEXITCODE -ne 0) { throw 'Launcher bundle failed' }
-          (Get-FileHash artifacts/launcher-release/MojinDashuai-windows-x64.zip).Hash | Set-Content artifacts/launcher-release/SHA256.txt
-          gh release create "launcher-v$env:VERSION" artifacts/launcher-release/MojinDashuai-windows-x64.zip artifacts/launcher-release/launcher-release.json artifacts/launcher-release/SHA256.txt --draft --title "魔金大帅 $env:VERSION" --notes 'Windows x64 启动器。游戏内容通过独立签名目录发布。'
+          $setup = "artifacts/installer/MojinDashuai-Setup-$env:VERSION-x64.exe"
+          @($setup, 'artifacts/launcher-release/MojinDashuai-windows-x64.zip') | ForEach-Object { $file = Get-Item $_; '{0}  {1}' -f (Get-FileHash $file.FullName).Hash.ToLowerInvariant(),$file.Name } | Set-Content artifacts/launcher-release/SHA256.txt
+          gh release create "launcher-v$env:VERSION" $setup artifacts/launcher-release/MojinDashuai-windows-x64.zip artifacts/launcher-release/launcher-release.json artifacts/launcher-release/SHA256.txt --draft --title "魔金大帅 $env:VERSION" --notes '玩家请下载 Setup 安装包。ZIP 用于启动器内部更新。游戏内容与 Java 按需下载。'

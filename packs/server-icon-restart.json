@@ -1,0 +1,58 @@
+{
+  "approvedByUser": true,
+  "startedAt": "2026-09-05T10:10:21.102896+00:00",
+  "servers": [
+    {
+      "instance": "m3e",
+      "oldPid": 3198886,
+      "phase": "ready",
+      "startedAt": "2026-09-05T10:10:22.149348+00:00",
+      "online": 0,
+      "maximum": 20,
+      "saved": true,
+      "stopSent": true,
+      "newPid": 3662768,
+      "readyStatus": {
+        "online": 0,
+        "maximum": 20
+      },
+      "completedAt": "2026-09-05T10:11:00.603557+00:00"
+    },
+    {
+      "instance": "dc2",
+      "oldPid": 3368321,
+      "phase": "ready",
+      "startedAt": "2026-09-05T10:11:00.609990+00:00",
+      "online": 0,
+      "maximum": 20,
+      "saved": true,
+      "stopSent": true,
+      "newPid": 3664014,
+      "readyStatus": {
+        "online": 0,
+        "maximum": 20
+      },
+      "completedAt": "2026-09-05T10:11:39.349566+00:00"
+    },
+    {
+      "instance": "mb",
+      "oldPid": 3380322,
+      "phase": "ready",
+      "startedAt": "2026-09-05T10:11:39.361570+00:00",
+      "online": 0,
+      "maximum": 20,
+      "saved": true,
+      "stopSent": true,
+      "shutdownWaitExceeded": true,
+      "newPid": 3669577,
+      "readyStatus": {
+        "online": 0,
+        "maximum": 20
+      },
+      "completedAt": "2026-09-05T10:17:29.835310+00:00"
+    }
+  ],
+  "complete": true,
+  "recoveredFrom": "Timed out waiting for game state",
+  "completedAt": "2026-09-05T10:17:29.835310+00:00"
+}

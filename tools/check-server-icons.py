@@ -1,5 +1,6 @@
 """Read public Minecraft status icons without joining or restarting the servers."""
-import base64,concurrent.futures,datetime,hashlib,json,pathlib,socket,struct,urllib.parse,urllib.request
+import base64,concurrent.futures,datetime,hashlib,io,json,pathlib,socket,struct,urllib.parse,urllib.request
+from PIL import Image
 
 ROOT=pathlib.Path(__file__).resolve().parents[1]
 ROUTES={'m3e':['mc.m3e.boshan.uk','mc.m3e.bk.boshan.uk'],
@@ -27,6 +28,11 @@ def read_varint(connection):
         if byte<128:return value
     raise ValueError('Invalid status length')
 
+def pixel_hash(data):
+    with Image.open(io.BytesIO(data)) as image:
+        if image.format!='PNG' or image.size!=(64,64):raise ValueError('Unexpected favicon image')
+        return hashlib.sha256(image.convert('RGBA').tobytes()).hexdigest()
+
 def probe(instance,domain,expected):
     row={'instance':instance,'domain':domain}
     try:
@@ -47,8 +53,10 @@ def probe(instance,domain,expected):
             if not 0<size<=length:raise ValueError('Invalid status JSON size')
             status=json.loads(read_exact(connection,size))
         favicon=status.get('favicon','')
-        digest=hashlib.sha256(base64.b64decode(favicon.split(',',1)[1],validate=True)).hexdigest() if favicon.startswith('data:image/png;base64,') else None
-        row.update(reachable=True,onlinePlayers=status.get('players',{}).get('online'),hasIcon=bool(favicon),sha256=digest,matchesApprovedIcon=digest==expected)
+        png=base64.b64decode(''.join(favicon.split(',',1)[1].split()),validate=True) if favicon.startswith('data:image/png;base64,') else None
+        digest=hashlib.sha256(png).hexdigest() if png else None
+        pixels=pixel_hash(png) if png else None
+        row.update(reachable=True,onlinePlayers=status.get('players',{}).get('online'),hasIcon=bool(favicon),sha256=digest,pixelSha256=pixels,matchesApprovedIcon=pixels==expected)
     except Exception as error:
         row.update(reachable=False,error=type(error).__name__,matchesApprovedIcon=False)
     return row
@@ -56,10 +64,12 @@ def probe(instance,domain,expected):
 if __name__=='__main__':
     report_path=ROOT/'packs/server-icons.json'
     report=json.loads(report_path.read_text(encoding='utf-8'))
+    # Minecraft re-encodes the PNG; compare decoded pixels, not compression bytes.
+    expected=pixel_hash((ROOT/report['source']).read_bytes())
     with concurrent.futures.ThreadPoolExecutor(max_workers=6) as pool:
-        futures=[pool.submit(probe,instance,domain,report['sha256']) for instance,domains in ROUTES.items() for domain in domains]
+        futures=[pool.submit(probe,instance,domain,expected) for instance,domains in ROUTES.items() for domain in domains]
         rows=[future.result() for future in futures]
-    report.update(liveStatusCheckedAt=datetime.datetime.now(datetime.timezone.utc).isoformat(),liveStatus=rows,
+    report.update(pixelSha256=expected,liveStatusCheckedAt=datetime.datetime.now(datetime.timezone.utc).isoformat(),liveStatus=rows,
                   liveStatusIconVerified=all(row['matchesApprovedIcon'] for row in rows))
     report_path.write_text(json.dumps(report,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
     print(json.dumps({'liveStatusIconVerified':report['liveStatusIconVerified'],'routes':rows},ensure_ascii=False))
