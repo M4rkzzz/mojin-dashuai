@@ -34,6 +34,7 @@ public partial class App : Application
             // the parent already checked once for this user-initiated startup.
             if(checkNetwork)
             {
+                string? availableVersion=null;
                 try
                 {
                     var settingsPath=Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),"Boshan","Launcher","settings.json");
@@ -44,8 +45,10 @@ public partial class App : Application
                     if(envelope is not null)
                     {
                         var release=updates.AcceptMetadata(envelope);
-                        if(LauncherVersion.Compare(release.Version,ReleaseVersion)>0&&!updates.HasFailed(release))
+                        if(LauncherVersion.Compare(release.Version,ReleaseVersion)>0)
                         {
+                            availableVersion=release.Version;
+                            if(updates.HasFailed(release))throw new InvalidDataException("新版启动失败，已保留原版本。");
                             using var downloadTimeout=new CancellationTokenSource(TimeSpan.FromMinutes(10));
                             using var downloader=new Downloader(Path.Combine(updates.Root,"cache"),settings,origin:NetworkPolicy.DirectApi);
                             await updates.Prepare(envelope,downloader,token:downloadTimeout.Token);
@@ -56,7 +59,7 @@ public partial class App : Application
                 catch(Exception ex)
                 {
                     var diagnostic=NetworkPolicy.Find(ex);
-                    StartupUpdateState=new {Phase="failed",Version=(string?)null,Downloaded=0L,Total=0L,Error=diagnostic is null?"自动更新暂未完成，当前版本可继续使用。":NetworkPolicy.Message(diagnostic),Diagnostic=diagnostic};
+                    StartupUpdateState=new {Phase="failed",Version=availableVersion,Downloaded=0L,Total=0L,Error=diagnostic is null?"自动更新暂未完成，当前版本可继续使用。":NetworkPolicy.Message(diagnostic),Diagnostic=diagnostic};
                     // Keep diagnostic metadata without serializing URLs or credentials
                     // from exception messages, inner exceptions or the user's settings.
                     try{Json.Write(Path.Combine(updates.Root,"startup-check.json"),new {At=DateTimeOffset.UtcNow,Version=ReleaseVersion,Phase="failed",BeforeLogin=true,ErrorType=ex.GetType().Name,ex.HResult,Diagnostic=diagnostic});}catch(IOException){ }
@@ -67,6 +70,7 @@ public partial class App : Application
                 var ready=await updates.Ready(AppContext.BaseDirectory,ReleaseVersion);
                 if(ready is null)break;
                 if(await UpdateStartup.Start(updates,ready))return true;
+                StartupUpdateState=new {Phase="failed",Version=ready.Release.Version,Downloaded=0L,Total=0L,Error="新版启动失败，已保留原版本。可以重新检查更新。"};
             }
         }
         catch(Exception){ /* A damaged/unavailable update must not prevent the installed launcher opening. */ }

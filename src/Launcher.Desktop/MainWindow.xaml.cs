@@ -425,6 +425,7 @@ public partial class MainWindow : Window
     {
         if(checkingLauncherUpdate||restartingLauncher)return launcherUpdate;
         checkingLauncherUpdate=true;
+        string? availableVersion=null;
         void State(string phase,string? version=null,long downloaded=0,long total=0,string? error=null)
         {
             launcherUpdate=new {Phase=phase,Version=version,Downloaded=downloaded,Total=total,Error=error};
@@ -439,6 +440,7 @@ public partial class MainWindow : Window
                 var release=launcherUpdates.AcceptMetadata(envelope);
                 if(LauncherVersion.Compare(release.Version,App.ReleaseVersion)>0)
                 {
+                    availableVersion=release.Version;
                     if(retry)launcherUpdates.Retry(release);
                     if(launcherUpdates.HasFailed(release))throw new InvalidDataException("新版启动失败，已保留原版本。可以重新检查更新。");
                     var downloadBytes=await launcherUpdates.PendingDownloadBytes(release,AppContext.BaseDirectory);
@@ -453,11 +455,15 @@ public partial class MainWindow : Window
             if(ready is not null&&games.Count==0&&transfers.Count==0&&instanceOperations.Count==0&&savedDownloads.Count==0&&microsoftLogin is null)
             {
                 restartingLauncher=true;
-                try{if(await UpdateStartup.Start(launcherUpdates,ready)){Application.Current.Shutdown();return launcherUpdate;}}
+                try
+                {
+                    if(await UpdateStartup.Start(launcherUpdates,ready)){Application.Current.Shutdown();return launcherUpdate;}
+                    State("failed",ready.Release.Version,error:"新版启动失败，已保留原版本。可以重新检查更新。");
+                }
                 finally{restartingLauncher=false;}
             }
         }
-        catch(Exception ex){State("failed",error:Friendly(ex));Log("launcher-update",ex);}
+        catch(Exception ex){State("failed",availableVersion,error:Friendly(ex));Log("launcher-update",ex);}
         finally{checkingLauncherUpdate=false;}
         return launcherUpdate;
     }
