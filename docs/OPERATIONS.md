@@ -92,6 +92,6 @@ python tools/publish-catalog.py --beta --sequence 1 --key PRIVATE_KEY_PATH
 python tools/publish-launcher-update.py artifacts/launcher-update-0.1.2-beta.10 --activate --beta
 ```
 
-后续目录发布必须提高序号；脚本先上传不可变清单，保留旧目录备份，再原子切换。当前目录序号 1，启动器更新序号 10。本次 beta.10 未重启三服生产进程；beta.6 的图标重启已另有授权及记录。
+后续目录发布必须提高序号；脚本先上传不可变清单，保留旧目录备份，再原子切换。当前目录序号 1，启动器更新序号 12。本次 beta.10 未重启三服生产进程；beta.6 的图标重启已另有授权及记录。
 
 三服统一入口空缓存安装、真实中断续传及文件校验均已通过，证据见 `packs/acceptance/beta8-network-install.json`。beta.10 的 UI、Windows 和 API 构建检查通过；已切换启动器签名清单，未重启三服。

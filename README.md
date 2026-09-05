@@ -2,7 +2,7 @@
 
 Windows 三服统一客户端。React + TypeScript / WebView2 / .NET 10。自建账号服务使用 ASP.NET Core Identity + PostgreSQL。
 
-**0.1.2-beta.10 已开放内测。** [下载 Windows 安装包](https://launcher-direct.boshan.uk:21708/launcher/0.1.2-beta.10/MojinDashuai-Setup-0.1.2-beta.10-x64.exe) · [使用说明](docs/BETA-0.1.2.md)。干净 Windows 验收按用户决定延后，仍保留未通过记录；本次不认定为完整稳定版交付。
+**0.1.2-beta.10 已开放内测。** [下载 Windows 安装包](https://launcher-direct.boshan.uk:21708/launcher/0.1.2-beta.10/latency2/MojinDashuai-Setup-0.1.2-beta.10-x64.exe) · [使用说明](docs/BETA-0.1.2.md)。干净 Windows 验收按用户决定延后，仍保留未通过记录；本次不认定为完整稳定版交付。
 
 ## 启动开发环境
 
@@ -40,3 +40,5 @@ dotnet publish src/Launcher.Desktop/Launcher.Desktop.csproj -c Release -r win-x6
 三服游戏服务器保持现有离线认证。群服账号只验证启动器身份，不能阻止其他客户端使用同一昵称连接。
 
 管理和部署步骤见 [运维文档](docs/OPERATIONS.md)。
+
+当前 beta.10 安装包包含测速修复：进入页面只测一次，保留手动重测。已安装旧 beta.10 请关闭启动器后覆盖安装。

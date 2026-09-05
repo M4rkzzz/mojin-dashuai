@@ -1,6 +1,6 @@
 # 魔金大帅 0.1.2-beta.10
 
-已开放内测。[下载 Windows 安装包](https://launcher-direct.boshan.uk:21708/launcher/0.1.2-beta.10/MojinDashuai-Setup-0.1.2-beta.10-x64.exe)，约 53 MiB。启动器更新序号 10，beta.8、beta.9 未激活。
+已开放内测。[下载 Windows 安装包](https://launcher-direct.boshan.uk:21708/launcher/0.1.2-beta.10/latency2/MojinDashuai-Setup-0.1.2-beta.10-x64.exe)，约 53 MiB。启动器更新序号 12，beta.8、beta.9 未激活。
 
 ## 本轮修复
 
@@ -24,3 +24,5 @@
 本版最终自动化、安装包、差异更新和公开发布结果见 [验收记录](../packs/beta10-acceptance.json)。干净 Windows 首次使用、新 LittleSkin 游戏内画面及真实双显卡渲染器仍未验收。已申请高性能偏好并不保证所有设备最终都选择独显；依据与恢复规则见 [显卡处理](GPU-SELECTION.md)。
 
 自动化与安装包验证：[GitHub Actions](https://github.com/M4rkzzz/mojin-dashuai/actions/runs/33967597197)。完整更新包回读校验通过，差异更新实测下载 1,152,003 字节并核验全部 498 个文件。
+
+测速修正版 latency2 保持 beta.10：取消自动轮询，进入页面测一次，手动重测保留原读数，页面状态刷新不重复测速。已安装原 beta.10 的玩家需要覆盖安装；同版本不会自动升级。修正只涉及前端，原生程序文件与通过验收的 latency1 完全一致。记录见 [测速修复](../packs/beta10-latency-fix.json)。

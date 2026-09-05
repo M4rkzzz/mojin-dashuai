@@ -1,0 +1,9 @@
+{
+  "client": "direct .NET HttpClient",
+  "uniqueObjects": 496,
+  "sequence": 11,
+  "revision": "latency1",
+  "passed": true,
+  "version": "0.1.2-beta.10",
+  "matchesSignedCandidate": true
+}

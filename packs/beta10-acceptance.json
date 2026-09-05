@@ -153,5 +153,7 @@
     "reason": "Automatic approval review rejected deletion with blocked by policy; test content retained"
   },
   "codeCommit": "17f470b234c5bd4eded122720560cf9b50050e22",
-  "publishedAt": "2026-09-05T13:07:01.249769+00:00"
+  "publishedAt": "2026-09-05T13:07:01.249769+00:00",
+  "latestHotfix": "packs/beta10-latency-fix.json",
+  "baselineRevision": "initial"
 }
