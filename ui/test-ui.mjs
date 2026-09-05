@@ -19,4 +19,5 @@ try {
   await check('chrome-check.mjs');
   await check('visual-check.mjs');
   await check('avatar-check.mjs');
+  await check('storage-check.mjs');
 } finally {server.kill();}

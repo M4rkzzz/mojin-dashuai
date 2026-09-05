@@ -80,3 +80,17 @@ dialog label select{display:block;width:100%;margin-top:8px}
 @media(max-width:850px){.account{gap:6px;flex-wrap:wrap}.account>.avatar-button{flex-basis:36px}.account .skin-avatar{width:36px;height:45px}.account>span{font-size:11px}.account small{font-size:10px}}
 
 dialog{border-color:#454545;color:#f2f2f2}dialog::backdrop{background:#000b}.skin-refresh{margin-top:12px}
+
+.storage-page{flex:1;min-height:0;display:flex;flex-direction:column;overflow-y:auto;background:#090909}
+.storage-page>header{display:flex;justify-content:space-between;align-items:center;gap:24px;padding:28px 48px;flex-shrink:0}
+.storage-layout{flex:1;display:grid;place-items:center;padding:36px 48px 100px}
+.storage-panel{width:min(620px,100%);min-width:0}
+.storage-mark{color:#d3e9bb;margin-bottom:22px}
+.storage-panel h1{font-size:32px;line-height:1.4;letter-spacing:.5px;margin:0 0 36px;color:#f4f4f4}
+.storage-panel label{display:block;margin-bottom:12px;font-size:14px}
+.storage-path{display:flex;gap:12px;align-items:stretch}
+.storage-path input{flex:1;min-width:0;height:48px;font-size:14px}
+.storage-path .secondary{flex-shrink:0;gap:8px;padding:12px 16px;white-space:nowrap}
+.storage-confirm{display:flex;align-items:center;justify-content:space-between;gap:28px;min-width:228px;margin-top:32px;padding:15px 20px}
+@media(max-width:650px){.storage-page>header{padding:24px}.storage-layout{padding:30px 24px 64px}.storage-panel h1{font-size:26px}.storage-path{flex-direction:column}.storage-path input{flex-basis:48px}.storage-confirm{width:100%}}
+@media(max-height:680px){.storage-page>header{padding-top:18px;padding-bottom:18px}.storage-layout{padding-top:20px;padding-bottom:48px}.storage-panel h1{margin-bottom:24px}.storage-mark{margin-bottom:16px}}

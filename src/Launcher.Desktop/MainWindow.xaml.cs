@@ -42,7 +42,7 @@ public partial class MainWindow : Window
         {
             Directory.CreateDirectory(appData);
             var config=Json.Read<AppConfig>(Path.Combine(AppContext.BaseDirectory,"launcher.json"));
-            var settingsPath=Path.Combine(appData,"settings.json");settings=File.Exists(settingsPath)?Json.Read<LauncherSettings>(settingsPath):new();settings.Validate();
+            var settingsPath=Path.Combine(appData,"settings.json");settings=ContentDirectorySetup.LoadSettings(settingsPath);settings.Validate();
             accounts=new(new Vault(appData),config.Api,config.MicrosoftClientId);
             catalog=new(config.Api,config.PublicKeys,Path.Combine(appData,"catalog-checkpoint.json"));
             try{CoreWebView2Environment.GetAvailableBrowserVersionString();}
@@ -103,6 +103,8 @@ public partial class MainWindow : Window
     private async Task<object?> Dispatch(string command,JsonElement args)
     {
         string Id(){var id=args.GetProperty("instance").GetString()!;if(!Routes.Domains.ContainsKey(id))throw new InvalidDataException("未知服务器。");return id;}
+        if(!settings.ContentDirectoryConfigured&&(command.StartsWith("instance.",StringComparison.Ordinal)||command.StartsWith("download.",StringComparison.Ordinal)||command is "settings.save" or "directory.migrate" or "cache.clean" or "content.manage"))
+            throw new InvalidDataException("请先设置游戏文件保存位置。");
         switch(command)
         {
             case "bootstrap": return new {Profile=await accounts.Restore(),Settings=settings,WindowMaximized=WindowState==WindowState.Maximized,Installs=Routes.Domains.Keys.Select(id=>new {Id=id,Pack=new TransactionalInstaller(settings.Root).ReadInstalled(id)}).Where(x=>x.Pack is not null).ToDictionary(x=>x.Id,x=>new {Version=x.Pack!.Manifest.Version,State="installed"})};
@@ -111,14 +113,31 @@ public partial class MainWindow : Window
             case "auth.recover":return await accounts.Recover(args);
             case "auth.microsoft":return await accounts.MicrosoftLogin();
             case "auth.logout":await accounts.Logout();return null;
+            case "directory.choose":
+            {
+                if(accounts.Current is null)throw new InvalidDataException("请先登录账号。");
+                var picker=new OpenFolderDialog{Title="选择游戏文件保存位置"};
+                return picker.ShowDialog(this)==true?picker.FolderName:null;
+            }
+            case "directory.initialize":
+                await settingsGate.WaitAsync();
+                try
+                {
+                    if(accounts.Current is null)throw new InvalidDataException("请先登录账号。");
+                    if(games.Count>0||transfers.Count>0||pendingPacks.Count>0)throw new InvalidDataException("请先结束游戏和下载任务。");
+                    settings=ContentDirectorySetup.Complete(settings,Path.Combine(appData,"settings.json"),args.GetProperty("root").GetString()??"");
+                    return settings;
+                }
+                finally{settingsGate.Release();}
             case "settings.save":
                 await settingsGate.WaitAsync();
                 try
                 {
                     var next=args.Deserialize<LauncherSettings>(Json.Options)!;next.Validate();
+                    next.ContentDirectoryConfigured=settings.ContentDirectoryConfigured;
                     if(!Path.GetFullPath(next.Root).Equals(Path.GetFullPath(settings.Root),StringComparison.OrdinalIgnoreCase))throw new InvalidDataException("请通过目录迁移功能更换内容目录。");
                     foreach(var id in Routes.Domains.Keys)if(next.Java[id]!=settings.Java[id]&&!string.IsNullOrEmpty(next.Java[id]))await RuntimeManager.Validate(next.Java[id],id=="m3e"?8:id=="dc2"?17:25);
-                    settings=next;Json.Write(Path.Combine(appData,"settings.json"),settings);return null;
+                    Json.Write(Path.Combine(appData,"settings.json"),next);settings=next;return null;
                 }
                 finally{settingsGate.Release();}
             case "routes.probe":return (await Routes.ProbeAll(Id())).Select(x=>x.Latency).ToArray();
@@ -244,7 +263,7 @@ public partial class MainWindow : Window
             await Task.Run(()=>TransactionalInstaller.AtomicCopy(file,ContentSecurity.SafePath(destination,relative)));
         }
         settings.Root=destination;Json.Write(Path.Combine(appData,"settings.json"),settings);
-        return new {Message="目录迁移完成。旧目录保留，可核验后自行清理。"};
+        return new {Message="目录迁移完成。旧目录保留，可核验后自行清理。",Settings=settings};
     }
     private object CleanCache()
     {
@@ -304,5 +323,5 @@ public partial class MainWindow : Window
         // Do not serialize exception messages, request bodies, game command lines, URLs or account objects.
         File.AppendAllText(Path.Combine(appData,"diagnostic.log"),$"{DateTimeOffset.UtcNow:O} {command} {ex.GetType().Name}\n");
     }
-    private static string Friendly(Exception ex)=>ex is InvalidDataException or FileNotFoundException?ex.Message:ex is IOException?"文件操作未完成，请检查磁盘空间、目录权限或文件占用。":ex is HttpRequestException or TaskCanceledException?"网络连接暂时不可用，请稍后重试。":"操作未完成。可导出诊断日志并联系管理员。";
+    private static string Friendly(Exception ex)=>ex is InvalidDataException or FileNotFoundException?ex.Message:ex is UnauthorizedAccessException?"没有写入这个文件夹的权限，请选择其他位置。":ex is IOException?"文件操作未完成，请检查磁盘空间、目录权限或文件占用。":ex is HttpRequestException or TaskCanceledException?"网络连接暂时不可用，请稍后重试。":"操作未完成。可导出诊断日志并联系管理员。";
 }
