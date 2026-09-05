@@ -28,8 +28,9 @@ public sealed class GameLauncher
         await RuntimeManager.Validate(java,manifest.Runtime.Major,token);
         if(manifest.Instance=="mb")CleanroomAdapter.ValidatePrepared(instance,manifest);
         var launcher=FromInstalledFiles(instance);
-        var delayedJoin=manifest.Instance=="m3e";
-        if(delayedJoin&&!manifest.Files.Any(f=>f.Path=="mods/mojin-autoconnect-1.7.10-0.1.0.jar"))throw new InvalidDataException("一服连接组件尚未安装，请先更新客户端。");
+        var adapter=manifest.Instance switch {"m3e"=>"mods/mojin-autoconnect-1.7.10-0.1.0.jar","mb"=>"mods/mojin-autoconnect-cleanroom-0.1.0.jar",_=>null};
+        var delayedJoin=adapter is not null;
+        if(delayedJoin&&!manifest.Files.Any(f=>f.Path==adapter))throw new InvalidDataException("服务器连接组件尚未安装，请先更新客户端。");
         if(delayedJoin&&(!System.Text.RegularExpressions.Regex.IsMatch(route.Host,"^[A-Za-z0-9.-]+$")||route.Port is <1 or >65535))throw new InvalidDataException("服务器地址无效。");
         var jvm=new List<MArgument>{MArgument.FromCommandLine(settings.Jvm[manifest.Instance])};
         if(delayedJoin)jvm.Add(MArgument.FromCommandLine($"-Dmojin.join.host={route.Host} -Dmojin.join.port={route.Port}"));

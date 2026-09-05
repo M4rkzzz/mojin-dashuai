@@ -61,7 +61,9 @@ python tools/check-native-install.py
 
 `play-check` 始终使用 `Mojin_QA`，应在用户观察前明确告知，不能用它核对旧角色。需要验证已登录玩家时，使用 `NativeAccountSmoke --play-saved-account MANIFEST ROOT ROUTE EXPECTED_GAME_NAME`；它从原生加密会话恢复登录，严格核对游戏名，不允许通过改昵称冒充当前账号，也不迁移服务端存档。输出日志会遮盖已知游戏令牌。
 
-一服原生清单额外包含启动器自有的微型连接组件，在游戏初始化完成后再自动入服，解决直接传入 `--server` 引发的首次握手超时。标准外部启动器导入包仍使用原有内容，不依赖该连接组件，见 `src/GameIntegration/README.md`。
+一、三服原生清单额外包含启动器自有的微型连接组件，在游戏初始化完成后再自动入服。标准外部启动器导入包不依赖该连接组件，见 `src/GameIntegration/README.md`。
+
+`-mojin.1` 修订保留原有内容基线，为三服加入统一的 CustomSkinLoader 配置，二、三服另加入官方固定 `15.0.1` Universal JAR。一服保留原有 `14.17` ForgeLegacy 及兼容层。新增文件的大小、SHA256、原站和自建备用源固定在 `packs/client-integrations.json`，与模组基线一起进入 mrpack/packwiz 及原生清单；三服依然只允许 Cleanroom + Java 25。皮肤配置只查自建 API 和 Mojang，原客户端的皮肤缓存、其他站点和本地人物皮肤不进入分发。协议见 [CustomSkinLoader 官方实现](https://github.com/xfl03/MCCustomSkinLoader/blob/v15.0.1/Common/src/main/java/customskinloader/loader/jsonapi/CustomSkinAPI.java)，许可保存在 `packs/notices/CustomSkinLoader-LICENSE.txt`。兼容模组安装不等于游戏内显示已经验收。
 
 不带 `--publish-missing` 可仅做本地构建，缺少可用地址时会提示补传。`--draft` 保留给本地审查，不作为玩家包。实际缺少原文件或文件损坏才需要补齐，缺少发布出处不会卡住流程。
 

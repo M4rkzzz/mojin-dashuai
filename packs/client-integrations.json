@@ -1,0 +1,10 @@
+{
+  "skinLoader": {
+    "instances": ["dc2", "mb"],
+    "path": "mods/CustomSkinLoader_Universal-15.0.1.jar",
+    "size": 218215,
+    "sha256": "026d8b38ea93edccd647f60568193e79801a377b7bd4e916dcfc0d5482b767fc",
+    "url": "https://github.com/xfl03/MCCustomSkinLoader/releases/download/v15.0.1/CustomSkinLoader_Universal-15.0.1.jar",
+    "distributionBasis": "CustomSkinLoader official v15.0.1; GPL-3.0; https://github.com/xfl03/MCCustomSkinLoader/tree/v15.0.1"
+  }
+}

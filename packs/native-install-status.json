@@ -11,9 +11,9 @@
       "localVersionPrepared": true,
       "gameStarted": false,
       "joinedServer": false,
-      "elapsedSeconds": 8.3696895,
-      "files": 4779,
-      "manifestSha256": "5d42f4c30e7a32833a103c1dffbf911a1abbd28967569a40044e8ba3310429e3",
+      "elapsedSeconds": 8.5562199,
+      "files": 4780,
+      "manifestSha256": "7f87ccef03890deb15c2d5790bce59cd0ebb834e8a656faed79b75cd7a901209",
       "verification": "cached-install-and-process-preparation"
     },
     {
@@ -23,9 +23,9 @@
       "localVersionPrepared": true,
       "gameStarted": false,
       "joinedServer": false,
-      "elapsedSeconds": 14.0665138,
-      "files": 9861,
-      "manifestSha256": "57a82e0da3b2e7d3df3d8b6bc45d050af8568c0dd6fbb56374bb6218e92567fe",
+      "elapsedSeconds": 18.0058823,
+      "files": 9863,
+      "manifestSha256": "ee754c30cf5558c30acd95299a3d7ceebd56b5e7644ccb500c10a73d41a64f85",
       "verification": "cached-install-and-process-preparation"
     },
     {
@@ -35,9 +35,9 @@
       "localVersionPrepared": true,
       "gameStarted": false,
       "joinedServer": false,
-      "elapsedSeconds": 170.954188,
-      "files": 26886,
-      "manifestSha256": "c417193d8f122bf0d29c7b1530d307098b5b4b4bba71f3f50492782fb2d1114e",
+      "elapsedSeconds": 37.0818816,
+      "files": 26889,
+      "manifestSha256": "69045648c0e2010e692ce365d6c2b3544f9a507e816e7f4b4abcd39d8057cfce",
       "verification": "cached-install-and-process-preparation"
     }
   ],
@@ -56,7 +56,8 @@
       "state": "automatic-join-and-original-character-confirmed",
       "renderLogFloodObserved": true,
       "renderLogFilterVerified": true,
-      "renderLogFilterInGameRecheckPending": true
+      "renderLogFilterInGameRecheckPending": true,
+      "skinIntegrationGameCheckPending": true
     },
     "dc2": {
       "state": "automatic-join-and-user-gameplay-confirmed",
@@ -69,13 +70,19 @@
       "characterConfirmedByUser": true,
       "forgeRuntimeFilesFixed": true,
       "windowsSelectorFixed": true,
-      "normalExitCode": 0
+      "normalExitCode": 0,
+      "skinIntegrationGameCheckPending": true
     },
     "mb": {
-      "state": "loading-from-native-install",
+      "state": "retesting-delayed-connection-and-skin-integration",
       "javaMajor": 25,
       "account": "saved-microsoft-session",
-      "gameName": "M4rkzzz"
+      "gameName": "M4rkzzz",
+      "joinedServer": true,
+      "automaticConnectionAccepted": false,
+      "manualRejoinConfirmedByUser": true,
+      "startupSeconds": 267.435,
+      "skinIntegrationGameCheckPending": true
     }
   }
 }

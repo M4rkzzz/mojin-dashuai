@@ -4,7 +4,7 @@
   "frpBase": "http://103.40.14.100:21708",
   "instances": {
     "m3e": {
-      "name": "魔法金属", "version": "8.0.4-2", "minecraft": "1.7.10",
+      "name": "魔法金属", "version": "8.0.4-2-mojin.1", "minecraft": "1.7.10",
       "loader": "forge", "loaderVersion": "10.13.4.1614", "javaMajor": 8, "memoryMiB": 8192,
       "format": "modrinth", "source": "D:/Desktop/魔金大帅/.minecraft/versions/MSE",
       "include": ["config", "scripts", "resourcepacks", "shaderpacks", "structures", "ManaMetalModData/CustomDungeon"],
@@ -15,7 +15,7 @@
       ]
     },
     "dc2": {
-      "name": "亡者世界", "version": "5.10.17-zh-cn-r3", "minecraft": "1.20.1",
+      "name": "亡者世界", "version": "5.10.17-zh-cn-r3-mojin.1", "minecraft": "1.20.1",
       "loader": "forge", "loaderVersion": "47.4.0", "javaMajor": 17, "memoryMiB": 8192,
       "format": "modrinth", "source": "../DeceasedCraft-2-client-zh-5.10.17/overrides",
       "include": ["config", "customnpcs", "defaultconfigs", "kubejs", "resourcepacks", "shaderpacks", "tacz"],
@@ -26,7 +26,7 @@
       ]
     },
     "mb": {
-      "name": "肉丸工艺", "version": "0.18.6.4-cleanroom.0.5.17-alpha", "minecraft": "1.12.2",
+      "name": "肉丸工艺", "version": "0.18.6.4-cleanroom.0.5.17-alpha-mojin.1", "minecraft": "1.12.2",
       "loader": "cleanroom", "loaderVersion": "0.5.17-alpha", "javaMajor": 25, "memoryMiB": 8736,
       "format": "multimc-packwiz", "source": "D:/Desktop/【三服】肉丸工艺/dmeatball/.minecraft/versions/Meatballcraft",
       "modCacheExcludes": ["mods/memory_repo/**", "mods/1.12.2/**"],

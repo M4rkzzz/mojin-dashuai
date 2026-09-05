@@ -37,6 +37,22 @@
       "native": true,
       "partial": true,
       "catalogChanged": false
+    },
+    {
+      "publishedFiles": 2,
+      "publicSampleChecks": 1,
+      "standard": false,
+      "native": true,
+      "partial": true,
+      "catalogChanged": false
+    },
+    {
+      "publishedFiles": 35725,
+      "publicSampleChecks": 6,
+      "standard": true,
+      "native": false,
+      "partial": false,
+      "catalogChanged": false
     }
   ],
   "standardPublished": true,

@@ -49,3 +49,21 @@ if checked.returncode or any(lines.count(line) != 1 for line in expected):
     raise RuntimeError('Renderer log filter failed: ' + repr(lines))
 print('Renderer log filter: duplicate INFO suppressed; first INFO, warnings, errors and other messages preserved.')
 print(output.name, hashlib.sha256(output.read_bytes()).hexdigest())
+
+# Cleanroom's startup connection also runs before the main loop and can leave
+# GuiConnecting covering an already joined world. Build its own Java 25 adapter.
+engine = ROOT / '.local/engines/mb'
+cleanroom = engine / 'libraries/com/cleanroommc/cleanroom/0.5.17-alpha/cleanroom-0.5.17-alpha.jar'
+classes = ROOT / '.local/game-integration/mb/classes'; classes.mkdir(parents=True, exist_ok=True)
+compiled = subprocess.run([str(javac), '-J-Duser.language=en', '--release', '25', '-encoding', 'UTF-8',
+                          '-cp', str(cleanroom), '-d', str(classes), str(ROOT / 'src/GameIntegration/mb/MojinAutoConnect.java')],
+                         capture_output=True, creationflags=subprocess.CREATE_NO_WINDOW)
+if compiled.returncode:
+    print(compiled.stderr.decode('utf-8', errors='replace')); raise SystemExit(compiled.returncode)
+output = ROOT / 'artifacts/game-integration/mojin-autoconnect-cleanroom-0.1.0.jar'
+with zipfile.ZipFile(output, 'w', compression=zipfile.ZIP_DEFLATED) as archive:
+    for path in sorted(classes.rglob('*.class')):
+        entry = zipfile.ZipInfo(path.relative_to(classes).as_posix(), (2026, 9, 5, 0, 0, 0))
+        entry.compress_type = zipfile.ZIP_DEFLATED
+        archive.writestr(entry, path.read_bytes())
+print(output.name, hashlib.sha256(output.read_bytes()).hexdigest())

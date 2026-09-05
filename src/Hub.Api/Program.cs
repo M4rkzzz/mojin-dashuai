@@ -65,6 +65,7 @@ account.MapGet("/me", async (ClaimsPrincipal p, HubDb db) => { var user = await 
 account.MapPost("/password", async (ClaimsPrincipal p, PasswordRequest r, AccountService service) => { await service.ChangePassword(Guid.Parse(p.FindFirstValue(ClaimTypes.NameIdentifier)!), r); return Results.NoContent(); });
 account.MapPost("/recovery-code", async (ClaimsPrincipal p, LoginRequest r, AccountService service) => new { recoveryCode = await service.RotateRecovery(Guid.Parse(p.FindFirstValue(ClaimTypes.NameIdentifier)!), r.Password) });
 account.MapPost("/skin", (ClaimsPrincipal p, SkinTexture texture, SkinService skins) => skins.Save(Guid.Parse(p.FindFirstValue(ClaimTypes.NameIdentifier)!),texture));
+app.MapGameSkins();
 app.MapGet("/v1/skins/{gameName}", async (string gameName, HubDb db, SkinService skins, HttpContext context) => {
     if (!Secret.GameNamePattern().IsMatch(gameName)) return Results.NotFound();
     var key = Secret.NameKey(gameName);

@@ -104,6 +104,14 @@ class DistributionTests(unittest.TestCase):
             for route in spec['routes']:
                 self.assertIn(route['host'].encode(), data)
 
+    def test_skin_config_uses_own_api_then_official_and_keeps_tls_validation(self):
+        for instance in self.config['instances']:
+            config = json.loads(pack.skin_config(instance))
+            self.assertEqual([x['type'] for x in config['loadlist']], ['CustomSkinAPI', 'MojangAPI'])
+            self.assertEqual(config['loadlist'][0]['root'], 'https://launcher.boshan.uk/v1/skins/csl/')
+            self.assertFalse(config['forceIgnoreHttpsCertificate'])
+        self.assertEqual(json.loads(pack.skin_config('m3e'))['version'], '14.17')
+
 
 if __name__ == '__main__':
     unittest.main()

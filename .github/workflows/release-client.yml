@@ -10,8 +10,14 @@ permissions:
 jobs:
   package:
     runs-on: windows-latest
+    env:
+      VERSION: ${{ inputs.version }}
     steps:
       - uses: actions/checkout@v4
+      - name: Validate version
+        shell: pwsh
+        run: |
+          if ($env:VERSION -notmatch '^\d+\.\d+\.\d+(-[a-z0-9.]+)?$') { throw 'Invalid version' }
       - uses: actions/setup-python@v5
         with: {python-version: '3.11'}
       - name: Require configured login and complete game sources
@@ -23,10 +29,9 @@ jobs:
       - run: npm ci && npm run build
         working-directory: ui
       - run: dotnet test tests/Hub.Tests/Hub.Tests.csproj -c Release
-      - run: dotnet publish src/Launcher.Desktop/Launcher.Desktop.csproj -c Release -r win-x64 --self-contained true -o artifacts/MojinDashuai
+      - run: dotnet publish src/Launcher.Desktop/Launcher.Desktop.csproj -c Release -r win-x64 --self-contained true "-p:Version=$env:VERSION" -o artifacts/MojinDashuai
       - name: Package and create draft
         env:
-          VERSION: ${{ inputs.version }}
           GH_TOKEN: ${{ github.token }}
         shell: pwsh
         run: |

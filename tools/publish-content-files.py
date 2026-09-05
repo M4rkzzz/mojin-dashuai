@@ -16,11 +16,15 @@ parser.add_argument('--only', nargs='+', help='Publish only these staged public 
 args = parser.parse_args()
 if not (args.standard or args.native): parser.error('select --standard and/or --native')
 config = json.loads((ROOT / 'packs/distributions.json').read_text(encoding='utf-8'))
+active_prefixes = tuple(f'distributions/{instance}/{spec["version"]}/' for instance, spec in config['instances'].items())
 files, probes = {}, []
 for selected, base in [(args.standard, ROOT / 'artifacts/distributions/public'), (args.native, ROOT / 'artifacts/native/public')]:
     if selected:
         for path in base.rglob('*'):
-            if path.is_file(): files[safe_path(path.relative_to(base).as_posix())] = path
+            if path.is_file():
+                relative = safe_path(path.relative_to(base).as_posix())
+                if relative.startswith('distributions/') and not relative.startswith(active_prefixes): continue
+                files[relative] = path
 if args.standard:
     for instance, spec in config['instances'].items():
         report = json.loads((ROOT / f'artifacts/distributions/{instance}-report.json').read_text(encoding='utf-8'))

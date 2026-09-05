@@ -10,6 +10,7 @@ from pathlib import Path, PurePosixPath
 import re
 import struct
 import urllib.parse
+import urllib.request
 import zipfile
 from datetime import date
 
@@ -71,6 +72,39 @@ def digest(data):
 
 def encode_json(value):
     return (json.dumps(value, ensure_ascii=False, sort_keys=True, indent=2) + '\n').encode('utf-8')
+
+
+def skin_config(instance):
+    return encode_json({'version': '14.17' if instance == 'm3e' else '15.0.1', 'buildNumber': 0,
+        'loadlist': [{'name': 'Mojin', 'type': 'CustomSkinAPI', 'root': 'https://launcher.boshan.uk/v1/skins/csl/'},
+                     {'name': 'Mojang', 'type': 'MojangAPI', 'apiRoot': 'https://api.mojang.com/',
+                      'sessionRoot': 'https://sessionserver.mojang.com/'}],
+        'forceIgnoreHttpsCertificate': False, 'forceLoadAllTextures': False,
+        'enableLogStdOut': False, 'enableLocalProfileCache': False, 'cacheExpiry': 30})
+
+
+def integration_records(instance, config, public):
+    spec = json.loads((ROOT / 'packs/client-integrations.json').read_text(encoding='utf-8'))['skinLoader']
+    if instance not in spec['instances']:
+        return []  # The supplied 1.7.10 pack retains its working ForgeLegacy loader.
+    local = ROOT / '.local/source-cache' / (spec['sha256'] + '.jar')
+    if not local.is_file():
+        local.parent.mkdir(parents=True, exist_ok=True)
+        with urllib.request.urlopen(public_url(spec['url']), timeout=45) as response:
+            data = response.read()
+    else:
+        data = local.read_bytes()
+    hashes = digest(data)
+    if len(data) != spec['size'] or hashes['sha256'] != spec['sha256']:
+        raise ValueError('Pinned skin loader mismatch')
+    if not local.is_file(): local.write_bytes(data)
+    relative = 'objects/' + hashes['sha256'] + '.jar'
+    target = public / relative
+    target.parent.mkdir(parents=True, exist_ok=True)
+    target.write_bytes(data)
+    return [{'path': safe_path(spec['path']), 'size': len(data), **hashes,
+             'sources': [spec['url'], public_url(config['publicBase'] + '/' + relative)],
+             'policy': 'managed', 'distributionBasis': spec['distributionBasis']}]
 
 
 def write_zip(target, entries):
@@ -278,8 +312,13 @@ def build(instance, config, destination, draft=False):
             raise ValueError('Nested required mods are missing from the pinned source inventory')
     # A draft with unavailable files must not silently describe a reduced modpack.
     complete = len(records) == len(audit['files'])
+    additions = integration_records(instance, config, public)
+    if any(item['path'].casefold() in seen for item in additions):
+        raise ValueError('Client integration duplicates a supplied mod')
+    records.extend(additions)
+    overrides['CustomSkinLoader/CustomSkinLoader.json'] = skin_config(instance)
     report = {'instance': instance, 'format': spec['format'], 'candidate': not blockers,
-              'releaseReady': False, 'declaredFiles': len(audit['files']), 'resolvedFiles': len(records),
+              'releaseReady': False, 'declaredFiles': len(audit['files']) + len(additions), 'resolvedFiles': len(records),
               'overrideFiles': len(overrides), 'excludedPrivateOrDisabledFiles': len(excluded),
               'blockers': blockers, 'fallbackObjects': planned, 'portableArtifact': None}
     destination.mkdir(parents=True, exist_ok=True)

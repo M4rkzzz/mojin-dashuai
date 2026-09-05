@@ -1,4 +1,4 @@
-# 一服自动连接适配
+# 一、三服自动连接适配
 
 Forge 1.7.10 的 `--server` 在启动资源处理完成前开始连接。MSE 首次原生启动实测在连接开始后仍处理资源，超过 Forge 客户端握手的五秒等待，出现 `NetHandlerLoginClient` 类型转换错误；返回多人游戏重连成功。
 
@@ -9,3 +9,7 @@ Forge 1.7.10 的 `--server` 在启动资源处理完成前开始连接。MSE 首
 源码依据：[Forge 1.7.10 FMLClientHandler](https://github.com/MinecraftForge/FML/blob/1.7.10/src/main/java/cpw/mods/fml/client/FMLClientHandler.java)。本组件调用公开方法，没有复制或修改 Forge 类。
 
 组件另为 Angelica 加入精确的重复日志过滤：只对 `SKIPPING glBindTexture for target 32879` 的 INFO 保留第一次，其他信息及 WARN/ERROR 原样保留。对应 Angelica 2.0.0-alpha19 源码先执行 OpenGL 纹理绑定再打印此提示；过滤不更改渲染。构建时使用实际 Log4j 2.0-beta9 跑 `tests/game-integration/RenderLogFilterCheck.java`，检查重复提示与错误级别。游戏中的日志增量仍要在下一次一服实测核对。
+
+三服首次自动连接的实测现象是世界已加载，但 `GuiConnecting` 的“登入中”界面仍盖在画面上，点取消会退出连接；回主菜单重进正常。`mb/MojinAutoConnect.java` 使用 Cleanroom 的客户端 tick 事件推迟首次连接，原生层不再传入 `--server`，而是传入同样的主机和端口属性。组件使用固定 Cleanroom 0.5.17-alpha 库编译为 Java 25 字节码，不增加其他运行时或服务端组件。修正后的首次自动连接仍需游戏画面验证。
+
+对应公开 API：[Cleanroom 0.5.17-alpha FMLClientHandler](https://github.com/CleanroomMC/Cleanroom/blob/0.5.17-alpha/src/main/java/net/minecraftforge/fml/client/FMLClientHandler.java)。只调用连接方法，不复制 Cleanroom 源码。

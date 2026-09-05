@@ -1,6 +1,6 @@
 """Run on 124 against a disposable database and isolated API container. Never print credentials."""
 import concurrent.futures, json, os, pathlib, re, secrets, subprocess, time, urllib.request, urllib.error
-import base64, struct, zlib, tempfile
+import base64, struct, zlib, tempfile, hashlib
 
 def run(*args):
     result=subprocess.run(args,check=True,capture_output=True,text=True)
@@ -81,6 +81,15 @@ try:
     code,png,headers=public_skin('Alice')
     check(code==200 and png.startswith(b'\x89PNG') and headers['Content-Type']=='image/png','public skin downloads work without account credentials')
     check(headers['X-Skin-Model']=='slim' and headers['X-Content-Type-Options']=='nosniff','skin response has model and explicit image type')
+    code,profile=api('/v1/skins/csl/Alice.json')
+    texture='Alice/'+hashlib.sha256(png).hexdigest()+'.png'
+    check(code==200 and profile=={'username':'Alice','skins':{'slim':texture}},'CustomSkinAPI exposes exact slim model and content hash without account identifiers')
+    with urllib.request.urlopen('http://127.0.0.1:18082/v1/skins/csl/textures/'+texture,timeout=10) as response:
+        check(response.read()==png and response.headers['Content-Type']=='image/png','CustomSkinLoader texture URL returns exact uploaded PNG anonymously')
+    check(api('/v1/skins/csl/Bobby.json')[0]==404,'missing group skin allows loader to continue to official skin')
+    check(api('/v1/skins/csl/textures/Alice/'+('0'*64)+'.png')[0]==404,'wrong texture hash cannot return another skin')
+    classic={**skin,'model':'classic'}
+    check(api('/v1/account/skin',classic,token=alice['accessToken'],ip='198.51.100.70')[0]==200 and api('/v1/skins/csl/Alice.json')[1]['skins']=={'default':texture},'classic skin maps to CustomSkinLoader default model')
     check(public_skin('Bobby')[0]==404,'skin upload cannot change another account skin')
     invalid={'pngBase64':base64.b64encode(skin_png(8192)).decode(),'model':'classic'}
     check(api('/v1/account/skin',invalid,token=alice['accessToken'],ip='198.51.100.70')[0]==400,'oversized skin dimensions rejected')

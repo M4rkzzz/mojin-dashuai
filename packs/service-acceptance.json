@@ -1,0 +1,20 @@
+{
+  "apiVersion": "0.1.3",
+  "isolatedChecksPassed": 44,
+  "checkedAt": "2026-09-05T08:21:54Z",
+  "deployedHealthy": true,
+  "publicHealthStatus": 200,
+  "upgradeBackup": "/vol1/mc-client-hub/backups/upgrades/api-0.1.3-20260905T082231Z",
+  "otherContainerStartTimesUnchanged": true,
+  "gameSkinApi": {
+    "protocol": "CustomSkinAPI",
+    "metadataAnonymous": true,
+    "textureAnonymous": true,
+    "models": [
+      "default",
+      "slim"
+    ],
+    "textureHashVerified": true,
+    "inGameVisualAcceptance": false
+  }
+}
