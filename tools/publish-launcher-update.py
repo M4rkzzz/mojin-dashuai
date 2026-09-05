@@ -20,6 +20,9 @@ def public_open(request,timeout=25):
             if attempt==2:raise
             time.sleep(0.5*(attempt+1))
 bundle=args.bundle.resolve()
+hold=bundle/'HOLD.json'
+if hold.exists() and json.loads(hold.read_text(encoding='utf-8-sig')).get('publishAllowed') is not True:
+    raise ValueError('This launcher candidate is on hold; rebuild with the fourth server before publication.')
 signed=bundle/'launcher.signed.json'
 subprocess.run([args.dotnet,str(args.publisher),'verify-launcher',str(signed),str(ROOT/'src/Launcher.Desktop/launcher.json')],check=True,cwd=ROOT)
 envelope=json.loads(signed.read_text(encoding='utf-8-sig'))

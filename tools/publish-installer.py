@@ -6,6 +6,9 @@ parser=argparse.ArgumentParser(description=__doc__)
 parser.add_argument('directory',type=pathlib.Path)
 parser.add_argument('--revision',default='',help='Immutable subdirectory for a user-requested same-version rebuild')
 args=parser.parse_args();directory=args.directory.resolve()
+hold=directory/'HOLD.json'
+if hold.exists() and json.loads(hold.read_text(encoding='utf-8-sig')).get('publishAllowed') is not True:
+    raise ValueError('This installer candidate is on hold; rebuild with the fourth server before publication.')
 if args.revision and not re.fullmatch(r'[a-z0-9][a-z0-9-]{0,39}',args.revision):parser.error('Invalid revision')
 record=json.loads((directory/'installer.json').read_text(encoding='utf-8-sig'))
 version=record['version'];name=record['fileName']
