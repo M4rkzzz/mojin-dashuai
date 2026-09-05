@@ -56,5 +56,7 @@
   "archiveEvidence": "packs/acceptance/beta10-latency2-archive.json",
   "ciUiPassed": true,
   "ciApiPassed": true,
-  "ciWindowsRepeatPending": true
+  "ciWindowsRepeatPending": false,
+  "ciWindowsPassed": true,
+  "ciPassed": true
 }
