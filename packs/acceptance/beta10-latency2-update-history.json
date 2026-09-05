@@ -1,0 +1,21 @@
+{
+  "version": "0.1.2-beta.10",
+  "sequence": 12,
+  "sha256": "b8a49ab80911cdd17a801b1a0ba1529b81481a9a21bcb91a8c3a90fa33ecad8f",
+  "bytes": 78342108,
+  "downloadUrl": "https://launcher-direct.boshan.uk:21708/launcher/0.1.2-beta.10/latency2/MojinDashuai-windows-x64.zip",
+  "publicDownloadVerified": true,
+  "differential": true,
+  "fileObjects": 496,
+  "activated": true,
+  "revision": "latency2",
+  "publicArchiveRoundTripVerified": true,
+  "uiStatesVerified": true,
+  "sameVersionOriginalBeta10RequiresInstaller": true,
+  "nativeProcessHandshakeBaseline": "packs/acceptance/beta10-first-update-history.json",
+  "unchangedNativeFilesVerified": 486,
+  "hotfixAcceptance": "packs/beta10-latency-fix.json",
+  "fullNativeUiRestartVerified": false,
+  "publicBetaActivated": true,
+  "currentReleaseWindowOpened": false
+}

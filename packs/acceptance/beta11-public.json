@@ -1,0 +1,18 @@
+{
+  "apis": [
+    {
+      "api": "https://launcher-direct.boshan.uk:21708",
+      "exactSignedMetadata": true
+    },
+    {
+      "api": "https://launcher.boshan.uk",
+      "exactSignedMetadata": true
+    }
+  ],
+  "checkedAt": "2026-09-05T13:35:15.0879409+00:00",
+  "archiveSha256": "96ba8d05ffb6c04e188168c32a3f937a3bb9b55742bc9e14f8401a27b04c9938",
+  "version": "0.1.2-beta.11",
+  "wholeArchiveReadback": true,
+  "archiveSize": 78343092,
+  "sequence": 13
+}

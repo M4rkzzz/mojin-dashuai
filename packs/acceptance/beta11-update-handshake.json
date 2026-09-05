@@ -1,0 +1,9 @@
+{
+  "passed": true,
+  "actualChildProcess": true,
+  "activationHandshake": true,
+  "programDirectoryPreserved": true,
+  "startupCheckPropagated": true,
+  "failedLaunchRetainsPrevious": true,
+  "noGameOrAccountFilesTouched": true
+}

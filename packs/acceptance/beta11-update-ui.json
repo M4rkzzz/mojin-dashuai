@@ -1,0 +1,11 @@
+{
+  "passed": true,
+  "progress": true,
+  "restartGuard": true,
+  "retryAfterError": true,
+  "greenTitlebarNotice": true,
+  "beforeLogin": true,
+  "compactLayout": true,
+  "staleSnapshotIgnored": true,
+  "errors": []
+}

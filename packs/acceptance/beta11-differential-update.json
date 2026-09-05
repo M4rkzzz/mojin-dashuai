@@ -1,0 +1,14 @@
+{
+  "version": "0.1.2-beta.11",
+  "files": 498,
+  "size": 78343092,
+  "downloadedAndVerified": true,
+  "expectedDownloadBytes": 1154963,
+  "actualDownloadBytes": 1154963,
+  "singleOrigin": true,
+  "gameStarted": false,
+  "activated": false,
+  "fromVersion": "0.1.2-beta.10",
+  "fromRevision": "latency2",
+  "initialUpdateCacheEmpty": true
+}

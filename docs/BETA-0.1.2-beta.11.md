@@ -10,3 +10,5 @@ beta.11 使用新的版本号和更新序号 13，让 beta.10 在下次打开时
 [下载 Windows 安装包](https://launcher-direct.boshan.uk:21708/launcher/0.1.2-beta.11/MojinDashuai-Setup-0.1.2-beta.11-x64.exe)。[上一轮功能与修复](BETA-0.1.2-beta.10.md)全部保留。
 
 发布和验收证据见 [beta.11 验收记录](../packs/beta11-acceptance.json)。使用无窗口测试和隔离安装目录，不关闭玩家现有启动器或游戏。干净 Windows、LittleSkin 实际游戏画面及真实双显卡渲染器仍保留未验收记录。
+
+[GitHub Actions](https://github.com/M4rkzzz/mojin-dashuai/actions/runs/33969242133) 的前端、Windows 和 API 检查全部通过。beta.10 latency2 → beta.11 从公开 FRP 入口实测下载 1,154,963 字节，498 个文件全部校验；安装包与完整更新 ZIP 的公网回读 SHA256 匹配。
