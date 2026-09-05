@@ -1,0 +1,10 @@
+{
+  "method": "minecraft-status-ping-pong",
+  "dnsAndConnectExcluded": true,
+  "statusJsonAndForgeExtensionExcluded": true,
+  "actualPublicRoutesVerified": true,
+  "checkedDate": "2026-09-05",
+  "samplesMs": {"m3e": [18, 57], "dc2": [17, 59], "mb": [20, 59]},
+  "routeOrder": ["河北阿里云", "宿迁三网"],
+  "exactInGameLatencyClaimed": false
+}

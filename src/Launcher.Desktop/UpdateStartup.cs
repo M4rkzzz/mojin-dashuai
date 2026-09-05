@@ -1,6 +1,7 @@
 using System.Diagnostics;
 using System.IO;
 using Boshan.Launcher;
+using Microsoft.Win32;
 
 namespace Boshan.Desktop;
 
@@ -9,6 +10,21 @@ internal static class UpdateStartup
 {
     internal static string? Nonce;
     internal static string DataRoot=>Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),"Boshan","Launcher","updates");
+    internal const string ProgramDirectoryVariable="MOJIN_INSTALL_DIRECTORY";
+    internal static string ProgramDirectory
+    {
+        get
+        {
+            var current=Path.TrimEndingDirectorySeparator(Path.GetFullPath(AppContext.BaseDirectory));
+            if(!current.StartsWith(Path.GetFullPath(DataRoot)+Path.DirectorySeparatorChar,StringComparison.OrdinalIgnoreCase))return current;
+            var inherited=Environment.GetEnvironmentVariable(ProgramDirectoryVariable);
+            if(!string.IsNullOrWhiteSpace(inherited)&&Path.IsPathFullyQualified(inherited)&&File.Exists(Path.Combine(inherited,"MojinDashuai.Launcher.exe")))return Path.GetFullPath(inherited);
+            // beta.6 and earlier handoffs did not pass the original program directory.
+            using var key=Registry.CurrentUser.OpenSubKey(@"Software\Microsoft\Windows\CurrentVersion\Uninstall\MojinDashuai.Launcher_is1");
+            var installed=key?.GetValue("InstallLocation") as string;
+            return !string.IsNullOrWhiteSpace(installed)&&Path.IsPathFullyQualified(installed)&&File.Exists(Path.Combine(installed,"MojinDashuai.Launcher.exe"))?Path.GetFullPath(installed):current;
+        }
+    }
     internal static void MarkReady()
     {
         if(Nonce is null)return;
@@ -20,6 +36,7 @@ internal static class UpdateStartup
         var nonce=Guid.NewGuid().ToString("N");
         var readyFile=ContentSecurity.SafePath(updates.Root,"ready/"+nonce+".json");
         var info=new ProcessStartInfo(prepared.Executable){UseShellExecute=false,CreateNoWindow=true,WorkingDirectory=prepared.Directory};
+        info.Environment[ProgramDirectoryVariable]=ProgramDirectory;
         info.ArgumentList.Add("--update-ready");info.ArgumentList.Add(nonce);
         Process? started;
         try{started=Process.Start(info);}

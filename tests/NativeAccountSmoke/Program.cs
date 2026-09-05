@@ -4,6 +4,8 @@ using Boshan.Launcher;
 
 if(args is ["--launcher-update-smoke",var fixture]){await LauncherUpdateSmoke.Run(fixture);return;}
 if(args is ["--microsoft-contract"]){await MicrosoftContract.Run();return;}
+if(args is ["--content-path-smoke",var contentRoot]){await ContentPathSmoke.Run(contentRoot);return;}
+if(args is ["--route-latency-smoke"]){foreach(var instance in Routes.Domains.Keys)Console.WriteLine(System.Text.Json.JsonSerializer.Serialize(new{instance,routes=await Routes.ProbeAll(instance)}));return;}
 if(args is ["--microsoft-live"]){MicrosoftLive.Run();return;}
 if(args is ["--microsoft-network"]){await MicrosoftNetwork.Run();return;}
 if(args.Length>0&&args[0] is "--saved-profile" or "--play-saved-account"){await SavedAccountPlay.Run(args);return;}

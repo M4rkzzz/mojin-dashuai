@@ -1,0 +1,36 @@
+{
+  "passed": true,
+  "root": "D:\\project\\MCserver\\unified-client\\.local\\路径验证\\edd1d59be87242c48a6a4cf66ee09872\\魔金大帅 with spaces\\content",
+  "checks": [
+    {
+      "instance": "m3e",
+      "javaMajor": 8,
+      "launchArgumentsPrepared": true,
+      "classpathFilesPresent": true,
+      "gameLoaderClassLoaded": true,
+      "nativeLibraryLoaded": true,
+      "unicodeFileRoundTrip": true
+    },
+    {
+      "instance": "dc2",
+      "javaMajor": 17,
+      "launchArgumentsPrepared": true,
+      "classpathFilesPresent": true,
+      "gameLoaderClassLoaded": true,
+      "nativeLibraryLoaded": true,
+      "unicodeFileRoundTrip": true
+    },
+    {
+      "instance": "mb",
+      "javaMajor": 25,
+      "launchArgumentsPrepared": true,
+      "classpathFilesPresent": true,
+      "gameLoaderClassLoaded": true,
+      "nativeLibraryLoaded": true,
+      "unicodeFileRoundTrip": true
+    }
+  ],
+  "gameWindowOpened": false,
+  "serverConnected": false,
+  "fullGameRenderVerified": false
+}

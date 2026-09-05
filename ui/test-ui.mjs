@@ -2,7 +2,7 @@ import { spawn } from 'node:child_process';
 import fs from 'node:fs/promises';
 
 await fs.mkdir('../.local',{recursive:true});
-const server = spawn(process.execPath,['node_modules/vite/bin/vite.js','preview','--host','127.0.0.1','--port','18475','--strictPort'],{stdio:'ignore',windowsHide:true});
+const server = spawn(process.execPath,['node_modules/vite/bin/vite.js','preview','--outDir',process.env.LAUNCHER_WEB_ROOT||'dist','--host','127.0.0.1','--port','18475','--strictPort'],{stdio:'ignore',windowsHide:true});
 const url = 'http://127.0.0.1:18475';
 async function check(script) {
   const child = spawn(process.execPath,[script],{stdio:'inherit',windowsHide:true,env:{...process.env,LAUNCHER_UI_URL:url}});
@@ -19,6 +19,7 @@ try {
   await check('chrome-check.mjs');
   await check('visual-check.mjs');
   await check('routes-check.mjs');
+  await check('tools-check.mjs');
   await check('avatar-check.mjs');
   await check('storage-check.mjs');
   await check('microsoft-check.mjs');

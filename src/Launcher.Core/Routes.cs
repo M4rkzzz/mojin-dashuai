@@ -4,6 +4,7 @@ using System.Net.Sockets;
 using System.Text;
 using System.Text.Json;
 using DnsClient;
+using System.Buffers.Binary;
 
 namespace Boshan.Launcher;
 
@@ -40,21 +41,38 @@ public static class Routes
     public static async Task<RouteEndpoint> Probe(string domain,CancellationToken token=default)
     {
         var resolved=await Resolve(domain,token);
+        return await Probe(resolved,token);
+    }
+    public static async Task<RouteEndpoint> Probe(RouteEndpoint resolved,CancellationToken token=default)
+    {
+        resolved=resolved with{Latency=-1};
         try
         {
             using var timeout=CancellationTokenSource.CreateLinkedTokenSource(token);timeout.CancelAfter(TimeSpan.FromSeconds(5));
-            using var tcp=new TcpClient();var timer=Stopwatch.StartNew(); await tcp.ConnectAsync(resolved.Host,resolved.Port,timeout.Token);
+            using var tcp=new TcpClient{NoDelay=true};await tcp.ConnectAsync(resolved.Host,resolved.Port,timeout.Token);
             // Verify a Minecraft status response; an FRP listener alone does not imply a working game server.
             var stream=tcp.GetStream();using var handshake=new MemoryStream();
-            WriteVarInt(handshake,0);WriteVarInt(handshake,47);var name=Encoding.UTF8.GetBytes(domain);WriteVarInt(handshake,name.Length);handshake.Write(name);
+            WriteVarInt(handshake,0);WriteVarInt(handshake,47);var name=Encoding.UTF8.GetBytes(resolved.Domain);WriteVarInt(handshake,name.Length);handshake.Write(name);
             handshake.WriteByte((byte)(resolved.Port>>8));handshake.WriteByte((byte)resolved.Port);WriteVarInt(handshake,1);
             using var packet=new MemoryStream();WriteVarInt(packet,(int)handshake.Length);handshake.Position=0;handshake.CopyTo(packet);packet.Write([1,0]);
             await stream.WriteAsync(packet.ToArray(),timeout.Token);
             var length=await ReadVarInt(stream,timeout.Token);if(length is < 3 or > 1024*1024)throw new IOException("状态包无效。");
-            if(await ReadVarInt(stream,timeout.Token)!=0)throw new IOException("游戏状态不可用。");
-            var jsonLength=await ReadVarInt(stream,timeout.Token);if(jsonLength<=0||jsonLength>length)throw new IOException("状态包无效。");
-            var data=new byte[jsonLength];await stream.ReadExactlyAsync(data,timeout.Token);using var status=JsonDocument.Parse(data);
+            // Forge may append extension data after the status JSON. Consume the
+            // entire frame so that extension bytes cannot be mistaken for a pong.
+            var statusPacket=new byte[length];await stream.ReadExactlyAsync(statusPacket,timeout.Token);
+            using var statusFrame=new MemoryStream(statusPacket);
+            if(await ReadVarInt(statusFrame,timeout.Token)!=0)throw new IOException("游戏状态不可用。");
+            var jsonLength=await ReadVarInt(statusFrame,timeout.Token);if(jsonLength<=0||jsonLength>statusFrame.Length-statusFrame.Position)throw new IOException("状态包无效。");
+            var data=new byte[jsonLength];await statusFrame.ReadExactlyAsync(data,timeout.Token);using var status=JsonDocument.Parse(data);
             if(!status.RootElement.TryGetProperty("version",out _))throw new IOException("游戏状态不可用。");
+            // Match Minecraft's server-list RTT: DNS, TCP setup and the status
+            // JSON/icon response are complete before timing the ping/pong pair.
+            var ping=new byte[10];ping[0]=9;ping[1]=1;
+            var payload=DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();BinaryPrimitives.WriteInt64BigEndian(ping.AsSpan(2),payload);
+            var timer=Stopwatch.StartNew();await stream.WriteAsync(ping,timeout.Token);
+            if(await ReadVarInt(stream,timeout.Token)!=9||await ReadVarInt(stream,timeout.Token)!=1)throw new IOException("测速响应无效。");
+            var pong=new byte[8];await stream.ReadExactlyAsync(pong,timeout.Token);timer.Stop();
+            if(BinaryPrimitives.ReadInt64BigEndian(pong)!=payload)throw new IOException("测速响应不匹配。");
             return resolved with {Latency=(int)timer.ElapsedMilliseconds};
         }
         catch(Exception e) when(e is IOException or SocketException or OperationCanceledException or JsonException) {return resolved;}

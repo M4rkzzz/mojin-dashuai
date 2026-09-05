@@ -29,7 +29,7 @@ public sealed record InstalledPack(PackManifest Manifest, DateTimeOffset Install
 public sealed record TransferProgress(string Instance, string Phase, long Completed, long Total, double BytesPerSecond, bool Paused = false);
 public sealed class LauncherSettings
 {
-    public string Root { get; set; } = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "Boshan", "Content");
+    public string Root { get; set; } = Path.Combine(AppContext.BaseDirectory, "content");
     public bool ContentDirectoryConfigured { get; set; }
     public Dictionary<string, int> Memory { get; set; } = new() { ["m3e"] = 8192, ["dc2"] = 8192, ["mb"] = 8736 };
     public Dictionary<string, string> Java { get; set; } = new() { ["m3e"] = "", ["dc2"] = "", ["mb"] = "" };

@@ -4,9 +4,12 @@ namespace Boshan.Launcher;
 
 public static class ContentDirectorySetup
 {
-    public static LauncherSettings LoadSettings(string settingsPath)
+    public static string DefaultRoot(string programDirectory) => Path.Combine(Path.GetFullPath(programDirectory), "content");
+
+    public static LauncherSettings LoadSettings(string settingsPath, string? programDirectory = null)
     {
-        if (!File.Exists(settingsPath)) return new();
+        var defaultRoot = DefaultRoot(programDirectory ?? AppContext.BaseDirectory);
+        if (!File.Exists(settingsPath)) return new() { Root = defaultRoot };
         using var document = JsonDocument.Parse(File.ReadAllText(settingsPath));
         var settings = document.Deserialize<LauncherSettings>(Json.Options) ?? throw new InvalidDataException("设置文件为空。");
         settings.Validate();
@@ -16,6 +19,7 @@ public static class ContentDirectorySetup
             settings.ContentDirectoryConfigured = true;
             Json.Write(settingsPath, settings);
         }
+        else if (!settings.ContentDirectoryConfigured) settings.Root = defaultRoot;
         return settings;
     }
 

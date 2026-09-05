@@ -12,8 +12,20 @@ public sealed class ContentDirectoryTests : IDisposable
     [Fact]
     public void NewInstallationWaitsForDirectorySelection()
     {
-        Assert.False(ContentDirectorySetup.LoadSettings(SettingsPath).ContentDirectoryConfigured);
+        var programDirectory=Path.Combine(root,"魔金大帅 安装目录");
+        var loaded=ContentDirectorySetup.LoadSettings(SettingsPath,programDirectory);
+        Assert.False(loaded.ContentDirectoryConfigured);
+        Assert.Equal(Path.Combine(programDirectory,"content"),loaded.Root);
+        Assert.False(Directory.Exists(loaded.Root));
         Assert.False(File.Exists(SettingsPath));
+    }
+
+    [Fact]
+    public void ConfirmedDirectorySurvivesDifferentProgramAndUpdateDirectories()
+    {
+        var original=Path.Combine(root,"魔金大帅","content");
+        Json.Write(SettingsPath,new LauncherSettings{Root=original,ContentDirectoryConfigured=true});
+        Assert.Equal(original,ContentDirectorySetup.LoadSettings(SettingsPath,Path.Combine(root,"updates","release-7")).Root);
     }
 
     [Fact]
@@ -36,7 +48,10 @@ public sealed class ContentDirectoryTests : IDisposable
     public void IncompleteSavedSettingsStillRequireSelection()
     {
         Json.Write(SettingsPath, new LauncherSettings { Root = Path.Combine(root, "games") });
-        Assert.False(ContentDirectorySetup.LoadSettings(SettingsPath).ContentDirectoryConfigured);
+        var program=Path.Combine(root,"程序");
+        var loaded=ContentDirectorySetup.LoadSettings(SettingsPath,program);
+        Assert.False(loaded.ContentDirectoryConfigured);
+        Assert.Equal(Path.Combine(program,"content"),loaded.Root);
     }
 
     [Fact]

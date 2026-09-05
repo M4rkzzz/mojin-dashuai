@@ -1,7 +1,7 @@
 param(
     [Parameter(Mandatory=$true)][string]$Source,
     [string]$PreviousSource,
-    [string]$Version='0.1.2-beta.6',
+    [string]$Version='0.1.2-beta.7',
     [string]$Compiler
 )
 $ErrorActionPreference='Stop'
@@ -73,7 +73,7 @@ foreach ($link in @($desktopLink,$menuLink)) {
     if (!(Test-Path -LiteralPath $actual) -or !(Long-Path $actual).Equals((Long-Path $installed),[StringComparison]::OrdinalIgnoreCase)) { throw "Installer shortcut target mismatch: expected [$installed], got [$actual], link [$link]" }
 }
 $outside=Join-Path $testRoot '游戏文件\world.txt'
-$inside=Join-Path $installRoot 'player-data\keep.txt'
+$inside=Join-Path $installRoot 'content\instances\m3e\options.txt'
 foreach ($path in @($outside,$inside)) {
     New-Item -ItemType Directory -Path (Split-Path $path -Parent) -Force | Out-Null
     Set-Content -LiteralPath $path -Value 'player-owned-content' -Encoding utf8

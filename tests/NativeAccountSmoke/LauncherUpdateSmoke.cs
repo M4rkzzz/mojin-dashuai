@@ -35,11 +35,13 @@ internal static class LauncherUpdateSmoke
         async Task<bool> Start(PreparedLauncher prepared)=>await (Task<bool>)method.Invoke(null,[updates,prepared])!;
         var good=await Prepare(1,false);
         if(!await Start(good))throw new InvalidOperationException("The replacement process did not complete the native handshake.");
+        var origin=File.ReadAllText(Path.Combine(good.Directory,"program-directory.txt"));
+        if(!Path.TrimEndingDirectorySeparator(origin).Equals(Path.TrimEndingDirectorySeparator(AppContext.BaseDirectory),StringComparison.OrdinalIgnoreCase))throw new InvalidOperationException("The original program directory was lost during the update handoff.");
         var bad=await Prepare(2,true);
         if(await Start(bad)||!updates.HasFailed(bad.Release))throw new InvalidOperationException("An unhealthy replacement was not rejected.");
         var fallback=await updates.Ready(Path.Combine(root,"old"),new Version(0,1,0));
         if(fallback?.Release.Sequence!=1)throw new InvalidOperationException("The healthy previous version was lost.");
-        var report=new{passed=true,actualChildProcess=true,activationHandshake=true,failedLaunchRetainsPrevious=true,noGameOrAccountFilesTouched=true};
+        var report=new{passed=true,actualChildProcess=true,activationHandshake=true,programDirectoryPreserved=true,failedLaunchRetainsPrevious=true,noGameOrAccountFilesTouched=true};
         Json.Write(Path.Combine(root,"report.json"),report);Console.WriteLine(JsonSerializer.Serialize(report));
     }
 }

@@ -52,7 +52,7 @@ public partial class MainWindow : Window
             Directory.CreateDirectory(appData);
             var config=Json.Read<AppConfig>(Path.Combine(AppContext.BaseDirectory,"launcher.json"));
             launcherUpdates=new(UpdateStartup.DataRoot,config.PublicKeys);updateApi=config.Api;
-            var settingsPath=Path.Combine(appData,"settings.json");settings=ContentDirectorySetup.LoadSettings(settingsPath);settings.Validate();
+            var settingsPath=Path.Combine(appData,"settings.json");settings=ContentDirectorySetup.LoadSettings(settingsPath,UpdateStartup.ProgramDirectory);settings.Validate();
             var microsoftId=config.MicrosoftClientId??"";
             accounts=new(new Vault(appData),config.Api,microsoftId.Trim(),()=>new MicrosoftWebUi(this,Path.Combine(appData,"MicrosoftAuth")));
             catalog=new(config.Api,config.PublicKeys,Path.Combine(appData,"catalog-checkpoint.json"));
@@ -186,7 +186,8 @@ public partial class MainWindow : Window
             }
             case "instance.launch":await Launch(Id());return null;
             case "instance.folder":OpenFolder(new TransactionalInstaller(settings.Root).InstancePath(Id()));return null;
-            case "instance.import":return await Import(Id());
+            case "instance.import":return await Import(Id(),args);
+            case "instance.import.backups":OpenFolder(ContentSecurity.SafePath(new TransactionalInstaller(settings.Root).InstancePath(Id()),".hub/personal-import"));return null;
             case "directory.migrate":return await Migrate();
             case "cache.clean":return CleanCache();
             case "content.manage":return ContentDialog(Id());
@@ -345,12 +346,14 @@ public partial class MainWindow : Window
             Web.CoreWebView2.PostWebMessageAsJson(JsonSerializer.Serialize(new {Event=name,Data=data},Json.Options));
     });
     private void OpenFolder(string path){Directory.CreateDirectory(path);Process.Start(new ProcessStartInfo(path){UseShellExecute=true});}
-    private async Task<object> Import(string id)
+    private async Task<object?> Import(string id,JsonElement args)
     {
-        var dialog=new OpenFolderDialog {Title="选择旧客户端的游戏实例目录"};if(dialog.ShowDialog(this)!=true)return new {Message="已取消导入"};
+        if(games.ContainsKey(id)||transfers.ContainsKey(id)||pendingPacks.ContainsKey(id))throw new InvalidDataException("请先结束当前服务器的游戏和下载任务。");
+        if(new TransactionalInstaller(settings.Root).ReadInstalled(id) is null)throw new InvalidDataException("下载后才可以导入。");
+        var categories=args.TryGetProperty("categories",out var values)?values.Deserialize<string[]>(Json.Options)??[]:["settings","maps"];
+        var dialog=new OpenFolderDialog {Title="选择旧客户端文件夹"};if(dialog.ShowDialog(this)!=true)return null;
         var source=dialog.FolderName;var installer=new TransactionalInstaller(settings.Root);using var gate=installer.Acquire(id);var target=installer.InstancePath(id);
-        var count=await Task.Run(()=>PlayerFiles.Import(source,target));
-        return new {Message=$"已导入 {count} 个个人文件。游戏模组由对应服务器的正式清单安装。"};
+        return await Task.Run(()=>PersonalDataImport.Import(source,target,id,categories));
     }
     private async Task<object> Migrate()
     {

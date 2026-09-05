@@ -49,6 +49,12 @@ try {
       expect(metrics.horizontalOverflow).toBe(false);
       expect(metrics.top).toBe(0);
       expect(metrics.emoji).toBe(false);
+      expect(metrics.background).toContain('magic.webp');
+      const sceneLoaded=await page.evaluate(async()=>{
+        const image=new Image();image.src='./scenes/magic.webp';await image.decode();
+        return image.naturalWidth>=1000&&image.naturalHeight>=500;
+      });
+      expect(sceneLoaded).toBe(true);
       if (mode === 'login') expect(metrics.sceneOverflow).toBe(false);
       results.push({width,height,mode,...metrics});
       if(width === 1024 && mode === 'login') await page.screenshot({path:'../.local/titlebar-login.png',animations:'disabled'});
