@@ -8,10 +8,11 @@
       "sha256": "69ecf53ec808c1219fc40b98c2464b4546f035e401591effd0229a2787e10666",
       "sha1": "21db670c715e2a24eda05bd0c1d3b834e3949857",
       "sources": [
-        "https://cdn.modrinth.com/data/ghjoiQAl/versions/QVfak9aE/%2Bunimixins-all-1.7.10-0.2.1.jar"
+        "https://cdn.modrinth.com/data/ghjoiQAl/versions/QVfak9aE/%2Bunimixins-all-1.7.10-0.2.1.jar",
+        "https://edge.forgecdn.net/files/7446/239/%2bunimixins-all-1.7.10-0.2.1.jar"
       ],
-      "projectId": null,
-      "fileId": null,
+      "projectId": 826970,
+      "fileId": 7446239,
       "distributionBasis": "Download the identical author-published file directly from Modrinth; no rehosting. Project license: LicenseRef-Mixed",
       "status": "author-origin-download-verified",
       "embeddedLicenseFiles": [
@@ -41,9 +42,24 @@
       },
       "downloadVerification": {
         "verified": true,
+        "at": "2026-09-05T06:50:32.033390+00:00",
         "cached": true,
-        "at": "2026-09-05T06:16:39.984732+00:00"
-      }
+        "errors": []
+      },
+      "curseforgeEvidence": {
+        "provider": "mcim-public-metadata-cache",
+        "metadataUrl": "https://mod.mcimirror.top/curseforge/v1/mods/826970/files/7446239",
+        "projectId": 826970,
+        "fileId": 7446239,
+        "fileName": "+unimixins-all-1.7.10-0.2.1.jar",
+        "fileSha1": "21db670c715e2a24eda05bd0c1d3b834e3949857",
+        "fileMd5": "46d0ab037c4cc8f46fc3d6ae05cc4141",
+        "checkedAt": "2026-09-05T06:38:46.077105+00:00"
+      },
+      "sha512": "53b5ab9c390744009fabb5e12e4a611ea192dae6b51e4036a08fafa33b0e45b8cc2bd74ce6334bcfd70145caa39fc56830bdd2826d39a0afa9ccfd92dd2c8284",
+      "verifiedSources": [
+        "https://cdn.modrinth.com/data/ghjoiQAl/versions/QVfak9aE/%2Bunimixins-all-1.7.10-0.2.1.jar"
+      ]
     },
     {
       "path": "mods/1.7.10-ASJCore-1.4.3.0.jar",
@@ -51,10 +67,11 @@
       "sha256": "ac110c7cdf7e3837cd0e0a3ce19e869490aed600418998471fcca67602484cc9",
       "sha1": "11c619aea11ba5001ad39ca83c5fc42fab253dfa",
       "sources": [
-        "https://cdn.modrinth.com/data/ZOxCC8DJ/versions/H4Sr7CwL/1.7.10-ASJCore-1.4.3.0.jar"
+        "https://cdn.modrinth.com/data/ZOxCC8DJ/versions/H4Sr7CwL/1.7.10-ASJCore-1.4.3.0.jar",
+        "https://edge.forgecdn.net/files/6363/820/1.7.10-ASJCore-1.4.3.0.jar"
       ],
-      "projectId": null,
-      "fileId": null,
+      "projectId": 445557,
+      "fileId": 6363820,
       "distributionBasis": "Download the identical author-published file directly from Modrinth; no rehosting. Project license: LicenseRef-NCCPL-License",
       "status": "author-origin-download-verified",
       "embeddedLicenseFiles": [],
@@ -75,21 +92,58 @@
       },
       "downloadVerification": {
         "verified": true,
+        "at": "2026-09-05T06:50:32.027103+00:00",
         "cached": true,
-        "at": "2026-09-05T06:16:39.982627+00:00"
-      }
+        "errors": []
+      },
+      "curseforgeEvidence": {
+        "provider": "mcim-public-metadata-cache",
+        "metadataUrl": "https://mod.mcimirror.top/curseforge/v1/mods/445557/files/6363820",
+        "projectId": 445557,
+        "fileId": 6363820,
+        "fileName": "1.7.10-ASJCore-1.4.3.0.jar",
+        "fileSha1": "11c619aea11ba5001ad39ca83c5fc42fab253dfa",
+        "fileMd5": "6c191dd8141c849d3888ec7549724392",
+        "checkedAt": "2026-09-05T06:38:46.077105+00:00"
+      },
+      "sha512": "05edca3514ff6d50665e8032902a62dd6627dead5e69c1346df73628a5a638c228ffe22f4d2d21068fbd764e45c1c2d4a525207258f1aab5291ddfe24cd26843",
+      "verifiedSources": [
+        "https://cdn.modrinth.com/data/ZOxCC8DJ/versions/H4Sr7CwL/1.7.10-ASJCore-1.4.3.0.jar"
+      ]
     },
     {
       "path": "mods/Advanced Botany 1.3.1.7.jar",
       "size": 1437287,
       "sha256": "4a19941c365e8be1d9da08c0e8c6e316aafb3a707d93e53f7b548805f855defb",
       "sha1": "44d4cd395e6a13fdcac784080a0db6d6e92f4e6a",
-      "sources": [],
-      "projectId": null,
-      "fileId": null,
-      "distributionBasis": null,
-      "status": "needs-source-and-license-review",
-      "embeddedLicenseFiles": []
+      "sources": [
+        "https://edge.forgecdn.net/files/3862/595/Advanced%20Botany%201.3.1.7.jar"
+      ],
+      "projectId": 575841,
+      "fileId": 3862595,
+      "distributionBasis": "Pinned author file on CurseForge; direct download only. Metadata resolved via the public MCIM cache; redistribution is not implied.",
+      "status": "author-origin-download-verified",
+      "embeddedLicenseFiles": [],
+      "curseforgeEvidence": {
+        "provider": "mcim-public-metadata-cache",
+        "metadataUrl": "https://mod.mcimirror.top/curseforge/v1/mods/575841/files/3862595",
+        "projectId": 575841,
+        "fileId": 3862595,
+        "fileName": "Advanced Botany 1.3.1.7.jar",
+        "fileSha1": "44d4cd395e6a13fdcac784080a0db6d6e92f4e6a",
+        "fileMd5": "7db945be66928454cdbb91162db2781f",
+        "checkedAt": "2026-09-05T06:38:46.077105+00:00"
+      },
+      "sha512": "2056a77e57e06e1fa9c69bf4e49a95bd00f3daab8543158673b54edd1e7879e4c896b9da2bc8c4b132c72c5524bf97a86f2856c01f5c638ee9df71466c01079f",
+      "verifiedSources": [
+        "https://mediafilez.forgecdn.net/files/3862/595/Advanced%20Botany%201.3.1.7.jar"
+      ],
+      "downloadVerification": {
+        "verified": true,
+        "at": "2026-09-05T06:50:32.030267+00:00",
+        "cached": true,
+        "errors": []
+      }
     },
     {
       "path": "mods/AdvancedSolarPanel_1.7.10_Edition.jar",
@@ -108,24 +162,64 @@
       "size": 1291265,
       "sha256": "272d17a0a03f7284320504f6fe82502d824347446b65e108398389a3d02a681e",
       "sha1": "5ce80d8421a7ffac2d5732d0ee462ba5031151a5",
-      "sources": [],
+      "sources": [
+        "https://github.com/GTNewHorizons/AE2FluidCraft-Rework/releases/download/1.4.115-gtnh/ae2fc-1.4.115-gtnh.jar"
+      ],
       "projectId": null,
       "fileId": null,
-      "distributionBasis": null,
-      "status": "needs-source-and-license-review",
-      "embeddedLicenseFiles": []
+      "distributionBasis": "Download the pinned unmodified release asset directly from https://github.com/GTNewHorizons/AE2FluidCraft-Rework/releases/tag/1.4.115-gtnh; no rehosting.",
+      "status": "author-origin-download-verified",
+      "embeddedLicenseFiles": [],
+      "githubEvidence": {
+        "path": "mods/ae2fc-1.4.115-gtnh.jar",
+        "sha256": "272d17a0a03f7284320504f6fe82502d824347446b65e108398389a3d02a681e",
+        "url": "https://github.com/GTNewHorizons/AE2FluidCraft-Rework/releases/download/1.4.115-gtnh/ae2fc-1.4.115-gtnh.jar",
+        "releaseUrl": "https://github.com/GTNewHorizons/AE2FluidCraft-Rework/releases/tag/1.4.115-gtnh",
+        "assetId": 297914392,
+        "repository": "GTNewHorizons/AE2FluidCraft-Rework"
+      },
+      "sha512": "a0029ff295c3c2d22f0d0d7b77bcb3f154e9191ff56ed4091034af8a33b62b267e04e2ea874aaec76256d9fca9949377122a732bba53d2d610c5aed2c38bd5ca",
+      "verifiedSources": [
+        "https://github.com/GTNewHorizons/AE2FluidCraft-Rework/releases/download/1.4.115-gtnh/ae2fc-1.4.115-gtnh.jar"
+      ],
+      "downloadVerification": {
+        "verified": true,
+        "at": "2026-09-05T06:50:32.033390+00:00",
+        "cached": true,
+        "errors": []
+      }
     },
     {
       "path": "mods/ae2stuff-0.9.4-GTNH.jar",
       "size": 651603,
       "sha256": "f905986757d3e3768cf4159456fc288c1e915ce4630adee7e88fb51c17b31af6",
       "sha1": "8b1edf60941ed01c713bbe5bee9642d0bc546142",
-      "sources": [],
+      "sources": [
+        "https://github.com/GTNewHorizons/ae2stuff/releases/download/0.9.4-GTNH/ae2stuff-0.9.4-GTNH.jar"
+      ],
       "projectId": null,
       "fileId": null,
-      "distributionBasis": null,
-      "status": "needs-source-and-license-review",
-      "embeddedLicenseFiles": []
+      "distributionBasis": "Download the pinned unmodified release asset directly from https://github.com/GTNewHorizons/ae2stuff/releases/tag/0.9.4-GTNH; no rehosting.",
+      "status": "author-origin-download-verified",
+      "embeddedLicenseFiles": [],
+      "githubEvidence": {
+        "path": "mods/ae2stuff-0.9.4-GTNH.jar",
+        "sha256": "f905986757d3e3768cf4159456fc288c1e915ce4630adee7e88fb51c17b31af6",
+        "url": "https://github.com/GTNewHorizons/ae2stuff/releases/download/0.9.4-GTNH/ae2stuff-0.9.4-GTNH.jar",
+        "releaseUrl": "https://github.com/GTNewHorizons/ae2stuff/releases/tag/0.9.4-GTNH",
+        "assetId": 223400907,
+        "repository": "GTNewHorizons/ae2stuff"
+      },
+      "sha512": "f3f86ab1ce0ec1141e573229b0b19856044ef30e8dbd111f900a57aefed7e1ed3bb76ede369629d879c487d13b11d166f57aa26f5c60991e329a876a0afdc56c",
+      "verifiedSources": [
+        "https://github.com/GTNewHorizons/ae2stuff/releases/download/0.9.4-GTNH/ae2stuff-0.9.4-GTNH.jar"
+      ],
+      "downloadVerification": {
+        "verified": true,
+        "at": "2026-09-05T06:50:32.034906+00:00",
+        "cached": true,
+        "errors": []
+      }
     },
     {
       "path": "mods/ae2thing-v1.13.jar",
@@ -139,7 +233,15 @@
       "status": "needs-source-and-license-review",
       "embeddedLicenseFiles": [
         "LICENSE"
-      ]
+      ],
+      "fallback": {
+        "url": "https://launcher.boshan.uk/objects/afd6ffd607fb27b27de63f9593178b6fa44fca776a20b2558f93bd1187736e61.jar",
+        "frpUrl": "http://103.40.14.100:21708/objects/afd6ffd607fb27b27de63f9593178b6fa44fca776a20b2558f93bd1187736e61.jar",
+        "noticeUrl": "https://launcher.boshan.uk/objects/afd6ffd607fb27b27de63f9593178b6fa44fca776a20b2558f93bd1187736e61.LICENSE.txt",
+        "distributionBasis": "MIT license embedded in the supplied unmodified JAR; all embedded LICENSE and NOTICE text retained alongside the exact-hash object",
+        "publishedVerified": true,
+        "rangeVerified": true
+      }
     },
     {
       "path": "mods/Alfheim-60.jar",
@@ -147,10 +249,11 @@
       "sha256": "a382f83444239c552adb862cfdf2b38b831a48afff765c81d3d3b0c5d12cf300",
       "sha1": "b0c8914c6cdef6f5f447cd021b9c4528bd34b9fb",
       "sources": [
-        "https://cdn.modrinth.com/data/Qta0UW0A/versions/XXg6GJ7o/Alfheim-60.jar"
+        "https://cdn.modrinth.com/data/Qta0UW0A/versions/XXg6GJ7o/Alfheim-60.jar",
+        "https://edge.forgecdn.net/files/5994/800/Alfheim-60.jar"
       ],
-      "projectId": null,
-      "fileId": null,
+      "projectId": 284811,
+      "fileId": 5994800,
       "distributionBasis": "Download the identical author-published file directly from Modrinth; no rehosting. Project license: LicenseRef-NCCPL-License",
       "status": "author-origin-download-verified",
       "embeddedLicenseFiles": [],
@@ -171,9 +274,24 @@
       },
       "downloadVerification": {
         "verified": true,
+        "at": "2026-09-05T06:50:32.177791+00:00",
         "cached": true,
-        "at": "2026-09-05T06:16:40.031405+00:00"
-      }
+        "errors": []
+      },
+      "curseforgeEvidence": {
+        "provider": "mcim-public-metadata-cache",
+        "metadataUrl": "https://mod.mcimirror.top/curseforge/v1/mods/284811/files/5994800",
+        "projectId": 284811,
+        "fileId": 5994800,
+        "fileName": "Alfheim-60.jar",
+        "fileSha1": "b0c8914c6cdef6f5f447cd021b9c4528bd34b9fb",
+        "fileMd5": "cb98f8f04eb40a45870320c94ccbc202",
+        "checkedAt": "2026-09-05T06:38:46.077105+00:00"
+      },
+      "sha512": "47421963e9639cacaf07fec29b838b5e8943e74d24443b37bab86a1297c90ef4f81f9b988aa774f689cc4cd24604fa405c293731b09555f694527c43d304cc08",
+      "verifiedSources": [
+        "https://cdn.modrinth.com/data/Qta0UW0A/versions/XXg6GJ7o/Alfheim-60.jar"
+      ]
     },
     {
       "path": "mods/angelica-2.0.0-alpha19.jar",
@@ -181,10 +299,11 @@
       "sha256": "11d32bf5c4beef04f91e86429718eaac1daef91eb7093db87af539846e80f9a8",
       "sha1": "bf435f81aca5dfcabd3b1dce65db4f106e23d1f1",
       "sources": [
-        "https://cdn.modrinth.com/data/XN5jnYB4/versions/F09ZvaKn/angelica-2.0.0-alpha19.jar"
+        "https://cdn.modrinth.com/data/XN5jnYB4/versions/F09ZvaKn/angelica-2.0.0-alpha19.jar",
+        "https://edge.forgecdn.net/files/7576/330/angelica-2.0.0-alpha19.jar"
       ],
-      "projectId": null,
-      "fileId": null,
+      "projectId": 988067,
+      "fileId": 7576330,
       "distributionBasis": "Download the identical author-published file directly from Modrinth; no rehosting. Project license: LicenseRef-Multiple---Primarily-LGPLv3",
       "status": "author-origin-download-verified",
       "embeddedLicenseFiles": [
@@ -210,21 +329,56 @@
       },
       "downloadVerification": {
         "verified": true,
+        "at": "2026-09-05T06:50:32.048599+00:00",
         "cached": true,
-        "at": "2026-09-05T06:16:39.988874+00:00"
-      }
+        "errors": []
+      },
+      "curseforgeEvidence": {
+        "provider": "mcim-public-metadata-cache",
+        "metadataUrl": "https://mod.mcimirror.top/curseforge/v1/mods/988067/files/7576330",
+        "projectId": 988067,
+        "fileId": 7576330,
+        "fileName": "angelica-2.0.0-alpha19.jar",
+        "fileSha1": "bf435f81aca5dfcabd3b1dce65db4f106e23d1f1",
+        "fileMd5": "723b6f8c7e968883364c9082727f6991",
+        "checkedAt": "2026-09-05T06:38:46.077105+00:00"
+      },
+      "sha512": "b8f87c2e3e6a276dae8050e9c059d3836c97b070fb3000f0e6484423dbbea287266818fa6b46ed11e78793d3af70f7f83dc6346f9bcca663a2e105b809d2fd19",
+      "verifiedSources": [
+        "https://cdn.modrinth.com/data/XN5jnYB4/versions/F09ZvaKn/angelica-2.0.0-alpha19.jar"
+      ]
     },
     {
       "path": "mods/appliedenergistics2-rv3-beta-690-GTNH.jar",
       "size": 3805302,
       "sha256": "850bc2bab4c9b791d49c25c902c462db751a3fa377bf96eb6f9e9299c0c096c1",
       "sha1": "c3518b18ec737d7cac09815cbda7d6ebb8fe02ad",
-      "sources": [],
+      "sources": [
+        "https://github.com/GTNewHorizons/Applied-Energistics-2-Unofficial/releases/download/rv3-beta-690-GTNH/appliedenergistics2-rv3-beta-690-GTNH.jar"
+      ],
       "projectId": null,
       "fileId": null,
-      "distributionBasis": null,
-      "status": "needs-source-and-license-review",
-      "embeddedLicenseFiles": []
+      "distributionBasis": "Download the pinned unmodified release asset directly from https://github.com/GTNewHorizons/Applied-Energistics-2-Unofficial/releases/tag/rv3-beta-690-GTNH; no rehosting.",
+      "status": "author-origin-download-verified",
+      "embeddedLicenseFiles": [],
+      "githubEvidence": {
+        "path": "mods/appliedenergistics2-rv3-beta-690-GTNH.jar",
+        "sha256": "850bc2bab4c9b791d49c25c902c462db751a3fa377bf96eb6f9e9299c0c096c1",
+        "url": "https://github.com/GTNewHorizons/Applied-Energistics-2-Unofficial/releases/download/rv3-beta-690-GTNH/appliedenergistics2-rv3-beta-690-GTNH.jar",
+        "releaseUrl": "https://github.com/GTNewHorizons/Applied-Energistics-2-Unofficial/releases/tag/rv3-beta-690-GTNH",
+        "assetId": 297911773,
+        "repository": "GTNewHorizons/Applied-Energistics-2-Unofficial"
+      },
+      "sha512": "d995886207f5ba52a64e97750f18eb89ec9d6ea03bc9fb0a66029714e7f66daf44c8876ca3b9c36c7a61c758e490268475faf57b9e3bd3d9005873f9ff840a5a",
+      "verifiedSources": [
+        "https://github.com/GTNewHorizons/Applied-Energistics-2-Unofficial/releases/download/rv3-beta-690-GTNH/appliedenergistics2-rv3-beta-690-GTNH.jar"
+      ],
+      "downloadVerification": {
+        "verified": true,
+        "at": "2026-09-05T06:50:32.057154+00:00",
+        "cached": true,
+        "errors": []
+      }
     },
     {
       "path": "mods/AquaManGift-1.0.jar",
@@ -243,60 +397,168 @@
       "size": 1034833,
       "sha256": "d104fc45d811d6e8ecf77287dc87010137b8eaf03852f616b0a75490ee2f71bc",
       "sha1": "3ed1f92809d6a6ec1d495082ad263725cea7f098",
-      "sources": [],
-      "projectId": null,
-      "fileId": null,
-      "distributionBasis": null,
-      "status": "needs-source-and-license-review",
-      "embeddedLicenseFiles": []
+      "sources": [
+        "https://edge.forgecdn.net/files/2519/595/Avaritia-1.13.jar"
+      ],
+      "projectId": 233785,
+      "fileId": 2519595,
+      "distributionBasis": "Pinned author file on CurseForge; direct download only. Metadata resolved via the public MCIM cache; redistribution is not implied.",
+      "status": "author-origin-download-verified",
+      "embeddedLicenseFiles": [],
+      "curseforgeEvidence": {
+        "provider": "mcim-public-metadata-cache",
+        "metadataUrl": "https://mod.mcimirror.top/curseforge/v1/mods/233785/files/2519595",
+        "projectId": 233785,
+        "fileId": 2519595,
+        "fileName": "Avaritia-1.13.jar",
+        "fileSha1": "3ed1f92809d6a6ec1d495082ad263725cea7f098",
+        "fileMd5": "3afefdb53de17d768ac06ab40f2e0d1a",
+        "checkedAt": "2026-09-05T06:38:46.077105+00:00"
+      },
+      "sha512": "ae9b73cc3943a06bc0ceafd547bcaa8a911bae5a833fa293ec35e63f4381fc9ec8b9a17701f4aa1ccba5ac28303ff5afcd590f1e43ece42caee5b8574a1ab54b",
+      "verifiedSources": [
+        "https://mediafilez.forgecdn.net/files/2519/595/Avaritia-1.13.jar"
+      ],
+      "downloadVerification": {
+        "verified": true,
+        "at": "2026-09-05T06:50:32.059243+00:00",
+        "cached": true,
+        "errors": []
+      }
     },
     {
       "path": "mods/Avaritiaddons-1.8.4-GTNH.jar",
       "size": 209639,
       "sha256": "bb79671246a8ed1cc9e94d96d25dab9813e43eab3f95d6ef89bd349e8b9456f6",
       "sha1": "b781fa462f0b14ae07062e0533ffa5182be7cebb",
-      "sources": [],
+      "sources": [
+        "https://github.com/GTNewHorizons/Avaritiaddons/releases/download/1.8.4-GTNH/Avaritiaddons-1.8.4-GTNH.jar"
+      ],
       "projectId": null,
       "fileId": null,
-      "distributionBasis": null,
-      "status": "needs-source-and-license-review",
-      "embeddedLicenseFiles": []
+      "distributionBasis": "Download the pinned unmodified release asset directly from https://github.com/GTNewHorizons/Avaritiaddons/releases/tag/1.8.4-GTNH; no rehosting.",
+      "status": "author-origin-download-verified",
+      "embeddedLicenseFiles": [],
+      "githubEvidence": {
+        "path": "mods/Avaritiaddons-1.8.4-GTNH.jar",
+        "sha256": "bb79671246a8ed1cc9e94d96d25dab9813e43eab3f95d6ef89bd349e8b9456f6",
+        "url": "https://github.com/GTNewHorizons/Avaritiaddons/releases/download/1.8.4-GTNH/Avaritiaddons-1.8.4-GTNH.jar",
+        "releaseUrl": "https://github.com/GTNewHorizons/Avaritiaddons/releases/tag/1.8.4-GTNH",
+        "assetId": 200714315,
+        "repository": "GTNewHorizons/Avaritiaddons"
+      },
+      "sha512": "e934b744e684e3046b2a3dcf20655cf9c9bf8fd527bbf4a5a0abafc8214869debc29f1a760a25bfb6fed822d75b4e6b9800cc90c40ddc4025b0cdc0a9554b123",
+      "verifiedSources": [
+        "https://github.com/GTNewHorizons/Avaritiaddons/releases/download/1.8.4-GTNH/Avaritiaddons-1.8.4-GTNH.jar"
+      ],
+      "downloadVerification": {
+        "verified": true,
+        "at": "2026-09-05T06:50:32.060709+00:00",
+        "cached": true,
+        "errors": []
+      }
     },
     {
       "path": "mods/BaublesExpanded-2.1.13-GTNH.jar",
       "size": 95248,
       "sha256": "ea032d59df23dfdbad5141f1d2205e0ddf3c6600e7aa2bb2600e37e2e17eddd8",
       "sha1": "71c4a359674ba21fc43854c8eab3133e179ff992",
-      "sources": [],
-      "projectId": null,
-      "fileId": null,
-      "distributionBasis": null,
-      "status": "needs-source-and-license-review",
-      "embeddedLicenseFiles": []
+      "sources": [
+        "https://edge.forgecdn.net/files/6892/764/BaublesExpanded-2.1.13-GTNH.jar"
+      ],
+      "projectId": 1238321,
+      "fileId": 6892764,
+      "distributionBasis": "Pinned author file on CurseForge; direct download only. Metadata resolved via the public MCIM cache; redistribution is not implied.",
+      "status": "author-origin-download-verified",
+      "embeddedLicenseFiles": [],
+      "curseforgeEvidence": {
+        "provider": "mcim-public-metadata-cache",
+        "metadataUrl": "https://mod.mcimirror.top/curseforge/v1/mods/1238321/files/6892764",
+        "projectId": 1238321,
+        "fileId": 6892764,
+        "fileName": "BaublesExpanded-2.1.13-GTNH.jar",
+        "fileSha1": "71c4a359674ba21fc43854c8eab3133e179ff992",
+        "fileMd5": "aff4e0b02982f20acf4c08253299d132",
+        "checkedAt": "2026-09-05T06:38:46.077105+00:00"
+      },
+      "sha512": "bb8533237ee72ab3c3b591b9754baba0bbceac588174d527dc33674c19e3549bb6b8405c9fc5f48afa581f424b0a9b77b3612595a3312abb78f7e25ad01b4dbc",
+      "verifiedSources": [
+        "https://mediafilez.forgecdn.net/files/6892/764/BaublesExpanded-2.1.13-GTNH.jar"
+      ],
+      "downloadVerification": {
+        "verified": true,
+        "at": "2026-09-05T06:50:32.061714+00:00",
+        "cached": true,
+        "errors": []
+      }
     },
     {
       "path": "mods/bdlib-1.9.5.1-mc1.7.10.jar",
       "size": 1506680,
       "sha256": "e61ce89d68e30bf01aab4919d1243fab1a075472b8203973027d88151c87fb2f",
       "sha1": "39441e4cf394bcba7365391e1ad98dab859dcb64",
-      "sources": [],
-      "projectId": null,
-      "fileId": null,
-      "distributionBasis": null,
-      "status": "needs-source-and-license-review",
-      "embeddedLicenseFiles": []
+      "sources": [
+        "https://edge.forgecdn.net/files/4673/767/bdlib-1.9.5.1-mc1.7.10.jar"
+      ],
+      "projectId": 70496,
+      "fileId": 4673767,
+      "distributionBasis": "Pinned author file on CurseForge; direct download only. Metadata resolved via the public MCIM cache; redistribution is not implied.",
+      "status": "author-origin-download-verified",
+      "embeddedLicenseFiles": [],
+      "curseforgeEvidence": {
+        "provider": "mcim-public-metadata-cache",
+        "metadataUrl": "https://mod.mcimirror.top/curseforge/v1/mods/70496/files/4673767",
+        "projectId": 70496,
+        "fileId": 4673767,
+        "fileName": "bdlib-1.9.5.1-mc1.7.10.jar",
+        "fileSha1": "39441e4cf394bcba7365391e1ad98dab859dcb64",
+        "fileMd5": "67b1eb7dac48eb62874aff278468fb12",
+        "checkedAt": "2026-09-05T06:38:46.077105+00:00"
+      },
+      "sha512": "b8b1b923008696e0bb8e2ba0df6a23acd0a46ac11b10d5450d8999e4831e3ce045abdcee0dcd95a1784091ac0f85da9e8cd1edaa8a779ef2ce77a9f6e84b31f3",
+      "verifiedSources": [
+        "https://mediafilez.forgecdn.net/files/4673/767/bdlib-1.9.5.1-mc1.7.10.jar"
+      ],
+      "downloadVerification": {
+        "verified": true,
+        "at": "2026-09-05T06:50:32.066012+00:00",
+        "cached": true,
+        "errors": []
+      }
     },
     {
       "path": "mods/BetterAchievements-1.7.10-0.1.0.jar",
       "size": 46776,
       "sha256": "10f8195abe547b9649d627df11684fd354ac7acd68a5c9ca60459b79b21890bb",
       "sha1": "3b2f5af23eb6c9f57d90426bfefad1fa633d0929",
-      "sources": [],
-      "projectId": null,
-      "fileId": null,
-      "distributionBasis": null,
-      "status": "needs-source-and-license-review",
-      "embeddedLicenseFiles": []
+      "sources": [
+        "https://edge.forgecdn.net/files/2260/793/BetterAchievements-1.7.10-0.1.0.jar"
+      ],
+      "projectId": 235716,
+      "fileId": 2260793,
+      "distributionBasis": "Pinned author file on CurseForge; direct download only. Metadata resolved via the public MCIM cache; redistribution is not implied.",
+      "status": "author-origin-download-verified",
+      "embeddedLicenseFiles": [],
+      "curseforgeEvidence": {
+        "provider": "mcim-public-metadata-cache",
+        "metadataUrl": "https://mod.mcimirror.top/curseforge/v1/mods/235716/files/2260793",
+        "projectId": 235716,
+        "fileId": 2260793,
+        "fileName": "BetterAchievements-1.7.10-0.1.0.jar",
+        "fileSha1": "3b2f5af23eb6c9f57d90426bfefad1fa633d0929",
+        "fileMd5": "61d608ff02bc6383c59d222f69ef72ce",
+        "checkedAt": "2026-09-05T06:38:46.077105+00:00"
+      },
+      "sha512": "785f8593c442df7072a423f4798f00df63c120b70cf582d5e67056594d3f42de612deca811d6371b49118affb2022a41add7d7b1e71d263c7583bf761fe1e967",
+      "verifiedSources": [
+        "https://mediafilez.forgecdn.net/files/2260/793/BetterAchievements-1.7.10-0.1.0.jar"
+      ],
+      "downloadVerification": {
+        "verified": true,
+        "at": "2026-09-05T06:50:32.066539+00:00",
+        "cached": true,
+        "errors": []
+      }
     },
     {
       "path": "mods/BetterBuildersWands-d93187f.jar",
@@ -316,10 +578,11 @@
       "sha256": "2f2dce79eb8c46f9344a791eca179ae7b9ee597c6eca911b966feac883bf6371",
       "sha1": "c9d673415deca85afb42e7e698d932691f27d8a8",
       "sources": [
-        "https://cdn.modrinth.com/data/RC5CQSRD/versions/OAkz4PBP/BetterLoadingScreen-1.3.10.jar"
+        "https://cdn.modrinth.com/data/RC5CQSRD/versions/OAkz4PBP/BetterLoadingScreen-1.3.10.jar",
+        "https://edge.forgecdn.net/files/2414/751/BetterLoadingScreen-1.3.10.jar"
       ],
-      "projectId": null,
-      "fileId": null,
+      "projectId": 229302,
+      "fileId": 2414751,
       "distributionBasis": "Download the identical author-published file directly from Modrinth; no rehosting. Project license: GPL-3.0-only",
       "status": "author-origin-download-verified",
       "embeddedLicenseFiles": [],
@@ -340,21 +603,56 @@
       },
       "downloadVerification": {
         "verified": true,
+        "at": "2026-09-05T06:50:32.067067+00:00",
         "cached": true,
-        "at": "2026-09-05T06:16:39.990079+00:00"
-      }
+        "errors": []
+      },
+      "curseforgeEvidence": {
+        "provider": "mcim-public-metadata-cache",
+        "metadataUrl": "https://mod.mcimirror.top/curseforge/v1/mods/229302/files/2414751",
+        "projectId": 229302,
+        "fileId": 2414751,
+        "fileName": "BetterLoadingScreen-1.3.10.jar",
+        "fileSha1": "c9d673415deca85afb42e7e698d932691f27d8a8",
+        "fileMd5": "d713da2a6b25e9690a68c42c0412da10",
+        "checkedAt": "2026-09-05T06:38:46.077105+00:00"
+      },
+      "sha512": "f5e34c5ec7380a442908425dc02cd9a2bba618489ae8a81d869dec1d9467012101069827d176ceda518b02ad54fd76581a2c4c0d36427e1d9467bd54a33c32a5",
+      "verifiedSources": [
+        "https://cdn.modrinth.com/data/RC5CQSRD/versions/OAkz4PBP/BetterLoadingScreen-1.3.10.jar"
+      ]
     },
     {
       "path": "mods/BetterQuesting-3.7.14-GTNH.jar",
       "size": 1894355,
       "sha256": "c0eef289791c38d52f0b1352ad0f6327e0de007a684826ddba0fa2c0e6d1222c",
       "sha1": "cd77ac7cc1055d69bcb31d4ed174c057b003af2f",
-      "sources": [],
+      "sources": [
+        "https://github.com/GTNewHorizons/BetterQuesting/releases/download/3.7.14-GTNH/BetterQuesting-3.7.14-GTNH.jar"
+      ],
       "projectId": null,
       "fileId": null,
-      "distributionBasis": null,
-      "status": "needs-source-and-license-review",
-      "embeddedLicenseFiles": []
+      "distributionBasis": "Download the pinned unmodified release asset directly from https://github.com/GTNewHorizons/BetterQuesting/releases/tag/3.7.14-GTNH; no rehosting.",
+      "status": "author-origin-download-verified",
+      "embeddedLicenseFiles": [],
+      "githubEvidence": {
+        "path": "mods/BetterQuesting-3.7.14-GTNH.jar",
+        "sha256": "c0eef289791c38d52f0b1352ad0f6327e0de007a684826ddba0fa2c0e6d1222c",
+        "url": "https://github.com/GTNewHorizons/BetterQuesting/releases/download/3.7.14-GTNH/BetterQuesting-3.7.14-GTNH.jar",
+        "releaseUrl": "https://github.com/GTNewHorizons/BetterQuesting/releases/tag/3.7.14-GTNH",
+        "assetId": 292574435,
+        "repository": "GTNewHorizons/BetterQuesting"
+      },
+      "sha512": "80676d44602e5ef4045ae2e322091c6d3eac0ed0b10da4a6c5c6d06afc8dc7a0dc942988888888a0da4d3641767c55cb191ffaf45d98644fe67ae8c618936708",
+      "verifiedSources": [
+        "https://github.com/GTNewHorizons/BetterQuesting/releases/download/3.7.14-GTNH/BetterQuesting-3.7.14-GTNH.jar"
+      ],
+      "downloadVerification": {
+        "verified": true,
+        "at": "2026-09-05T06:50:32.071240+00:00",
+        "cached": true,
+        "errors": []
+      }
     },
     {
       "path": "mods/BetterTitleScreen-1.7.10-1.1.jar",
@@ -362,10 +660,11 @@
       "sha256": "9fd158b30d8efe4ec32563cb7102c864928afcfe7b71ef2a0ce343e4f987cf88",
       "sha1": "c6a07aa19ab08ac226c45449e87612c1aeabbb14",
       "sources": [
-        "https://cdn.modrinth.com/data/ui5BchwQ/versions/hEte9pKt/BetterTitleScreen-1.7.10-1.1.jar"
+        "https://cdn.modrinth.com/data/ui5BchwQ/versions/hEte9pKt/BetterTitleScreen-1.7.10-1.1.jar",
+        "https://edge.forgecdn.net/files/2214/88/BetterTitleScreen-1.7.10-1.1.jar"
       ],
-      "projectId": null,
-      "fileId": null,
+      "projectId": 224223,
+      "fileId": 2214088,
       "distributionBasis": "Download the identical author-published file directly from Modrinth; no rehosting. Project license: LicenseRef-All-Rights-Reserved",
       "status": "author-origin-download-verified",
       "embeddedLicenseFiles": [],
@@ -386,9 +685,24 @@
       },
       "downloadVerification": {
         "verified": true,
-        "cached": false,
-        "at": "2026-09-05T06:16:41.912668+00:00"
-      }
+        "at": "2026-09-05T06:50:32.072562+00:00",
+        "cached": true,
+        "errors": []
+      },
+      "curseforgeEvidence": {
+        "provider": "mcim-public-metadata-cache",
+        "metadataUrl": "https://mod.mcimirror.top/curseforge/v1/mods/224223/files/2214088",
+        "projectId": 224223,
+        "fileId": 2214088,
+        "fileName": "BetterTitleScreen-1.7.10-1.1.jar",
+        "fileSha1": "c6a07aa19ab08ac226c45449e87612c1aeabbb14",
+        "fileMd5": "0a967e8863ea6a1ab4ac5b7cdabb193a",
+        "checkedAt": "2026-09-05T06:38:46.077105+00:00"
+      },
+      "sha512": "de2a40f976fdbd1ecbe5c51dae1a54018cb6a052c1516be12814a86081dca20b32d0ee00bb60356d197f2b5ded5277e368e37a458c728f70ff264e5a77ab5634",
+      "verifiedSources": [
+        "https://cdn.modrinth.com/data/ui5BchwQ/versions/hEte9pKt/BetterTitleScreen-1.7.10-1.1.jar"
+      ]
     },
     {
       "path": "mods/BetterTooltipBox-NO-GIT-TAG-SET.jar",
@@ -402,19 +716,47 @@
       "status": "needs-source-and-license-review",
       "embeddedLicenseFiles": [
         "LICENSE"
-      ]
+      ],
+      "fallback": {
+        "url": "https://launcher.boshan.uk/objects/4804ded22bc9db268f4cc4661d9bfef725b34d3ca2e3fe5dde24ca40bc148aa3.jar",
+        "frpUrl": "http://103.40.14.100:21708/objects/4804ded22bc9db268f4cc4661d9bfef725b34d3ca2e3fe5dde24ca40bc148aa3.jar",
+        "noticeUrl": "https://launcher.boshan.uk/objects/4804ded22bc9db268f4cc4661d9bfef725b34d3ca2e3fe5dde24ca40bc148aa3.LICENSE.txt",
+        "distributionBasis": "MIT license embedded in the supplied unmodified JAR; all embedded LICENSE and NOTICE text retained alongside the exact-hash object",
+        "publishedVerified": true,
+        "rangeVerified": true
+      }
     },
     {
       "path": "mods/Botania-1.12.5-GTNH.jar",
       "size": 16055563,
       "sha256": "f3228a21bb313bdaf7c7735d34eaaa6a60fa6d65face62b2723e2e3fc480f888",
       "sha1": "787d440ae099042db261f0c1fd0320f8af37b39d",
-      "sources": [],
+      "sources": [
+        "https://github.com/GTNewHorizons/Botania/releases/download/1.12.5-GTNH/Botania-1.12.5-GTNH.jar"
+      ],
       "projectId": null,
       "fileId": null,
-      "distributionBasis": null,
-      "status": "needs-source-and-license-review",
-      "embeddedLicenseFiles": []
+      "distributionBasis": "Download the pinned unmodified release asset directly from https://github.com/GTNewHorizons/Botania/releases/tag/1.12.5-GTNH; no rehosting.",
+      "status": "author-origin-download-verified",
+      "embeddedLicenseFiles": [],
+      "githubEvidence": {
+        "path": "mods/Botania-1.12.5-GTNH.jar",
+        "sha256": "f3228a21bb313bdaf7c7735d34eaaa6a60fa6d65face62b2723e2e3fc480f888",
+        "url": "https://github.com/GTNewHorizons/Botania/releases/download/1.12.5-GTNH/Botania-1.12.5-GTNH.jar",
+        "releaseUrl": "https://github.com/GTNewHorizons/Botania/releases/tag/1.12.5-GTNH",
+        "assetId": 220593592,
+        "repository": "GTNewHorizons/Botania"
+      },
+      "sha512": "54240963352dba5c468c1cd9f5cc47f47e992272efcd836abb34b6fcc331573245c755f4f0c670e9483eb702c413b3b5c62181eaad7fd6e1664efee0ab86c61f",
+      "verifiedSources": [
+        "https://github.com/GTNewHorizons/Botania/releases/download/1.12.5-GTNH/Botania-1.12.5-GTNH.jar"
+      ],
+      "downloadVerification": {
+        "verified": true,
+        "at": "2026-09-05T06:50:32.105190+00:00",
+        "cached": true,
+        "errors": []
+      }
     },
     {
       "path": "mods/bugtorch-1.2.13.jar",
@@ -446,21 +788,48 @@
       },
       "downloadVerification": {
         "verified": true,
+        "at": "2026-09-05T06:50:32.105710+00:00",
         "cached": true,
-        "at": "2026-09-05T06:16:40.031917+00:00"
-      }
+        "errors": []
+      },
+      "sha512": "72834169b561f722e52825fef5e0f8e6f2852deb2d84341bde904f89f4bf1d2dcc388af261d8d360051dbec7244b1845ceac78a82c4dc6fef4c888d491057bad",
+      "verifiedSources": [
+        "https://cdn.modrinth.com/data/6su8A6OH/versions/6HgNiu8e/bugtorch-1.2.13.jar"
+      ]
     },
     {
       "path": "mods/ChunkPurge-1.7.10-2.1.jar",
       "size": 16922,
       "sha256": "28ff0b9bc1772902f030fcb8b4b57f161989ad76981aca929a27e47dd79ecb05",
       "sha1": "4a00b982a66259f0cfc9bd5e0cffd003a8a237fc",
-      "sources": [],
-      "projectId": null,
-      "fileId": null,
-      "distributionBasis": null,
-      "status": "needs-source-and-license-review",
-      "embeddedLicenseFiles": []
+      "sources": [
+        "https://edge.forgecdn.net/files/2263/206/ChunkPurge-1.7.10-2.1.jar"
+      ],
+      "projectId": 237027,
+      "fileId": 2263206,
+      "distributionBasis": "Pinned author file on CurseForge; direct download only. Metadata resolved via the public MCIM cache; redistribution is not implied.",
+      "status": "author-origin-download-verified",
+      "embeddedLicenseFiles": [],
+      "curseforgeEvidence": {
+        "provider": "mcim-public-metadata-cache",
+        "metadataUrl": "https://mod.mcimirror.top/curseforge/v1/mods/237027/files/2263206",
+        "projectId": 237027,
+        "fileId": 2263206,
+        "fileName": "ChunkPurge-1.7.10-2.1.jar",
+        "fileSha1": "4a00b982a66259f0cfc9bd5e0cffd003a8a237fc",
+        "fileMd5": "1a644b27d4b42689b207bd65f4737597",
+        "checkedAt": "2026-09-05T06:38:46.077105+00:00"
+      },
+      "sha512": "b249ab8963e2f17ad703326ad77fc011630a198b9953397c908fa706deea0889f75c4c40ede771f7ddbc0f38ec9f4e53d57163743c60ae9dcc762d9d88e994cc",
+      "verifiedSources": [
+        "https://mediafilez.forgecdn.net/files/2263/206/ChunkPurge-1.7.10-2.1.jar"
+      ],
+      "downloadVerification": {
+        "verified": true,
+        "at": "2026-09-05T06:50:32.106743+00:00",
+        "cached": true,
+        "errors": []
+      }
     },
     {
       "path": "mods/CodeChickenCore-1.4.3.jar",
@@ -468,10 +837,11 @@
       "sha256": "b90cbe38871564041b336520f186904497a9358b95c94b088070f1ed720fd543",
       "sha1": "70b3bd705287657b68ae36b04cde5cdf182c8e87",
       "sources": [
-        "https://cdn.modrinth.com/data/qMOdaUOs/versions/Dbl4pDXW/CodeChickenCore-1.4.3.jar"
+        "https://cdn.modrinth.com/data/qMOdaUOs/versions/Dbl4pDXW/CodeChickenCore-1.4.3.jar",
+        "https://edge.forgecdn.net/files/6596/650/CodeChickenCore-1.4.3.jar"
       ],
-      "projectId": null,
-      "fileId": null,
+      "projectId": 746279,
+      "fileId": 6596650,
       "distributionBasis": "Download the identical author-published file directly from Modrinth; no rehosting. Project license: MIT",
       "status": "author-origin-download-verified",
       "embeddedLicenseFiles": [],
@@ -492,45 +862,124 @@
       },
       "downloadVerification": {
         "verified": true,
+        "at": "2026-09-05T06:50:32.107780+00:00",
         "cached": true,
-        "at": "2026-09-05T06:16:40.032461+00:00"
-      }
+        "errors": []
+      },
+      "curseforgeEvidence": {
+        "provider": "mcim-public-metadata-cache",
+        "metadataUrl": "https://mod.mcimirror.top/curseforge/v1/mods/746279/files/6596650",
+        "projectId": 746279,
+        "fileId": 6596650,
+        "fileName": "CodeChickenCore-1.4.3.jar",
+        "fileSha1": "70b3bd705287657b68ae36b04cde5cdf182c8e87",
+        "fileMd5": "a7a8d67053b73d20c0e298118e54df40",
+        "checkedAt": "2026-09-05T06:38:46.077105+00:00"
+      },
+      "sha512": "677a80630a8b5df080695be5de1c254b87ede4dd742193f96b2cfb0496ba3cb53a5fb617949e9d28f5e8aa645ef53035bb736e3a788d2593433aa3b4233d7a99",
+      "verifiedSources": [
+        "https://cdn.modrinth.com/data/qMOdaUOs/versions/Dbl4pDXW/CodeChickenCore-1.4.3.jar"
+      ]
     },
     {
       "path": "mods/CoFHCore-[1.7.10]3.1.4-329.jar",
       "size": 1230511,
       "sha256": "acefa71392eff745dcfd6d6d5e49b6586e2e4e103d1260f4674f622152ef6f60",
       "sha1": "b7d66be19a6898232f5498a50ac0207109a3b2e6",
-      "sources": [],
-      "projectId": null,
-      "fileId": null,
-      "distributionBasis": null,
-      "status": "needs-source-and-license-review",
-      "embeddedLicenseFiles": []
+      "sources": [
+        "https://edge.forgecdn.net/files/2388/750/CoFHCore-%5b1.7.10%5d3.1.4-329.jar"
+      ],
+      "projectId": 69162,
+      "fileId": 2388750,
+      "distributionBasis": "Pinned author file on CurseForge; direct download only. Metadata resolved via the public MCIM cache; redistribution is not implied.",
+      "status": "author-origin-download-verified",
+      "embeddedLicenseFiles": [],
+      "curseforgeEvidence": {
+        "provider": "mcim-public-metadata-cache",
+        "metadataUrl": "https://mod.mcimirror.top/curseforge/v1/mods/69162/files/2388750",
+        "projectId": 69162,
+        "fileId": 2388750,
+        "fileName": "CoFHCore-[1.7.10]3.1.4-329.jar",
+        "fileSha1": "b7d66be19a6898232f5498a50ac0207109a3b2e6",
+        "fileMd5": "de527c101a1f2c62203f99515f3d0957",
+        "checkedAt": "2026-09-05T06:38:46.077105+00:00"
+      },
+      "sha512": "e5345958dd7f1bbf150937dc58e2da34a417210bc37a0b4866dae34917eef3c3af4270e24bcd5c58ec870986b57af861aac01265c7b510d8be2e4da89b54f891",
+      "verifiedSources": [
+        "https://mediafilez.forgecdn.net/files/2388/750/CoFHCore-%5b1.7.10%5d3.1.4-329.jar"
+      ],
+      "downloadVerification": {
+        "verified": true,
+        "at": "2026-09-05T06:50:32.110867+00:00",
+        "cached": true,
+        "errors": []
+      }
     },
     {
       "path": "mods/CompatibilityLayerForCustomSkinLoader-ALPHA-11.jar",
       "size": 52687,
       "sha256": "1269cbf2f78387c310ebd79dbd2f99f0efa9603831876b178c1802fa47b0bedf",
       "sha1": "71545ac3f357e9c5642a3294316412eb62e66ea1",
-      "sources": [],
-      "projectId": null,
-      "fileId": null,
-      "distributionBasis": null,
-      "status": "needs-source-and-license-review",
-      "embeddedLicenseFiles": []
+      "sources": [
+        "https://edge.forgecdn.net/files/3795/843/CompatibilityLayerForCustomSkinLoader-ALPHA-11.jar"
+      ],
+      "projectId": 404263,
+      "fileId": 3795843,
+      "distributionBasis": "Pinned author file on CurseForge; direct download only. Metadata resolved via the public MCIM cache; redistribution is not implied.",
+      "status": "author-origin-download-verified",
+      "embeddedLicenseFiles": [],
+      "curseforgeEvidence": {
+        "provider": "mcim-public-metadata-cache",
+        "metadataUrl": "https://mod.mcimirror.top/curseforge/v1/mods/404263/files/3795843",
+        "projectId": 404263,
+        "fileId": 3795843,
+        "fileName": "CompatibilityLayerForCustomSkinLoader-ALPHA-11.jar",
+        "fileSha1": "71545ac3f357e9c5642a3294316412eb62e66ea1",
+        "fileMd5": "3530f35c01fd6938d6d1f57348327aa3",
+        "checkedAt": "2026-09-05T06:38:46.077105+00:00"
+      },
+      "sha512": "26bbbd33ca3bd272cd3c0f2cedeae00290ed3171bc70283222894cdaf31c8b2d483845d78a661bc48b1f9075b45946d4c424fb5847d690bef622c219b050854b",
+      "verifiedSources": [
+        "https://mediafilez.forgecdn.net/files/3795/843/CompatibilityLayerForCustomSkinLoader-ALPHA-11.jar"
+      ],
+      "downloadVerification": {
+        "verified": true,
+        "at": "2026-09-05T06:50:32.114910+00:00",
+        "cached": true,
+        "errors": []
+      }
     },
     {
       "path": "mods/controlling-2.1.2.jar",
       "size": 32403,
       "sha256": "69f8faa4496d4d29d743abd9caa8e4b2cb8b99c7f06c9b6f902d96421e59ca61",
       "sha1": "c4e038de0fb2406c07b3c30e9cdb3131ae29e8b1",
-      "sources": [],
+      "sources": [
+        "https://github.com/GTNewHorizons/Controlling/releases/download/2.1.2/controlling-2.1.2.jar"
+      ],
       "projectId": null,
       "fileId": null,
-      "distributionBasis": null,
-      "status": "needs-source-and-license-review",
-      "embeddedLicenseFiles": []
+      "distributionBasis": "Download the pinned unmodified release asset directly from https://github.com/GTNewHorizons/Controlling/releases/tag/2.1.2; no rehosting.",
+      "status": "author-origin-download-verified",
+      "embeddedLicenseFiles": [],
+      "githubEvidence": {
+        "path": "mods/controlling-2.1.2.jar",
+        "sha256": "69f8faa4496d4d29d743abd9caa8e4b2cb8b99c7f06c9b6f902d96421e59ca61",
+        "url": "https://github.com/GTNewHorizons/Controlling/releases/download/2.1.2/controlling-2.1.2.jar",
+        "releaseUrl": "https://github.com/GTNewHorizons/Controlling/releases/tag/2.1.2",
+        "assetId": 187441505,
+        "repository": "GTNewHorizons/Controlling"
+      },
+      "sha512": "17b6ac4beb7600057bad72a4588ec1ec1e993adfba954a9e3036a5dcf38f0e4aacb66f68a188cca7c65489e5f93b5077cff24d92fa6d8fc57c0ca8dc1b572cd6",
+      "verifiedSources": [
+        "https://github.com/GTNewHorizons/Controlling/releases/download/2.1.2/controlling-2.1.2.jar"
+      ],
+      "downloadVerification": {
+        "verified": true,
+        "at": "2026-09-05T06:50:32.115517+00:00",
+        "cached": true,
+        "errors": []
+      }
     },
     {
       "path": "mods/CoreTweaks-1.7.10-0.3.3.2+nomixin.jar",
@@ -545,20 +994,48 @@
       "embeddedLicenseFiles": [
         "META-INF/LICENSE",
         "LICENSE"
-      ]
+      ],
+      "fallback": {
+        "url": "https://launcher.boshan.uk/objects/2b5aff22ab605da145fe664c6952a52e1010d8159052c61a40f7bcc4024549c7.jar",
+        "frpUrl": "http://103.40.14.100:21708/objects/2b5aff22ab605da145fe664c6952a52e1010d8159052c61a40f7bcc4024549c7.jar",
+        "noticeUrl": "https://launcher.boshan.uk/objects/2b5aff22ab605da145fe664c6952a52e1010d8159052c61a40f7bcc4024549c7.LICENSE.txt",
+        "distributionBasis": "MIT license embedded in the supplied unmodified JAR; all embedded LICENSE and NOTICE text retained alongside the exact-hash object",
+        "publishedVerified": true,
+        "rangeVerified": true
+      }
     },
     {
       "path": "mods/CraftTweaker-3.3.1.jar",
       "size": 1006315,
       "sha256": "7ccbc51c34c66850a39a3c8e7f04d4196a1c0f8fa052fb084ac4eb72b4ddd218",
       "sha1": "15015eb025066369a5a5f43f141ff38588d54b4e",
-      "sources": [],
+      "sources": [
+        "https://github.com/GTNewHorizons/CraftTweaker/releases/download/3.3.1/CraftTweaker-3.3.1.jar"
+      ],
       "projectId": null,
       "fileId": null,
-      "distributionBasis": null,
-      "status": "needs-source-and-license-review",
+      "distributionBasis": "Download the pinned unmodified release asset directly from https://github.com/GTNewHorizons/CraftTweaker/releases/tag/3.3.1; no rehosting.",
+      "status": "author-origin-download-verified",
       "embeddedLicenseFiles": [
         "LICENSE"
+      ],
+      "githubEvidence": {
+        "path": "mods/CraftTweaker-3.3.1.jar",
+        "sha256": "7ccbc51c34c66850a39a3c8e7f04d4196a1c0f8fa052fb084ac4eb72b4ddd218",
+        "url": "https://github.com/GTNewHorizons/CraftTweaker/releases/download/3.3.1/CraftTweaker-3.3.1.jar",
+        "releaseUrl": "https://github.com/GTNewHorizons/CraftTweaker/releases/tag/3.3.1",
+        "assetId": 151589714,
+        "repository": "GTNewHorizons/CraftTweaker"
+      },
+      "downloadVerification": {
+        "verified": true,
+        "at": "2026-09-05T06:50:33.863343+00:00",
+        "cached": false,
+        "errors": []
+      },
+      "sha512": "fd35f56a0c44115955eb4bdc2cd69157427e10dfeda6e7d452b460562bc1ac4942a8fc9dccab6860a9098aad6309eb75c8fc86a82228578b77f1d3f70214b1ec",
+      "verifiedSources": [
+        "https://github.com/GTNewHorizons/CraftTweaker/releases/download/3.3.1/CraftTweaker-3.3.1.jar"
       ]
     },
     {
@@ -567,10 +1044,11 @@
       "sha256": "cfccfe41a5f015875f80a7c8c095d8c3df3bcc15ff70f0eccb92852563455b39",
       "sha1": "ff76221a18c2fd9768c0888aa3acb74b4a7a933a",
       "sources": [
-        "https://cdn.modrinth.com/data/idMHQ4n2/versions/C2FVAFqn/CustomSkinLoader_ForgeLegacy-14.17.jar"
+        "https://cdn.modrinth.com/data/idMHQ4n2/versions/C2FVAFqn/CustomSkinLoader_ForgeLegacy-14.17.jar",
+        "https://edge.forgecdn.net/files/4642/232/CustomSkinLoader_ForgeLegacy-14.17.jar"
       ],
-      "projectId": null,
-      "fileId": null,
+      "projectId": 286924,
+      "fileId": 4642232,
       "distributionBasis": "Download the identical author-published file directly from Modrinth; no rehosting. Project license: GPL-3.0-only",
       "status": "author-origin-download-verified",
       "embeddedLicenseFiles": [
@@ -593,9 +1071,24 @@
       },
       "downloadVerification": {
         "verified": true,
+        "at": "2026-09-05T06:50:32.178832+00:00",
         "cached": true,
-        "at": "2026-09-05T06:16:40.033969+00:00"
-      }
+        "errors": []
+      },
+      "curseforgeEvidence": {
+        "provider": "mcim-public-metadata-cache",
+        "metadataUrl": "https://mod.mcimirror.top/curseforge/v1/mods/286924/files/4642232",
+        "projectId": 286924,
+        "fileId": 4642232,
+        "fileName": "CustomSkinLoader_ForgeLegacy-14.17.jar",
+        "fileSha1": "ff76221a18c2fd9768c0888aa3acb74b4a7a933a",
+        "fileMd5": "b8466c3fed8e6caf64891294634d797e",
+        "checkedAt": "2026-09-05T06:38:46.077105+00:00"
+      },
+      "sha512": "e557a2c70bf44a3f5ef9c522594ac3155f4c19283d058d34568e98f06c371928d2bedaf0e2eb7e256d97cb8221e7ab7d89f866276c3b400036bbe2afed2daf8e",
+      "verifiedSources": [
+        "https://cdn.modrinth.com/data/idMHQ4n2/versions/C2FVAFqn/CustomSkinLoader_ForgeLegacy-14.17.jar"
+      ]
     },
     {
       "path": "mods/CustomThings-1.7.10-0.0.3-59.jar",
@@ -614,62 +1107,166 @@
       "size": 41408,
       "sha256": "cd7c369c860703e65aaf7e79faecdc035a87a7b5b2a2012bf8d719bc6a85c762",
       "sha1": "621f49c30e5562e209a8c1361e7c2d913511cf3a",
-      "sources": [],
-      "projectId": null,
-      "fileId": null,
-      "distributionBasis": null,
-      "status": "needs-source-and-license-review",
-      "embeddedLicenseFiles": []
+      "sources": [
+        "https://edge.forgecdn.net/files/3112/130/DenseNeutronCollectors_1.7.10_1.0R.jar"
+      ],
+      "projectId": 420109,
+      "fileId": 3112130,
+      "distributionBasis": "Pinned author file on CurseForge; direct download only. Metadata resolved via the public MCIM cache; redistribution is not implied.",
+      "status": "author-origin-download-verified",
+      "embeddedLicenseFiles": [],
+      "curseforgeEvidence": {
+        "provider": "mcim-public-metadata-cache",
+        "metadataUrl": "https://mod.mcimirror.top/curseforge/v1/mods/420109/files/3112130",
+        "projectId": 420109,
+        "fileId": 3112130,
+        "fileName": "DenseNeutronCollectors_1.7.10_1.0R.jar",
+        "fileSha1": "621f49c30e5562e209a8c1361e7c2d913511cf3a",
+        "fileMd5": "888440c53ecd7b34c5866782f4ce17c5",
+        "checkedAt": "2026-09-05T06:38:46.077105+00:00"
+      },
+      "sha512": "a2573bb8fe8d84f75f29f7e2a807adf52eb333f5ef1ede643d007960dba3faf51307c124725ad83058f8c51da7b9c17c9037862fc72a1d763c59aed12ae4a56f",
+      "verifiedSources": [
+        "https://mediafilez.forgecdn.net/files/3112/130/DenseNeutronCollectors_1.7.10_1.0R.jar"
+      ],
+      "downloadVerification": {
+        "verified": true,
+        "at": "2026-09-05T06:50:32.179954+00:00",
+        "cached": true,
+        "errors": []
+      }
     },
     {
       "path": "mods/Ding-MC1.7.10v2.jar",
       "size": 4764,
       "sha256": "1790a2267ee028fe2a2e802f2636bd26efb4f847051a8149a686a28b8381edda",
       "sha1": "63c764b08fed9d426c50544ebbae87421b269cf4",
-      "sources": [],
-      "projectId": null,
-      "fileId": null,
-      "distributionBasis": null,
-      "status": "needs-source-and-license-review",
-      "embeddedLicenseFiles": []
+      "sources": [
+        "https://edge.forgecdn.net/files/2283/572/Ding-MC1.7.10v2.jar"
+      ],
+      "projectId": 231275,
+      "fileId": 2283572,
+      "distributionBasis": "Pinned author file on CurseForge; direct download only. Metadata resolved via the public MCIM cache; redistribution is not implied.",
+      "status": "author-origin-download-verified",
+      "embeddedLicenseFiles": [],
+      "curseforgeEvidence": {
+        "provider": "mcim-public-metadata-cache",
+        "metadataUrl": "https://mod.mcimirror.top/curseforge/v1/mods/231275/files/2283572",
+        "projectId": 231275,
+        "fileId": 2283572,
+        "fileName": "Ding-MC1.7.10v2.jar",
+        "fileSha1": "63c764b08fed9d426c50544ebbae87421b269cf4",
+        "fileMd5": "1a02aec95248abbe9f795a27c6763d3e",
+        "checkedAt": "2026-09-05T06:38:46.077105+00:00"
+      },
+      "sha512": "0ca364ac8a069888a0a85013ed04da151ce88dbe2ed37f62a8d2606b422269264b0c11f6a61095d1c35d9680712f949fb470466320db622cd32e3c577a5a489a",
+      "verifiedSources": [
+        "https://mediafilez.forgecdn.net/files/2283/572/Ding-MC1.7.10v2.jar"
+      ],
+      "downloadVerification": {
+        "verified": true,
+        "at": "2026-09-05T06:50:32.181000+00:00",
+        "cached": true,
+        "errors": []
+      }
     },
     {
       "path": "mods/endercore-0.4.6.jar",
       "size": 469520,
       "sha256": "422d90d1f17d50df13e1988bc0657a270a946e6147deba79461607e206e27d3b",
       "sha1": "6691f62d7d9aa5b44a1655015a86491ab55c24f4",
-      "sources": [],
+      "sources": [
+        "https://github.com/GTNewHorizons/EnderCore/releases/download/0.4.6/endercore-0.4.6.jar"
+      ],
       "projectId": null,
       "fileId": null,
-      "distributionBasis": null,
-      "status": "needs-source-and-license-review",
-      "embeddedLicenseFiles": []
+      "distributionBasis": "Download the pinned unmodified release asset directly from https://github.com/GTNewHorizons/EnderCore/releases/tag/0.4.6; no rehosting.",
+      "status": "author-origin-download-verified",
+      "embeddedLicenseFiles": [],
+      "githubEvidence": {
+        "path": "mods/endercore-0.4.6.jar",
+        "sha256": "422d90d1f17d50df13e1988bc0657a270a946e6147deba79461607e206e27d3b",
+        "url": "https://github.com/GTNewHorizons/EnderCore/releases/download/0.4.6/endercore-0.4.6.jar",
+        "releaseUrl": "https://github.com/GTNewHorizons/EnderCore/releases/tag/0.4.6",
+        "assetId": 154647756,
+        "repository": "GTNewHorizons/EnderCore"
+      },
+      "sha512": "97cc9b4030b54bb8d16c216711b3f4d8dd2e9c73eb73fbbf8846afc5785844dbca1b5100cf3232709021ed8d0011f79f057523f42e5912288598223ff735a424",
+      "verifiedSources": [
+        "https://github.com/GTNewHorizons/EnderCore/releases/download/0.4.6/endercore-0.4.6.jar"
+      ],
+      "downloadVerification": {
+        "verified": true,
+        "at": "2026-09-05T06:50:32.182565+00:00",
+        "cached": true,
+        "errors": []
+      }
     },
     {
       "path": "mods/EnderIO-2.9.6.jar",
       "size": 5171999,
       "sha256": "71c4bb6ce3a55ff20f64991a548baba8d60a8f9644e8bf1a2a78a17b64ac45d6",
       "sha1": "ad8fa7a033c762e62f91bab83aae9e3d1fdb7c53",
-      "sources": [],
+      "sources": [
+        "https://github.com/GTNewHorizons/EnderIO/releases/download/2.9.6/EnderIO-2.9.6.jar"
+      ],
       "projectId": null,
       "fileId": null,
-      "distributionBasis": null,
-      "status": "needs-source-and-license-review",
+      "distributionBasis": "Download the pinned unmodified release asset directly from https://github.com/GTNewHorizons/EnderIO/releases/tag/2.9.6; no rehosting.",
+      "status": "author-origin-download-verified",
       "embeddedLicenseFiles": [
         "META-INF/LICENSE"
-      ]
+      ],
+      "githubEvidence": {
+        "path": "mods/EnderIO-2.9.6.jar",
+        "sha256": "71c4bb6ce3a55ff20f64991a548baba8d60a8f9644e8bf1a2a78a17b64ac45d6",
+        "url": "https://github.com/GTNewHorizons/EnderIO/releases/download/2.9.6/EnderIO-2.9.6.jar",
+        "releaseUrl": "https://github.com/GTNewHorizons/EnderIO/releases/tag/2.9.6",
+        "assetId": 239828847,
+        "repository": "GTNewHorizons/EnderIO"
+      },
+      "sha512": "29ca43160c18a72768d3888e95763b52f16439996b0b2110ffb5af51caedf07bec2b768321f82aed11643dbb11f99c7dc04845c9ff7bb86f03400264908bf619",
+      "verifiedSources": [
+        "https://github.com/GTNewHorizons/EnderIO/releases/download/2.9.6/EnderIO-2.9.6.jar"
+      ],
+      "downloadVerification": {
+        "verified": true,
+        "at": "2026-09-05T06:50:32.192728+00:00",
+        "cached": true,
+        "errors": []
+      }
     },
     {
       "path": "mods/EnhancedLootBags-1.1.1.jar",
       "size": 74693,
       "sha256": "0092b7d63816dc77b18390ee4c942746a1bec5b647afbfd7bddb1dec132aadb1",
       "sha1": "e7093b4e5090f667fc09fa076e1ff81f12673204",
-      "sources": [],
+      "sources": [
+        "https://github.com/GTNewHorizons/EnhancedLootBags/releases/download/1.1.1/EnhancedLootBags-1.1.1.jar"
+      ],
       "projectId": null,
       "fileId": null,
-      "distributionBasis": null,
-      "status": "needs-source-and-license-review",
-      "embeddedLicenseFiles": []
+      "distributionBasis": "Download the pinned unmodified release asset directly from https://github.com/GTNewHorizons/EnhancedLootBags/releases/tag/1.1.1; no rehosting.",
+      "status": "author-origin-download-verified",
+      "embeddedLicenseFiles": [],
+      "githubEvidence": {
+        "path": "mods/EnhancedLootBags-1.1.1.jar",
+        "sha256": "0092b7d63816dc77b18390ee4c942746a1bec5b647afbfd7bddb1dec132aadb1",
+        "url": "https://github.com/GTNewHorizons/EnhancedLootBags/releases/download/1.1.1/EnhancedLootBags-1.1.1.jar",
+        "releaseUrl": "https://github.com/GTNewHorizons/EnhancedLootBags/releases/tag/1.1.1",
+        "assetId": 145141383,
+        "repository": "GTNewHorizons/EnhancedLootBags"
+      },
+      "sha512": "e1d187df9b4afd96b1b349f47ebfa6eda3d208a246645d7751a48e4d3ca374971d3fd2d3a27328c43c5584ae6e534c8d9263d733daeb8e9e6e023f18deb0b255",
+      "verifiedSources": [
+        "https://github.com/GTNewHorizons/EnhancedLootBags/releases/download/1.1.1/EnhancedLootBags-1.1.1.jar"
+      ],
+      "downloadVerification": {
+        "verified": true,
+        "at": "2026-09-05T06:50:32.193792+00:00",
+        "cached": true,
+        "errors": []
+      }
     },
     {
       "path": "mods/EuphoriaPatcher-1.5.2-r5.4-forgeVintage.jar",
@@ -677,10 +1274,11 @@
       "sha256": "fa2f02062b524d25746485679c3acebf8e75efc668ed0da1a44318f66a983866",
       "sha1": "a88fe52fb27babfda343eb0dd03f57c55655901b",
       "sources": [
-        "https://cdn.modrinth.com/data/4H6sumDB/versions/PZGJtIvC/EuphoriaPatcher-1.5.2-r5.4-forgeVintage.jar"
+        "https://cdn.modrinth.com/data/4H6sumDB/versions/PZGJtIvC/EuphoriaPatcher-1.5.2-r5.4-forgeVintage.jar",
+        "https://edge.forgecdn.net/files/6137/777/EuphoriaPatcher-1.5.2-r5.4-forgeVintage.jar"
       ],
-      "projectId": null,
-      "fileId": null,
+      "projectId": 915902,
+      "fileId": 6137777,
       "distributionBasis": "Download the identical author-published file directly from Modrinth; no rehosting. Project license: MPL-2.0",
       "status": "author-origin-download-verified",
       "embeddedLicenseFiles": [],
@@ -701,21 +1299,58 @@
       },
       "downloadVerification": {
         "verified": true,
+        "at": "2026-09-05T06:50:32.196079+00:00",
         "cached": true,
-        "at": "2026-09-05T06:16:40.034974+00:00"
-      }
+        "errors": []
+      },
+      "curseforgeEvidence": {
+        "provider": "mcim-public-metadata-cache",
+        "metadataUrl": "https://mod.mcimirror.top/curseforge/v1/mods/915902/files/6137777",
+        "projectId": 915902,
+        "fileId": 6137777,
+        "fileName": "EuphoriaPatcher-1.5.2-r5.4-forgeVintage.jar",
+        "fileSha1": "a88fe52fb27babfda343eb0dd03f57c55655901b",
+        "fileMd5": "f569130372882046a25e821f9bf18a66",
+        "checkedAt": "2026-09-05T06:38:46.077105+00:00"
+      },
+      "sha512": "a6f39457ad5acb68928719c1ca3f41123a4c043d281562e7b6a62e31a94cb035137f8dda3bb63de034ac11c0d9bccab43531f67cb22331b3b60327fd71426d6d",
+      "verifiedSources": [
+        "https://cdn.modrinth.com/data/4H6sumDB/versions/PZGJtIvC/EuphoriaPatcher-1.5.2-r5.4-forgeVintage.jar"
+      ]
     },
     {
       "path": "mods/FastLeafDecay-1.7.10-1.4.jar",
       "size": 7079,
       "sha256": "17cf47a96cd31da7bd13f72d1afe97f35df601297446b21e30e051e9ae2107e2",
       "sha1": "d82f7a1f7573f35a4f1dace410a7fbb88bb4b522",
-      "sources": [],
-      "projectId": null,
-      "fileId": null,
-      "distributionBasis": null,
-      "status": "needs-source-and-license-review",
-      "embeddedLicenseFiles": []
+      "sources": [
+        "https://edge.forgecdn.net/files/2272/838/FastLeafDecay-1.7.10-1.4.jar"
+      ],
+      "projectId": 230976,
+      "fileId": 2272838,
+      "distributionBasis": "Pinned author file on CurseForge; direct download only. Metadata resolved via the public MCIM cache; redistribution is not implied.",
+      "status": "author-origin-download-verified",
+      "embeddedLicenseFiles": [],
+      "curseforgeEvidence": {
+        "provider": "mcim-public-metadata-cache",
+        "metadataUrl": "https://mod.mcimirror.top/curseforge/v1/mods/230976/files/2272838",
+        "projectId": 230976,
+        "fileId": 2272838,
+        "fileName": "FastLeafDecay-1.7.10-1.4.jar",
+        "fileSha1": "d82f7a1f7573f35a4f1dace410a7fbb88bb4b522",
+        "fileMd5": "96404c6169bd47e011ca8f484969a8b4",
+        "checkedAt": "2026-09-05T06:38:46.077105+00:00"
+      },
+      "sha512": "63184939dfa0d0aab280eff3225e25e3c4b0e2c37eda0e394ada011cb60b57715ef744df19c9f5bccaa223ec19ff2e500e9db96067bc24ebafab4f165fdf3ec6",
+      "verifiedSources": [
+        "https://mediafilez.forgecdn.net/files/2272/838/FastLeafDecay-1.7.10-1.4.jar"
+      ],
+      "downloadVerification": {
+        "verified": true,
+        "at": "2026-09-05T06:50:32.197123+00:00",
+        "cached": true,
+        "errors": []
+      }
     },
     {
       "path": "mods/FoamFix-1.7.10-universal-1.0.4.jar",
@@ -723,10 +1358,11 @@
       "sha256": "3c82a60149f024d9a02cd582ffd49aee36dba2394af3065e054d8e6b5364d3c6",
       "sha1": "a32624a456d2fab26241df30c1612558710202f3",
       "sources": [
-        "https://cdn.modrinth.com/data/jupr7Bf5/versions/H4Y7YwTd/FoamFix-1.7.10-universal-1.0.4.jar"
+        "https://cdn.modrinth.com/data/jupr7Bf5/versions/H4Y7YwTd/FoamFix-1.7.10-universal-1.0.4.jar",
+        "https://edge.forgecdn.net/files/4473/363/FoamFix-1.7.10-universal-1.0.4.jar"
       ],
-      "projectId": null,
-      "fileId": null,
+      "projectId": 278494,
+      "fileId": 4473363,
       "distributionBasis": "Download the identical author-published file directly from Modrinth; no rehosting. Project license: LicenseRef-Custom",
       "status": "author-origin-download-verified",
       "embeddedLicenseFiles": [
@@ -750,81 +1386,222 @@
       },
       "downloadVerification": {
         "verified": true,
+        "at": "2026-09-05T06:50:32.198163+00:00",
         "cached": true,
-        "at": "2026-09-05T06:16:40.035975+00:00"
-      }
+        "errors": []
+      },
+      "curseforgeEvidence": {
+        "provider": "mcim-public-metadata-cache",
+        "metadataUrl": "https://mod.mcimirror.top/curseforge/v1/mods/278494/files/4473363",
+        "projectId": 278494,
+        "fileId": 4473363,
+        "fileName": "FoamFix-1.7.10-universal-1.0.4.jar",
+        "fileSha1": "a32624a456d2fab26241df30c1612558710202f3",
+        "fileMd5": "807adb4d146b3c314ca90302038f661f",
+        "checkedAt": "2026-09-05T06:38:46.077105+00:00"
+      },
+      "sha512": "e8098d58901c4e3ecf1ad3498ce6e8ee3a2bdb948ced5a5889ff0e829c4c4585afe8aabad7c7b05eae61b7f0ef72d5d8712f1f33dccebe5b508240a23b6cb80b",
+      "verifiedSources": [
+        "https://cdn.modrinth.com/data/jupr7Bf5/versions/H4Y7YwTd/FoamFix-1.7.10-universal-1.0.4.jar"
+      ]
     },
     {
       "path": "mods/Forbidden Magic-1.7.10-0.575.jar",
       "size": 647020,
       "sha256": "d6b239a05a630cfb3b6de01fe14a8674ec14ef8fb34ea75d1ad45b79565d8636",
       "sha1": "dfe376c08c4fa43ec7491128ae26a65b9d4106c9",
-      "sources": [],
-      "projectId": null,
-      "fileId": null,
-      "distributionBasis": null,
-      "status": "needs-source-and-license-review",
-      "embeddedLicenseFiles": []
+      "sources": [
+        "https://edge.forgecdn.net/files/2303/822/Forbidden%20Magic-1.7.10-0.575.jar"
+      ],
+      "projectId": 224237,
+      "fileId": 2303822,
+      "distributionBasis": "Pinned author file on CurseForge; direct download only. Metadata resolved via the public MCIM cache; redistribution is not implied.",
+      "status": "author-origin-download-verified",
+      "embeddedLicenseFiles": [],
+      "curseforgeEvidence": {
+        "provider": "mcim-public-metadata-cache",
+        "metadataUrl": "https://mod.mcimirror.top/curseforge/v1/mods/224237/files/2303822",
+        "projectId": 224237,
+        "fileId": 2303822,
+        "fileName": "Forbidden Magic-1.7.10-0.575.jar",
+        "fileSha1": "dfe376c08c4fa43ec7491128ae26a65b9d4106c9",
+        "fileMd5": "8572280652bb3c84da2915570021f42d",
+        "checkedAt": "2026-09-05T06:38:46.077105+00:00"
+      },
+      "sha512": "1dda5fff28732213c58eee41aef5cb80e0b1ff76416556248f4d6fdc44fee65eeae10d87f01b69a99071319edabe4547eabced86a4b85c6100362c0f88925e2d",
+      "verifiedSources": [
+        "https://mediafilez.forgecdn.net/files/2303/822/Forbidden%20Magic-1.7.10-0.575.jar"
+      ],
+      "downloadVerification": {
+        "verified": true,
+        "at": "2026-09-05T06:50:32.199711+00:00",
+        "cached": true,
+        "errors": []
+      }
     },
     {
       "path": "mods/ForgeAuth-0.6.2-1.8.jar",
       "size": 26998,
       "sha256": "b6dbb5e29afb0967196316fe1af24a91a542332a49327f0347021b233d7688fd",
       "sha1": "3d914ad6276c7261c8a5977cb0222cf54172c8ea",
-      "sources": [],
+      "sources": [
+        "https://github.com/ajussak/ForgeAuth/releases/download/v0.6.2-1.8/ForgeAuth-0.6.2-1.8.jar"
+      ],
       "projectId": null,
       "fileId": null,
-      "distributionBasis": null,
-      "status": "needs-source-and-license-review",
-      "embeddedLicenseFiles": []
+      "distributionBasis": "Download the pinned unmodified release asset directly from https://github.com/ajussak/ForgeAuth/releases/tag/v0.6.2-1.8; no rehosting.",
+      "status": "author-origin-download-verified",
+      "embeddedLicenseFiles": [],
+      "githubEvidence": {
+        "path": "mods/ForgeAuth-0.6.2-1.8.jar",
+        "sha256": "b6dbb5e29afb0967196316fe1af24a91a542332a49327f0347021b233d7688fd",
+        "url": "https://github.com/ajussak/ForgeAuth/releases/download/v0.6.2-1.8/ForgeAuth-0.6.2-1.8.jar",
+        "releaseUrl": "https://github.com/ajussak/ForgeAuth/releases/tag/v0.6.2-1.8",
+        "assetId": 711092,
+        "repository": "wascar10/ForgeAuth"
+      },
+      "sha512": "0fe276c73acecb90b05797ff3b4d099dc18199d9ba7385b8cdb5a1f7139cb1eeaa24c5277220b960caf5c05cb836a6198cc85278a0d06a213865c30743243ddb",
+      "verifiedSources": [
+        "https://github.com/ajussak/ForgeAuth/releases/download/v0.6.2-1.8/ForgeAuth-0.6.2-1.8.jar"
+      ],
+      "downloadVerification": {
+        "verified": true,
+        "at": "2026-09-05T06:50:33.420343+00:00",
+        "cached": false,
+        "errors": []
+      }
     },
     {
       "path": "mods/forgelin-1.10.0-GTNH.jar",
       "size": 6616554,
       "sha256": "a3e817e0ccbc6f16f8f468941e6256068b488932abac2a160666909844f76125",
       "sha1": "df1f0204a73a6960abefc6ecd283ae4d00d42703",
-      "sources": [],
+      "sources": [
+        "https://github.com/GTNewHorizons/Forgelin/releases/download/1.10.0-GTNH/forgelin-1.10.0-GTNH.jar"
+      ],
       "projectId": null,
       "fileId": null,
-      "distributionBasis": null,
-      "status": "needs-source-and-license-review",
-      "embeddedLicenseFiles": []
+      "distributionBasis": "Download the pinned unmodified release asset directly from https://github.com/GTNewHorizons/Forgelin/releases/tag/1.10.0-GTNH; no rehosting.",
+      "status": "author-origin-download-verified",
+      "embeddedLicenseFiles": [],
+      "githubEvidence": {
+        "path": "mods/forgelin-1.10.0-GTNH.jar",
+        "sha256": "a3e817e0ccbc6f16f8f468941e6256068b488932abac2a160666909844f76125",
+        "url": "https://github.com/GTNewHorizons/Forgelin/releases/download/1.10.0-GTNH/forgelin-1.10.0-GTNH.jar",
+        "releaseUrl": "https://github.com/GTNewHorizons/Forgelin/releases/tag/1.10.0-GTNH",
+        "assetId": 167499252,
+        "repository": "GTNewHorizons/Forgelin"
+      },
+      "sha512": "bd9577d3a72073618395a7fd12e0df997b7f032d0b10f2feb0b06df7396a4486c04490fc6269bd3eb5444207145eddba5600c99c721e5379411588729fb0263f",
+      "verifiedSources": [
+        "https://github.com/GTNewHorizons/Forgelin/releases/download/1.10.0-GTNH/forgelin-1.10.0-GTNH.jar"
+      ],
+      "downloadVerification": {
+        "verified": true,
+        "at": "2026-09-05T06:50:33.434848+00:00",
+        "cached": true,
+        "errors": []
+      }
     },
     {
       "path": "mods/ForgeNBTEdit-universal-1.0.0.test.jar",
       "size": 77576,
       "sha256": "866a8fb0d59a7ac98af9c0eb1be909f285128ea8201ef637bb37b16b7f49e6d2",
       "sha1": "765f4ab7877abaec9113848eb828ced8314c4c0f",
-      "sources": [],
-      "projectId": null,
-      "fileId": null,
-      "distributionBasis": null,
-      "status": "needs-source-and-license-review",
-      "embeddedLicenseFiles": []
+      "sources": [
+        "https://edge.forgecdn.net/files/2949/679/ForgeNBTEdit-universal-1.0.0.test.jar"
+      ],
+      "projectId": 381388,
+      "fileId": 2949679,
+      "distributionBasis": "Pinned author file on CurseForge; direct download only. Metadata resolved via the public MCIM cache; redistribution is not implied.",
+      "status": "author-origin-download-verified",
+      "embeddedLicenseFiles": [],
+      "curseforgeEvidence": {
+        "provider": "mcim-public-metadata-cache",
+        "metadataUrl": "https://mod.mcimirror.top/curseforge/v1/mods/381388/files/2949679",
+        "projectId": 381388,
+        "fileId": 2949679,
+        "fileName": "ForgeNBTEdit-universal-1.0.0.test.jar",
+        "fileSha1": "765f4ab7877abaec9113848eb828ced8314c4c0f",
+        "fileMd5": "e42d4d3a3923e157f5a0edb334183663",
+        "checkedAt": "2026-09-05T06:38:46.077105+00:00"
+      },
+      "sha512": "3053da74f3b4300bd2bbb2cf1c7ca7fa071770a9be6f0f2bb28656fda9b902d389a463d955d90498cd52a960b3c72ac3f09124e0e5e176c15f3f4ba98597a3c4",
+      "verifiedSources": [
+        "https://mediafilez.forgecdn.net/files/2949/679/ForgeNBTEdit-universal-1.0.0.test.jar"
+      ],
+      "downloadVerification": {
+        "verified": true,
+        "at": "2026-09-05T06:50:33.435889+00:00",
+        "cached": true,
+        "errors": []
+      }
     },
     {
       "path": "mods/ForgottenRelics-1.7.3-[Final].jar",
       "size": 839639,
       "sha256": "c63341435bdefa63138da887eeaa61fa83056710ad386e35bc6742b97390332b",
       "sha1": "bd3d07019171a2dac3237e72b1a29080497450f1",
-      "sources": [],
-      "projectId": null,
-      "fileId": null,
-      "distributionBasis": null,
-      "status": "needs-source-and-license-review",
-      "embeddedLicenseFiles": []
+      "sources": [
+        "https://edge.forgecdn.net/files/2786/664/ForgottenRelics-1.7.3-%5bFinal%5d.jar"
+      ],
+      "projectId": 313427,
+      "fileId": 2786664,
+      "distributionBasis": "Pinned author file on CurseForge; direct download only. Metadata resolved via the public MCIM cache; redistribution is not implied.",
+      "status": "author-origin-download-verified",
+      "embeddedLicenseFiles": [],
+      "curseforgeEvidence": {
+        "provider": "mcim-public-metadata-cache",
+        "metadataUrl": "https://mod.mcimirror.top/curseforge/v1/mods/313427/files/2786664",
+        "projectId": 313427,
+        "fileId": 2786664,
+        "fileName": "ForgottenRelics-1.7.3-[Final].jar",
+        "fileSha1": "bd3d07019171a2dac3237e72b1a29080497450f1",
+        "fileMd5": "e0ed79157019888ccb1d039367462d41",
+        "checkedAt": "2026-09-05T06:38:46.077105+00:00"
+      },
+      "sha512": "c8be7a23ad92a9f953e014b626fb3e06034da457658de5203d2da01b0a38c33d1e0dad095e929b81f0074ca691f7f5cd592884a5fc6b70b4562a377bb61f06d8",
+      "verifiedSources": [
+        "https://mediafilez.forgecdn.net/files/2786/664/ForgottenRelics-1.7.3-%5bFinal%5d.jar"
+      ],
+      "downloadVerification": {
+        "verified": true,
+        "at": "2026-09-05T06:50:33.437709+00:00",
+        "cached": true,
+        "errors": []
+      }
     },
     {
       "path": "mods/gadomancy-1.4.2.jar",
       "size": 7252950,
       "sha256": "a1b84ae30b31b38f3466492e4bed0bb80f5831130604b7acfc614cbda26574c9",
       "sha1": "004a9bbee91362f44bf35e0e456f3c0b231bd04f",
-      "sources": [],
+      "sources": [
+        "https://github.com/GTNewHorizons/Gadomancy/releases/download/1.4.2/gadomancy-1.4.2.jar"
+      ],
       "projectId": null,
       "fileId": null,
-      "distributionBasis": null,
-      "status": "needs-source-and-license-review",
-      "embeddedLicenseFiles": []
+      "distributionBasis": "Download the pinned unmodified release asset directly from https://github.com/GTNewHorizons/Gadomancy/releases/tag/1.4.2; no rehosting.",
+      "status": "author-origin-download-verified",
+      "embeddedLicenseFiles": [],
+      "githubEvidence": {
+        "path": "mods/gadomancy-1.4.2.jar",
+        "sha256": "a1b84ae30b31b38f3466492e4bed0bb80f5831130604b7acfc614cbda26574c9",
+        "url": "https://github.com/GTNewHorizons/Gadomancy/releases/download/1.4.2/gadomancy-1.4.2.jar",
+        "releaseUrl": "https://github.com/GTNewHorizons/Gadomancy/releases/tag/1.4.2",
+        "assetId": 216951033,
+        "repository": "GTNewHorizons/Gadomancy"
+      },
+      "sha512": "0a19e6457bad7315c5e56cb24ffc417dd9b354ba77abc955538923b1f56059520009c319493b9f183ed3ff7c57aed6d7e087da6b662d103dbb7504825dbba2fd",
+      "verifiedSources": [
+        "https://github.com/GTNewHorizons/Gadomancy/releases/download/1.4.2/gadomancy-1.4.2.jar"
+      ],
+      "downloadVerification": {
+        "verified": true,
+        "at": "2026-09-05T06:50:33.451848+00:00",
+        "cached": true,
+        "errors": []
+      }
     },
     {
       "path": "mods/gtnhlib-0.9.37.jar",
@@ -832,10 +1609,11 @@
       "sha256": "83357d1bbbbb29473e593531aab73d78209bb24d741eb8472e9542de76222717",
       "sha1": "25e877c79cdd26bc55cc43d1842a51b6b142fd54",
       "sources": [
-        "https://cdn.modrinth.com/data/vTvnv7qp/versions/Z7AJXtd7/gtnhlib-0.9.37.jar"
+        "https://cdn.modrinth.com/data/vTvnv7qp/versions/Z7AJXtd7/gtnhlib-0.9.37.jar",
+        "https://edge.forgecdn.net/files/7726/554/gtnhlib-0.9.37.jar"
       ],
-      "projectId": null,
-      "fileId": null,
+      "projectId": 688894,
+      "fileId": 7726554,
       "distributionBasis": "Download the identical author-published file directly from Modrinth; no rehosting. Project license: LGPL-3.0-only",
       "status": "author-origin-download-verified",
       "embeddedLicenseFiles": [
@@ -859,9 +1637,24 @@
       },
       "downloadVerification": {
         "verified": true,
+        "at": "2026-09-05T06:50:33.510699+00:00",
         "cached": true,
-        "at": "2026-09-05T06:16:40.050439+00:00"
-      }
+        "errors": []
+      },
+      "curseforgeEvidence": {
+        "provider": "mcim-public-metadata-cache",
+        "metadataUrl": "https://mod.mcimirror.top/curseforge/v1/mods/688894/files/7726554",
+        "projectId": 688894,
+        "fileId": 7726554,
+        "fileName": "gtnhlib-0.9.37.jar",
+        "fileSha1": "25e877c79cdd26bc55cc43d1842a51b6b142fd54",
+        "fileMd5": "ba52e67ab94391be3ae12cdfa5a6aabe",
+        "checkedAt": "2026-09-05T06:38:46.077105+00:00"
+      },
+      "sha512": "3d0620254e2911544b3c1ba63ed93e36aa146a557bb1cffae7e1ac6e22cde381ad498dd3e43c4e69f311d85be43b8e61f54129bd1e8b4ce06adc0ddd2f09f1fb",
+      "verifiedSources": [
+        "https://cdn.modrinth.com/data/vTvnv7qp/versions/Z7AJXtd7/gtnhlib-0.9.37.jar"
+      ]
     },
     {
       "path": "mods/HarvestDay-Day-1.jar",
@@ -869,11 +1662,21 @@
       "sha256": "822afbfe75b9b0605425c7a3e3e6ab2697c3e9e7c37b0928ea1cfb8cca70e4c8",
       "sha1": "44456d2965797f97b2c96be0f011e86bd7f1863f",
       "sources": [],
-      "projectId": null,
-      "fileId": null,
-      "distributionBasis": null,
+      "projectId": 837153,
+      "fileId": 4435051,
+      "distributionBasis": "Pinned author file on CurseForge; direct download only. Metadata resolved via the public MCIM cache; redistribution is not implied.",
       "status": "needs-source-and-license-review",
-      "embeddedLicenseFiles": []
+      "embeddedLicenseFiles": [],
+      "curseforgeEvidence": {
+        "provider": "mcim-public-metadata-cache",
+        "metadataUrl": "https://mod.mcimirror.top/curseforge/v1/mods/837153/files/4435051",
+        "projectId": 837153,
+        "fileId": 4435051,
+        "fileName": "HarvestDay-Day-1.jar",
+        "fileSha1": "44456d2965797f97b2c96be0f011e86bd7f1863f",
+        "fileMd5": "dcc8996777454bb0f784c58bd774f39d",
+        "checkedAt": "2026-09-05T06:38:46.077105+00:00"
+      }
     },
     {
       "path": "mods/hodgepodge-2.6.26.jar",
@@ -881,10 +1684,11 @@
       "sha256": "97e829b245c74305edd09ff17892a33fd240588923be5eaeddd9768f9bdfa107",
       "sha1": "ee1404c3d961bbc9ff363df45b0f10d494708909",
       "sources": [
-        "https://cdn.modrinth.com/data/6QQe8Ldy/versions/u5SKSQxu/hodgepodge-2.6.26.jar"
+        "https://cdn.modrinth.com/data/6QQe8Ldy/versions/u5SKSQxu/hodgepodge-2.6.26.jar",
+        "https://edge.forgecdn.net/files/6185/787/hodgepodge-2.6.26.jar"
       ],
-      "projectId": null,
-      "fileId": null,
+      "projectId": 688899,
+      "fileId": 6185787,
       "distributionBasis": "Download the identical author-published file directly from Modrinth; no rehosting. Project license: LGPL-3.0-only",
       "status": "author-origin-download-verified",
       "embeddedLicenseFiles": [],
@@ -905,93 +1709,260 @@
       },
       "downloadVerification": {
         "verified": true,
+        "at": "2026-09-05T06:50:33.512773+00:00",
         "cached": true,
-        "at": "2026-09-05T06:16:40.051966+00:00"
-      }
+        "errors": []
+      },
+      "curseforgeEvidence": {
+        "provider": "mcim-public-metadata-cache",
+        "metadataUrl": "https://mod.mcimirror.top/curseforge/v1/mods/688899/files/6185787",
+        "projectId": 688899,
+        "fileId": 6185787,
+        "fileName": "hodgepodge-2.6.26.jar",
+        "fileSha1": "ee1404c3d961bbc9ff363df45b0f10d494708909",
+        "fileMd5": "5ef1de5057ab4f0f713a0b8b4d397772",
+        "checkedAt": "2026-09-05T06:38:46.077105+00:00"
+      },
+      "sha512": "a2952bf6b8317d0295c6501ae5e5bf9f80395b3b063ad19ba1ea181deb1f28f1b938930867aa53f82794941f0e57a965748b0fbfb0ea689352cebf8077b9725d",
+      "verifiedSources": [
+        "https://cdn.modrinth.com/data/6QQe8Ldy/versions/u5SKSQxu/hodgepodge-2.6.26.jar"
+      ]
     },
     {
       "path": "mods/industrialcraft-2-2.2.827-experimental.jar",
       "size": 5633941,
       "sha256": "2c7a4d5ea98f286c84b591c0f4efad564b1dd74a7779d043475794884a3d1ca8",
       "sha1": "a2a24f98eaab2c4a8fa2583f66590ad8cdeea405",
-      "sources": [],
-      "projectId": null,
-      "fileId": null,
-      "distributionBasis": null,
-      "status": "needs-source-and-license-review",
-      "embeddedLicenseFiles": []
+      "sources": [
+        "https://edge.forgecdn.net/files/2353/971/industrialcraft-2-2.2.827-experimental.jar"
+      ],
+      "projectId": 242638,
+      "fileId": 2353971,
+      "distributionBasis": "Pinned author file on CurseForge; direct download only. Metadata resolved via the public MCIM cache; redistribution is not implied.",
+      "status": "author-origin-download-verified",
+      "embeddedLicenseFiles": [],
+      "curseforgeEvidence": {
+        "provider": "mcim-public-metadata-cache",
+        "metadataUrl": "https://mod.mcimirror.top/curseforge/v1/mods/242638/files/2353971",
+        "projectId": 242638,
+        "fileId": 2353971,
+        "fileName": "industrialcraft-2-2.2.827-experimental.jar",
+        "fileSha1": "a2a24f98eaab2c4a8fa2583f66590ad8cdeea405",
+        "fileMd5": "6fd8c3b8b87532c4c8884614fc2eb21d",
+        "checkedAt": "2026-09-05T06:38:46.077105+00:00"
+      },
+      "sha512": "d797f034dede1a2f8d42e436d85d0724334a16dd91d628e455bc44b79431fbd926054d260ed845d4876edbff2c95276749ab107b216f19dcf1447ce2ea048a68",
+      "verifiedSources": [
+        "https://mediafilez.forgecdn.net/files/2353/971/industrialcraft-2-2.2.827-experimental.jar"
+      ],
+      "downloadVerification": {
+        "verified": true,
+        "at": "2026-09-05T06:50:33.527005+00:00",
+        "cached": true,
+        "errors": []
+      }
     },
     {
       "path": "mods/InGameInfoXML-1.7.10-2.8.1.82-universal.jar",
       "size": 330346,
       "sha256": "a1332303839cf65cdb77335efeeac28133fbc7ead8e8b2e4baedc789c38d0ee8",
       "sha1": "44c05208968aa9f83bb3ba4e5f090acdd2bc05e6",
-      "sources": [],
-      "projectId": null,
-      "fileId": null,
-      "distributionBasis": null,
-      "status": "needs-source-and-license-review",
-      "embeddedLicenseFiles": []
+      "sources": [
+        "https://edge.forgecdn.net/files/2260/741/InGameInfoXML-1.7.10-2.8.1.82-universal.jar"
+      ],
+      "projectId": 225604,
+      "fileId": 2260741,
+      "distributionBasis": "Pinned author file on CurseForge; direct download only. Metadata resolved via the public MCIM cache; redistribution is not implied.",
+      "status": "author-origin-download-verified",
+      "embeddedLicenseFiles": [],
+      "curseforgeEvidence": {
+        "provider": "mcim-public-metadata-cache",
+        "metadataUrl": "https://mod.mcimirror.top/curseforge/v1/mods/225604/files/2260741",
+        "projectId": 225604,
+        "fileId": 2260741,
+        "fileName": "InGameInfoXML-1.7.10-2.8.1.82-universal.jar",
+        "fileSha1": "44c05208968aa9f83bb3ba4e5f090acdd2bc05e6",
+        "fileMd5": "334a6ab7fe204e38ab24add54290fa43",
+        "checkedAt": "2026-09-05T06:38:46.077105+00:00"
+      },
+      "sha512": "4c35270c939c9e65fd6cd871d1b387801d800cdf00f46ee1851ae5e8717d092d60a6643cd09b802dbff89dc83d53aea4dab0bd272055df46968345ff8a17dda5",
+      "verifiedSources": [
+        "https://mediafilez.forgecdn.net/files/2260/741/InGameInfoXML-1.7.10-2.8.1.82-universal.jar"
+      ],
+      "downloadVerification": {
+        "verified": true,
+        "at": "2026-09-05T06:50:33.528036+00:00",
+        "cached": true,
+        "errors": []
+      }
     },
     {
       "path": "mods/InventoryTweaks-1.59-dev-152.jar",
       "size": 224461,
       "sha256": "03aa8f9a012c2a34748648b8556c4391ca985bce744c4a589001c222f978ba04",
       "sha1": "3643e09b93e66c5690de7b9c3daa62da7789e7f5",
-      "sources": [],
-      "projectId": null,
-      "fileId": null,
-      "distributionBasis": null,
-      "status": "needs-source-and-license-review",
-      "embeddedLicenseFiles": []
+      "sources": [
+        "https://edge.forgecdn.net/files/2210/792/InventoryTweaks-1.59-dev-152.jar"
+      ],
+      "projectId": 223094,
+      "fileId": 2210792,
+      "distributionBasis": "Pinned author file on CurseForge; direct download only. Metadata resolved via the public MCIM cache; redistribution is not implied.",
+      "status": "author-origin-download-verified",
+      "embeddedLicenseFiles": [],
+      "curseforgeEvidence": {
+        "provider": "mcim-public-metadata-cache",
+        "metadataUrl": "https://mod.mcimirror.top/curseforge/v1/mods/223094/files/2210792",
+        "projectId": 223094,
+        "fileId": 2210792,
+        "fileName": "InventoryTweaks-1.59-dev-152.jar",
+        "fileSha1": "3643e09b93e66c5690de7b9c3daa62da7789e7f5",
+        "fileMd5": "83f7ddcd5f5fd8d640aa15dc62acc6bf",
+        "checkedAt": "2026-09-05T06:38:46.077105+00:00"
+      },
+      "sha512": "875f6da18d3bbd1fbf47b1c933ebaa9186516caad6a7e815ad636d05084b0f2854d00f05537d68e1891a58d9b7646d13069069ba3f41b10a8a8d2150bb918593",
+      "verifiedSources": [
+        "https://mediafilez.forgecdn.net/files/2210/792/InventoryTweaks-1.59-dev-152.jar"
+      ],
+      "downloadVerification": {
+        "verified": true,
+        "at": "2026-09-05T06:50:33.529298+00:00",
+        "cached": true,
+        "errors": []
+      }
     },
     {
       "path": "mods/IvToolkit-1.2.1.jar",
       "size": 373500,
       "sha256": "546a8c0d88c00f1e66062db73a47de1aa5f54099f18292e488ae8de54b18ad92",
       "sha1": "dbfd202496e3f89b8d1fbb42c69263e92e92c13b",
-      "sources": [],
-      "projectId": null,
-      "fileId": null,
-      "distributionBasis": null,
-      "status": "needs-source-and-license-review",
-      "embeddedLicenseFiles": []
+      "sources": [
+        "https://edge.forgecdn.net/files/2294/442/IvToolkit-1.2.1.jar"
+      ],
+      "projectId": 224535,
+      "fileId": 2294442,
+      "distributionBasis": "Pinned author file on CurseForge; direct download only. Metadata resolved via the public MCIM cache; redistribution is not implied.",
+      "status": "author-origin-download-verified",
+      "embeddedLicenseFiles": [],
+      "curseforgeEvidence": {
+        "provider": "mcim-public-metadata-cache",
+        "metadataUrl": "https://mod.mcimirror.top/curseforge/v1/mods/224535/files/2294442",
+        "projectId": 224535,
+        "fileId": 2294442,
+        "fileName": "IvToolkit-1.2.1.jar",
+        "fileSha1": "dbfd202496e3f89b8d1fbb42c69263e92e92c13b",
+        "fileMd5": "dd91e34daaa9be33bfa522d7a058c549",
+        "checkedAt": "2026-09-05T06:38:46.077105+00:00"
+      },
+      "sha512": "6c02ecf6950ef54ba7ed7481c418c673f515c43584c177d2168a594a509aa53b7fc7b22aee96e34e8a9d9b0fb27bcc1e6e75613bcce9e441041a9ea2184764bf",
+      "verifiedSources": [
+        "https://mediafilez.forgecdn.net/files/2294/442/IvToolkit-1.2.1.jar"
+      ],
+      "downloadVerification": {
+        "verified": true,
+        "at": "2026-09-05T06:50:33.530341+00:00",
+        "cached": true,
+        "errors": []
+      }
     },
     {
       "path": "mods/KeepingInventory-1.7.10-2.1.jar",
       "size": 4082,
       "sha256": "88d1972e377831012ec71f31957322ed3195170dc3e5fe167a17f11f3c3ba263",
       "sha1": "e44677ff93ecc25ef6819d75ccaa388e2dec9aee",
-      "sources": [],
-      "projectId": null,
-      "fileId": null,
-      "distributionBasis": null,
-      "status": "needs-source-and-license-review",
-      "embeddedLicenseFiles": []
+      "sources": [
+        "https://edge.forgecdn.net/files/2299/603/KeepingInventory-1.7.10-2.1.jar"
+      ],
+      "projectId": 231775,
+      "fileId": 2299603,
+      "distributionBasis": "Pinned author file on CurseForge; direct download only. Metadata resolved via the public MCIM cache; redistribution is not implied.",
+      "status": "author-origin-download-verified",
+      "embeddedLicenseFiles": [],
+      "curseforgeEvidence": {
+        "provider": "mcim-public-metadata-cache",
+        "metadataUrl": "https://mod.mcimirror.top/curseforge/v1/mods/231775/files/2299603",
+        "projectId": 231775,
+        "fileId": 2299603,
+        "fileName": "KeepingInventory-1.7.10-2.1.jar",
+        "fileSha1": "e44677ff93ecc25ef6819d75ccaa388e2dec9aee",
+        "fileMd5": "0d73e221b794bbd76f6672d51a895f29",
+        "checkedAt": "2026-09-05T06:38:46.077105+00:00"
+      },
+      "sha512": "534c6762de8f721fbf80ce65dd0b54f495eda9dbc20422c6bae957e20b287b93a32ea209ce67a9d5c5edc43a04d40a1cde77ce3da778e7b664b466a79699a676",
+      "verifiedSources": [
+        "https://mediafilez.forgecdn.net/files/2299/603/KeepingInventory-1.7.10-2.1.jar"
+      ],
+      "downloadVerification": {
+        "verified": true,
+        "at": "2026-09-05T06:50:33.531382+00:00",
+        "cached": true,
+        "errors": []
+      }
     },
     {
       "path": "mods/Loot++-0.24_for_1.7.jar",
       "size": 426155,
       "sha256": "1ecbe123599ffa4d42052ec219cc8dc9ce5eb5090d2aed92d423cd9f5324eb14",
       "sha1": "dd36c2bf2986dc85b8c92a518ed7415824398548",
-      "sources": [],
-      "projectId": null,
-      "fileId": null,
-      "distributionBasis": null,
-      "status": "needs-source-and-license-review",
-      "embeddedLicenseFiles": []
+      "sources": [
+        "https://edge.forgecdn.net/files/2311/63/Loot%2b%2b-0.24_for_1.7.jar"
+      ],
+      "projectId": 225880,
+      "fileId": 2311063,
+      "distributionBasis": "Pinned author file on CurseForge; direct download only. Metadata resolved via the public MCIM cache; redistribution is not implied.",
+      "status": "author-origin-download-verified",
+      "embeddedLicenseFiles": [],
+      "curseforgeEvidence": {
+        "provider": "mcim-public-metadata-cache",
+        "metadataUrl": "https://mod.mcimirror.top/curseforge/v1/mods/225880/files/2311063",
+        "projectId": 225880,
+        "fileId": 2311063,
+        "fileName": "Loot++-0.24_for_1.7.jar",
+        "fileSha1": "dd36c2bf2986dc85b8c92a518ed7415824398548",
+        "fileMd5": "37cff75e72f61cbe7622803b9b5b45ea",
+        "checkedAt": "2026-09-05T06:38:46.077105+00:00"
+      },
+      "sha512": "f5d318d120f3659e1143c38aa39f188e03668a2e5f5bd0c8038976bcf0c927063e93b45b744b656ec4192db22084c4f16b2c9898c3895b53c235fccc536b919c",
+      "verifiedSources": [
+        "https://mediafilez.forgecdn.net/files/2311/63/Loot%2b%2b-0.24_for_1.7.jar"
+      ],
+      "downloadVerification": {
+        "verified": true,
+        "at": "2026-09-05T06:50:33.533590+00:00",
+        "cached": true,
+        "errors": []
+      }
     },
     {
       "path": "mods/LunatriusCore-1.2.1-GTNH.jar",
       "size": 47094,
       "sha256": "887574ea5ea35f250c3c6483b77edd4923ebf2e73c688401c6dc3fceecc92ead",
       "sha1": "f53cf96945c881a5039b074fabdc91ad5050c7a4",
-      "sources": [],
+      "sources": [
+        "https://github.com/GTNewHorizons/LunatriusCore/releases/download/1.2.1-GTNH/LunatriusCore-1.2.1-GTNH.jar"
+      ],
       "projectId": null,
       "fileId": null,
-      "distributionBasis": null,
-      "status": "needs-source-and-license-review",
-      "embeddedLicenseFiles": []
+      "distributionBasis": "Download the pinned unmodified release asset directly from https://github.com/GTNewHorizons/LunatriusCore/releases/tag/1.2.1-GTNH; no rehosting.",
+      "status": "author-origin-download-verified",
+      "embeddedLicenseFiles": [],
+      "githubEvidence": {
+        "path": "mods/LunatriusCore-1.2.1-GTNH.jar",
+        "sha256": "887574ea5ea35f250c3c6483b77edd4923ebf2e73c688401c6dc3fceecc92ead",
+        "url": "https://github.com/GTNewHorizons/LunatriusCore/releases/download/1.2.1-GTNH/LunatriusCore-1.2.1-GTNH.jar",
+        "releaseUrl": "https://github.com/GTNewHorizons/LunatriusCore/releases/tag/1.2.1-GTNH",
+        "assetId": 206961848,
+        "repository": "GTNewHorizons/LunatriusCore"
+      },
+      "sha512": "a7f4b675297ad5e31923b1148a79de30330f498e2b6d8a899f41759545fae339f73a986f74a364e8722a7fa4324b1ae040869d87c94e9da6ddd8d63178c365a3",
+      "verifiedSources": [
+        "https://github.com/GTNewHorizons/LunatriusCore/releases/download/1.2.1-GTNH/LunatriusCore-1.2.1-GTNH.jar"
+      ],
+      "downloadVerification": {
+        "verified": true,
+        "at": "2026-09-05T06:50:33.534629+00:00",
+        "cached": true,
+        "errors": []
+      }
     },
     {
       "path": "mods/M3 Tweaker-0.7.5.jar",
@@ -1026,10 +1997,11 @@
       "sha256": "f9d8bba66cca4671da4cdad1397e4b86508ca1f26b3037447e5643c7c7882578",
       "sha1": "e5c745b487e85c85e3fb5c1971f6c4e53b0be3aa",
       "sources": [
-        "https://cdn.modrinth.com/data/HtxqvxVX/versions/5Lp2qo7Y/manametalmod-8.0.4-2.jar"
+        "https://cdn.modrinth.com/data/HtxqvxVX/versions/5Lp2qo7Y/manametalmod-8.0.4-2.jar",
+        "https://edge.forgecdn.net/files/8683/95/manametalmod-8.0.4-2.jar"
       ],
-      "projectId": null,
-      "fileId": null,
+      "projectId": 531708,
+      "fileId": 8683095,
       "distributionBasis": "Download the identical author-published file directly from Modrinth; no rehosting. Project license: LicenseRef-All-Rights-Reserved",
       "status": "author-origin-download-verified",
       "embeddedLicenseFiles": [],
@@ -1050,9 +2022,24 @@
       },
       "downloadVerification": {
         "verified": true,
+        "at": "2026-09-05T06:50:33.991917+00:00",
         "cached": true,
-        "at": "2026-09-05T06:16:40.162516+00:00"
-      }
+        "errors": []
+      },
+      "curseforgeEvidence": {
+        "provider": "mcim-public-metadata-cache",
+        "metadataUrl": "https://mod.mcimirror.top/curseforge/v1/mods/531708/files/8683095",
+        "projectId": 531708,
+        "fileId": 8683095,
+        "fileName": "manametalmod-8.0.4-2.jar",
+        "fileSha1": "e5c745b487e85c85e3fb5c1971f6c4e53b0be3aa",
+        "fileMd5": "a7b6d76df87aaf3f21008542233034fa",
+        "checkedAt": "2026-09-05T06:38:46.077105+00:00"
+      },
+      "sha512": "07dc7deaf3c1502a0d15b225b4064a1e23bde1580fbc0ed2fa8a4e294a7725cd4eb1bcda001a18b06bcda1c779fd0fa01e09563eba493c25ed38e0112d6298c2",
+      "verifiedSources": [
+        "https://cdn.modrinth.com/data/HtxqvxVX/versions/5Lp2qo7Y/manametalmod-8.0.4-2.jar"
+      ]
     },
     {
       "path": "mods/Mekanism-Community-Edition-1.7.10-9.10.37-ALL.jar",
@@ -1083,24 +2070,68 @@
       "size": 33495,
       "sha256": "904819d2cc209e5c7b99f6a7310fafc1075dce4ac60a39474fcca7c6d967162d",
       "sha1": "9bc031c0b0db065651744f23df48f766743892ba",
-      "sources": [],
-      "projectId": null,
-      "fileId": null,
-      "distributionBasis": null,
-      "status": "needs-source-and-license-review",
-      "embeddedLicenseFiles": []
+      "sources": [
+        "https://edge.forgecdn.net/files/2381/332/MineTweakerRecipeMaker-1.7.10-1.1.1.jar"
+      ],
+      "projectId": 226294,
+      "fileId": 2381332,
+      "distributionBasis": "Pinned author file on CurseForge; direct download only. Metadata resolved via the public MCIM cache; redistribution is not implied.",
+      "status": "author-origin-download-verified",
+      "embeddedLicenseFiles": [],
+      "curseforgeEvidence": {
+        "provider": "mcim-public-metadata-cache",
+        "metadataUrl": "https://mod.mcimirror.top/curseforge/v1/mods/226294/files/2381332",
+        "projectId": 226294,
+        "fileId": 2381332,
+        "fileName": "MineTweakerRecipeMaker-1.7.10-1.1.1.jar",
+        "fileSha1": "9bc031c0b0db065651744f23df48f766743892ba",
+        "fileMd5": "f3b8adbaddc95f29bf5c6e8875c0f7a3",
+        "checkedAt": "2026-09-05T06:38:46.077105+00:00"
+      },
+      "sha512": "4442233b169879041084965786a143ecd95b84528608e3f4f4dc10cd58c61ad88fcb56b5daf34376fc21f27964bb5b474409b69ac31c686843ffd7c710f79928",
+      "verifiedSources": [
+        "https://mediafilez.forgecdn.net/files/2381/332/MineTweakerRecipeMaker-1.7.10-1.1.1.jar"
+      ],
+      "downloadVerification": {
+        "verified": true,
+        "at": "2026-09-05T06:50:33.864391+00:00",
+        "cached": true,
+        "errors": []
+      }
     },
     {
       "path": "mods/MobProperties-1.7.10-1.0.2.jar",
       "size": 142228,
       "sha256": "123cf0872b16c3fb0044c3f34132e788ae57eee6f8591fc108a4a7bf29c1681b",
       "sha1": "76d089995767fc74fba863fb1993f66e05693e95",
-      "sources": [],
-      "projectId": null,
-      "fileId": null,
-      "distributionBasis": null,
-      "status": "needs-source-and-license-review",
-      "embeddedLicenseFiles": []
+      "sources": [
+        "https://edge.forgecdn.net/files/2283/249/MobProperties-1.7.10-1.0.2.jar"
+      ],
+      "projectId": 224298,
+      "fileId": 2283249,
+      "distributionBasis": "Pinned author file on CurseForge; direct download only. Metadata resolved via the public MCIM cache; redistribution is not implied.",
+      "status": "author-origin-download-verified",
+      "embeddedLicenseFiles": [],
+      "curseforgeEvidence": {
+        "provider": "mcim-public-metadata-cache",
+        "metadataUrl": "https://mod.mcimirror.top/curseforge/v1/mods/224298/files/2283249",
+        "projectId": 224298,
+        "fileId": 2283249,
+        "fileName": "MobProperties-1.7.10-1.0.2.jar",
+        "fileSha1": "76d089995767fc74fba863fb1993f66e05693e95",
+        "fileMd5": "be02ea47aad31407ff5fa95002c68cb0",
+        "checkedAt": "2026-09-05T06:38:46.077105+00:00"
+      },
+      "sha512": "a06b11622dba1dff1e378ca0d98a6f70dfeeb81292677d656da5bb41c2174310acaf4f14c3e94f7e96561624df40d35629e28f2c07a1a275f6e15c3a4677cd81",
+      "verifiedSources": [
+        "https://mediafilez.forgecdn.net/files/2283/249/MobProperties-1.7.10-1.0.2.jar"
+      ],
+      "downloadVerification": {
+        "verified": true,
+        "at": "2026-09-05T06:50:33.865445+00:00",
+        "cached": true,
+        "errors": []
+      }
     },
     {
       "path": "mods/ModTweaker2-0.9.6.jar",
@@ -1108,10 +2139,11 @@
       "sha256": "dee791c989e12cda1a32cb65081e24d40d727b9b6d99a38750fe6b9478983669",
       "sha1": "4b44a9267050b3a97bc1d9e8f3d060ff217dfd4b",
       "sources": [
-        "https://cdn.modrinth.com/data/7ZsHKFX3/versions/JCOS1cuU/ModTweaker2-0.9.6.jar"
+        "https://cdn.modrinth.com/data/7ZsHKFX3/versions/JCOS1cuU/ModTweaker2-0.9.6.jar",
+        "https://edge.forgecdn.net/files/2313/730/ModTweaker2-0.9.6.jar"
       ],
-      "projectId": null,
-      "fileId": null,
+      "projectId": 220954,
+      "fileId": 2313730,
       "distributionBasis": "Download the identical author-published file directly from Modrinth; no rehosting. Project license: MIT",
       "status": "author-origin-download-verified",
       "embeddedLicenseFiles": [],
@@ -1132,21 +2164,58 @@
       },
       "downloadVerification": {
         "verified": true,
+        "at": "2026-09-05T06:50:33.867608+00:00",
         "cached": true,
-        "at": "2026-09-05T06:16:40.163556+00:00"
-      }
+        "errors": []
+      },
+      "curseforgeEvidence": {
+        "provider": "mcim-public-metadata-cache",
+        "metadataUrl": "https://mod.mcimirror.top/curseforge/v1/mods/220954/files/2313730",
+        "projectId": 220954,
+        "fileId": 2313730,
+        "fileName": "ModTweaker2-0.9.6.jar",
+        "fileSha1": "4b44a9267050b3a97bc1d9e8f3d060ff217dfd4b",
+        "fileMd5": "157633c119127d9d0112a7b9f8c2c334",
+        "checkedAt": "2026-09-05T06:38:46.077105+00:00"
+      },
+      "sha512": "81bd30cb145bdf5fc94ee1d0234c7fac7bc062eeb5f61af6bf6a5efdc898e7c99621576b451448cb12bfb3e81c5687f11bda9cc65dcef760699fe7eb6e2233d2",
+      "verifiedSources": [
+        "https://cdn.modrinth.com/data/7ZsHKFX3/versions/JCOS1cuU/ModTweaker2-0.9.6.jar"
+      ]
     },
     {
       "path": "mods/MouseTweaks-2.4.4-mc1.7.10.jar",
       "size": 51898,
       "sha256": "8b141026e0be476978015a789680f2e550c1bef4518065ff5dbf5ad640ea2164",
       "sha1": "1fef53ebcd48f003fa0799de51e86ad113e3af7c",
-      "sources": [],
-      "projectId": null,
-      "fileId": null,
-      "distributionBasis": null,
-      "status": "needs-source-and-license-review",
-      "embeddedLicenseFiles": []
+      "sources": [
+        "https://edge.forgecdn.net/files/2209/265/MouseTweaks-2.4.4-mc1.7.10.jar"
+      ],
+      "projectId": 60089,
+      "fileId": 2209265,
+      "distributionBasis": "Pinned author file on CurseForge; direct download only. Metadata resolved via the public MCIM cache; redistribution is not implied.",
+      "status": "author-origin-download-verified",
+      "embeddedLicenseFiles": [],
+      "curseforgeEvidence": {
+        "provider": "mcim-public-metadata-cache",
+        "metadataUrl": "https://mod.mcimirror.top/curseforge/v1/mods/60089/files/2209265",
+        "projectId": 60089,
+        "fileId": 2209265,
+        "fileName": "MouseTweaks-2.4.4-mc1.7.10.jar",
+        "fileSha1": "1fef53ebcd48f003fa0799de51e86ad113e3af7c",
+        "fileMd5": "d4968eb0b513066313259fcd80bb8eb0",
+        "checkedAt": "2026-09-05T06:38:46.077105+00:00"
+      },
+      "sha512": "5fc4d387ada45880869c04b930eedc685748dc17cddce4552dfd8a3a5f97762d40e9cabe5c2570f48c6c050b2e2d4f7210b44f956f9971ba5854873c5fd6372d",
+      "verifiedSources": [
+        "https://mediafilez.forgecdn.net/files/2209/265/MouseTweaks-2.4.4-mc1.7.10.jar"
+      ],
+      "downloadVerification": {
+        "verified": true,
+        "at": "2026-09-05T06:50:33.869298+00:00",
+        "cached": true,
+        "errors": []
+      }
     },
     {
       "path": "mods/Muya_1.11.1.jar",
@@ -1154,10 +2223,11 @@
       "sha256": "68d572005bfd4071992af30e0ba2ca5ae9e3cf51b20865721e798f0a1ad18e89",
       "sha1": "2960667b711bec6563dca33a6445a7e9875fe597",
       "sources": [
-        "https://cdn.modrinth.com/data/KeklQLwu/versions/8Fq2Pd9F/Muya_1.11.1.jar"
+        "https://cdn.modrinth.com/data/KeklQLwu/versions/8Fq2Pd9F/Muya_1.11.1.jar",
+        "https://edge.forgecdn.net/files/4364/97/Muya_1.11.1.jar"
       ],
-      "projectId": null,
-      "fileId": null,
+      "projectId": 530214,
+      "fileId": 4364097,
       "distributionBasis": "Download the identical author-published file directly from Modrinth; no rehosting. Project license: LicenseRef-All-Rights-Reserved",
       "status": "author-origin-download-verified",
       "embeddedLicenseFiles": [],
@@ -1178,9 +2248,24 @@
       },
       "downloadVerification": {
         "verified": true,
+        "at": "2026-09-05T06:50:33.870919+00:00",
         "cached": true,
-        "at": "2026-09-05T06:16:40.164079+00:00"
-      }
+        "errors": []
+      },
+      "curseforgeEvidence": {
+        "provider": "mcim-public-metadata-cache",
+        "metadataUrl": "https://mod.mcimirror.top/curseforge/v1/mods/530214/files/4364097",
+        "projectId": 530214,
+        "fileId": 4364097,
+        "fileName": "Muya_1.11.1.jar",
+        "fileSha1": "2960667b711bec6563dca33a6445a7e9875fe597",
+        "fileMd5": "c7c3ac4eede21c4ba8999814e10aeb24",
+        "checkedAt": "2026-09-05T06:38:46.077105+00:00"
+      },
+      "sha512": "f9304437a63ddfba677c887092e060b617896039b669dbb450e0bd1eed68250f23a6121ac168ba03ca753a23a5cc8095e70844da063c143192494354024259c8",
+      "verifiedSources": [
+        "https://cdn.modrinth.com/data/KeklQLwu/versions/8Fq2Pd9F/Muya_1.11.1.jar"
+      ]
     },
     {
       "path": "mods/NaturesCompass-1.7.10-1.3.1.jar",
@@ -1188,10 +2273,11 @@
       "sha256": "4dab9da15163ea2592f689f32080eac1ce5b3c5ea23c88450b96c1c99b091aeb",
       "sha1": "470b45aa127e3ff619d4ae2d764613f8d7493c8a",
       "sources": [
-        "https://cdn.modrinth.com/data/fPetb5Kh/versions/Oq29B6p7/NaturesCompass-1.7.10-1.3.1-forge.jar"
+        "https://cdn.modrinth.com/data/fPetb5Kh/versions/Oq29B6p7/NaturesCompass-1.7.10-1.3.1-forge.jar",
+        "https://edge.forgecdn.net/files/2451/823/NaturesCompass-1.7.10-1.3.1.jar"
       ],
-      "projectId": null,
-      "fileId": null,
+      "projectId": 252848,
+      "fileId": 2451823,
       "distributionBasis": "Download the identical author-published file directly from Modrinth; no rehosting. Project license: CC-BY-NC-SA-4.0",
       "status": "author-origin-download-verified",
       "embeddedLicenseFiles": [],
@@ -1212,21 +2298,56 @@
       },
       "downloadVerification": {
         "verified": true,
+        "at": "2026-09-05T06:50:33.871962+00:00",
         "cached": true,
-        "at": "2026-09-05T06:16:40.164602+00:00"
-      }
+        "errors": []
+      },
+      "curseforgeEvidence": {
+        "provider": "mcim-public-metadata-cache",
+        "metadataUrl": "https://mod.mcimirror.top/curseforge/v1/mods/252848/files/2451823",
+        "projectId": 252848,
+        "fileId": 2451823,
+        "fileName": "NaturesCompass-1.7.10-1.3.1.jar",
+        "fileSha1": "470b45aa127e3ff619d4ae2d764613f8d7493c8a",
+        "fileMd5": "7fcf8da50b32424d2673c4aec59e39e6",
+        "checkedAt": "2026-09-05T06:38:46.077105+00:00"
+      },
+      "sha512": "412662569f20ebd4fcd5ddb8bd15df33e68e3d7d7a1cc5d78872827697917aa022810e4816cab5322f04427b255f65d26510c79b52593b7d9f1cd34c144e24c0",
+      "verifiedSources": [
+        "https://cdn.modrinth.com/data/fPetb5Kh/versions/Oq29B6p7/NaturesCompass-1.7.10-1.3.1-forge.jar"
+      ]
     },
     {
       "path": "mods/navigator-1.0.16.jar",
       "size": 115667,
       "sha256": "cd660562a87172d451e72c3fc3d6c8d722f6978720c98c80111fed9b5af1384d",
       "sha1": "cee361860bf2895a005d0816e127f77e4d35b6a6",
-      "sources": [],
+      "sources": [
+        "https://github.com/GTNewHorizons/Navigator/releases/download/1.0.16/navigator-1.0.16.jar"
+      ],
       "projectId": null,
       "fileId": null,
-      "distributionBasis": null,
-      "status": "needs-source-and-license-review",
-      "embeddedLicenseFiles": []
+      "distributionBasis": "Download the pinned unmodified release asset directly from https://github.com/GTNewHorizons/Navigator/releases/tag/1.0.16; no rehosting.",
+      "status": "author-origin-download-verified",
+      "embeddedLicenseFiles": [],
+      "githubEvidence": {
+        "path": "mods/navigator-1.0.16.jar",
+        "sha256": "cd660562a87172d451e72c3fc3d6c8d722f6978720c98c80111fed9b5af1384d",
+        "url": "https://github.com/GTNewHorizons/Navigator/releases/download/1.0.16/navigator-1.0.16.jar",
+        "releaseUrl": "https://github.com/GTNewHorizons/Navigator/releases/tag/1.0.16",
+        "assetId": 254811870,
+        "repository": "GTNewHorizons/Navigator"
+      },
+      "sha512": "6f04dfeaccd92bea6caad7819f9a3cffa5e719a9511fad47e61bbc3662a4451069dc4575e174b042ef0fc825ab6302d4b1461d0d309c6fbb474d006b6680b1a7",
+      "verifiedSources": [
+        "https://github.com/GTNewHorizons/Navigator/releases/download/1.0.16/navigator-1.0.16.jar"
+      ],
+      "downloadVerification": {
+        "verified": true,
+        "at": "2026-09-05T06:50:33.873530+00:00",
+        "cached": true,
+        "errors": []
+      }
     },
     {
       "path": "mods/nechar-GTNH 2.7.0.jar",
@@ -1245,36 +2366,98 @@
       "size": 1530056,
       "sha256": "b27a6030732662d6b46e9597e5d9e0f4ad6bff2d4a88d087c37454d59edcb5b6",
       "sha1": "9e63a7b991bdcb40da67fa0bf06ba15d85ab7af0",
-      "sources": [],
+      "sources": [
+        "https://github.com/makamys/Neodymium/releases/download/0.1.8.4/neodymium-1.7.10-0.1.8.4.jar"
+      ],
       "projectId": null,
       "fileId": null,
-      "distributionBasis": null,
-      "status": "needs-source-and-license-review",
-      "embeddedLicenseFiles": []
+      "distributionBasis": "Download the pinned unmodified release asset directly from https://github.com/makamys/Neodymium/releases/tag/0.1.8.4; no rehosting.",
+      "status": "author-origin-download-verified",
+      "embeddedLicenseFiles": [],
+      "githubEvidence": {
+        "path": "mods/neodymium-1.7.10-0.1.8.4.jar",
+        "sha256": "b27a6030732662d6b46e9597e5d9e0f4ad6bff2d4a88d087c37454d59edcb5b6",
+        "url": "https://github.com/makamys/Neodymium/releases/download/0.1.8.4/neodymium-1.7.10-0.1.8.4.jar",
+        "releaseUrl": "https://github.com/makamys/Neodymium/releases/tag/0.1.8.4",
+        "assetId": 108475399,
+        "repository": "makamys/Neodymium"
+      },
+      "sha512": "74bc8f8ec928eb23e4d5003f088cc71de53a1414136cd2f7c3aea6d0ab93f7013d8568af408531af9032a0137f2215d917cff02f62ec324e07d43662e3c3762b",
+      "verifiedSources": [
+        "https://github.com/makamys/Neodymium/releases/download/0.1.8.4/neodymium-1.7.10-0.1.8.4.jar"
+      ],
+      "downloadVerification": {
+        "verified": true,
+        "at": "2026-09-05T06:50:35.848603+00:00",
+        "cached": false,
+        "errors": []
+      }
     },
     {
       "path": "mods/NodalMechanics-1.7-1.0-7.jar",
       "size": 22172,
       "sha256": "538ca06dd04eabaab530bbdedabe435c981547add5c6b20bb688863444f34efb",
       "sha1": "2e985ce4ecf4a7495436a038656fbc35a0f2213c",
-      "sources": [],
-      "projectId": null,
-      "fileId": null,
-      "distributionBasis": null,
-      "status": "needs-source-and-license-review",
-      "embeddedLicenseFiles": []
+      "sources": [
+        "https://edge.forgecdn.net/files/2213/742/NodalMechanics-1.7-1.0-7.jar"
+      ],
+      "projectId": 223704,
+      "fileId": 2213742,
+      "distributionBasis": "Pinned author file on CurseForge; direct download only. Metadata resolved via the public MCIM cache; redistribution is not implied.",
+      "status": "author-origin-download-verified",
+      "embeddedLicenseFiles": [],
+      "curseforgeEvidence": {
+        "provider": "mcim-public-metadata-cache",
+        "metadataUrl": "https://mod.mcimirror.top/curseforge/v1/mods/223704/files/2213742",
+        "projectId": 223704,
+        "fileId": 2213742,
+        "fileName": "NodalMechanics-1.7-1.0-7.jar",
+        "fileSha1": "2e985ce4ecf4a7495436a038656fbc35a0f2213c",
+        "fileMd5": "a5b0ef5e3dcb647b3d51b923c01abe33",
+        "checkedAt": "2026-09-05T06:38:46.077105+00:00"
+      },
+      "sha512": "7098e70d53d9b249078fe240a6992f741f18e848f81d68859bde0543ac3da458f4cbdac691e56a814d99ffbaaedcad735d25675492205a5669dd64c805aa69c5",
+      "verifiedSources": [
+        "https://mediafilez.forgecdn.net/files/2213/742/NodalMechanics-1.7-1.0-7.jar"
+      ],
+      "downloadVerification": {
+        "verified": true,
+        "at": "2026-09-05T06:50:33.993421+00:00",
+        "cached": true,
+        "errors": []
+      }
     },
     {
       "path": "mods/NotEnoughEnergistics-1.6.4.jar",
       "size": 306463,
       "sha256": "09733225a4550e4994b9cce2822c9eb7841a932c7f1debb12a818bb7dacf1895",
       "sha1": "4a2a4979ba4ec7539d407959aea8d376a4f7949b",
-      "sources": [],
+      "sources": [
+        "https://github.com/GTNewHorizons/NotEnoughEnergistics/releases/download/1.6.4/NotEnoughEnergistics-1.6.4.jar"
+      ],
       "projectId": null,
       "fileId": null,
-      "distributionBasis": null,
-      "status": "needs-source-and-license-review",
-      "embeddedLicenseFiles": []
+      "distributionBasis": "Download the pinned unmodified release asset directly from https://github.com/GTNewHorizons/NotEnoughEnergistics/releases/tag/1.6.4; no rehosting.",
+      "status": "author-origin-download-verified",
+      "embeddedLicenseFiles": [],
+      "githubEvidence": {
+        "path": "mods/NotEnoughEnergistics-1.6.4.jar",
+        "sha256": "09733225a4550e4994b9cce2822c9eb7841a932c7f1debb12a818bb7dacf1895",
+        "url": "https://github.com/GTNewHorizons/NotEnoughEnergistics/releases/download/1.6.4/NotEnoughEnergistics-1.6.4.jar",
+        "releaseUrl": "https://github.com/GTNewHorizons/NotEnoughEnergistics/releases/tag/1.6.4",
+        "assetId": 190136282,
+        "repository": "GTNewHorizons/NotEnoughEnergistics"
+      },
+      "sha512": "0fbbae33f72ccb9cec5ac8296834e6b65d39a4eef382b29fa88326d0e9764ea58bbe07a05d5b94847c39a088a73a46a82f927f09d2081613482cda63d2ef2729",
+      "verifiedSources": [
+        "https://github.com/GTNewHorizons/NotEnoughEnergistics/releases/download/1.6.4/NotEnoughEnergistics-1.6.4.jar"
+      ],
+      "downloadVerification": {
+        "verified": true,
+        "at": "2026-09-05T06:50:33.994936+00:00",
+        "cached": true,
+        "errors": []
+      }
     },
     {
       "path": "mods/NotEnoughItems-2.7.66-GTNH.jar",
@@ -1282,10 +2465,11 @@
       "sha256": "c933386f4c4f8c68e4b36225b219200895615884bdb63bcebbc964182b6de3a3",
       "sha1": "d1de0311b0ed4c29e3ee578c2476511d9c2119de",
       "sources": [
-        "https://cdn.modrinth.com/data/iNPc3Onu/versions/6efqpIjh/NotEnoughItems-2.7.66-GTNH.jar"
+        "https://cdn.modrinth.com/data/iNPc3Onu/versions/6efqpIjh/NotEnoughItems-2.7.66-GTNH.jar",
+        "https://edge.forgecdn.net/files/6779/317/NotEnoughItems-2.7.66-GTNH.jar"
       ],
-      "projectId": null,
-      "fileId": null,
+      "projectId": 358228,
+      "fileId": 6779317,
       "distributionBasis": "Download the identical author-published file directly from Modrinth; no rehosting. Project license: LGPL-3.0-only",
       "status": "author-origin-download-verified",
       "embeddedLicenseFiles": [
@@ -1308,181 +2492,486 @@
       },
       "downloadVerification": {
         "verified": true,
+        "at": "2026-09-05T06:50:33.997670+00:00",
         "cached": true,
-        "at": "2026-09-05T06:16:40.165126+00:00"
-      }
+        "errors": []
+      },
+      "curseforgeEvidence": {
+        "provider": "mcim-public-metadata-cache",
+        "metadataUrl": "https://mod.mcimirror.top/curseforge/v1/mods/358228/files/6779317",
+        "projectId": 358228,
+        "fileId": 6779317,
+        "fileName": "NotEnoughItems-2.7.66-GTNH.jar",
+        "fileSha1": "d1de0311b0ed4c29e3ee578c2476511d9c2119de",
+        "fileMd5": "a52f3fab5b2f89568fc344bd6d6191c0",
+        "checkedAt": "2026-09-05T06:38:46.077105+00:00"
+      },
+      "sha512": "9a0128f0155b6ee3d0993de6028da0e81066eb0f60834b2b30316d415a14b1a00d05306bc2a62827abe93beb7745de83370bf55773575d6fc7d2e6638de9d1be",
+      "verifiedSources": [
+        "https://cdn.modrinth.com/data/iNPc3Onu/versions/6efqpIjh/NotEnoughItems-2.7.66-GTNH.jar"
+      ]
     },
     {
       "path": "mods/OreExcavation-1.1.134.jar",
       "size": 179454,
       "sha256": "1940b52395c167ab723f0fa12b679047435637c81b220ef2a115cec65ff5b69f",
       "sha1": "6f3199bf2e9c73faf78ad4b19d1187d64773272a",
-      "sources": [],
-      "projectId": null,
-      "fileId": null,
-      "distributionBasis": null,
-      "status": "needs-source-and-license-review",
-      "embeddedLicenseFiles": []
+      "sources": [
+        "https://edge.forgecdn.net/files/2673/691/OreExcavation-1.1.134.jar"
+      ],
+      "projectId": 250898,
+      "fileId": 2673691,
+      "distributionBasis": "Pinned author file on CurseForge; direct download only. Metadata resolved via the public MCIM cache; redistribution is not implied.",
+      "status": "author-origin-download-verified",
+      "embeddedLicenseFiles": [],
+      "curseforgeEvidence": {
+        "provider": "mcim-public-metadata-cache",
+        "metadataUrl": "https://mod.mcimirror.top/curseforge/v1/mods/250898/files/2673691",
+        "projectId": 250898,
+        "fileId": 2673691,
+        "fileName": "OreExcavation-1.1.134.jar",
+        "fileSha1": "6f3199bf2e9c73faf78ad4b19d1187d64773272a",
+        "fileMd5": "59cc71615b093b99ba06ebc07ef7cbcd",
+        "checkedAt": "2026-09-05T06:38:46.077105+00:00"
+      },
+      "sha512": "c52f4f84ff654d509156fc684264d21897973b261110df33cc2123b4f36dc340bbda81aed7cfc6105a040adcef97f08611b92361ad2702d93ffa223e6337e73b",
+      "verifiedSources": [
+        "https://mediafilez.forgecdn.net/files/2673/691/OreExcavation-1.1.134.jar"
+      ],
+      "downloadVerification": {
+        "verified": true,
+        "at": "2026-09-05T06:50:33.998721+00:00",
+        "cached": true,
+        "errors": []
+      }
     },
     {
       "path": "mods/p455w0rdslib-1.7.10-1.0.4.jar",
       "size": 23853,
       "sha256": "c3b4a59984b117c6e212b6284219021cc19d6321e626028a0c92f24c18a13982",
       "sha1": "ad6f3ad049611d1a238acb965e0b68d61998d81e",
-      "sources": [],
-      "projectId": null,
-      "fileId": null,
-      "distributionBasis": null,
-      "status": "needs-source-and-license-review",
-      "embeddedLicenseFiles": []
+      "sources": [
+        "https://edge.forgecdn.net/files/2359/471/p455w0rdslib-1.7.10-1.0.4.jar"
+      ],
+      "projectId": 255232,
+      "fileId": 2359471,
+      "distributionBasis": "Pinned author file on CurseForge; direct download only. Metadata resolved via the public MCIM cache; redistribution is not implied.",
+      "status": "author-origin-download-verified",
+      "embeddedLicenseFiles": [],
+      "curseforgeEvidence": {
+        "provider": "mcim-public-metadata-cache",
+        "metadataUrl": "https://mod.mcimirror.top/curseforge/v1/mods/255232/files/2359471",
+        "projectId": 255232,
+        "fileId": 2359471,
+        "fileName": "p455w0rdslib-1.7.10-1.0.4.jar",
+        "fileSha1": "ad6f3ad049611d1a238acb965e0b68d61998d81e",
+        "fileMd5": "86a7be78717ddf189271e147441d40fa",
+        "checkedAt": "2026-09-05T06:38:46.077105+00:00"
+      },
+      "sha512": "0740e8e98c151d4d0fb4d25b6dfacd0d2cbd9f0403788d4c12d964f9c725ed92206289bd6a44b44e144420d1f8e1dea876d81f51fc18ec886b3132fd167cb3c7",
+      "verifiedSources": [
+        "https://mediafilez.forgecdn.net/files/2359/471/p455w0rdslib-1.7.10-1.0.4.jar"
+      ],
+      "downloadVerification": {
+        "verified": true,
+        "at": "2026-09-05T06:50:34.003032+00:00",
+        "cached": true,
+        "errors": []
+      }
     },
     {
       "path": "mods/PineappleTips-0.0.5-mixinless.jar",
       "size": 9726,
       "sha256": "7fbc0b404fee689b31f881aed4dff56e71cce038d2089ad643689fbb0542c9cd",
       "sha1": "91aa62809c9320a42a434a2a0fe7e4b255d92473",
-      "sources": [],
-      "projectId": null,
-      "fileId": null,
-      "distributionBasis": null,
-      "status": "needs-source-and-license-review",
+      "sources": [
+        "https://edge.forgecdn.net/files/5636/594/PineappleTips-0.0.5-mixinless.jar"
+      ],
+      "projectId": 1014260,
+      "fileId": 5636594,
+      "distributionBasis": "Pinned author file on CurseForge; direct download only. Metadata resolved via the public MCIM cache; redistribution is not implied.",
+      "status": "author-origin-download-verified",
       "embeddedLicenseFiles": [
         "LICENSE"
-      ]
+      ],
+      "curseforgeEvidence": {
+        "provider": "mcim-public-metadata-cache",
+        "metadataUrl": "https://mod.mcimirror.top/curseforge/v1/mods/1014260/files/5636594",
+        "projectId": 1014260,
+        "fileId": 5636594,
+        "fileName": "PineappleTips-0.0.5-mixinless.jar",
+        "fileSha1": "91aa62809c9320a42a434a2a0fe7e4b255d92473",
+        "fileMd5": "ad647e97d902cb029d1a595fbcf3e875",
+        "checkedAt": "2026-09-05T06:38:46.077105+00:00"
+      },
+      "sha512": "3f4e149db63e1c5979e7fd44287e4c83ea14dee1d708c7638b6ad3727e2a59886fc06996a3215f314a3b2d7f12179d62a391e07726400877a9a25770f6e1a963",
+      "verifiedSources": [
+        "https://mediafilez.forgecdn.net/files/5636/594/PineappleTips-0.0.5-mixinless.jar"
+      ],
+      "downloadVerification": {
+        "verified": true,
+        "at": "2026-09-05T06:50:34.004119+00:00",
+        "cached": true,
+        "errors": []
+      }
     },
     {
       "path": "mods/PlayerContainerFix-2.0.0.jar",
       "size": 4991,
       "sha256": "47c9284d10be3f6b5d48321eeca194bdc0f52e51d1680851c05098309a68a3ee",
       "sha1": "4858f8c2b81e4bd06185ff2a309cad9c793f0fd7",
-      "sources": [],
+      "sources": [
+        "https://github.com/GTNewHorizons/BQ3-Thermos-patch/releases/download/2.0.0/PlayerContainerFix-2.0.0.jar"
+      ],
       "projectId": null,
       "fileId": null,
-      "distributionBasis": null,
-      "status": "needs-source-and-license-review",
-      "embeddedLicenseFiles": []
+      "distributionBasis": "Download the pinned unmodified release asset directly from https://github.com/GTNewHorizons/BQ3-Thermos-patch/releases/tag/2.0.0; no rehosting.",
+      "status": "author-origin-download-verified",
+      "embeddedLicenseFiles": [],
+      "githubEvidence": {
+        "path": "mods/PlayerContainerFix-2.0.0.jar",
+        "sha256": "47c9284d10be3f6b5d48321eeca194bdc0f52e51d1680851c05098309a68a3ee",
+        "url": "https://github.com/GTNewHorizons/BQ3-Thermos-patch/releases/download/2.0.0/PlayerContainerFix-2.0.0.jar",
+        "releaseUrl": "https://github.com/GTNewHorizons/BQ3-Thermos-patch/releases/tag/2.0.0",
+        "assetId": 183919282,
+        "repository": "GTNewHorizons/BQ3-Thermos-patch"
+      },
+      "sha512": "6432f93e3bafaff6bef96ad3951c1e31347f5a75fd2973aaf9a0b06f1ee0620f8042cf9281544d36c86c1b6f0b179dfcbeca14d25c83ba86d76d63961910b530",
+      "verifiedSources": [
+        "https://github.com/GTNewHorizons/BQ3-Thermos-patch/releases/download/2.0.0/PlayerContainerFix-2.0.0.jar"
+      ],
+      "downloadVerification": {
+        "verified": true,
+        "at": "2026-09-05T06:50:35.077570+00:00",
+        "cached": false,
+        "errors": []
+      }
     },
     {
       "path": "mods/RecurrentComplex-0.9.7.1.2_Unoffical.jar",
       "size": 4508615,
       "sha256": "055f9400a35e185551aaed88bb152fa21c1d3469ef5dc5543fb3f966ceb34f6c",
       "sha1": "604ae71a73406ded6e85bc5c623e8bd33613f6a4",
-      "sources": [],
-      "projectId": null,
-      "fileId": null,
-      "distributionBasis": null,
-      "status": "needs-source-and-license-review",
-      "embeddedLicenseFiles": []
+      "sources": [
+        "https://edge.forgecdn.net/files/3108/489/RecurrentComplex-0.9.7.1.2_Unoffical.jar"
+      ],
+      "projectId": 419129,
+      "fileId": 3108489,
+      "distributionBasis": "Pinned author file on CurseForge; direct download only. Metadata resolved via the public MCIM cache; redistribution is not implied.",
+      "status": "author-origin-download-verified",
+      "embeddedLicenseFiles": [],
+      "curseforgeEvidence": {
+        "provider": "mcim-public-metadata-cache",
+        "metadataUrl": "https://mod.mcimirror.top/curseforge/v1/mods/419129/files/3108489",
+        "projectId": 419129,
+        "fileId": 3108489,
+        "fileName": "RecurrentComplex-0.9.7.1.2_Unoffical.jar",
+        "fileSha1": "604ae71a73406ded6e85bc5c623e8bd33613f6a4",
+        "fileMd5": "f9f74f5658fb20c6694d9f89db28ed8a",
+        "checkedAt": "2026-09-05T06:38:46.077105+00:00"
+      },
+      "sha512": "a933375208412ab6355f9247e06185c6fe9dd8fdbe5f52e7d465444ac5b530759c87d74e24d87cc5dbd5d53462c54817feac9b45e6e181034a1f798f40754d69",
+      "verifiedSources": [
+        "https://mediafilez.forgecdn.net/files/3108/489/RecurrentComplex-0.9.7.1.2_Unoffical.jar"
+      ],
+      "downloadVerification": {
+        "verified": true,
+        "at": "2026-09-05T06:50:35.085337+00:00",
+        "cached": true,
+        "errors": []
+      }
     },
     {
       "path": "mods/redirectionor-1.7.10-1.2.jar",
       "size": 112313,
       "sha256": "f1fd2e0f29b084381d0bb0957804098f040a69ac7e98e2ce009e3ad60cf4b807",
       "sha1": "31a9f8c56297d30c762040c7c04dba6c5319320d",
-      "sources": [],
-      "projectId": null,
-      "fileId": null,
-      "distributionBasis": null,
-      "status": "needs-source-and-license-review",
-      "embeddedLicenseFiles": []
+      "sources": [
+        "https://edge.forgecdn.net/files/4745/273/redirectionor-1.7.10-1.2.jar"
+      ],
+      "projectId": 907559,
+      "fileId": 4745273,
+      "distributionBasis": "Pinned author file on CurseForge; direct download only. Metadata resolved via the public MCIM cache; redistribution is not implied.",
+      "status": "author-origin-download-verified",
+      "embeddedLicenseFiles": [],
+      "curseforgeEvidence": {
+        "provider": "mcim-public-metadata-cache",
+        "metadataUrl": "https://mod.mcimirror.top/curseforge/v1/mods/907559/files/4745273",
+        "projectId": 907559,
+        "fileId": 4745273,
+        "fileName": "redirectionor-1.7.10-1.2.jar",
+        "fileSha1": "31a9f8c56297d30c762040c7c04dba6c5319320d",
+        "fileMd5": "a18cd301e4b2f1f13fd67b56fbbeb5c2",
+        "checkedAt": "2026-09-05T06:38:46.077105+00:00"
+      },
+      "sha512": "febfb15fc0e275bbe8f5386d81f4eadb76196a1779e9985f73b87d8bd13b2f830c608bcb2f887be200658a41c2fecc50b74baa66b15c236a89476d066e95ee89",
+      "verifiedSources": [
+        "https://mediafilez.forgecdn.net/files/4745/273/redirectionor-1.7.10-1.2.jar"
+      ],
+      "downloadVerification": {
+        "verified": true,
+        "at": "2026-09-05T06:50:35.088436+00:00",
+        "cached": true,
+        "errors": []
+      }
     },
     {
       "path": "mods/Schematica-1.12.6-GTNH.jar",
       "size": 264277,
       "sha256": "9b12f671791c336288a8ba7541eaef388a3d0a1db6ece04295555604bdb8a6c1",
       "sha1": "72721505a5615ecae5664c6d1f8198bdd8711309",
-      "sources": [],
+      "sources": [
+        "https://github.com/GTNewHorizons/Schematica/releases/download/1.12.6-GTNH/Schematica-1.12.6-GTNH.jar"
+      ],
       "projectId": null,
       "fileId": null,
-      "distributionBasis": null,
-      "status": "needs-source-and-license-review",
-      "embeddedLicenseFiles": []
+      "distributionBasis": "Download the pinned unmodified release asset directly from https://github.com/GTNewHorizons/Schematica/releases/tag/1.12.6-GTNH; no rehosting.",
+      "status": "author-origin-download-verified",
+      "embeddedLicenseFiles": [],
+      "githubEvidence": {
+        "path": "mods/Schematica-1.12.6-GTNH.jar",
+        "sha256": "9b12f671791c336288a8ba7541eaef388a3d0a1db6ece04295555604bdb8a6c1",
+        "url": "https://github.com/GTNewHorizons/Schematica/releases/download/1.12.6-GTNH/Schematica-1.12.6-GTNH.jar",
+        "releaseUrl": "https://github.com/GTNewHorizons/Schematica/releases/tag/1.12.6-GTNH",
+        "assetId": 258083884,
+        "repository": "GTNewHorizons/Schematica"
+      },
+      "sha512": "97e4d508f6a0590f87083765e8f6f88c1bb23b37e48f7f7cb5646956f988b6445afa96c9748eee109021028dcbbaaabb959a99e0928381ee67f17c2cfc4f33ad",
+      "verifiedSources": [
+        "https://github.com/GTNewHorizons/Schematica/releases/download/1.12.6-GTNH/Schematica-1.12.6-GTNH.jar"
+      ],
+      "downloadVerification": {
+        "verified": true,
+        "at": "2026-09-05T06:50:35.089438+00:00",
+        "cached": true,
+        "errors": []
+      }
     },
     {
       "path": "mods/ServerUtilities-2.2.18.jar",
       "size": 1929469,
       "sha256": "336f74077a7ada5ddcba06d40b46f3ea381fcc1c633c9fdab5cfb54dd49f3d39",
       "sha1": "34f29bf9670c30a53035394551d6b0cd3bfd9daa",
-      "sources": [],
+      "sources": [
+        "https://github.com/GTNewHorizons/ServerUtilities/releases/download/2.2.18/ServerUtilities-2.2.18.jar"
+      ],
       "projectId": null,
       "fileId": null,
-      "distributionBasis": null,
-      "status": "needs-source-and-license-review",
-      "embeddedLicenseFiles": []
+      "distributionBasis": "Download the pinned unmodified release asset directly from https://github.com/GTNewHorizons/ServerUtilities/releases/tag/2.2.18; no rehosting.",
+      "status": "author-origin-download-verified",
+      "embeddedLicenseFiles": [],
+      "githubEvidence": {
+        "path": "mods/ServerUtilities-2.2.18.jar",
+        "sha256": "336f74077a7ada5ddcba06d40b46f3ea381fcc1c633c9fdab5cfb54dd49f3d39",
+        "url": "https://github.com/GTNewHorizons/ServerUtilities/releases/download/2.2.18/ServerUtilities-2.2.18.jar",
+        "releaseUrl": "https://github.com/GTNewHorizons/ServerUtilities/releases/tag/2.2.18",
+        "assetId": 359338342,
+        "repository": "GTNewHorizons/ServerUtilities"
+      },
+      "sha512": "686c0ed0b4d37467a646bf8bf33e1d305a87b4786423c6977bfb819f4d49aeec551416ce037adadb08dfcb593a11ff0dbbbfccdcd794802a4eb48dc839094340",
+      "verifiedSources": [
+        "https://github.com/GTNewHorizons/ServerUtilities/releases/download/2.2.18/ServerUtilities-2.2.18.jar"
+      ],
+      "downloadVerification": {
+        "verified": true,
+        "at": "2026-09-05T06:50:35.093022+00:00",
+        "cached": true,
+        "errors": []
+      }
     },
     {
       "path": "mods/SmoothFont-1.7.10-1.15.3.jar",
       "size": 222713,
       "sha256": "535bb759b7d0fcd321e083043a8945b0dc60a111caa2e0978c753cded44dd5ac",
       "sha1": "5587c9c50eef67f8fa10bb25ac9fe179e627acff",
-      "sources": [],
-      "projectId": null,
-      "fileId": null,
-      "distributionBasis": null,
-      "status": "needs-source-and-license-review",
-      "embeddedLicenseFiles": []
+      "sources": [
+        "https://edge.forgecdn.net/files/2614/474/SmoothFont-1.7.10-1.15.3.jar"
+      ],
+      "projectId": 285742,
+      "fileId": 2614474,
+      "distributionBasis": "Pinned author file on CurseForge; direct download only. Metadata resolved via the public MCIM cache; redistribution is not implied.",
+      "status": "author-origin-download-verified",
+      "embeddedLicenseFiles": [],
+      "curseforgeEvidence": {
+        "provider": "mcim-public-metadata-cache",
+        "metadataUrl": "https://mod.mcimirror.top/curseforge/v1/mods/285742/files/2614474",
+        "projectId": 285742,
+        "fileId": 2614474,
+        "fileName": "SmoothFont-1.7.10-1.15.3.jar",
+        "fileSha1": "5587c9c50eef67f8fa10bb25ac9fe179e627acff",
+        "fileMd5": "ec4176383eb99e7d03fb6d583cbdf1e1",
+        "checkedAt": "2026-09-05T06:38:46.077105+00:00"
+      },
+      "sha512": "edb1a4633cb5b73fdd596acf05ad073996b29c89fd0926f9b150ceee3171362d8aa85f62b6c0247590eed9b68826dec823608ec9af56209d733e0adddb0026db",
+      "verifiedSources": [
+        "https://mediafilez.forgecdn.net/files/2614/474/SmoothFont-1.7.10-1.15.3.jar"
+      ],
+      "downloadVerification": {
+        "verified": true,
+        "at": "2026-09-05T06:50:35.094501+00:00",
+        "cached": true,
+        "errors": []
+      }
     },
     {
       "path": "mods/spark-1.10.19-forge1710.jar",
       "size": 2865003,
       "sha256": "35e37dcd29dd1b92b9cbb064165889ee9a501384dd5fa58cfcc727a5e18f3366",
       "sha1": "b0a0242d5ae13a035b9f57c394c146a500881cd6",
-      "sources": [],
-      "projectId": null,
-      "fileId": null,
-      "distributionBasis": null,
-      "status": "needs-source-and-license-review",
+      "sources": [
+        "https://edge.forgecdn.net/files/4271/867/spark-1.10.19-forge1710.jar"
+      ],
+      "projectId": 361579,
+      "fileId": 4271867,
+      "distributionBasis": "Pinned author file on CurseForge; direct download only. Metadata resolved via the public MCIM cache; redistribution is not implied.",
+      "status": "author-origin-download-verified",
       "embeddedLicenseFiles": [
         "META-INF/LICENSE"
-      ]
+      ],
+      "curseforgeEvidence": {
+        "provider": "mcim-public-metadata-cache",
+        "metadataUrl": "https://mod.mcimirror.top/curseforge/v1/mods/361579/files/4271867",
+        "projectId": 361579,
+        "fileId": 4271867,
+        "fileName": "spark-1.10.19-forge1710.jar",
+        "fileSha1": "b0a0242d5ae13a035b9f57c394c146a500881cd6",
+        "fileMd5": "248fd7f5fd4b9edf8fc792085c93a8c8",
+        "checkedAt": "2026-09-05T06:38:46.077105+00:00"
+      },
+      "sha512": "191d313e66aa47981753a8635ea9eaaab0dbc2e9f555b489d60741cde04c04d9b90605c4a8e1f6bf1cbd3ef23e44a1a43874e7242dbf87b829a3b0f1bde920ff",
+      "verifiedSources": [
+        "https://mediafilez.forgecdn.net/files/4271/867/spark-1.10.19-forge1710.jar"
+      ],
+      "downloadVerification": {
+        "verified": true,
+        "at": "2026-09-05T06:50:35.102161+00:00",
+        "cached": true,
+        "errors": []
+      }
     },
     {
       "path": "mods/Stackie-1.7.10-1.6.0.36-universal.jar",
       "size": 54245,
       "sha256": "b4e1792ebfb98d25e16681b68cb9ccfcc7a3c99c6b8eef83b2f97de73a8c4384",
       "sha1": "16835e5a23fbfebaac379a7dcacc7a0a5ea70e55",
-      "sources": [],
-      "projectId": null,
-      "fileId": null,
-      "distributionBasis": null,
-      "status": "needs-source-and-license-review",
-      "embeddedLicenseFiles": []
+      "sources": [
+        "https://edge.forgecdn.net/files/2248/339/Stackie-1.7.10-1.6.0.36-universal.jar"
+      ],
+      "projectId": 225606,
+      "fileId": 2248339,
+      "distributionBasis": "Pinned author file on CurseForge; direct download only. Metadata resolved via the public MCIM cache; redistribution is not implied.",
+      "status": "author-origin-download-verified",
+      "embeddedLicenseFiles": [],
+      "curseforgeEvidence": {
+        "provider": "mcim-public-metadata-cache",
+        "metadataUrl": "https://mod.mcimirror.top/curseforge/v1/mods/225606/files/2248339",
+        "projectId": 225606,
+        "fileId": 2248339,
+        "fileName": "Stackie-1.7.10-1.6.0.36-universal.jar",
+        "fileSha1": "16835e5a23fbfebaac379a7dcacc7a0a5ea70e55",
+        "fileMd5": "ffc05505331183d59244c7c981dea188",
+        "checkedAt": "2026-09-05T06:38:46.077105+00:00"
+      },
+      "sha512": "f37c9e6166fe4d6f1d5378dd1d0194619e08674276d7f23ffbb13fc3e4d9a8f7b735fb2aed5585d1120c86f5f82e4ae3c16d9a664d41eed64f962d7c6671f3ef",
+      "verifiedSources": [
+        "https://mediafilez.forgecdn.net/files/2248/339/Stackie-1.7.10-1.6.0.36-universal.jar"
+      ],
+      "downloadVerification": {
+        "verified": true,
+        "at": "2026-09-05T06:50:35.102672+00:00",
+        "cached": true,
+        "errors": []
+      }
     },
     {
       "path": "mods/StorageDrawers-1.13.12-GTNH-pre.jar",
       "size": 1276276,
       "sha256": "5a0bfa0c2f319896817a3d53f2a7c22fe483c467e917e797afd7281ee88cacbc",
       "sha1": "39a23457cea3356d8e25d51ff336e9e95da97d4d",
-      "sources": [],
+      "sources": [
+        "https://github.com/GTNewHorizons/StorageDrawers/releases/download/1.13.12-GTNH-pre/StorageDrawers-1.13.12-GTNH-pre.jar"
+      ],
       "projectId": null,
       "fileId": null,
-      "distributionBasis": null,
+      "distributionBasis": "Download the exact unmodified asset from https://github.com/GTNewHorizons/StorageDrawers/releases/tag/1.13.12-GTNH-pre; no rehosting.",
       "status": "needs-source-and-license-review",
-      "embeddedLicenseFiles": []
+      "embeddedLicenseFiles": [],
+      "verifiedSources": [
+        "https://github.com/GTNewHorizons/StorageDrawers/releases/download/1.13.12-GTNH-pre/StorageDrawers-1.13.12-GTNH-pre.jar"
+      ],
+      "sha512": "0089c946dd8b9ebe5e222fc09feb010cf5450bb2de981b71943da383d6857093049f8b458ef1ca201d04e94bba87ce0681e1b7ea1b9d4073ce3bfc70bd36db39",
+      "downloadVerification": {
+        "verified": true,
+        "cached": false
+      }
     },
     {
       "path": "mods/Tainted-Magic-1.7.10-8.1.1.jar",
       "size": 3602696,
       "sha256": "2fbf1f56a1b8cbdfb80296904e4a5a8f6ac585b0423053a170b49259193da824",
       "sha1": "2efe76adf5dca79724d11803bd54358db6f20a92",
-      "sources": [],
-      "projectId": null,
-      "fileId": null,
-      "distributionBasis": null,
-      "status": "needs-source-and-license-review",
-      "embeddedLicenseFiles": []
+      "sources": [
+        "https://edge.forgecdn.net/files/3634/109/Tainted-Magic-1.7.10-8.1.1.jar"
+      ],
+      "projectId": 231061,
+      "fileId": 3634109,
+      "distributionBasis": "Pinned author file on CurseForge; direct download only. Metadata resolved via the public MCIM cache; redistribution is not implied.",
+      "status": "author-origin-download-verified",
+      "embeddedLicenseFiles": [],
+      "curseforgeEvidence": {
+        "provider": "mcim-public-metadata-cache",
+        "metadataUrl": "https://mod.mcimirror.top/curseforge/v1/mods/231061/files/3634109",
+        "projectId": 231061,
+        "fileId": 3634109,
+        "fileName": "Tainted-Magic-1.7.10-8.1.1.jar",
+        "fileSha1": "2efe76adf5dca79724d11803bd54358db6f20a92",
+        "fileMd5": "bddc0ecb76847d50763f0bd1fab9c68b",
+        "checkedAt": "2026-09-05T06:38:46.077105+00:00"
+      },
+      "sha512": "b20ea3b242abc19da42c88b30169028889a6d52ffcda95e133465b6390dfff4ea706c19b0885c6ef4330ce3995353d0e3c5ecd5dc78425b253f1389ec05d9447",
+      "verifiedSources": [
+        "https://mediafilez.forgecdn.net/files/3634/109/Tainted-Magic-1.7.10-8.1.1.jar"
+      ],
+      "downloadVerification": {
+        "verified": true,
+        "at": "2026-09-05T06:50:35.110095+00:00",
+        "cached": true,
+        "errors": []
+      }
     },
     {
       "path": "mods/tcinventoryscan-mc1.7.10-1.0.11.jar",
       "size": 17202,
       "sha256": "8f7ddf60d19903c99b6e72f7ae52fad7484999e72affc6ff0559b0502ec7dfad",
       "sha1": "2bdfe707d0adb5b51be97526c4a37a26d3f83f06",
-      "sources": [],
-      "projectId": null,
-      "fileId": null,
-      "distributionBasis": null,
-      "status": "needs-source-and-license-review",
-      "embeddedLicenseFiles": []
+      "sources": [
+        "https://edge.forgecdn.net/files/2286/894/tcinventoryscan-mc1.7.10-1.0.11.jar"
+      ],
+      "projectId": 238003,
+      "fileId": 2286894,
+      "distributionBasis": "Pinned author file on CurseForge; direct download only. Metadata resolved via the public MCIM cache; redistribution is not implied.",
+      "status": "author-origin-download-verified",
+      "embeddedLicenseFiles": [],
+      "curseforgeEvidence": {
+        "provider": "mcim-public-metadata-cache",
+        "metadataUrl": "https://mod.mcimirror.top/curseforge/v1/mods/238003/files/2286894",
+        "projectId": 238003,
+        "fileId": 2286894,
+        "fileName": "tcinventoryscan-mc1.7.10-1.0.11.jar",
+        "fileSha1": "2bdfe707d0adb5b51be97526c4a37a26d3f83f06",
+        "fileMd5": "0d5158557116916a4a14f749c745ef54",
+        "checkedAt": "2026-09-05T06:38:46.077105+00:00"
+      },
+      "sha512": "1f764b7617244c00ca7001d1c56b6f4c63f115d6afab309b12943f01f7061245c5a50add13940da8eaf6a3b964fe0f24886b128bbb7061a96f1fb9e3f877440d",
+      "verifiedSources": [
+        "https://mediafilez.forgecdn.net/files/2286/894/tcinventoryscan-mc1.7.10-1.0.11.jar"
+      ],
+      "downloadVerification": {
+        "verified": true,
+        "at": "2026-09-05T06:50:35.111138+00:00",
+        "cached": true,
+        "errors": []
+      }
     },
     {
       "path": "mods/tcneiadditions-1.4.1.jar",
@@ -1513,76 +3002,202 @@
       "size": 337235,
       "sha256": "a30372ac739e0d9cc47fd158c7d5a09b656d4541fe6c52ddfb80363c60d43be4",
       "sha1": "45db88a62e2352e86964058892b502d0345de364",
-      "sources": [],
-      "projectId": null,
-      "fileId": null,
-      "distributionBasis": null,
-      "status": "needs-source-and-license-review",
+      "sources": [
+        "https://edge.forgecdn.net/files/6331/776/Thaumcraft4Tweaks-1.5.34.jar"
+      ],
+      "projectId": 431297,
+      "fileId": 6331776,
+      "distributionBasis": "Pinned author file on CurseForge; direct download only. Metadata resolved via the public MCIM cache; redistribution is not implied.",
+      "status": "author-origin-download-verified",
       "embeddedLicenseFiles": [
         "COPYING",
         "LICENSE",
         "LICENSE.forge-exception"
-      ]
+      ],
+      "curseforgeEvidence": {
+        "provider": "mcim-public-metadata-cache",
+        "metadataUrl": "https://mod.mcimirror.top/curseforge/v1/mods/431297/files/6331776",
+        "projectId": 431297,
+        "fileId": 6331776,
+        "fileName": "Thaumcraft4Tweaks-1.5.34.jar",
+        "fileSha1": "45db88a62e2352e86964058892b502d0345de364",
+        "fileMd5": "f82707658aa94c05f400e5d61dd06488",
+        "checkedAt": "2026-09-05T06:38:46.077105+00:00"
+      },
+      "sha512": "9be03f43279cf6ab4e0b94a12a7755ba4a176ff83651fe4bf16c39bbb13d55691794c5f202862ff21673b198582241dbad4c347470aa745f9a53cd09c2a3eff3",
+      "verifiedSources": [
+        "https://mediafilez.forgecdn.net/files/6331/776/Thaumcraft4Tweaks-1.5.34.jar"
+      ],
+      "downloadVerification": {
+        "verified": true,
+        "at": "2026-09-05T06:50:35.112710+00:00",
+        "cached": true,
+        "errors": []
+      }
     },
     {
       "path": "mods/ThaumcraftLocalizationOptimizer-1.0.4.jar",
       "size": 14943,
       "sha256": "ea05bf06da58551854df8f70ff816b27b2dbf42c2fe9e7c330af595434ab8c65",
       "sha1": "8c638036446b20d10d71097ecde798609f683adb",
-      "sources": [],
-      "projectId": null,
-      "fileId": null,
-      "distributionBasis": null,
-      "status": "needs-source-and-license-review",
-      "embeddedLicenseFiles": []
+      "sources": [
+        "https://edge.forgecdn.net/files/4083/601/ThaumcraftLocalizationOptimizer-1.0.4.jar"
+      ],
+      "projectId": 518485,
+      "fileId": 4083601,
+      "distributionBasis": "Pinned author file on CurseForge; direct download only. Metadata resolved via the public MCIM cache; redistribution is not implied.",
+      "status": "author-origin-download-verified",
+      "embeddedLicenseFiles": [],
+      "curseforgeEvidence": {
+        "provider": "mcim-public-metadata-cache",
+        "metadataUrl": "https://mod.mcimirror.top/curseforge/v1/mods/518485/files/4083601",
+        "projectId": 518485,
+        "fileId": 4083601,
+        "fileName": "ThaumcraftLocalizationOptimizer-1.0.4.jar",
+        "fileSha1": "8c638036446b20d10d71097ecde798609f683adb",
+        "fileMd5": "5fc852b384fbf55bcd1a5a76f918f0e8",
+        "checkedAt": "2026-09-05T06:38:46.077105+00:00"
+      },
+      "sha512": "1b0431e255810a4a97058b7bd9b766c08887712fb5dbc93287ac893dba6b0f771cff7ca806edc89ea82de06665be8f8c1607704515b5a635fde3af7df24e2405",
+      "verifiedSources": [
+        "https://mediafilez.forgecdn.net/files/4083/601/ThaumcraftLocalizationOptimizer-1.0.4.jar"
+      ],
+      "downloadVerification": {
+        "verified": true,
+        "at": "2026-09-05T06:50:35.113224+00:00",
+        "cached": true,
+        "errors": []
+      }
     },
     {
       "path": "mods/thaumcraftneiplugin-1.7.10-1.7a.jar",
       "size": 68794,
       "sha256": "d39e6c8fc27709b04d58ec4c1b625648776dbf01cdf7af2d51388ee215d5d4e8",
       "sha1": "1cad010865aa455cc5eafbffc4ef915ac4ab2ecc",
-      "sources": [],
-      "projectId": null,
-      "fileId": null,
-      "distributionBasis": null,
-      "status": "needs-source-and-license-review",
-      "embeddedLicenseFiles": []
+      "sources": [
+        "https://edge.forgecdn.net/files/2241/913/thaumcraftneiplugin-1.7.10-1.7a.jar"
+      ],
+      "projectId": 225095,
+      "fileId": 2241913,
+      "distributionBasis": "Pinned author file on CurseForge; direct download only. Metadata resolved via the public MCIM cache; redistribution is not implied.",
+      "status": "author-origin-download-verified",
+      "embeddedLicenseFiles": [],
+      "curseforgeEvidence": {
+        "provider": "mcim-public-metadata-cache",
+        "metadataUrl": "https://mod.mcimirror.top/curseforge/v1/mods/225095/files/2241913",
+        "projectId": 225095,
+        "fileId": 2241913,
+        "fileName": "thaumcraftneiplugin-1.7.10-1.7a.jar",
+        "fileSha1": "1cad010865aa455cc5eafbffc4ef915ac4ab2ecc",
+        "fileMd5": "f71559fa64c1996b03e796b660914637",
+        "checkedAt": "2026-09-05T06:38:46.077105+00:00"
+      },
+      "sha512": "8f6180948082ec1edd97181210e2738e9b333c0dd1a87708d44056719ac02b8529e23b8ddaa5ce3d0895d973b54157fd0ff5a0f2c6edf206158e34e833a30ee3",
+      "verifiedSources": [
+        "https://mediafilez.forgecdn.net/files/2241/913/thaumcraftneiplugin-1.7.10-1.7a.jar"
+      ],
+      "downloadVerification": {
+        "verified": true,
+        "at": "2026-09-05T06:50:35.114259+00:00",
+        "cached": true,
+        "errors": []
+      }
     },
     {
       "path": "mods/ThaumcraftResearchTweaks-1.2.0.jar",
       "size": 690693,
       "sha256": "886f392764ceae3a24f457da0da156630d0beb76852b8aab683b8ca66b45f75a",
       "sha1": "e715a45817658019338d4ea5c4962b6aa6a25c57",
-      "sources": [],
+      "sources": [
+        "https://github.com/GTNewHorizons/thaumcraft-research-tweaks/releases/download/1.2.0/ThaumcraftResearchTweaks-1.2.0.jar"
+      ],
       "projectId": null,
       "fileId": null,
-      "distributionBasis": null,
-      "status": "needs-source-and-license-review",
-      "embeddedLicenseFiles": []
+      "distributionBasis": "Download the pinned unmodified release asset directly from https://github.com/GTNewHorizons/thaumcraft-research-tweaks/releases/tag/1.2.0; no rehosting.",
+      "status": "author-origin-download-verified",
+      "embeddedLicenseFiles": [],
+      "githubEvidence": {
+        "path": "mods/ThaumcraftResearchTweaks-1.2.0.jar",
+        "sha256": "886f392764ceae3a24f457da0da156630d0beb76852b8aab683b8ca66b45f75a",
+        "url": "https://github.com/GTNewHorizons/thaumcraft-research-tweaks/releases/download/1.2.0/ThaumcraftResearchTweaks-1.2.0.jar",
+        "releaseUrl": "https://github.com/GTNewHorizons/thaumcraft-research-tweaks/releases/tag/1.2.0",
+        "assetId": 184863924,
+        "repository": "GTNewHorizons/thaumcraft-research-tweaks"
+      },
+      "sha512": "64b9eff763009e06db8f63875ffdb4accb7b17301f6342c5c65097e81b9568f42401c5004ce9afe2f482cfe4cba0b95e95ac755768cde0c9058b9492f0ca3377",
+      "verifiedSources": [
+        "https://github.com/GTNewHorizons/thaumcraft-research-tweaks/releases/download/1.2.0/ThaumcraftResearchTweaks-1.2.0.jar"
+      ],
+      "downloadVerification": {
+        "verified": true,
+        "at": "2026-09-05T06:50:35.116317+00:00",
+        "cached": true,
+        "errors": []
+      }
     },
     {
       "path": "mods/Thaumic-Exploration-1.3.4-GTNH.jar",
       "size": 2012235,
       "sha256": "6a9d059ada45e4f8e0a3282716fd721f93ef4817f66d8c0b3cdb8fc846f0323f",
       "sha1": "a0c3d86a2326f6c9120ea90abb7c4d1e1f516a21",
-      "sources": [],
+      "sources": [
+        "https://github.com/GTNewHorizons/Thaumic_Exploration/releases/download/1.3.4-GTNH/Thaumic-Exploration-1.3.4-GTNH.jar"
+      ],
       "projectId": null,
       "fileId": null,
-      "distributionBasis": null,
-      "status": "needs-source-and-license-review",
-      "embeddedLicenseFiles": []
+      "distributionBasis": "Download the pinned unmodified release asset directly from https://github.com/GTNewHorizons/Thaumic_Exploration/releases/tag/1.3.4-GTNH; no rehosting.",
+      "status": "author-origin-download-verified",
+      "embeddedLicenseFiles": [],
+      "githubEvidence": {
+        "path": "mods/Thaumic-Exploration-1.3.4-GTNH.jar",
+        "sha256": "6a9d059ada45e4f8e0a3282716fd721f93ef4817f66d8c0b3cdb8fc846f0323f",
+        "url": "https://github.com/GTNewHorizons/Thaumic_Exploration/releases/download/1.3.4-GTNH/Thaumic-Exploration-1.3.4-GTNH.jar",
+        "releaseUrl": "https://github.com/GTNewHorizons/Thaumic_Exploration/releases/tag/1.3.4-GTNH",
+        "assetId": 190196229,
+        "repository": "GTNewHorizons/Thaumic_Exploration"
+      },
+      "sha512": "78cee37feab5933a08ce3abc2d8efb9cb1503c7af1d2e18c1f2bb609b92ba060cdb65c727fc14eb43673b13ab1c5024427362360ca00eeb6b22f676b48b7e3f5",
+      "verifiedSources": [
+        "https://github.com/GTNewHorizons/Thaumic_Exploration/releases/download/1.3.4-GTNH/Thaumic-Exploration-1.3.4-GTNH.jar"
+      ],
+      "downloadVerification": {
+        "verified": true,
+        "at": "2026-09-05T06:50:35.120456+00:00",
+        "cached": true,
+        "errors": []
+      }
     },
     {
       "path": "mods/thaumicenergistics-1.7.14-GTNH.jar",
       "size": 1754971,
       "sha256": "199fb55fc2e52b0bde3b600ba696ae261451e258538e4a11cdc9c896d5c1e5f8",
       "sha1": "e4e870d5bc1610bf04ec1d0625b91864fbf0a494",
-      "sources": [],
+      "sources": [
+        "https://github.com/GTNewHorizons/ThaumicEnergistics/releases/download/1.7.14-GTNH/thaumicenergistics-1.7.14-GTNH.jar"
+      ],
       "projectId": null,
       "fileId": null,
-      "distributionBasis": null,
-      "status": "needs-source-and-license-review",
-      "embeddedLicenseFiles": []
+      "distributionBasis": "Download the pinned unmodified release asset directly from https://github.com/GTNewHorizons/ThaumicEnergistics/releases/tag/1.7.14-GTNH; no rehosting.",
+      "status": "author-origin-download-verified",
+      "embeddedLicenseFiles": [],
+      "githubEvidence": {
+        "path": "mods/thaumicenergistics-1.7.14-GTNH.jar",
+        "sha256": "199fb55fc2e52b0bde3b600ba696ae261451e258538e4a11cdc9c896d5c1e5f8",
+        "url": "https://github.com/GTNewHorizons/ThaumicEnergistics/releases/download/1.7.14-GTNH/thaumicenergistics-1.7.14-GTNH.jar",
+        "releaseUrl": "https://github.com/GTNewHorizons/ThaumicEnergistics/releases/tag/1.7.14-GTNH",
+        "assetId": 293543744,
+        "repository": "GTNewHorizons/ThaumicEnergistics"
+      },
+      "sha512": "848212601b1c01f6d8cd1ee6da15f2a3c2d57acbc3110e6bec3d989991a7401f46a32b2a36d9255c66c92a86c57609779de67282ef7b1f63f59dd8b7668fe543",
+      "verifiedSources": [
+        "https://github.com/GTNewHorizons/ThaumicEnergistics/releases/download/1.7.14-GTNH/thaumicenergistics-1.7.14-GTNH.jar"
+      ],
+      "downloadVerification": {
+        "verified": true,
+        "at": "2026-09-05T06:50:35.124653+00:00",
+        "cached": true,
+        "errors": []
+      }
     },
     {
       "path": "mods/ThaumicHorizons-1.6.3.jar",
@@ -1590,10 +3205,11 @@
       "sha256": "1f6821948a271b0a8bde6c767867f4712f927a160e86c3f8ede57865924e821a",
       "sha1": "d53065c9d63cdf668ae1ef575f92e5a223c05e39",
       "sources": [
-        "https://cdn.modrinth.com/data/1wDWP1tN/versions/xARxatMx/ThaumicHorizons-1.6.3.jar"
+        "https://cdn.modrinth.com/data/1wDWP1tN/versions/xARxatMx/ThaumicHorizons-1.6.3.jar",
+        "https://edge.forgecdn.net/files/5689/743/ThaumicHorizons-1.6.3.jar"
       ],
-      "projectId": null,
-      "fileId": null,
+      "projectId": 227914,
+      "fileId": 5689743,
       "distributionBasis": "Download the identical author-published file directly from Modrinth; no rehosting. Project license: LGPL-3.0-or-later",
       "status": "author-origin-download-verified",
       "embeddedLicenseFiles": [],
@@ -1614,133 +3230,358 @@
       },
       "downloadVerification": {
         "verified": true,
+        "at": "2026-09-05T06:50:35.129340+00:00",
         "cached": true,
-        "at": "2026-09-05T06:16:40.167249+00:00"
-      }
+        "errors": []
+      },
+      "curseforgeEvidence": {
+        "provider": "mcim-public-metadata-cache",
+        "metadataUrl": "https://mod.mcimirror.top/curseforge/v1/mods/227914/files/5689743",
+        "projectId": 227914,
+        "fileId": 5689743,
+        "fileName": "ThaumicHorizons-1.6.3.jar",
+        "fileSha1": "d53065c9d63cdf668ae1ef575f92e5a223c05e39",
+        "fileMd5": "1aecfe30a1ad47c439182ada790a60de",
+        "checkedAt": "2026-09-05T06:38:46.077105+00:00"
+      },
+      "sha512": "e0f3f4d6f718f8127fa5edca48c7cb868eef8edee33682a6bd5bfa7bcd05d5c4ed3d7eb0a410eac2a3747cc5ec2abbb3a6bfe81f66796d34f7bd829f2fc671e9",
+      "verifiedSources": [
+        "https://cdn.modrinth.com/data/1wDWP1tN/versions/xARxatMx/ThaumicHorizons-1.6.3.jar"
+      ]
     },
     {
       "path": "mods/ThaumicTinkerer-2.10.1.jar",
       "size": 2031749,
       "sha256": "d8626cc299e1a1db41b08bf402c0d52ce6c7266a63f8a3fc5c27fc65deb0d223",
       "sha1": "0459d5dc1aea2e34e04fecb2e2cf701ab058d987",
-      "sources": [],
+      "sources": [
+        "https://github.com/GTNewHorizons/ThaumicTinkerer/releases/download/2.10.1/ThaumicTinkerer-2.10.1.jar"
+      ],
       "projectId": null,
       "fileId": null,
-      "distributionBasis": null,
-      "status": "needs-source-and-license-review",
-      "embeddedLicenseFiles": []
+      "distributionBasis": "Download the pinned unmodified release asset directly from https://github.com/GTNewHorizons/ThaumicTinkerer/releases/tag/2.10.1; no rehosting.",
+      "status": "author-origin-download-verified",
+      "embeddedLicenseFiles": [],
+      "githubEvidence": {
+        "path": "mods/ThaumicTinkerer-2.10.1.jar",
+        "sha256": "d8626cc299e1a1db41b08bf402c0d52ce6c7266a63f8a3fc5c27fc65deb0d223",
+        "url": "https://github.com/GTNewHorizons/ThaumicTinkerer/releases/download/2.10.1/ThaumicTinkerer-2.10.1.jar",
+        "releaseUrl": "https://github.com/GTNewHorizons/ThaumicTinkerer/releases/tag/2.10.1",
+        "assetId": 180170292,
+        "repository": "GTNewHorizons/ThaumicTinkerer"
+      },
+      "sha512": "98d28a198aa5eaa9ce67bfd7641b3b8c5dd5b0af27266888b2ad56cd51c8f6bf5516ca012b027a0cde450deb2f97d507eb605456cf8f49a95b268dd00e476983",
+      "verifiedSources": [
+        "https://github.com/GTNewHorizons/ThaumicTinkerer/releases/download/2.10.1/ThaumicTinkerer-2.10.1.jar"
+      ],
+      "downloadVerification": {
+        "verified": true,
+        "at": "2026-09-05T06:50:35.135060+00:00",
+        "cached": true,
+        "errors": []
+      }
     },
     {
       "path": "mods/ThermalExpansion-[1.7.10]4.1.5-248.jar",
       "size": 2614932,
       "sha256": "cbfeebd28c8e48ac41e88f08957dc2f99a1160a0c641bbd95eff232071e884d0",
       "sha1": "ae0d16da59401fee4ef4dcda42fa2b85efee96bc",
-      "sources": [],
-      "projectId": null,
-      "fileId": null,
-      "distributionBasis": null,
-      "status": "needs-source-and-license-review",
-      "embeddedLicenseFiles": []
+      "sources": [
+        "https://edge.forgecdn.net/files/2388/758/ThermalExpansion-%5b1.7.10%5d4.1.5-248.jar"
+      ],
+      "projectId": 69163,
+      "fileId": 2388758,
+      "distributionBasis": "Pinned author file on CurseForge; direct download only. Metadata resolved via the public MCIM cache; redistribution is not implied.",
+      "status": "author-origin-download-verified",
+      "embeddedLicenseFiles": [],
+      "curseforgeEvidence": {
+        "provider": "mcim-public-metadata-cache",
+        "metadataUrl": "https://mod.mcimirror.top/curseforge/v1/mods/69163/files/2388758",
+        "projectId": 69163,
+        "fileId": 2388758,
+        "fileName": "ThermalExpansion-[1.7.10]4.1.5-248.jar",
+        "fileSha1": "ae0d16da59401fee4ef4dcda42fa2b85efee96bc",
+        "fileMd5": "8c0ca9e6cc197a13e6cdbaf53b8d60f5",
+        "checkedAt": "2026-09-05T06:38:46.077105+00:00"
+      },
+      "sha512": "e76d65ecc3df279f33ba254efa87a11ed73c652cfd54a067b7d4547694a73d6167952f5fbb9f19fcce0b2abf54908c52334a3279e689e721135b77c0bdabd9b0",
+      "verifiedSources": [
+        "https://mediafilez.forgecdn.net/files/2388/758/ThermalExpansion-%5b1.7.10%5d4.1.5-248.jar"
+      ],
+      "downloadVerification": {
+        "verified": true,
+        "at": "2026-09-05T06:50:35.143787+00:00",
+        "cached": true,
+        "errors": []
+      }
     },
     {
       "path": "mods/ThermalFoundation-[1.7.10]1.2.6-118.jar",
       "size": 2316321,
       "sha256": "2e78538d2db2e924b9455e6521c89b6633f2c3f171a3b5b8f1208ce4eaca4206",
       "sha1": "5a8b566c655738fe02c749206f3e87d32ce74015",
-      "sources": [],
-      "projectId": null,
-      "fileId": null,
-      "distributionBasis": null,
-      "status": "needs-source-and-license-review",
-      "embeddedLicenseFiles": []
+      "sources": [
+        "https://edge.forgecdn.net/files/2388/752/ThermalFoundation-%5b1.7.10%5d1.2.6-118.jar"
+      ],
+      "projectId": 222880,
+      "fileId": 2388752,
+      "distributionBasis": "Pinned author file on CurseForge; direct download only. Metadata resolved via the public MCIM cache; redistribution is not implied.",
+      "status": "author-origin-download-verified",
+      "embeddedLicenseFiles": [],
+      "curseforgeEvidence": {
+        "provider": "mcim-public-metadata-cache",
+        "metadataUrl": "https://mod.mcimirror.top/curseforge/v1/mods/222880/files/2388752",
+        "projectId": 222880,
+        "fileId": 2388752,
+        "fileName": "ThermalFoundation-[1.7.10]1.2.6-118.jar",
+        "fileSha1": "5a8b566c655738fe02c749206f3e87d32ce74015",
+        "fileMd5": "cc29ba7f9164bb5c78cee67a3a23a81d",
+        "checkedAt": "2026-09-05T06:38:46.077105+00:00"
+      },
+      "sha512": "3dbed4e9bfe9b0ee59659af30e89990515596dafdeb107092cac212ed94ce4ee1b7ca0f9d1bf86d1429688825fce778d86ef5ae942ac960854b9a0976240ae38",
+      "verifiedSources": [
+        "https://mediafilez.forgecdn.net/files/2388/752/ThermalFoundation-%5b1.7.10%5d1.2.6-118.jar"
+      ],
+      "downloadVerification": {
+        "verified": true,
+        "at": "2026-09-05T06:50:35.148275+00:00",
+        "cached": true,
+        "errors": []
+      }
     },
     {
       "path": "mods/threadsafetyfixes-2.2.1.jar",
       "size": 19568,
       "sha256": "032b5665166d916c261cac52604ae7d474b05e8391795481efa7285b22dc72a0",
       "sha1": "d405550b196dd927fe6b7d3b3537a8ff9ba38eff",
-      "sources": [],
+      "sources": [
+        "https://github.com/unilock/ThreadSafetyFixes/releases/download/2.2.1/threadsafetyfixes-2.2.1.jar"
+      ],
       "projectId": null,
       "fileId": null,
-      "distributionBasis": null,
-      "status": "needs-source-and-license-review",
+      "distributionBasis": "Download the pinned unmodified release asset directly from https://github.com/unilock/ThreadSafetyFixes/releases/tag/2.2.1; no rehosting.",
+      "status": "author-origin-download-verified",
       "embeddedLicenseFiles": [
         "LICENSE"
-      ]
+      ],
+      "githubEvidence": {
+        "path": "mods/threadsafetyfixes-2.2.1.jar",
+        "sha256": "032b5665166d916c261cac52604ae7d474b05e8391795481efa7285b22dc72a0",
+        "url": "https://github.com/unilock/ThreadSafetyFixes/releases/download/2.2.1/threadsafetyfixes-2.2.1.jar",
+        "releaseUrl": "https://github.com/unilock/ThreadSafetyFixes/releases/tag/2.2.1",
+        "assetId": 189733263,
+        "repository": "unilock/ThreadSafetyFixes"
+      },
+      "sha512": "b81f680c4b8b3b61e78a2c0ccddac48196eedecaa9b34875d816eb00a0549254763a543e0e8b38968cae6dae060f7c07556a4c79f57bde7a3856ec0d8c5041d2",
+      "verifiedSources": [
+        "https://github.com/unilock/ThreadSafetyFixes/releases/download/2.2.1/threadsafetyfixes-2.2.1.jar"
+      ],
+      "downloadVerification": {
+        "verified": true,
+        "at": "2026-09-05T06:50:36.299217+00:00",
+        "cached": false,
+        "errors": []
+      }
     },
     {
       "path": "mods/TravellersGear-1.7.10-1.16.6.jar",
       "size": 312717,
       "sha256": "f4bc72fb618cfcb682c4d8b63cd379daf8f3e75d784778a6b7a511ab786923df",
       "sha1": "5e59570024a10dbf53f154f428f01f5fc2180b9d",
-      "sources": [],
-      "projectId": null,
-      "fileId": null,
-      "distributionBasis": null,
-      "status": "needs-source-and-license-review",
-      "embeddedLicenseFiles": []
+      "sources": [
+        "https://edge.forgecdn.net/files/2262/112/TravellersGear-1.7.10-1.16.6.jar"
+      ],
+      "projectId": 224440,
+      "fileId": 2262112,
+      "distributionBasis": "Pinned author file on CurseForge; direct download only. Metadata resolved via the public MCIM cache; redistribution is not implied.",
+      "status": "author-origin-download-verified",
+      "embeddedLicenseFiles": [],
+      "curseforgeEvidence": {
+        "provider": "mcim-public-metadata-cache",
+        "metadataUrl": "https://mod.mcimirror.top/curseforge/v1/mods/224440/files/2262112",
+        "projectId": 224440,
+        "fileId": 2262112,
+        "fileName": "TravellersGear-1.7.10-1.16.6.jar",
+        "fileSha1": "5e59570024a10dbf53f154f428f01f5fc2180b9d",
+        "fileMd5": "c131993743554bace7bb96fb3bcdc249",
+        "checkedAt": "2026-09-05T06:38:46.077105+00:00"
+      },
+      "sha512": "d5720894a88ead254fec8e30dccbef7fa54aec28305cd580ede014a38e58e1d285a174c611dd93fd1cd0504000d0e2e914115b212da8c0a20bc89bd97ab223ae",
+      "verifiedSources": [
+        "https://mediafilez.forgecdn.net/files/2262/112/TravellersGear-1.7.10-1.16.6.jar"
+      ],
+      "downloadVerification": {
+        "verified": true,
+        "at": "2026-09-05T06:50:35.850607+00:00",
+        "cached": true,
+        "errors": []
+      }
     },
     {
       "path": "mods/TrivialThoughts-1.1.8-2.jar",
       "size": 864429,
       "sha256": "8b186f7839eb42ce341109a7f8420b71f68664f0f31adf4f323937f11e6b3765",
       "sha1": "bd75878e0683a5ea9c1d6d5e78c624ee9452cd15",
-      "sources": [],
-      "projectId": null,
-      "fileId": null,
-      "distributionBasis": null,
-      "status": "needs-source-and-license-review",
-      "embeddedLicenseFiles": []
+      "sources": [
+        "https://edge.forgecdn.net/files/7662/198/TrivialThoughts-1.1.8-2.jar"
+      ],
+      "projectId": 967327,
+      "fileId": 7662198,
+      "distributionBasis": "Pinned author file on CurseForge; direct download only. Metadata resolved via the public MCIM cache; redistribution is not implied.",
+      "status": "author-origin-download-verified",
+      "embeddedLicenseFiles": [],
+      "curseforgeEvidence": {
+        "provider": "mcim-public-metadata-cache",
+        "metadataUrl": "https://mod.mcimirror.top/curseforge/v1/mods/967327/files/7662198",
+        "projectId": 967327,
+        "fileId": 7662198,
+        "fileName": "TrivialThoughts-1.1.8-2.jar",
+        "fileSha1": "bd75878e0683a5ea9c1d6d5e78c624ee9452cd15",
+        "fileMd5": "4962e2f5eb6105e5e8455e59543e13a7",
+        "checkedAt": "2026-09-05T06:38:46.077105+00:00"
+      },
+      "sha512": "71b4d27707c3779ce9edc1b4816e1877a2dc02ea718b1969b8db803b1b36d7da0090c99f4184b0b27b63b7bae5de10b43257412d12fadc21b6f097400c02d5fc",
+      "verifiedSources": [
+        "https://mediafilez.forgecdn.net/files/7662/198/TrivialThoughts-1.1.8-2.jar"
+      ],
+      "downloadVerification": {
+        "verified": true,
+        "at": "2026-09-05T06:50:35.853740+00:00",
+        "cached": true,
+        "errors": []
+      }
     },
     {
       "path": "mods/txloader-1.6.3.jar",
       "size": 37718,
       "sha256": "cd910252064c2e86733ee3843561661c348054343a721eda70a7bea3dd3af0d8",
       "sha1": "f1d4c41beaccaca9d211486e1321b0813aff1673",
-      "sources": [],
-      "projectId": null,
-      "fileId": null,
-      "distributionBasis": null,
-      "status": "needs-source-and-license-review",
-      "embeddedLicenseFiles": []
+      "sources": [
+        "https://edge.forgecdn.net/files/4796/692/txloader-1.6.3.jar"
+      ],
+      "projectId": 706505,
+      "fileId": 4796692,
+      "distributionBasis": "Pinned author file on CurseForge; direct download only. Metadata resolved via the public MCIM cache; redistribution is not implied.",
+      "status": "author-origin-download-verified",
+      "embeddedLicenseFiles": [],
+      "curseforgeEvidence": {
+        "provider": "mcim-public-metadata-cache",
+        "metadataUrl": "https://mod.mcimirror.top/curseforge/v1/mods/706505/files/4796692",
+        "projectId": 706505,
+        "fileId": 4796692,
+        "fileName": "txloader-1.6.3.jar",
+        "fileSha1": "f1d4c41beaccaca9d211486e1321b0813aff1673",
+        "fileMd5": "04c5c37c2c05cf4ba0ecac48b01f17b0",
+        "checkedAt": "2026-09-05T06:38:46.077105+00:00"
+      },
+      "sha512": "3e3ac2b4011c0ad08a6fc90ab09c3db65e0396fb5b6b27668c140abfae2cd1f09cfe03a1e9656a2691afada7371ccb6b9d918160fd6a8da0856425ba49398a9f",
+      "verifiedSources": [
+        "https://mediafilez.forgecdn.net/files/4796/692/txloader-1.6.3.jar"
+      ],
+      "downloadVerification": {
+        "verified": true,
+        "at": "2026-09-05T06:50:35.854739+00:00",
+        "cached": true,
+        "errors": []
+      }
     },
     {
       "path": "mods/Waila-1.8.4.jar",
       "size": 535004,
       "sha256": "d6ed6c909fe26c7d0d8c0c8b34d2550fbe3cf2c2a84e012c88b5284551a77866",
       "sha1": "c4641c4861c6e1d1642a178a9d1389ab349eeaf7",
-      "sources": [],
+      "sources": [
+        "https://github.com/GTNewHorizons/waila/releases/download/1.8.4/Waila-1.8.4.jar"
+      ],
       "projectId": null,
       "fileId": null,
-      "distributionBasis": null,
-      "status": "needs-source-and-license-review",
+      "distributionBasis": "Download the pinned unmodified release asset directly from https://github.com/GTNewHorizons/waila/releases/tag/1.8.4; no rehosting.",
+      "status": "author-origin-download-verified",
       "embeddedLicenseFiles": [
         "LICENSE.txt"
-      ]
+      ],
+      "githubEvidence": {
+        "path": "mods/Waila-1.8.4.jar",
+        "sha256": "d6ed6c909fe26c7d0d8c0c8b34d2550fbe3cf2c2a84e012c88b5284551a77866",
+        "url": "https://github.com/GTNewHorizons/waila/releases/download/1.8.4/Waila-1.8.4.jar",
+        "releaseUrl": "https://github.com/GTNewHorizons/waila/releases/tag/1.8.4",
+        "assetId": 239271384,
+        "repository": "GTNewHorizons/waila"
+      },
+      "sha512": "ca78c9b628ea8dbfee6c1d87b9241f9d6d5ef2e11c773a2f7b4ebb7cee33a505afd48381ca8e9e1e844a70e3587110050f09d8e9d55a325b7a2175af2cddd62c",
+      "verifiedSources": [
+        "https://github.com/GTNewHorizons/waila/releases/download/1.8.4/Waila-1.8.4.jar"
+      ],
+      "downloadVerification": {
+        "verified": true,
+        "at": "2026-09-05T06:50:35.856740+00:00",
+        "cached": true,
+        "errors": []
+      }
     },
     {
       "path": "mods/WailaHarvestability-1.2.1-GTNH.jar",
       "size": 29365,
       "sha256": "5abf01e3a460d71cf3d6dc0e6649df5ae5ef75d0a3f2af510c9c773b7bae5ae4",
       "sha1": "06a6067d8147251c082097d56e67755990427c45",
-      "sources": [],
+      "sources": [
+        "https://github.com/GTNewHorizons/WailaHarvestability/releases/download/1.2.1-GTNH/WailaHarvestability-1.2.1-GTNH.jar"
+      ],
       "projectId": null,
       "fileId": null,
-      "distributionBasis": null,
-      "status": "needs-source-and-license-review",
-      "embeddedLicenseFiles": []
+      "distributionBasis": "Download the pinned unmodified release asset directly from https://github.com/GTNewHorizons/WailaHarvestability/releases/tag/1.2.1-GTNH; no rehosting.",
+      "status": "author-origin-download-verified",
+      "embeddedLicenseFiles": [],
+      "githubEvidence": {
+        "path": "mods/WailaHarvestability-1.2.1-GTNH.jar",
+        "sha256": "5abf01e3a460d71cf3d6dc0e6649df5ae5ef75d0a3f2af510c9c773b7bae5ae4",
+        "url": "https://github.com/GTNewHorizons/WailaHarvestability/releases/download/1.2.1-GTNH/WailaHarvestability-1.2.1-GTNH.jar",
+        "releaseUrl": "https://github.com/GTNewHorizons/WailaHarvestability/releases/tag/1.2.1-GTNH",
+        "assetId": 161298291,
+        "repository": "GTNewHorizons/WailaHarvestability"
+      },
+      "sha512": "7137224b21e19dd9ef0b9957aff66ede1228f9f49db887983256cea0d10a1dd9cb67f938776efad74fd1ea42ab68b86ee42503f320e2315b1ee3ea9bef506832",
+      "verifiedSources": [
+        "https://github.com/GTNewHorizons/WailaHarvestability/releases/download/1.2.1-GTNH/WailaHarvestability-1.2.1-GTNH.jar"
+      ],
+      "downloadVerification": {
+        "verified": true,
+        "at": "2026-09-05T06:50:35.857739+00:00",
+        "cached": true,
+        "errors": []
+      }
     },
     {
       "path": "mods/WAILAPlugins-0.4.0.jar",
       "size": 69068,
       "sha256": "41809936282699629261757d65e532bff69172dd61658c9dab141548b19cd894",
       "sha1": "d3eb9bd51053e49206f3b04685e4c406db2f9000",
-      "sources": [],
+      "sources": [
+        "https://github.com/GTNewHorizons/WAILAPlugins/releases/download/0.4.0/WAILAPlugins-0.4.0.jar"
+      ],
       "projectId": null,
       "fileId": null,
-      "distributionBasis": null,
-      "status": "needs-source-and-license-review",
-      "embeddedLicenseFiles": []
+      "distributionBasis": "Download the pinned unmodified release asset directly from https://github.com/GTNewHorizons/WAILAPlugins/releases/tag/0.4.0; no rehosting.",
+      "status": "author-origin-download-verified",
+      "embeddedLicenseFiles": [],
+      "githubEvidence": {
+        "path": "mods/WAILAPlugins-0.4.0.jar",
+        "sha256": "41809936282699629261757d65e532bff69172dd61658c9dab141548b19cd894",
+        "url": "https://github.com/GTNewHorizons/WAILAPlugins/releases/download/0.4.0/WAILAPlugins-0.4.0.jar",
+        "releaseUrl": "https://github.com/GTNewHorizons/WAILAPlugins/releases/tag/0.4.0",
+        "assetId": 144695555,
+        "repository": "GTNewHorizons/WAILAPlugins"
+      },
+      "sha512": "13b8c61240c69e12bd35ccf43d0689e08efbe5b5fdf906b77f23ebe782670b0f72937a97698d353c81dee8a3f7c701c8cb1fd2a3a1e0eda9aaaaeeb0d2e7aacf",
+      "verifiedSources": [
+        "https://github.com/GTNewHorizons/WAILAPlugins/releases/download/0.4.0/WAILAPlugins-0.4.0.jar"
+      ],
+      "downloadVerification": {
+        "verified": true,
+        "at": "2026-09-05T06:50:35.858738+00:00",
+        "cached": true,
+        "errors": []
+      }
     },
     {
       "path": "mods/WanionLib-1.7.10-1.8.jar",
@@ -1748,10 +3589,11 @@
       "sha256": "744c6bf8cc340f5b51a7c27ed5bba505a798ede6b9b1cdffb21116d12278705b",
       "sha1": "a1ab13083d28403671501eaf7092021f2f477470",
       "sources": [
-        "https://cdn.modrinth.com/data/U90pf4L4/versions/t9ypzPpk/WanionLib-1.7.10-1.8.jar"
+        "https://cdn.modrinth.com/data/U90pf4L4/versions/t9ypzPpk/WanionLib-1.7.10-1.8.jar",
+        "https://edge.forgecdn.net/files/2430/662/WanionLib-1.7.10-1.8.jar"
       ],
-      "projectId": null,
-      "fileId": null,
+      "projectId": 253043,
+      "fileId": 2430662,
       "distributionBasis": "Download the identical author-published file directly from Modrinth; no rehosting. Project license: MPL-2.0",
       "status": "author-origin-download-verified",
       "embeddedLicenseFiles": [],
@@ -1772,9 +3614,24 @@
       },
       "downloadVerification": {
         "verified": true,
+        "at": "2026-09-05T06:50:35.859073+00:00",
         "cached": true,
-        "at": "2026-09-05T06:16:40.167249+00:00"
-      }
+        "errors": []
+      },
+      "curseforgeEvidence": {
+        "provider": "mcim-public-metadata-cache",
+        "metadataUrl": "https://mod.mcimirror.top/curseforge/v1/mods/253043/files/2430662",
+        "projectId": 253043,
+        "fileId": 2430662,
+        "fileName": "WanionLib-1.7.10-1.8.jar",
+        "fileSha1": "a1ab13083d28403671501eaf7092021f2f477470",
+        "fileMd5": "8c7c8b8fef46a39d174500d5cdb712e0",
+        "checkedAt": "2026-09-05T06:38:46.077105+00:00"
+      },
+      "sha512": "28cde5908d17460818f3881243e801bcdc8f87ce003a060f2af9e64cc41e83139c4982ebb6d9382a37b522fd21e1a21bec0cd29c8ec685bbbd7cf4e83d486c09",
+      "verifiedSources": [
+        "https://cdn.modrinth.com/data/U90pf4L4/versions/t9ypzPpk/WanionLib-1.7.10-1.8.jar"
+      ]
     },
     {
       "path": "mods/waystones-1.0.11.jar",
@@ -1782,10 +3639,11 @@
       "sha256": "619450eca03e9a836d82764581461341d6b06133326b922abf2510c380d7ad46",
       "sha1": "327270b50f172f2015e61ed161028dd258319d76",
       "sources": [
-        "https://cdn.modrinth.com/data/wRpyARgi/versions/XUX1TwBa/waystones-1.0.11.jar"
+        "https://cdn.modrinth.com/data/wRpyARgi/versions/XUX1TwBa/waystones-1.0.11.jar",
+        "https://edge.forgecdn.net/files/7706/135/waystones-1.0.11.jar"
       ],
-      "projectId": null,
-      "fileId": null,
+      "projectId": 1449057,
+      "fileId": 7706135,
       "distributionBasis": "Download the identical author-published file directly from Modrinth; no rehosting. Project license: LGPL-3.0-only",
       "status": "author-origin-download-verified",
       "embeddedLicenseFiles": [
@@ -1809,33 +3667,90 @@
       },
       "downloadVerification": {
         "verified": true,
+        "at": "2026-09-05T06:50:35.863083+00:00",
         "cached": true,
-        "at": "2026-09-05T06:16:40.168306+00:00"
-      }
+        "errors": []
+      },
+      "curseforgeEvidence": {
+        "provider": "mcim-public-metadata-cache",
+        "metadataUrl": "https://mod.mcimirror.top/curseforge/v1/mods/1449057/files/7706135",
+        "projectId": 1449057,
+        "fileId": 7706135,
+        "fileName": "waystones-1.0.11.jar",
+        "fileSha1": "327270b50f172f2015e61ed161028dd258319d76",
+        "fileMd5": "5e52a131ae5655355fe17b4b64e8575d",
+        "checkedAt": "2026-09-05T06:38:46.077621+00:00"
+      },
+      "sha512": "3dbc21f9aa540cb8691e99ccacbf179135f589a8c5ff45136b65516af627a90f18dcc4463c15f456fc49dff6ee0d8b0b7947214dda01b1f78f5e774cc5f87697",
+      "verifiedSources": [
+        "https://cdn.modrinth.com/data/wRpyARgi/versions/XUX1TwBa/waystones-1.0.11.jar"
+      ]
     },
     {
       "path": "mods/WirelessCraftingTerminal-1.12.7.jar",
       "size": 290829,
       "sha256": "39f823036dce7030bd4e68762a1e2a0469852255e3d40e0cc6e1f3bc264b42ae",
       "sha1": "bb47625d8052731fb2ddef473f941fbff0adf8d3",
-      "sources": [],
+      "sources": [
+        "https://github.com/GTNewHorizons/WirelessCraftingTerminal/releases/download/1.12.7/WirelessCraftingTerminal-1.12.7.jar"
+      ],
       "projectId": null,
       "fileId": null,
-      "distributionBasis": null,
-      "status": "needs-source-and-license-review",
-      "embeddedLicenseFiles": []
+      "distributionBasis": "Download the pinned unmodified release asset directly from https://github.com/GTNewHorizons/WirelessCraftingTerminal/releases/tag/1.12.7; no rehosting.",
+      "status": "author-origin-download-verified",
+      "embeddedLicenseFiles": [],
+      "githubEvidence": {
+        "path": "mods/WirelessCraftingTerminal-1.12.7.jar",
+        "sha256": "39f823036dce7030bd4e68762a1e2a0469852255e3d40e0cc6e1f3bc264b42ae",
+        "url": "https://github.com/GTNewHorizons/WirelessCraftingTerminal/releases/download/1.12.7/WirelessCraftingTerminal-1.12.7.jar",
+        "releaseUrl": "https://github.com/GTNewHorizons/WirelessCraftingTerminal/releases/tag/1.12.7",
+        "assetId": 273080291,
+        "repository": "GTNewHorizons/WirelessCraftingTerminal"
+      },
+      "sha512": "69ccc78f9fd728ec478817183cf4c7de72a8c5c1a2f75dd7c37fef0b0008c4d355ba3a80468bf5fcb337413c59c6f11eacedf0c964dd925f444586ee388a58b1",
+      "verifiedSources": [
+        "https://github.com/GTNewHorizons/WirelessCraftingTerminal/releases/download/1.12.7/WirelessCraftingTerminal-1.12.7.jar"
+      ],
+      "downloadVerification": {
+        "verified": true,
+        "at": "2026-09-05T06:50:35.864597+00:00",
+        "cached": true,
+        "errors": []
+      }
     },
     {
       "path": "mods/WitchingGadgets-1.7.10-1.1.10.jar",
       "size": 4217711,
       "sha256": "182cbb67db9de205ebaea9e2c986eca372060ac7acdce593aa5fb14a1af90a44",
       "sha1": "12e2a31d7a5f48759a932682414d875d35956020",
-      "sources": [],
-      "projectId": null,
-      "fileId": null,
-      "distributionBasis": null,
-      "status": "needs-source-and-license-review",
-      "embeddedLicenseFiles": []
+      "sources": [
+        "https://edge.forgecdn.net/files/2262/119/WitchingGadgets-1.7.10-1.1.10.jar"
+      ],
+      "projectId": 228268,
+      "fileId": 2262119,
+      "distributionBasis": "Pinned author file on CurseForge; direct download only. Metadata resolved via the public MCIM cache; redistribution is not implied.",
+      "status": "author-origin-download-verified",
+      "embeddedLicenseFiles": [],
+      "curseforgeEvidence": {
+        "provider": "mcim-public-metadata-cache",
+        "metadataUrl": "https://mod.mcimirror.top/curseforge/v1/mods/228268/files/2262119",
+        "projectId": 228268,
+        "fileId": 2262119,
+        "fileName": "WitchingGadgets-1.7.10-1.1.10.jar",
+        "fileSha1": "12e2a31d7a5f48759a932682414d875d35956020",
+        "fileMd5": "2625875481a8f3b64998a0831ca0d2e3",
+        "checkedAt": "2026-09-05T06:38:46.077621+00:00"
+      },
+      "sha512": "294e01112257f60e1343ec51508d3660d45c0b9f1605e7aad54f2aa1395c97bf94c4076e2b17b13d8902da879764e57b6e152a487644a9a047df5d399edb1687",
+      "verifiedSources": [
+        "https://mediafilez.forgecdn.net/files/2262/119/WitchingGadgets-1.7.10-1.1.10.jar"
+      ],
+      "downloadVerification": {
+        "verified": true,
+        "at": "2026-09-05T06:50:35.873604+00:00",
+        "cached": true,
+        "errors": []
+      }
     },
     {
       "path": "mods/WithCoffee-1.6.jar",
@@ -1843,11 +3758,21 @@
       "sha256": "0d4dbc4a762ce35fd5261f891ee3fb447de0ed356ad060e2bd3a7fcc926c88cd",
       "sha1": "9cfd428207fc10639055ee1953d6d4c7c215accc",
       "sources": [],
-      "projectId": null,
-      "fileId": null,
-      "distributionBasis": null,
+      "projectId": 689127,
+      "fileId": 5631165,
+      "distributionBasis": "Pinned author file on CurseForge; direct download only. Metadata resolved via the public MCIM cache; redistribution is not implied.",
       "status": "needs-source-and-license-review",
-      "embeddedLicenseFiles": []
+      "embeddedLicenseFiles": [],
+      "curseforgeEvidence": {
+        "provider": "mcim-public-metadata-cache",
+        "metadataUrl": "https://mod.mcimirror.top/curseforge/v1/mods/689127/files/5631165",
+        "projectId": 689127,
+        "fileId": 5631165,
+        "fileName": "WithCoffee-1.6.jar",
+        "fileSha1": "9cfd428207fc10639055ee1953d6d4c7c215accc",
+        "fileMd5": "52f0d6bb2f53a6b51f0fdaeb4cd1a2ec",
+        "checkedAt": "2026-09-05T06:38:46.077621+00:00"
+      }
     },
     {
       "path": "mods/Xaeros_Minimap_21.10.41_Forge_1.7.10.jar",
@@ -1855,10 +3780,11 @@
       "sha256": "489691c9535f5f55f2a9f8c0997d2513d44320d67ae230640af2763ce46082ec",
       "sha1": "7eaea1574f98aa3c3e4dfd3414b84e364e359d2a",
       "sources": [
-        "https://cdn.modrinth.com/data/1bokaNcj/versions/cx33FoE0/Xaeros_Minimap_21.10.41_Forge_1.7.10.jar"
+        "https://cdn.modrinth.com/data/1bokaNcj/versions/cx33FoE0/Xaeros_Minimap_21.10.41_Forge_1.7.10.jar",
+        "https://edge.forgecdn.net/files/5060/684/Xaeros_Minimap_21.10.41_Forge_1.7.10.jar"
       ],
-      "projectId": null,
-      "fileId": null,
+      "projectId": 263420,
+      "fileId": 5060684,
       "distributionBasis": "Download the identical author-published file directly from Modrinth; no rehosting. Project license: LicenseRef-All-Rights-Reserved",
       "status": "author-origin-download-verified",
       "embeddedLicenseFiles": [],
@@ -1879,9 +3805,24 @@
       },
       "downloadVerification": {
         "verified": true,
+        "at": "2026-09-05T06:50:35.876142+00:00",
         "cached": true,
-        "at": "2026-09-05T06:16:40.169310+00:00"
-      }
+        "errors": []
+      },
+      "curseforgeEvidence": {
+        "provider": "mcim-public-metadata-cache",
+        "metadataUrl": "https://mod.mcimirror.top/curseforge/v1/mods/263420/files/5060684",
+        "projectId": 263420,
+        "fileId": 5060684,
+        "fileName": "Xaeros_Minimap_21.10.41_Forge_1.7.10.jar",
+        "fileSha1": "7eaea1574f98aa3c3e4dfd3414b84e364e359d2a",
+        "fileMd5": "a2167fe6ed00247b2b21415f300e6b69",
+        "checkedAt": "2026-09-05T06:38:46.077621+00:00"
+      },
+      "sha512": "7fa4f0147d0febe058504cda5ee6178d77cc3abf1652679f7278e5de81717782758aca5da5919c3574654c6378dd80c5a1bcd3dbd7c7783f5f8ba9b36b8a0db1",
+      "verifiedSources": [
+        "https://cdn.modrinth.com/data/1bokaNcj/versions/cx33FoE0/Xaeros_Minimap_21.10.41_Forge_1.7.10.jar"
+      ]
     },
     {
       "path": "mods/XaerosWorldMap_1.14.1.31_Forge_1.7.10.jar",
@@ -1900,12 +3841,109 @@
       "size": 121777,
       "sha256": "80dfcf51f1f70a309ad5cbcbba5c7378c02887460f1bc879b5c44468063aaa9f",
       "sha1": "8c2da2026f0f96b5011f44b103ab18bb3faab698",
+      "sources": [
+        "https://edge.forgecdn.net/files/4459/506/YAMCore-0.5.86.jar"
+      ],
+      "projectId": 385873,
+      "fileId": 4459506,
+      "distributionBasis": "Pinned author file on CurseForge; direct download only. Metadata resolved via the public MCIM cache; redistribution is not implied.",
+      "status": "author-origin-download-verified",
+      "embeddedLicenseFiles": [],
+      "curseforgeEvidence": {
+        "provider": "mcim-public-metadata-cache",
+        "metadataUrl": "https://mod.mcimirror.top/curseforge/v1/mods/385873/files/4459506",
+        "projectId": 385873,
+        "fileId": 4459506,
+        "fileName": "YAMCore-0.5.86.jar",
+        "fileSha1": "8c2da2026f0f96b5011f44b103ab18bb3faab698",
+        "fileMd5": "d7a86376d428aafc535e572faca55c48",
+        "checkedAt": "2026-09-05T06:38:46.077621+00:00"
+      },
+      "sha512": "31e9c5fa3556e02043226c5e75ac393a6f9738a1cba56068b7402cdd0c24b428af0f7c2dfd81cc49c56e34c9a0a5dc79873325bb139f0ac72c0ecdf66af2f012",
+      "verifiedSources": [
+        "https://mediafilez.forgecdn.net/files/4459/506/YAMCore-0.5.86.jar"
+      ],
+      "downloadVerification": {
+        "verified": true,
+        "at": "2026-09-05T06:50:35.877181+00:00",
+        "cached": true,
+        "errors": []
+      }
+    },
+    {
+      "path": "mods/1.7.10/CodeChickenLib-1.3.0.jar",
+      "sha256": "44f57f35713a11c922a527b457af77dbd0c79b50dad86f8354b471ba105c1264",
+      "sha1": "86d55951dcfc8c71f17aa6b718cdfb688ae04177",
+      "size": 319472,
+      "sources": [
+        "https://edge.forgecdn.net/files/5492/860/CodeChickenLib-1.3.0.jar"
+      ],
+      "distributionBasis": "Pinned author file on CurseForge; direct download only. Metadata resolved via the public MCIM cache; redistribution is not implied.",
+      "status": "author-origin-download-verified",
+      "projectId": 746280,
+      "fileId": 5492860,
+      "curseforgeEvidence": {
+        "provider": "mcim-public-metadata-cache",
+        "metadataUrl": "https://mod.mcimirror.top/curseforge/v1/mods/746280/files/5492860",
+        "projectId": 746280,
+        "fileId": 5492860,
+        "fileName": "CodeChickenLib-1.3.0.jar",
+        "fileSha1": "86d55951dcfc8c71f17aa6b718cdfb688ae04177",
+        "fileMd5": "1cd1167a8b8aa6a759748a37aa54bd92",
+        "checkedAt": "2026-09-05T06:38:46.077621+00:00"
+      },
+      "sha512": "ed2e1cfa87eb064dd4bfc86a2dd8266768683d408534aa7f36dc72026d29c743a471ac7142b8d734fdf1092343dd1f9496318b3a2e7478bc8b5e2a7a83acc7da",
+      "verifiedSources": [
+        "https://mediafilez.forgecdn.net/files/5492/860/CodeChickenLib-1.3.0.jar"
+      ],
+      "downloadVerification": {
+        "verified": true,
+        "at": "2026-09-05T06:50:35.879267+00:00",
+        "cached": true,
+        "errors": []
+      }
+    },
+    {
+      "path": "mods/1.7.10/ForgeMultipart-1.7.10-1.2.0.345-universal.jar",
+      "sha256": "6ff759efc10f9ea0deabb4aed7c1f61408d9bb9bce278949544c0a613f7ae4c8",
+      "sha1": "34d4354ef1692be305511537c6a9b2ac18b69d7a",
+      "size": 943474,
+      "sources": [
+        "https://edge.forgecdn.net/files/2242/993/ForgeMultipart-1.7.10-1.2.0.345-universal.jar"
+      ],
+      "distributionBasis": "Pinned author file on CurseForge; direct download only. Metadata resolved via the public MCIM cache; redistribution is not implied.",
+      "status": "author-origin-download-verified",
+      "projectId": 229323,
+      "fileId": 2242993,
+      "curseforgeEvidence": {
+        "provider": "mcim-public-metadata-cache",
+        "metadataUrl": "https://mod.mcimirror.top/curseforge/v1/mods/229323/files/2242993",
+        "projectId": 229323,
+        "fileId": 2242993,
+        "fileName": "ForgeMultipart-1.7.10-1.2.0.345-universal.jar",
+        "fileSha1": "34d4354ef1692be305511537c6a9b2ac18b69d7a",
+        "fileMd5": "3bc13e5ff47b84960f24343e209345c8",
+        "checkedAt": "2026-09-05T06:38:46.077621+00:00"
+      },
+      "sha512": "51b2a01ae838946287891afb2340f3dcd7ec76cd2e7cccce5616bbfcad263657ded0b3beee4826222a3f6984661c5ce6df37a8136b9ac192f853a2845e03190d",
+      "verifiedSources": [
+        "https://mediafilez.forgecdn.net/files/2242/993/ForgeMultipart-1.7.10-1.2.0.345-universal.jar"
+      ],
+      "downloadVerification": {
+        "verified": true,
+        "at": "2026-09-05T06:50:35.881867+00:00",
+        "cached": true,
+        "errors": []
+      }
+    },
+    {
+      "path": "mods/ic2/EJML-core-0.26.jar",
+      "sha256": "ee7840eb553b850bdb32ed5be6194936f02f2cb2c9b915e4996312ec4a812588",
+      "sha1": "4d7c1d7b16b80875d7fba8d72b2e24eece176124",
+      "size": 341614,
       "sources": [],
-      "projectId": null,
-      "fileId": null,
       "distributionBasis": null,
-      "status": "needs-source-and-license-review",
-      "embeddedLicenseFiles": []
+      "status": "needs-source-and-license-review"
     }
   ]
 }

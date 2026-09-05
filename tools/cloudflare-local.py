@@ -85,6 +85,29 @@ class Cloudflare:
         print(json.dumps({'nativeApiHostname': 'launcher.boshan.uk', 'browserIntegrityCheck': False,
             'otherRulesPreserved': True}))
 
+    def public_downloads(self):
+        matches = [item for item in self.api('GET', self.base + '?is_deleted=false&name=boshan-client-hub')
+                   if item['name'] == 'boshan-client-hub']
+        if len(matches) != 1:
+            raise SystemExit('Expected exactly one launcher tunnel; no configuration changed.')
+        path = self.base + '/' + matches[0]['id'] + '/configurations'
+        current = self.api('GET', path)['config']
+        ingress = current['ingress']
+        rule = {'hostname': 'launcher.boshan.uk', 'path': '^/(objects|distributions)/',
+                'service': 'http://downloads:8080'}
+        existing = [r for r in ingress if r.get('hostname') == rule['hostname'] and r.get('path') == rule['path']]
+        if existing and existing != [rule]:
+            raise SystemExit('Public download route already has different settings; no configuration changed.')
+        if not existing:
+            position = next((i for i, r in enumerate(ingress)
+                             if r.get('hostname') == rule['hostname'] and not r.get('path')), None)
+            if position is None:
+                raise SystemExit('Launcher API ingress is missing; no configuration changed.')
+            ingress.insert(position, rule)
+            self.api('PUT', path, {'config': current})
+        print(json.dumps({'publicDownloadPrefix': 'https://launcher.boshan.uk/objects/',
+                          'apiRoutesPreserved': True, 'containerRestartRequired': False}))
+
     def provision(self, output):
         # Check both the receiving location and existing DNS before changing any remote resources.
         output = output.resolve()
@@ -111,8 +134,10 @@ class Cloudflare:
         else:
             tunnel = matches[0]
         tunnel_id = tunnel['id']
-        self.api('PUT', self.base + '/' + tunnel_id + '/configurations', {'config': {'ingress': [
-            {'hostname': 'launcher.boshan.uk', 'service': 'http://hub-api:8080'}, {'service': 'http_status:404'}]}})
+        # Re-provisioning an existing tunnel must preserve its public download route.
+        if not matches:
+            self.api('PUT', self.base + '/' + tunnel_id + '/configurations', {'config': {'ingress': [
+                {'hostname': 'launcher.boshan.uk', 'service': 'http://hub-api:8080'}, {'service': 'http_status:404'}]}})
         if not records:
             self.api('POST', records_path, {'type': 'CNAME', 'name': 'launcher.boshan.uk',
                 'content': tunnel_id + '.cfargotunnel.com', 'proxied': True, 'ttl': 1,
@@ -132,7 +157,7 @@ class Cloudflare:
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('command', choices=['inspect', 'provision-launcher', 'configure-native-api'])
+    parser.add_argument('command', choices=['inspect', 'provision-launcher', 'configure-native-api', 'configure-public-downloads'])
     parser.add_argument('--credentials', type=Path, default=Path('D:/project/cfapi/credentials.json'))
     parser.add_argument('--tunnel-output', type=Path, default=Path('D:/project/cfapi/mojin-tunnel-token.txt'))
     args = parser.parse_args()
@@ -141,6 +166,8 @@ def main():
         client.inspect()
     elif args.command == 'configure-native-api':
         client.native_api()
+    elif args.command == 'configure-public-downloads':
+        client.public_downloads()
     else:
         client.provision(args.tunnel_output)
 

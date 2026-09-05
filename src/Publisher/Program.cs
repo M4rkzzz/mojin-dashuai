@@ -7,7 +7,7 @@ using CmlLib.Core.Auth;
 using CmlLib.Core.ProcessBuilder;
 using CmlLib.Core.CommandParser;
 
-if(args.Length==0){Console.WriteLine("keygen PRIVATE PUBLIC | verify MANIFEST | sign MANIFEST PRIVATE OUTPUT | sign-catalog CATALOG PRIVATE OUTPUT | diff OLD NEW | probe INSTANCE | lab-launch INSTANCE_DIR VERSION JAVA [SERVER_DOMAIN]");return;}
+if(args.Length==0){Console.WriteLine("keygen PRIVATE PUBLIC | verify MANIFEST | sign MANIFEST PRIVATE OUTPUT | sign-catalog CATALOG PRIVATE OUTPUT | diff OLD NEW | probe INSTANCE | fetch CONTENT_FILE CACHE | lab-launch INSTANCE_DIR VERSION JAVA [SERVER_DOMAIN]");return;}
 try
 {
     switch(args[0])
@@ -53,6 +53,15 @@ try
         }
         case "probe":
             Console.WriteLine(JsonSerializer.Serialize(await Routes.ProbeAll(args[1]),Json.Options));break;
+        case "fetch":
+        {
+            var file=Json.Read<ContentFile>(args[1]);ContentSecurity.ValidateFile(file);
+            var cache=Path.GetFullPath(args[2]);
+            if(!cache.Contains(Path.DirectorySeparatorChar+".local"+Path.DirectorySeparatorChar,StringComparison.OrdinalIgnoreCase))throw new InvalidDataException("Download verification cache must be an isolated .local directory.");
+            using var downloader=new Downloader(cache,new LauncherSettings{LimitMiB=2});
+            var result=await downloader.Get(file);
+            Console.WriteLine(JsonSerializer.Serialize(new{HashVerified=await ContentSecurity.Matches(result,file),Sha256=file.Sha256},Json.Options));break;
+        }
         case "lab-launch":
         {
             var directory=Path.GetFullPath(args[1]);var java=Path.GetFullPath(args[3]);

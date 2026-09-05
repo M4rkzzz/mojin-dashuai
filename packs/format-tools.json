@@ -1,0 +1,7 @@
+{
+  "files": [
+    {"file":"cleanroom-0.5.17-alpha-mmc.zip","url":"https://github.com/CleanroomMC/Cleanroom/releases/download/0.5.17-alpha/cleanroom-0.5.17-alpha.zip","size":58691,"sha256":"efbd745faa8a97b0e6552793e1a30851162f02e0257d74e408ec28ebaf0bd17b"},
+    {"file":"packwiz-installer-bootstrap.jar","url":"https://github.com/packwiz/packwiz-installer-bootstrap/releases/download/v0.0.3/packwiz-installer-bootstrap.jar","size":98989,"sha256":"a8fbb24dc604278e97f4688e82d3d91a318b98efc08d5dbfcbcbcab6443d116c"},
+    {"file":"packwiz-installer.jar","url":"https://github.com/packwiz/packwiz-installer/releases/download/v0.5.14/packwiz-installer.jar","size":4378828,"sha256":"c9f646908d340d84773948a9a7d98bc1dae250d35e1016dc6e2b8459760b5598"}
+  ]
+}
