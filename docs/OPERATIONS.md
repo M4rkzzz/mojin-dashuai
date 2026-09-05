@@ -95,3 +95,7 @@ python tools/publish-launcher-update.py artifacts/launcher-update-0.1.2-beta.10 
 后续目录发布必须提高序号；脚本先上传不可变清单，保留旧目录备份，再原子切换。当前目录序号 1，启动器更新序号 12。本次 beta.10 未重启三服生产进程；beta.6 的图标重启已另有授权及记录。
 
 三服统一入口空缓存安装、真实中断续传及文件校验均已通过，证据见 `packs/acceptance/beta8-network-install.json`。beta.10 的 UI、Windows 和 API 构建检查通过；已切换启动器签名清单，未重启三服。
+
+## 2026-09-06 当前发布
+
+beta15 已开放，启动器更新序号 17，目录序号 6，最低启动器版本 0.1.2.15。四服为 1.1.9.1-boshan-r2 / seq2，弃用 Angelica、加入 Xaero 大地图与 FTB 地图扩展；其他三服内容不变。安装包与真实差异更新结果见 `packs/beta-release.json`，四服验收范围见 `packs/acceptance/vw-2.json`。干净 Windows 等未验收项仍保留。

@@ -2,7 +2,7 @@
 
 Windows 四服统一客户端。React + TypeScript / WebView2 / .NET 10。自建账号服务使用 ASP.NET Core Identity + PostgreSQL。
 
-**0.1.2-beta.14 已开放内测。** [下载 Windows 安装包](https://launcher-direct.boshan.uk:21708/launcher/0.1.2-beta.14/MojinDashuai-Setup-0.1.2-beta.14-x64.exe) · [使用说明](docs/BETA-0.1.2.md)。干净 Windows 验收按用户决定延后，仍保留未通过记录；本次不认定为完整稳定版交付。
+**0.1.2-beta.15 已开放内测。** [下载 Windows 安装包](https://launcher-direct.boshan.uk:21708/launcher/0.1.2-beta.15/MojinDashuai-Setup-0.1.2-beta.15-x64.exe) · [使用说明](docs/BETA-0.1.2.md)。干净 Windows 验收按用户决定延后，仍保留未通过记录；本次不认定为完整稳定版交付。
 
 ## 启动开发环境
 
@@ -41,7 +41,7 @@ dotnet publish src/Launcher.Desktop/Launcher.Desktop.csproj -c Release -r win-x6
 
 管理和部署步骤见 [运维文档](docs/OPERATIONS.md)。
 
-beta.10 / beta.11 / beta.12 / beta.13 玩家重新打开启动器即可在登录前自动升级到 beta.14。启动器按文件差异更新；最小化按钮左侧常驻“检查更新”，有新版时变绿。设置页显示当前版本。QQ群 1105114550：[点击加入](https://qm.qq.com/q/Bfat8qcPvO)。
+beta.10 / beta.11 / beta.12 / beta.13 / beta.14 玩家重新打开启动器即可在登录前自动升级到 beta.15。启动器按文件差异更新；最小化按钮左侧常驻“检查更新”文字，有新版时变绿。设置页显示当前版本。QQ群 1105114550：[点击加入](https://qm.qq.com/q/Bfat8qcPvO)。
 
 新增四服「虚空行者」格雷科技空岛，已通过统一端真实入服与自动分岛。大厅采用四张场景卡片；每服两条平级线路各自显示延迟，仅进入页面测一次，也可手动重测。
 

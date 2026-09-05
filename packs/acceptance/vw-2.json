@@ -1,0 +1,39 @@
+{
+  "passed": true,
+  "channel": "beta",
+  "manifestSha256": "0b9b5756cb91949c898630005fde57f1b317ca190e9bd86e97e7c73db9628098",
+  "cleanWindows": false,
+  "joinedServer": true,
+  "allSourcesAutomated": true,
+  "javaMajor": 8,
+  "loader": "forge",
+  "map": true,
+  "quests": false,
+  "machines": false,
+  "scope": "Native Forge candidate without Angelica joined the isolated fourth-server clone using the current unified GameLauncher and pinned Temurin8u504. User confirmed loading and gameplay, FTB map, Xaero WorldMap, excavation and Omni Ocular furnace Burn Time. FTB claim/unclaim packets and own/foreign excavation protection were tested. Final center-first request scheduling change was compiled and covered by existing view/input checks without another full client launch. The complete archive was constructed from exact overlay hashes plus the previously accepted r1 engine/runtime, and every archive entry was remotely verified; no fresh Windows or full-archive reinstall was repeated.",
+  "checkedAt": "2026-09-05T18:48:29.645857+00:00",
+  "evidence": [
+    "../_voidwayfarer4-deploy/evidence/r2-client-verification-20260906.md",
+    "../_voidwayfarer4-deploy/evidence/r2-production-verification.txt",
+    "artifacts/complete-client-staged/vw-r2-sequence-2/report.json",
+    "artifacts/vw-r2-final-input/publication-receipt.txt"
+  ],
+  "deferredChecks": [
+    "cleanWindows",
+    "questUi",
+    "machineUi",
+    "repeatFullArchiveInstallation",
+    "finalSchedulerInGameTiming"
+  ],
+  "fullArchiveInstallVerified": false,
+  "allFrozenFilesInArchiveHashVerified": true,
+  "frozenFilesUnchanged": 995,
+  "serverTps": 20,
+  "playerVisualConfirmation": true,
+  "loadingVisualConfirmation": true,
+  "worldMapVisualConfirmation": true,
+  "omniOcularVisualConfirmation": true,
+  "veinMiningConfirmed": true,
+  "ftbClaimModificationVerified": true,
+  "normalExitCode": 0
+}

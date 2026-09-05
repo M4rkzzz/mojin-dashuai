@@ -1,0 +1,109 @@
+{
+  "version": "0.1.2-beta.14",
+  "channel": "beta",
+  "publishedAt": "2026-09-05T16:40:07.768917+00:00",
+  "downloadUrl": "https://launcher-direct.boshan.uk:21708/launcher/0.1.2-beta.14/MojinDashuai-Setup-0.1.2-beta.14-x64.exe",
+  "bytes": 55860958,
+  "sha256": "e23177f33c55f2d926d00e425b7cfb80814c3295f62973f6ef63a1be78fa8b7c",
+  "githubRelease": "https://github.com/M4rkzzz/mojin-dashuai/releases/tag/launcher-v0.1.2-beta.14",
+  "catalogSequence": 5,
+  "launcherSequence": 16,
+  "minimumLauncher": "0.1.2.13",
+  "api": "https://launcher-direct.boshan.uk:21708",
+  "apiImageVersion": "0.1.6",
+  "publicCatalogVerified": true,
+  "publicManifestsVerified": [
+    "m3e",
+    "dc2",
+    "mb",
+    "vw"
+  ],
+  "contentReleases": {
+    "m3e": {
+      "version": "8.0.4-2-mojin.2",
+      "sequence": 2,
+      "manifestUrl": "https://launcher-direct.boshan.uk:21708/v1/manifests/m3e/2",
+      "sha256": "481647554213ffe38408ab8d805d03eda9d0b1f49c80ff5a94d5c1d0b8ecd1b1",
+      "compatibility": "m3e-1.7.10-forge"
+    },
+    "dc2": {
+      "version": "5.10.17-zh-cn-r4-mojin.2",
+      "sequence": 3,
+      "manifestUrl": "https://launcher-direct.boshan.uk:21708/v1/manifests/dc2/3",
+      "sha256": "96c1c4af76c3d3b1c39372766f6317a14af981b4fac96c3613024ab7b3c8ecd1",
+      "compatibility": "dc2-1.20.1-forge-r4"
+    },
+    "mb": {
+      "version": "0.18.6.4-cleanroom.0.5.17-alpha-mojin.3",
+      "sequence": 3,
+      "manifestUrl": "https://launcher-direct.boshan.uk:21708/v1/manifests/mb/3",
+      "sha256": "1e49f964b9a26c2b42400694d30114b5b468f9ae6e598f78fbb29ac6d3cd1732",
+      "compatibility": "mb-1.12.2-cleanroom"
+    },
+    "vw": {
+      "version": "1.1.9.1-boshan-r1",
+      "sequence": 1,
+      "manifestUrl": "https://launcher-direct.boshan.uk:21708/v1/manifests/vw/1",
+      "sha256": "d24f51f1fac8e83a27dd9e9a1aabe9a8c598e4cfaca8e6870fe0619faa90ee60",
+      "compatibility": "vw-1.7.10-forge-r1"
+    }
+  },
+  "updateArchive": {
+    "version": "0.1.2-beta.14",
+    "sequence": 16,
+    "sha256": "9e98f093c5721a4923c5bcfa647a423f198a660e1bd87c0617f146ab731c95e5",
+    "bytes": 78583658,
+    "downloadUrl": "https://launcher-direct.boshan.uk:21708/launcher/0.1.2-beta.14/MojinDashuai-windows-x64.zip",
+    "publicDownloadVerified": true,
+    "differential": true,
+    "fileObjects": 498,
+    "activated": true,
+    "revision": ""
+  },
+  "codeCommit": "7ff33a1b5de1960884300623346cf36f0b3d0e2a",
+  "ci": "https://github.com/M4rkzzz/mojin-dashuai/actions/runs/33978302917",
+  "ciPassed": true,
+  "ciPending": false,
+  "ciJobs": {
+    "ui": "success",
+    "windows": "success",
+    "api": "success"
+  },
+  "unitTestsPassed": 250,
+  "pythonDistributionTestsPassed": 44,
+  "graphicsPreferenceTestsPassed": 14,
+  "apiIsolatedChecksPassed": 47,
+  "delivery": "windows-installer",
+  "installerVerified": true,
+  "installerPublicRoundTripVerified": true,
+  "actualFourGamesJoined": true,
+  "fourthServerPlayerConfirmed": true,
+  "initialFourthServerClaimedChunks": 9,
+  "firstInstall": "complete-zip-with-fixed-java",
+  "downloadSourcePolicy": "single-frp",
+  "officialDownloadExceptions": [],
+  "historicalProvenanceUrlsRetained": true,
+  "desktopDownloaderRewritesProvenanceToUnifiedHashObjects": true,
+  "automaticRoutePolling": false,
+  "routeMeasurement": "once-per-page-entry-or-manual",
+  "twoRoutesEqual": true,
+  "defaultContentDirectory": "program-directory/content",
+  "personalImportEntry": "tools-only",
+  "preferDedicatedGpuDefault": true,
+  "actualDualGpuRendererVerified": false,
+  "liveHighDpiPlayerConfirmation": false,
+  "cleanWindows": false,
+  "completeDeliveryClaimed": false,
+  "approval": "packs/beta-authorization.json",
+  "acceptance": "packs/acceptance/beta14-launcher-checks.json",
+  "previousPublication": "packs/acceptance/beta13-publication-history.json",
+  "communityGroup": "1105114550",
+  "communityJoinUrl": "https://qm.qq.com/q/Bfat8qcPvO",
+  "alwaysVisibleUpdateButton": true,
+  "currentVersionInSettings": true,
+  "retiredDc2ReleaseSequences": [
+    1,
+    2
+  ],
+  "launcherDifferentialDownloadBytesFromBeta13": 1150385
+}

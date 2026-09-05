@@ -1,0 +1,67 @@
+{
+  "version": "0.1.2-beta.15",
+  "scope": "Lobby spacing, LittleSkin HD previews, text-only update entry and four-server native Forge loading migration.",
+  "splashCompatibilityTestsPassed": 16,
+  "previousTargetedChecks": {
+    "skinAndSplashTestsPassedBeforeNativeForgeMigration": 47,
+    "mapIdentityTestsPassed": 3,
+    "lobbySizes": [
+      "1440x940",
+      "1280x820",
+      "1024x768"
+    ],
+    "liveLittleSkinTexture": "1024x512 RGBA",
+    "liveLittleSkinPreviewAndCacheVerified": true,
+    "textOnlyUpdateEntryVerified": true,
+    "unchangedChecksNotRepeated": true
+  },
+  "releaseBuild": {
+    "passed": true,
+    "warnings": 0,
+    "errors": 0
+  },
+  "silentMicrosoftAcceptance": "packs/launcher-acceptance.json",
+  "fourthServer": {
+    "angelicaRemoved": true,
+    "originalForgeRenderer": true,
+    "loadingAndGameImagePlayerConfirmed": true,
+    "xaeroWorldMapPlayerConfirmed": true,
+    "mapDefaultKey": "M",
+    "ftbMapPlayerConfirmed": true,
+    "oreExcavationPlayerConfirmed": true,
+    "omniOcularPlayerConfirmed": true,
+    "omniOcularObservation": "Furnace Burn Time=67.0",
+    "discardedCompatibilityProfileExperiment": true,
+    "ftbReadSpeedImprovementPendingFinalFreeze": false,
+    "ftbRequestScheduling": "center-first, missing-before-refresh, 4 pages per 250 ms, max 8 pending, retry after 3 s",
+    "finalSchedulingValidation": "built and existing view/coordinate/input checks passed; prior live gameplay checks retained",
+    "finalClientOverlayArchiveSha256": "9fb47a765acef59ca626ec5c9a6094cc8b2b1251a72ee2506a817e81c116da76"
+  },
+  "launcherDifferentialUpdateVerified": true,
+  "launcherDifferentialBaseline": "0.1.2-beta.14",
+  "launcherDifferentialDownloadBytes": 1198575,
+  "publicLauncherObjectsVerified": true,
+  "singleDownloadOrigin": true,
+  "installerSha256": "bff931bfc9db2de7f217d8c30e45a3fc5a67805e35b3e943e8c28832ced6ac5e",
+  "installerBytes": 55863794,
+  "ci": "https://github.com/M4rkzzz/mojin-dashuai/actions/runs/33984891981",
+  "ciPending": false,
+  "published": true,
+  "cleanWindows": false,
+  "actualDualGpuRendererVerified": false,
+  "littleSkinInGameVisualVerified": false,
+  "ciPassed": true,
+  "ciJobs": {
+    "ui": "success",
+    "windows": "success",
+    "api": "success"
+  },
+  "codeCommit": "9ab5167fe354470a9d8e3c254ba8fe8ba235ae69",
+  "installerLifecycleVerified": true,
+  "publishedAt": "2026-09-05T18:50:35.011842+00:00",
+  "catalogSequence": 6,
+  "launcherSequence": 17,
+  "installerPublicRoundTripVerified": true,
+  "finalInstaller": "artifacts/installer-0.1.2-beta.15-final",
+  "finalUpdate": "artifacts/launcher-update-0.1.2-beta.15-final"
+}
