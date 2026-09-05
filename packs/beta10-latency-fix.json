@@ -1,17 +1,24 @@
 {
   "version": "0.1.2-beta.10",
-  "revision": "latency1",
+  "revision": "latency2",
   "status": "ui-verified-packaging",
   "requestedSameVersion": true,
   "changes": [
     "Stable probe lifecycle independent of changing error callback",
     "Preserve prior latency and signal during refresh",
     "At most one probe per instance hook",
-    "30-second visible-page refresh on lobby and details",
-    "Ignore stale results after switching servers"
+    "Ignore stale results after switching servers",
+    "Measure once on page entry; no automatic polling"
   ],
   "uiSuitePassed": true,
   "sameVersionAutoUpgradeFromOriginalBeta10": false,
-  "sameVersionInstallerUpgradePending": true,
-  "gameContentChanged": false
+  "sameVersionInstallerUpgradePending": false,
+  "gameContentChanged": false,
+  "sameVersionInstallerUpgradePassed": true,
+  "automaticPolling": false,
+  "measureOnceOnPageEntry": true,
+  "manualRefresh": true,
+  "nativePayloadReusedFrom": "latency1",
+  "sameVersionInstallerUpgradeEvidence": "Same-version overwrite verified using latency1; latency2 only replaces web assets",
+  "unchangedNativeFilesVerified": 486
 }

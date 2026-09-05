@@ -40,13 +40,10 @@ try{
  await expect(page.locator('.card-routes .latency-offline')).toHaveCount(1);
  expect(await cards.locator('.server-logo').evaluateAll(images=>images.every(img=>img.complete&&img.naturalWidth>0))).toBe(true);
  await page.screenshot({path:'../.local/lobby-routes.png',animations:'disabled'});
- await page.evaluate(()=>{window.holdRoutes=true;window.routeReplies.m3e=[80,220];});
- await page.clock.fastForward(30000);
- await expect.poll(()=>page.evaluate(()=>window.routeCalls.length)).toBe(6);
- await expect(page.locator('.card-routes .latency-pending')).toHaveCount(0);
+ await page.evaluate(()=>{window.routeReplies.m3e=[80,220];});
+ await page.clock.fastForward(300000);
+ expect(await page.evaluate(()=>window.routeCalls.length)).toBe(3);
  await expect(cards.filter({hasText:'魔法金属'}).locator('.card-route').nth(0)).toContainText('42 ms');
- await page.evaluate(()=>{window.holdRoutes=false;window.pendingRoutes.splice(0).forEach(reply=>reply());});
- await expect(cards.filter({hasText:'魔法金属'}).locator('.card-route').nth(0)).toContainText('80 ms');
  await cards.filter({hasText:'肉丸工艺'}).click();
  await expect(page.locator('.routes .latency-good')).toHaveCount(1);
  const detailCalls=await page.evaluate(()=>window.routeCalls.length);
@@ -58,7 +55,9 @@ try{
  await page.getByRole('button',{name:'宿迁三网',exact:false}).click();
  await expect.poll(()=>page.evaluate(()=>window.savedRouteSettings?.selectedRoutes.mb)).toBe('1');
  expect(await page.evaluate(()=>window.routeCalls.length)).toBe(detailCalls);
- await page.clock.fastForward(30000);
+ await page.clock.fastForward(300000);
+ expect(await page.evaluate(()=>window.routeCalls.length)).toBe(detailCalls);
+ await page.getByRole('button',{name:'重新测速'}).click();
  await expect.poll(()=>page.evaluate(()=>window.routeCalls.length)).toBe(detailCalls+1);
  await expect(page.locator('.routes .latency-good')).toContainText('99 ms');
  await expect(page.locator('.routes .latency-poor')).toContainText('200 ms');
@@ -80,5 +79,5 @@ try{
  await expect(page.locator('.routes .latency-good')).toContainText('80 ms');
  await expect(page.locator('.routes .latency-poor')).toContainText('220 ms');
  expect(errors).toEqual([]);
- console.log('Server selection latency passed: background/manual refresh preserves results, rerenders do not restart probes, slow probes do not overlap, server changes reject stale results, six routes and signal colors.');
+ console.log('Server selection latency passed: no automatic polling after five minutes; manual refresh preserves results, rerenders do not restart probes, slow probes do not overlap, server changes reject stale results, six routes and signal colors.');
 }finally{await browser.close();}

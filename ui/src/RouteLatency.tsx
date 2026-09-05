@@ -3,7 +3,7 @@ import {invoke,isNative} from './bridge';
 
 export const routeNames=['河北阿里云','宿迁三网'];
 type Latencies=[number|null,number|null];
-export function useRouteLatencies(instance:string,autoRefresh=false,onError?:(message:string)=>void){
+export function useRouteLatencies(instance:string,onError?:(message:string)=>void){
  const [latencies,setLatencies]=useState<Latencies>([null,null]);
  const [checking,setChecking]=useState(false);
  const generation=useRef(0);
@@ -24,9 +24,8 @@ export function useRouteLatencies(instance:string,autoRefresh=false,onError?:(me
   setLatencies([null,null]);
   if(!isNative)return;
   void probe();
-  const timer=autoRefresh?window.setInterval(()=>{if(document.visibilityState==='visible')void probe();},30000):undefined;
-  return()=>{generation.current++;inFlight.current=null;if(timer)window.clearInterval(timer);};
- },[instance,autoRefresh,probe]);
+  return()=>{generation.current++;inFlight.current=null;};
+ },[instance,probe]);
  return {latencies,checking,probe};
 }
 
@@ -43,6 +42,6 @@ export function LatencySignal({latency,checking=false}:{latency:number|null;chec
 }
 
 export function ServerRouteLatencies({instance}:{instance:string}){
- const {latencies,checking}=useRouteLatencies(instance,true);
+ const {latencies,checking}=useRouteLatencies(instance);
  return <div className="card-routes" aria-label="线路延迟">{routeNames.map((name,index)=><div className="card-route" key={name}><span>{name}</span><LatencySignal latency={latencies[index]} checking={checking}/></div>)}</div>;
 }
