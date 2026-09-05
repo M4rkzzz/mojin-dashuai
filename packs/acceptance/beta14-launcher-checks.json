@@ -1,0 +1,39 @@
+{
+  "version": "0.1.2-beta.14",
+  "checkedAt": "2026-09-05T16:26:25.598022+00:00",
+  "scope": "Resume against the current unified catalog, terminal progress ordering and installation record writes.",
+  "unitTestsPassed": 229,
+  "pythonDistributionTestsPassed": 44,
+  "dispatcher": {
+    "passed": true,
+    "heartbeatMaxGapMs": 32,
+    "staleCallbacks": 0,
+    "cancelDuringExtraction": true,
+    "progressFloodReports": 100000,
+    "progressFloodCallbacks": 2
+  },
+  "ui": {
+    "passed": true,
+    "savingRecordPhase": true,
+    "commitCannotPauseOrCancel": true,
+    "terminalInstalledState": true
+  },
+  "singleDownloadOrigin": true,
+  "legacyOfficialOnlyRewritten": true,
+  "ordinaryResumeUsesCurrentRelease": true,
+  "explicitRollbackStillRequiresCatalogAuthorization": true,
+  "catalogSequence": 5,
+  "retiredDc2ReleaseSequences": [
+    1,
+    2
+  ],
+  "memoryObservation": {
+    "configuredMiB": 8096,
+    "java8ParallelReportedMiB": 7196,
+    "java8G1ReportedMiB": 8096,
+    "settingsPassedToJava": true
+  },
+  "cleanWindows": false,
+  "published": false,
+  "ciPending": true
+}

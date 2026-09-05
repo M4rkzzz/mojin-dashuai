@@ -26,6 +26,7 @@ await page.addInitScript(()=>{
   }
   if(r.command==='download.cancel'){const id=r.args.instance;delete progress[id];states[id]=installs[id]?'installed':'not-installed';emit({event:'download-cancelled',data:{instance:id}});if(pending[id]){response(pending[id],null);delete pending[id];}}
   if(r.command==='instance.launch'){window.gameRunning(r.args.instance,true);}
+  if(r.command==='fixture.commit'){progress.mb={instance:'mb',phase:'保存安装记录',completed:0,total:0,bytesPerSecond:0};emit({event:'progress',data:progress.mb});return;}
   if(r.command==='settings.save')Object.assign(settings,r.args);
   if(r.command==='network.check')result=[{name:'账号与目录',host:'launcher-direct.boshan.uk:21708',ok:false,elapsedMs:8000,diagnostic:{id:'test-id',stage:'获取客户端清单',category:'DNS 解析失败',host:'launcher-direct.boshan.uk:21708',path:'/v1/catalog',code:'HostNotFound',proxyMode:'direct',attempt:2}}];
   response(r,result);
@@ -46,6 +47,12 @@ try{
  await page.getByRole('button',{name:'暂停下载',exact:true}).click();await expect(page.getByRole('button',{name:'继续下载',exact:true})).toBeEnabled();
  await select('亡者世界');await expect(page.getByRole('button',{name:'暂停下载',exact:true})).toBeEnabled();
  await select('肉丸工艺');await page.getByRole('button',{name:'继续下载',exact:true}).click();
+ await page.evaluate(()=>{
+  window.chrome.webview.postMessage({id:'commit-fixture',command:'fixture.commit'});
+ });
+ await expect(page.locator('.download-progress')).toContainText('保存安装记录');
+ await expect(page.locator('.download-actions')).toHaveCount(0);
+ await expect(page.locator('.download-progress')).not.toContainText('100%');
  await page.evaluate(()=>window.finishInstance('mb'));await expect(page.getByRole('button',{name:'进入游戏',exact:true})).toBeEnabled();
  expect(await page.evaluate(()=>window.instanceRequests.filter(r=>r.command==='instance.launch'))).toHaveLength(0);
  await page.getByRole('button',{name:'进入游戏',exact:true}).click();await expect(page.getByRole('button',{name:'正在运行',exact:true})).toBeDisabled();

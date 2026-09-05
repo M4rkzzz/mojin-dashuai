@@ -63,7 +63,12 @@
           "host": "dc2.bk.mc.boshan.uk"
         }
       ],
-      "revisionRecipe": "packs/revisions/dc2-r4/revision.json"
+      "revisionRecipe": "packs/revisions/dc2-r4/revision.json",
+      "retiredReleaseSequences": [
+        1,
+        2
+      ],
+      "retirementReason": "Superseded distribution revisions retain author-only downloads; resume must resolve to the current unified-download manifest."
     },
     "mb": {
       "name": "肉丸工艺",

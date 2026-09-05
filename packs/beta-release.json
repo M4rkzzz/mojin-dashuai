@@ -6,7 +6,7 @@
   "bytes": 55859208,
   "sha256": "5926b36cb1e7c458a47e50ab34a78bbcb4392c8bb8afb5540a3286ff2a674f80",
   "githubRelease": "https://github.com/M4rkzzz/mojin-dashuai/releases/tag/launcher-v0.1.2-beta.13",
-  "catalogSequence": 4,
+  "catalogSequence": 5,
   "launcherSequence": 15,
   "minimumLauncher": "0.1.2.13",
   "api": "https://launcher-direct.boshan.uk:21708",
@@ -101,5 +101,9 @@
   "communityGroup": "1105114550",
   "communityJoinUrl": "https://qm.qq.com/q/Bfat8qcPvO",
   "alwaysVisibleUpdateButton": true,
-  "currentVersionInSettings": true
+  "currentVersionInSettings": true,
+  "retiredDc2ReleaseSequences": [
+    1,
+    2
+  ]
 }

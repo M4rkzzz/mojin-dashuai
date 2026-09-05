@@ -43,7 +43,8 @@ for instance,spec in config['instances'].items():
     files[relative]=signed
     old=previous.get(instance,{})
     rollback_candidates=([old['release']] if old.get('release') else [])+old.get('rollbacks',[])
-    rollbacks=list({r['sequence']:r for r in rollback_candidates if r['sequence']<manifest['sequence'] and r['compatibility']==manifest['compatibility']}.values())
+    retired=set(spec.get('retiredReleaseSequences',[]))
+    rollbacks=list({r['sequence']:r for r in rollback_candidates if r['sequence']<manifest['sequence'] and r['compatibility']==manifest['compatibility'] and r['sequence'] not in retired}.values())
     servers.append({'id':instance,'name':spec['name'],'routes':[r['host'] for r in spec['routes']],
         'release':{'version':manifest['version'],'sequence':manifest['sequence'],'manifestUrl':config['publicBase']+'/v1/'+relative.removesuffix('.signed.json'),
         'sha256':hashlib.sha256(signed.read_bytes()).hexdigest(),'compatibility':manifest['compatibility']},'rollbacks':rollbacks})

@@ -9,11 +9,23 @@ public static class Json
     public static T Read<T>(string path) => JsonSerializer.Deserialize<T>(File.ReadAllText(path), Options) ?? throw new InvalidDataException("文件内容为空。");
     public static void Write<T>(string path, T value)
     {
+        // Serialize before opening the temporary file. Large journals otherwise
+        // turn the serializer's small chunks into many WriteThrough disk writes.
+        var bytes = JsonSerializer.SerializeToUtf8Bytes(value, Options);
         Directory.CreateDirectory(Path.GetDirectoryName(Path.GetFullPath(path))!);
         var temp = path + "." + Guid.NewGuid().ToString("N") + ".tmp";
-        using (var stream = new FileStream(temp, FileMode.CreateNew, FileAccess.Write, FileShare.None, 4096, FileOptions.WriteThrough))
-        { JsonSerializer.Serialize(stream, value, Options); stream.Flush(true); }
-        File.Move(temp, path, true);
+        try
+        {
+            using (var stream = new FileStream(temp, FileMode.CreateNew, FileAccess.Write, FileShare.None, 131072, FileOptions.None))
+            {
+                stream.Write(bytes);
+                // Durably flush the complete payload before the atomic rename;
+                // transaction ordering must never depend on a buffered close.
+                stream.Flush(true);
+            }
+            File.Move(temp, path, true);
+        }
+        finally { if (File.Exists(temp)) File.Delete(temp); }
     }
 }
 public enum FilePolicy { Managed, Seed, Preserve }

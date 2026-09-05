@@ -83,7 +83,18 @@ internal static class DispatcherInstallSmoke
                         await Task.Delay(250);
                     }
                     if(floodCallbacks>5)throw new InvalidOperationException("Chunk progress flooded the Dispatcher queue.");
-                    result=new{passed=true,fixtureFiles=files.Count,completeBundle=true,nestedRuntime=true,downloadRequests=handler.Requests,filesExtracted,heartbeats,extractionTicks,maximumGapMs=maximumGap,progressCallbacks=callbacks,floodReports=100000,floodCallbacks,cancelledDuringExtraction=cancelled};
+                    // Reproduce a final progress callback queued behind the install completion.
+                    // Disposal must happen before terminal cleanup yields to the Dispatcher.
+                    var staleCallbacks=0;
+                    using(var finished=new DispatcherTransferProgress(dispatcher,_=>staleCallbacks++))
+                    {
+                        finished.Report(new("vw","应用更新",1714,1714,0));
+                        finished.Dispose();
+                        await dispatcher.InvokeAsync(()=>{},DispatcherPriority.ApplicationIdle);
+                        if(staleCallbacks!=0)throw new InvalidOperationException("Completed installation republished stale progress.");
+                        if(finished.Current?.Completed!=1714)throw new InvalidOperationException("Disposal lost the last progress used for pause and error reporting.");
+                    }
+                    result=new{passed=true,fixtureFiles=files.Count,completeBundle=true,nestedRuntime=true,downloadRequests=handler.Requests,filesExtracted,heartbeats,extractionTicks,maximumGapMs=maximumGap,progressCallbacks=callbacks,floodReports=100000,floodCallbacks,cancelledDuringExtraction=cancelled,staleCallbacks};
                 }
                 catch(Exception ex){error=ex;}
                 finally{frame.Continue=false;}

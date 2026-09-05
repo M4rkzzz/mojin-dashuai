@@ -203,14 +203,19 @@ public sealed class TransactionalInstaller(string root)
             {
                 var target = ContentSecurity.SafePath(instance, change.Path);
                 if (change.Delete) File.Delete(target); else AtomicCopy(change.CachePath!, target);
-                applied++;progress?.Report(new(manifest.Instance,"应用更新",applied,actions.Count,0));
+                applied++;
+                // The final file is not the end of the transaction: its ledger
+                // and commit marker still have to reach durable storage.
+                if(applied<actions.Count)progress?.Report(new(manifest.Instance,"应用更新",applied,actions.Count,0));
             }
+            progress?.Report(new(manifest.Instance,"保存安装记录",0,0,0));
             if (previous is not null) Json.Write(Path.Combine(instance, ".hub", "previous.json"), previous);
             Json.Write(Path.Combine(instance, ".hub", "installed.json"), new InstalledPack(manifest, DateTimeOffset.UtcNow));
             Json.Write(journalPath, new UpdateJournal(id, "committed", manifest, previous, actions.ToArray()));
             File.Delete(journalPath);
         }
         catch { Recover(manifest.Instance); throw; }
+        progress?.Report(new(manifest.Instance,"应用更新",actions.Count,actions.Count,0));
         return new(inspection.CheckedFiles,inspection.RestoredFiles,inspection.RepairedFiles,actions.Count(action=>action.Delete),runtimePrepared);
     }
     public static void AtomicCopy(string source, string target)

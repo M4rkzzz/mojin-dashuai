@@ -198,14 +198,14 @@ public sealed class FullClientInstallationTests : IDisposable
     }
 
     [Fact]
-    public async Task OfficialExceptionsShareClientProgressUseOnlyTheirOfficialSourceAndStayDifferential()
+    public async Task LegacyOfficialExceptionsShareClientProgressUseUnifiedObjectsAndStayDifferential()
     {
         var fixture=CreateFixture(true);var official=fixture.Pack.Files.Single(file=>file.OfficialOnly);var installer=new TransactionalInstaller(root);
-        using var handler=new Handler(request=>request.RequestUri!.AbsoluteUri==OfficialSource?Full(fixture.Contents[official.Path]):Full(request.RequestUri.AbsoluteUri==ObjectUrl(fixture.Pack.Bundles!.Single().Archive)?fixture.Archive:throw new InvalidOperationException("Unexpected source.")));
+        using var handler=new Handler(request=>request.RequestUri!.AbsoluteUri==ObjectUrl(official)?Full(fixture.Contents[official.Path]):Full(request.RequestUri.AbsoluteUri==ObjectUrl(fixture.Pack.Bundles!.Single().Archive)?fixture.Archive:throw new InvalidOperationException("Unexpected source.")));
         using(var downloader=new Downloader(Cache,new LauncherSettings(),handler,Origin))
         {
             var progress=new Capture();await installer.Install(fixture.Pack,downloader,4,progress);
-            Assert.Equal(new[]{ObjectUrl(fixture.Pack.Bundles!.Single().Archive),OfficialSource},handler.Requests);
+            Assert.Equal(new[]{ObjectUrl(fixture.Pack.Bundles!.Single().Archive),ObjectUrl(official)},handler.Requests);
             var downloads=progress.Values.Where(value=>value.Phase=="下载客户端").ToArray();var total=fixture.Archive.Length+official.Size;
             Assert.All(downloads,value=>{Assert.Equal(total,value.Total);Assert.InRange(value.Completed,0,total);});
             Assert.Equal(total,downloads.Last().Completed);Assert.Equal(downloads.Select(value=>value.Completed).Order(),downloads.Select(value=>value.Completed));
@@ -214,7 +214,7 @@ public sealed class FullClientInstallationTests : IDisposable
         }
         var newer=Encoding.UTF8.GetBytes("new official version");var nextOfficial=Record(official.Path,newer) with {OfficialOnly=true,Sources=[OfficialSource.Replace("/v1/","/v2/")]};
         var next=fixture.Pack with {Sequence=2,Version="fixture-2",Files=fixture.Pack.Files.Select(file=>file.OfficialOnly?nextOfficial:file).ToArray()};
-        using var updates=new Handler(request=>{Assert.Equal(nextOfficial.Sources.Single(),request.RequestUri!.AbsoluteUri);return Full(newer);});using var updater=new Downloader(Cache,new LauncherSettings(),updates,Origin);
+        using var updates=new Handler(request=>{Assert.Equal(ObjectUrl(nextOfficial),request.RequestUri!.AbsoluteUri);return Full(newer);});using var updater=new Downloader(Cache,new LauncherSettings(),updates,Origin);
         await installer.Install(next,updater,4);Assert.Single(updates.Requests);
         File.Delete(Path.Combine(installer.InstancePath("dc2"),"mods","official.jar"));File.Delete(Path.Combine(Cache,nextOfficial.Sha256));
         await installer.Install(next,updater,4);Assert.Equal(2,updates.Requests.Count);
@@ -244,21 +244,21 @@ public sealed class FullClientInstallationTests : IDisposable
     [Theory]
     [InlineData(HttpStatusCode.NotFound)]
     [InlineData(HttpStatusCode.Found)]
-    public async Task OfficialDownloadFailureNeverFallsBackAndRetryReusesTheCompleteArchive(HttpStatusCode failure)
+    public async Task UnifiedLegacyOfficialDownloadFailureNeverFallsBackAndRetryReusesTheCompleteArchive(HttpStatusCode failure)
     {
         var fixture=CreateFixture(true);var official=fixture.Pack.Files.Single(file=>file.OfficialOnly);var installer=new TransactionalInstaller(root);
         using(var failed=new Handler(request=>
         {
             if(request.RequestUri!.AbsoluteUri==ObjectUrl(fixture.Pack.Bundles!.Single().Archive))return Full(fixture.Archive);
-            Assert.Equal(OfficialSource,request.RequestUri.AbsoluteUri);
+            Assert.Equal(ObjectUrl(official),request.RequestUri.AbsoluteUri);
             var response=new HttpResponseMessage(failure);response.Headers.Location=new Uri("https://unapproved.example/redirect.jar");return response;
         }))
         using(var downloader=new Downloader(Cache,new LauncherSettings(),failed,Origin))
         {
             await Assert.ThrowsAsync<IOException>(()=>installer.Install(fixture.Pack,downloader,4));Assert.Null(installer.ReadInstalled("dc2"));
-            Assert.Equal(4,failed.Requests.Count);Assert.Equal(3,failed.Requests.Count(url=>url==OfficialSource));
+            Assert.Equal(4,failed.Requests.Count);Assert.Equal(3,failed.Requests.Count(url=>url==ObjectUrl(official)));
         }
-        using var resumed=new Handler(request=>{Assert.Equal(OfficialSource,request.RequestUri!.AbsoluteUri);return Full(fixture.Contents[official.Path]);});using var retry=new Downloader(Cache,new LauncherSettings(),resumed,Origin);
+        using var resumed=new Handler(request=>{Assert.Equal(ObjectUrl(official),request.RequestUri!.AbsoluteUri);return Full(fixture.Contents[official.Path]);});using var retry=new Downloader(Cache,new LauncherSettings(),resumed,Origin);
         await installer.Install(fixture.Pack,retry,4);Assert.Single(resumed.Requests);Assert.NotNull(installer.ReadInstalled("dc2"));
     }
 
@@ -306,7 +306,7 @@ public sealed class FullClientInstallationTests : IDisposable
     {
         var fixture=CreateFixture(true);var official=fixture.Pack.Files.Single(file=>file.OfficialOnly);var installer=new TransactionalInstaller(root);
         using var cancellation=new CancellationTokenSource();
-        using(var handler=new Handler(request=>request.RequestUri!.AbsoluteUri==OfficialSource?Full(fixture.Contents[official.Path]):Full(fixture.Archive)))
+        using(var handler=new Handler(request=>request.RequestUri!.AbsoluteUri==ObjectUrl(official)?Full(fixture.Contents[official.Path]):Full(request.RequestUri.AbsoluteUri==ObjectUrl(fixture.Pack.Bundles!.Single().Archive)?fixture.Archive:throw new InvalidOperationException("Unexpected source."))))
         using(var downloader=new Downloader(Cache,new LauncherSettings(),handler,Origin))
         {
             var afterTwo=fixture.Pack.Files.Take(2).Sum(file=>file.Size);
@@ -360,6 +360,51 @@ public sealed class FullClientInstallationTests : IDisposable
         Assert.True(cancellation.IsCancellationRequested);Assert.NotNull(installer.ReadInstalled("dc2"));
         foreach(var file in fixture.Pack.Files)Assert.True(await ContentSecurity.Matches(ContentSecurity.SafePath(installer.InstancePath("dc2"),file.Path),file));
         Assert.False(File.Exists(Path.Combine(installer.InstancePath("dc2"),".hub","journal.json")));
+    }
+
+    [Fact]
+    public async Task FileApplicationOnlyReportsCompletionAfterTheInstallationRecordsAreCommitted()
+    {
+        var fixture=CreateFixture();var installer=new TransactionalInstaller(root);
+        var journal=Path.Combine(installer.InstancePath("dc2"),".hub","journal.json");var finalizing=false;
+        using var handler=BundleOnly(fixture);using var downloader=new Downloader(Cache,new LauncherSettings(),handler,Origin);
+        var progress=new Capture(value=>
+        {
+            if(value.Phase=="保存安装记录")
+            {
+                finalizing=true;Assert.Equal(0,value.Completed);Assert.Equal(0,value.Total);
+                Assert.Null(installer.ReadInstalled("dc2"));Assert.Equal("committing",Json.Read<UpdateJournal>(journal).State);
+                foreach(var file in fixture.Pack.Files)Assert.Equal(fixture.Contents[file.Path],File.ReadAllBytes(ContentSecurity.SafePath(installer.InstancePath("dc2"),file.Path)));
+            }
+            if(value.Phase=="应用更新"&&value.Completed==value.Total)
+            {
+                Assert.True(finalizing);Assert.NotNull(installer.ReadInstalled("dc2"));Assert.False(File.Exists(journal));
+            }
+        });
+        await installer.Install(fixture.Pack,downloader,4,progress);
+        Assert.True(finalizing);Assert.Equal("应用更新",progress.Values.Last().Phase);
+        Assert.Equal(fixture.Pack.Files.Length,progress.Values.Last().Completed);
+        Assert.Equal(progress.Values.Last().Completed,progress.Values.Last().Total);
+    }
+
+    [Fact]
+    public async Task InterruptionWhenSavingInstallationRecordsRestoresThePreviousFilesAndLedger()
+    {
+        var fixture=CreateFixture();var installer=new TransactionalInstaller(root);
+        using(var handler=BundleOnly(fixture))using(var downloader=new Downloader(Cache,new LauncherSettings(),handler,Origin))
+            await installer.Install(fixture.Pack,downloader,4);
+        var original=installer.ReadInstalled("dc2")!;
+        var changed=Encoding.UTF8.GetBytes("updated managed mod");var file=Record("mods/a.jar",changed);
+        var next=fixture.Pack with{Version="fixture-2",Sequence=2,Files=fixture.Pack.Files.Select(old=>old.Path==file.Path?file:old).ToArray()};
+        using var nextHandler=new Handler(request=>{Assert.Equal(ObjectUrl(file),request.RequestUri!.AbsoluteUri);return Full(changed);});
+        using var nextDownloader=new Downloader(Cache,new LauncherSettings(),nextHandler,Origin);
+        var progress=new Capture(value=>{if(value.Phase=="保存安装记录")throw new IOException("simulated record-save interruption");});
+        await Assert.ThrowsAsync<IOException>(()=>installer.Install(next,nextDownloader,4,progress));
+        Assert.Equal(original.Manifest.Version,installer.ReadInstalled("dc2")!.Manifest.Version);
+        Assert.Equal(original.InstalledAt,installer.ReadInstalled("dc2")!.InstalledAt);
+        Assert.Equal(fixture.Contents[file.Path],File.ReadAllBytes(ContentSecurity.SafePath(installer.InstancePath("dc2"),file.Path)));
+        Assert.False(File.Exists(Path.Combine(installer.InstancePath("dc2"),".hub","journal.json")));
+        Assert.DoesNotContain(progress.Values,value=>value.Phase=="应用更新"&&value.Total>0&&value.Completed==value.Total);
     }
 
     [Fact]

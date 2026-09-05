@@ -120,7 +120,7 @@ public sealed class Downloader : IDisposable
         this.origin=origin?.TrimEnd('/');
         this.cache = cache; Directory.CreateDirectory(cache); limit = (long)settings.LimitMiB * 1024 * 1024;
         officialClient = new HttpClient(handler??NetworkPolicy.Handler(settings,allowRedirect:false),disposeHandler:handler is null) { Timeout = TimeSpan.FromSeconds(20) };
-        client = new HttpClient(handler??NetworkPolicy.Handler(settings)) { Timeout = TimeSpan.FromSeconds(20) };
+        client = new HttpClient(handler??NetworkPolicy.Handler(settings,allowRedirect:origin is null)) { Timeout = TimeSpan.FromSeconds(20) };
         client.DefaultRequestHeaders.UserAgent.ParseAdd("BoshanLauncher/0.1");
         officialClient.DefaultRequestHeaders.UserAgent.ParseAdd("BoshanLauncher/0.1");
     }
@@ -135,7 +135,9 @@ public sealed class Downloader : IDisposable
             if (await ContentSecurity.Matches(target, file, token)) {onPosition?.Invoke(file.Size);return target;}
             var part = target + ".part";
             Exception? last = null;
-            var sources=origin is null||file.OfficialOnly?file.Sources:[origin+"/objects/sha256/"+file.Sha256.ToLowerInvariant()];
+            // The configured distribution origin is authoritative, including for older
+            // manifests carrying OfficialOnly. Never fall back or redirect to author sites.
+            var sources=origin is null?file.Sources:[origin+"/objects/sha256/"+file.Sha256.ToLowerInvariant()];
             for (var attempt = 0; attempt < 3; attempt++) foreach (var source in sources)
             {
                 token.ThrowIfCancellationRequested();
@@ -148,7 +150,7 @@ public sealed class Downloader : IDisposable
                     using var request = new HttpRequestMessage(HttpMethod.Get, source);
                     // This dedicated client has no authorization header, credentials or cookie container.
                     if (offset > 0) request.Headers.Range = new RangeHeaderValue(offset, null);
-                    using var response = await (file.OfficialOnly?officialClient:client).SendAsync(request, HttpCompletionOption.ResponseHeadersRead, token);
+                    using var response = await (origin is null&&file.OfficialOnly?officialClient:client).SendAsync(request, HttpCompletionOption.ResponseHeadersRead, token);
                     if (response.StatusCode == HttpStatusCode.RequestedRangeNotSatisfiable) { File.Delete(part); throw new IOException("下载源不支持当前续传位置。"); }
                     NetworkPolicy.EnsureSuccess(response,"下载文件");
                     if (response.StatusCode == HttpStatusCode.PartialContent)

@@ -36,7 +36,7 @@ public sealed class GameLauncher
         var delayedJoin=adapter is not null;
         if(delayedJoin&&!manifest.Files.Any(f=>f.Path==adapter))throw new InvalidDataException("服务器连接组件尚未安装，请先更新客户端。");
         if(delayedJoin&&(!System.Text.RegularExpressions.Regex.IsMatch(route.Host,"^[A-Za-z0-9.-]+$")||route.Port is <1 or >65535))throw new InvalidDataException("服务器地址无效。");
-        var jvm=new List<MArgument>{MArgument.FromCommandLine(settings.Jvm[manifest.Instance])};
+        var jvm=new List<MArgument>{MArgument.FromCommandLine(JavaLaunchArguments.ForInstance(manifest.Instance,manifest.Runtime.Major,settings.Jvm[manifest.Instance],Environment.ProcessorCount))};
         if(delayedJoin)jvm.Add(MArgument.FromCommandLine($"-Dmojin.join.host={route.Host} -Dmojin.join.port={route.Port}"));
         if(OperatingSystem.IsWindows()&&manifest.Runtime.Major>=16)
         {

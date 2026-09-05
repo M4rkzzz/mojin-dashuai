@@ -234,17 +234,17 @@ public partial class MainWindow : Window
             {
                 var id=Id();await InstanceOperation(id,async()=>
                 {
-                    if(!pendingPacks.TryGetValue(id,out var pack))
-                    {
-                        if(!savedDownloads.TryGetValue(id,out var saved))throw new InvalidDataException("没有可续传的任务。");
-                        await accounts.GameSession();
-                        if(cancelledDownloads.Contains(id))return;
-                        var directory=await FetchContentCatalog();var server=directory.Servers.Single(x=>x.Id==id);
-                        if(cancelledDownloads.Contains(id))return;
-                        var release=server.Release?.Sha256==saved.Release.Sha256?server.Release:server.Rollbacks.FirstOrDefault(r=>r.Sha256==saved.Release.Sha256)??server.Release;
-                        if(release is null)throw new InvalidDataException("此版本当前不可下载。");
-                        pack=await catalog.GetManifest(id,release);if(cancelledDownloads.Contains(id))return;TrackDownload(id,release);
-                    }
+                    if(!savedDownloads.TryGetValue(id,out var saved))throw new InvalidDataException("没有可续传的任务。");
+                    await accounts.GameSession();
+                    if(cancelledDownloads.Contains(id))return;
+                    var directory=await FetchContentCatalog();var server=directory.Servers.Single(x=>x.Id==id);
+                    if(cancelledDownloads.Contains(id))return;
+                    var release=DownloadResumePolicy.SelectRelease(server,saved.Release,saved.Rollback is not null);
+                    // Refresh even in-memory tasks: a paused transfer can outlive a publication.
+                    // Verified objects and partial downloads remain reusable by their hashes.
+                    var pack=await catalog.GetManifest(id,release);
+                    if(cancelledDownloads.Contains(id))return;
+                    TrackDownload(id,release);
                     await Transfer(pack);
                     if(!pendingPacks.ContainsKey(id)&&launchAfterDownload.Remove(id)&&!cancelledDownloads.Contains(id)&&!pausedDownloads.Contains(id))await Launch(id,false);
                 });return null;
@@ -425,7 +425,10 @@ public partial class MainWindow : Window
         try
         {
             InstallationSummary? summary=null;
-            await BackgroundInstallation.Run(async()=>{summary=await new TransactionalInstaller(root).Install(pack,downloader,concurrency,progress,cancellation.Token);},cancellation.Token);
+            try{await BackgroundInstallation.Run(async()=>{summary=await new TransactionalInstaller(root).Install(pack,downloader,concurrency,progress,cancellation.Token);},cancellation.Token);}
+            finally{progress.Dispose();}
+            // Stop queued progress before terminal cleanup or any UI await. A late final
+            // report must never recreate a completed download in the native state map.
             if(phase is not null)LogPhase(pack.Instance,phase,"completed");phase=null;
             if(pendingRollbackPins.Remove(pack.Instance,out var pin))Json.Write(Path.Combine(new TransactionalInstaller(settings.Root).InstancePath(pack.Instance),".hub","rollback-pin.json"),pin);
             if(repairDownloads.Contains(pack.Instance)&&summary is not null)Event("repair-result",new{Instance=pack.Instance,Summary=summary,Message=RepairMessage(summary,pack.Instance)});

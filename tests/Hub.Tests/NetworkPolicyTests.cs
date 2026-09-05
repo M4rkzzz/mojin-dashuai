@@ -26,16 +26,59 @@ public class NetworkPolicyTests
         var routes=NetworkPolicy.MetadataSources(new Uri(NetworkPolicy.LegacyApi+"/v1/catalog")).ToArray();
         Assert.Single(routes);Assert.Equal(NetworkPolicy.DirectApi+"/v1/catalog",routes[0].AbsoluteUri);
     }
-    [Fact] public async Task UnifiedDownloadNeverContactsManifestSources()
+    [Theory]
+    [InlineData(false)]
+    [InlineData(true)]
+    public async Task UnifiedDownloadNeverContactsManifestSourcesIncludingLegacyOfficialOnly(bool officialOnly)
     {
         var root=Path.Combine(Path.GetTempPath(),"mojin-origin-"+Guid.NewGuid().ToString("N"));var body=new byte[]{1,2,3};
         var hash=Convert.ToHexString(System.Security.Cryptography.SHA256.HashData(body)).ToLowerInvariant();
         var file=new ContentFile("mods/example.jar",body.Length,hash,["https://github.com/unavailable","https://libraries.minecraft.net/unavailable"],FilePolicy.Managed,"test fixture");
+        if(officialOnly)file=file with {OfficialOnly=true,Sources=["https://cdn.modrinth.com/data/project/versions/version/mod.jar"]};
         var urls=new List<string>();
         try{
             using var downloader=new Downloader(root,new LauncherSettings(),new Handler(request=>{urls.Add(request.RequestUri!.AbsoluteUri);return new(HttpStatusCode.OK){Content=new ByteArrayContent(body)};}),NetworkPolicy.DirectApi);
             await downloader.Get(file);Assert.Equal([NetworkPolicy.DirectApi+"/objects/sha256/"+hash],urls);
         }finally{if(Directory.Exists(root))Directory.Delete(root,true);}
+    }
+    [Theory]
+    [InlineData(false)]
+    [InlineData(true)]
+    public async Task WithoutUnifiedOriginManifestSourcesRemainAvailable(bool officialOnly)
+    {
+        var root=Path.Combine(Path.GetTempPath(),"mojin-origin-"+Guid.NewGuid().ToString("N"));var body=new byte[]{4,5,6};
+        var hash=Convert.ToHexString(System.Security.Cryptography.SHA256.HashData(body)).ToLowerInvariant();
+        var source=officialOnly?"https://cdn.modrinth.com/data/project/versions/version/mod.jar":"https://source.example/mod.jar";
+        var file=new ContentFile("mods/example.jar",body.Length,hash,[source],FilePolicy.Managed,"test fixture",OfficialOnly:officialOnly);
+        var urls=new List<string>();
+        try
+        {
+            using var downloader=new Downloader(root,new LauncherSettings(),new Handler(request=>{urls.Add(request.RequestUri!.AbsoluteUri);return new(HttpStatusCode.OK){Content=new ByteArrayContent(body)};}));
+            var path=await downloader.Get(file);Assert.Equal(new[]{source},urls);Assert.True(await ContentSecurity.Matches(path,file));
+        }
+        finally{if(Directory.Exists(root))Directory.Delete(root,true);}
+    }
+    [Fact]
+    public async Task LegacyOfficialOnlyObjectsDownloadedFromUnifiedOriginStillRequireTheirExactHash()
+    {
+        var root=Path.Combine(Path.GetTempPath(),"mojin-origin-"+Guid.NewGuid().ToString("N"));var body=new byte[]{7,8,9};
+        var hash=Convert.ToHexString(System.Security.Cryptography.SHA256.HashData(body)).ToLowerInvariant();
+        var file=new ContentFile("mods/example.jar",body.Length,hash,["https://cdn.modrinth.com/data/project/versions/version/mod.jar"],FilePolicy.Managed,"legacy fixture",OfficialOnly:true);
+        var calls=0;
+        try
+        {
+            using var downloader=new Downloader(root,new LauncherSettings(),new Handler(request=>
+            {
+                Assert.Equal(NetworkPolicy.DirectApi+"/objects/sha256/"+hash,request.RequestUri!.AbsoluteUri);
+                Assert.Null(request.Headers.Authorization);Assert.False(request.Headers.Contains("Cookie"));
+                Assert.False(File.Exists(Path.Combine(root,hash)));
+                return new(HttpStatusCode.OK){Content=new ByteArrayContent(++calls==1?new byte[]{9,8,7}:body)};
+            }),NetworkPolicy.DirectApi);
+            var path=await downloader.Get(file);Assert.Equal(2,calls);Assert.True(await ContentSecurity.Matches(path,file));
+            Assert.False(File.Exists(Path.Combine(root,hash+".part")));
+            Assert.Equal(path,await downloader.Get(file));Assert.Equal(2,calls);
+        }
+        finally{if(Directory.Exists(root))Directory.Delete(root,true);}
     }
     [Theory]
     [InlineData("https://cdn.modrinth.com/data/project/versions/version/mod.jar")]

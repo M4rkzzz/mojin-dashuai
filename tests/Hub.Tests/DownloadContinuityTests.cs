@@ -75,20 +75,25 @@ public sealed class DownloadContinuityTests:IDisposable
         Assert.Equal(bytes,await File.ReadAllBytesAsync(completed[0]));
     }
     [Theory]
-    [InlineData(true)]
-    [InlineData(false)]
-    public async Task NewDownloaderResumesCancelledPartialOrSafelyRestartsWhenRangeIsIgnored(bool supportsRange)
+    [InlineData(true,false)]
+    [InlineData(false,false)]
+    [InlineData(true,true)]
+    [InlineData(false,true)]
+    public async Task NewDownloaderResumesCancelledPartialOrSafelyRestartsWhenRangeIsIgnored(bool supportsRange,bool legacyOfficialOnly)
     {
         const int prefixLength=4096;
         var file=FileRecord;var firstRequests=0;
+        if(legacyOfficialOnly)file=file with {OfficialOnly=true,Sources=["https://cdn.modrinth.com/data/project/versions/version/mod.jar"]};
+        var origin=legacyOfficialOnly?"https://unified.example":null;
+        var expectedUrl=origin is null?file.Sources.Single():origin+"/objects/sha256/"+file.Sha256;
         using var cancellation=new CancellationTokenSource();
         using(var first=new Downloader(root,new LauncherSettings(),new Handler((request,token)=>
         {
-            Interlocked.Increment(ref firstRequests);Assert.Null(request.Headers.Range);
+            Interlocked.Increment(ref firstRequests);Assert.Null(request.Headers.Range);Assert.Equal(expectedUrl,request.RequestUri!.AbsoluteUri);
             var content=new StreamContent(new PrefixThenStallStream(bytes[..prefixLength]));
             content.Headers.ContentLength=bytes.Length;
             return Task.FromResult(new HttpResponseMessage(HttpStatusCode.OK){Content=content});
-        })))
+        }),origin))
         {
             var transfer=first.Get(file,_=>cancellation.Cancel(),cancellation.Token);
             await Assert.ThrowsAnyAsync<OperationCanceledException>(async()=>await transfer.WaitAsync(TimeSpan.FromSeconds(3)));
@@ -100,12 +105,13 @@ public sealed class DownloadContinuityTests:IDisposable
         using var resumed=new Downloader(root,new LauncherSettings(),new Handler((request,token)=>
         {
             Interlocked.Increment(ref resumedRequests);
+            Assert.Equal(expectedUrl,request.RequestUri!.AbsoluteUri);
             Assert.Equal(prefixLength,request.Headers.Range!.Ranges.Single().From);
             if(!supportsRange)return Task.FromResult(Full(bytes));
             var content=new ByteArrayContent(bytes[prefixLength..]);
             content.Headers.ContentRange=new ContentRangeHeaderValue(prefixLength,bytes.Length-1,bytes.Length);
             return Task.FromResult(new HttpResponseMessage(HttpStatusCode.PartialContent){Content=content});
-        }));
+        }),origin);
         Assert.Equal(prefixLength,await resumed.Available(file));
         var completed=await resumed.Get(file,n=>received+=n,onPosition:positions.Add).WaitAsync(TimeSpan.FromSeconds(3));
         Assert.Equal(1,resumedRequests);Assert.Equal(supportsRange?bytes.Length-prefixLength:bytes.Length,received);
