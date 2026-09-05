@@ -1,0 +1,69 @@
+"""Upload an immutable launcher ZIP; activate its signed metadata only with --activate."""
+import argparse,base64,hashlib,json,pathlib,subprocess,sys,urllib.request,uuid
+
+ROOT=pathlib.Path(__file__).resolve().parents[1]
+parser=argparse.ArgumentParser(description=__doc__)
+parser.add_argument('bundle',type=pathlib.Path)
+parser.add_argument('--dotnet',default='dotnet')
+parser.add_argument('--publisher',type=pathlib.Path,default=ROOT/'src/Publisher/bin/Release/net10.0/Publisher.dll')
+parser.add_argument('--activate',action='store_true')
+args=parser.parse_args()
+bundle=args.bundle.resolve()
+signed=bundle/'launcher.signed.json'
+subprocess.run([args.dotnet,str(args.publisher),'verify-launcher',str(signed),str(ROOT/'src/Launcher.Desktop/launcher.json')],check=True,cwd=ROOT)
+envelope=json.loads(signed.read_text(encoding='utf-8-sig'))
+release=json.loads(base64.b64decode(envelope['payload']))
+archive=bundle/'MojinDashuai-windows-x64.zip'
+with archive.open('rb') as f:digest=hashlib.file_digest(f,'sha256').hexdigest()
+if digest!=release['archive']['sha256'].lower() or archive.stat().st_size!=release['archive']['size']:raise ValueError('Archive does not match signed launcher release')
+if release['archive']['path']!='objects/sha256/'+digest:raise ValueError('Launcher object path must use its SHA256')
+if args.activate:subprocess.run([sys.executable,str(ROOT/'tools/check-client-release.py')],check=True,cwd=ROOT)
+config=json.loads((ROOT/'packs/distributions.json').read_text(encoding='utf-8'))
+expected=config['frpBase'].rstrip('/')+'/objects/sha256/'+digest
+if expected not in release['archive']['sources']:raise ValueError('Launcher ZIP must include the configured direct download route')
+run=uuid.uuid4().hex
+stage=ROOT/'.local/publication';stage.mkdir(parents=True,exist_ok=True)
+remote='/tmp/mojin-launcher-'+run
+helper=ROOT.parent/'tools/ssh124.py'
+def ssh(*parameters):
+    result=subprocess.run([sys.executable,str(helper),'--user','Agent2',*parameters],capture_output=True,timeout=600)
+    if result.returncode:raise RuntimeError('Launcher publication failed; no credentials were printed')
+    return result.stdout.decode('utf-8',errors='replace').strip()
+for path,suffix in [(archive,'.zip'),(signed,'.json')]:ssh('--send',str(path),remote+suffix)
+script=stage/(run+'.py')
+script.write_text('''import base64,hashlib,json,pathlib,shutil,datetime
+root=pathlib.Path('/vol1/mc-client-hub/public').resolve()
+source=pathlib.Path(BASE+'.zip')
+envelope=json.loads(pathlib.Path(BASE+'.json').read_text())
+release=json.loads(base64.b64decode(envelope['payload']))
+with source.open('rb') as f:sha=hashlib.file_digest(f,'sha256').hexdigest()
+if sha!=HASH or source.stat().st_size!=SIZE:raise ValueError('Uploaded ZIP mismatch')
+target=root/'objects/sha256'/sha
+if target.is_symlink() or not target.resolve().is_relative_to(root):raise ValueError('Unsafe object path')
+target.parent.mkdir(parents=True,exist_ok=True)
+if target.exists():
+ with target.open('rb') as f:old=hashlib.file_digest(f,'sha256').hexdigest()
+ if old!=sha:raise ValueError('Existing immutable object differs')
+else:
+ staged=target.with_name(sha+'.stage-'+RUN);shutil.copyfile(source,staged);staged.chmod(0o644);staged.replace(target)
+metadata=root/'launcher.signed.json'
+if ACTIVATE:
+ if metadata.exists():
+  previous=json.loads(metadata.read_text());old=json.loads(base64.b64decode(previous['payload']))
+  if old['sequence']>release['sequence'] or old['sequence']==release['sequence'] and old!=release:raise ValueError('Launcher release sequence must increase')
+  backups=pathlib.Path('/vol1/mc-client-hub/backups/launcher');backups.mkdir(parents=True,exist_ok=True)
+  shutil.copyfile(metadata,backups/(datetime.datetime.now(datetime.timezone.utc).strftime('%Y%m%dT%H%M%SZ')+'.signed.json'))
+ staged=root/('launcher-'+RUN+'.stage');staged.write_text(json.dumps(envelope));staged.chmod(0o644);staged.replace(metadata)
+source.unlink()
+print(json.dumps({'uploaded':True,'activated':ACTIVATE,'sequence':release['sequence']}))
+'''.replace('BASE',repr(remote)).replace('HASH',repr(digest)).replace('SIZE',str(archive.stat().st_size)).replace('RUN',repr(run)).replace('ACTIVATE',repr(args.activate)),encoding='utf-8')
+ssh('--send',str(script),remote+'.py')
+print(ssh('--sudo','--timeout','120','python3 '+remote+'.py'))
+with urllib.request.urlopen(urllib.request.Request(expected,method='HEAD'),timeout=25) as response:
+    if response.status!=200 or int(response.headers['Content-Length'])!=archive.stat().st_size:raise ValueError('Public launcher ZIP unavailable')
+if args.activate:
+    with urllib.request.urlopen(config['publicBase'].rstrip('/')+'/v1/launcher',timeout=25) as response:
+        if json.load(response)!=envelope:raise ValueError('Public launcher metadata differs')
+report={'version':release['version'],'sequence':release['sequence'],'sha256':digest,'bytes':archive.stat().st_size,'publicDownloadVerified':True,'activated':args.activate}
+(bundle/'publication.json').write_text(json.dumps(report,indent=2)+'\n',encoding='utf-8')
+print(json.dumps(report))

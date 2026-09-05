@@ -21,4 +21,5 @@ try {
   await check('avatar-check.mjs');
   await check('storage-check.mjs');
   await check('microsoft-check.mjs');
+  await check('update-check.mjs');
 } finally {server.kill();}

@@ -97,3 +97,7 @@ dialog{border-color:#454545;color:#f2f2f2}dialog::backdrop{background:#000b}.ski
 
 .microsoft-login h1{margin-bottom:32px}.device-code-label{font-size:14px;color:#ddd;margin-bottom:12px}.device-code-row{display:flex;align-items:center;justify-content:space-between;gap:16px;border:1px solid #555;background:#111;padding:18px 20px;border-radius:3px}.device-code-row output{font:600 30px/1.4 ui-monospace,Consolas,monospace;letter-spacing:3px;color:#f7f7f7;overflow-wrap:anywhere}.device-code-row button{flex-shrink:0;color:#e3e3e3;padding:8px}.device-open{margin-top:24px}.device-status{display:flex;align-items:center;gap:12px;min-height:74px;color:#ddd;font-size:14px}.device-status time{margin-left:auto;font-variant-numeric:tabular-nums}.device-error{color:#ffb7a9;font-size:14px;line-height:1.6}.microsoft-login .secondary{margin-top:12px}
 @media(max-width:650px){.device-code-row{padding:14px}.device-code-row output{font-size:24px;letter-spacing:2px}}
+/* Native launcher updates share the settings page and do not open a dialog. */
+.launcher-update { margin-top: 24px; border-top: 1px solid #303030; }
+.update-state { display: block; margin-top: 6px; color: #d0d0d0; font-size: 14px; }
+.update-error { color: #edb8b8; font-size: 14px; }

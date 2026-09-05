@@ -6,6 +6,7 @@ public static class PublicMetadata
 {
     public const long MaxBytes=16*1024*1024;
     public static byte[]? Catalog(string root)=>Read(root,["catalog.signed.json"]);
+    public static byte[]? Launcher(string root)=>Read(root,["launcher.signed.json"]);
     public static byte[]? Manifest(string root,string instance,long sequence)
     {
         if(instance is not ("m3e" or "dc2" or "mb")||sequence<=0)return null;

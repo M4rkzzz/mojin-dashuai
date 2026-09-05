@@ -1,0 +1,21 @@
+{
+  "date": "2026-09-05",
+  "protocolStatusVerified": {
+    "m3e": [
+      52,
+      96
+    ],
+    "dc2": [
+      71,
+      153
+    ],
+    "mb": [
+      69,
+      148
+    ]
+  },
+  "latencyUnit": "ms",
+  "m3eSuqianInitialTimeoutThenRecovered": true,
+  "routeConfigurationChanged": false,
+  "sameInstanceMapSwitchVerified": false
+}

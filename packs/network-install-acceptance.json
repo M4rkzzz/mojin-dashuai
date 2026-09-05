@@ -1,0 +1,42 @@
+{
+  "startedAt": "2026-09-05T08:35:48Z",
+  "initialCacheEmpty": true,
+  "cleanWindows": false,
+  "gameStarted": false,
+  "allCompleted": true,
+  "checks": [
+    {
+      "instance": "dc2",
+      "installed": true,
+      "javaMajor": 17,
+      "localVersionPrepared": true,
+      "gameStarted": false,
+      "joinedServer": false,
+      "elapsedSeconds": 779.4016891,
+      "files": 9863,
+      "manifestSha256": "ee754c30cf5558c30acd95299a3d7ceebd56b5e7644ccb500c10a73d41a64f85"
+    },
+    {
+      "instance": "m3e",
+      "installed": true,
+      "javaMajor": 8,
+      "localVersionPrepared": true,
+      "gameStarted": false,
+      "joinedServer": false,
+      "elapsedSeconds": 341.9191003,
+      "files": 4780,
+      "manifestSha256": "7f87ccef03890deb15c2d5790bce59cd0ebb834e8a656faed79b75cd7a901209"
+    },
+    {
+      "instance": "mb",
+      "installed": true,
+      "javaMajor": 25,
+      "localVersionPrepared": true,
+      "gameStarted": false,
+      "joinedServer": false,
+      "elapsedSeconds": 713.7442616,
+      "files": 26889,
+      "manifestSha256": "69045648c0e2010e692ce365d6c2b3544f9a507e816e7f4b4abcd39d8057cfce"
+    }
+  ]
+}

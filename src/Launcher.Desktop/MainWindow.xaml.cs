@@ -33,6 +33,10 @@ public partial class MainWindow : Window
     private readonly SemaphoreSlim settingsGate=new(1);
     private CancellationTokenSource? microsoftLogin;
     private MicrosoftDevicePrompt? microsoftPrompt;
+    private LauncherUpdates launcherUpdates=null!;
+    private string updateApi="";
+    private bool checkingLauncherUpdate,restartingLauncher,migratingContent;
+    private object launcherUpdate=new {Phase="idle",Version=(string?)null,Downloaded=0L,Total=0L};
     public MainWindow()
     {
         InitializeComponent();
@@ -47,6 +51,7 @@ public partial class MainWindow : Window
         {
             Directory.CreateDirectory(appData);
             var config=Json.Read<AppConfig>(Path.Combine(AppContext.BaseDirectory,"launcher.json"));
+            launcherUpdates=new(UpdateStartup.DataRoot,config.PublicKeys);updateApi=config.Api;
             var settingsPath=Path.Combine(appData,"settings.json");settings=ContentDirectorySetup.LoadSettings(settingsPath);settings.Validate();
             var microsoftId=config.MicrosoftClientId??"";
             accounts=new(new Vault(appData),config.Api,microsoftId.Trim(),()=>new MicrosoftWebUi(this,Path.Combine(appData,"MicrosoftAuth")));
@@ -71,7 +76,7 @@ public partial class MainWindow : Window
             core.PermissionRequested+=(_,e)=>e.State=CoreWebView2PermissionState.Deny;
             core.DownloadStarting+=(_,e)=>e.Cancel=true;
             core.WebMessageReceived+=HandleMessage;
-            core.NavigationCompleted+=(_,_)=>{Loading.Visibility=Visibility.Collapsed;Event("window-state",new {Maximized=WindowState==WindowState.Maximized});};
+            core.NavigationCompleted+=(_,_)=>{Loading.Visibility=Visibility.Collapsed;Event("window-state",new {Maximized=WindowState==WindowState.Maximized});_=CheckLauncherUpdate();};
             initialized=true;core.Navigate("https://app.boshan.local/index.html");
         }
         catch(Exception ex){Loading.Text="启动器准备失败："+Friendly(ex);File.WriteAllText(Path.Combine(appData,"startup-diagnostic.txt"),ex.GetType().FullName+"\n"+ex.HResult+"\n"+ex.StackTrace);}
@@ -109,12 +114,23 @@ public partial class MainWindow : Window
     }
     private async Task<object?> Dispatch(string command,JsonElement args)
     {
+        if(migratingContent&&!command.StartsWith("window.",StringComparison.Ordinal))throw new InvalidDataException("正在迁移内容目录，请稍候。");
+        if(restartingLauncher&&!command.StartsWith("window.",StringComparison.Ordinal))throw new InvalidDataException("正在打开新版启动器。");
         string Id(){var id=args.GetProperty("instance").GetString()!;if(!Routes.Domains.ContainsKey(id))throw new InvalidDataException("未知服务器。");return id;}
         if(!settings.ContentDirectoryConfigured&&(command.StartsWith("instance.",StringComparison.Ordinal)||command.StartsWith("download.",StringComparison.Ordinal)||command is "settings.save" or "directory.migrate" or "cache.clean" or "content.manage"))
             throw new InvalidDataException("请先设置游戏文件保存位置。");
         switch(command)
         {
-            case "bootstrap": return new {Profile=await accounts.Restore(),Settings=settings,WindowMaximized=WindowState==WindowState.Maximized,Installs=Routes.Domains.Keys.Select(id=>new {Id=id,Pack=new TransactionalInstaller(settings.Root).ReadInstalled(id)}).Where(x=>x.Pack is not null).ToDictionary(x=>x.Id,x=>new {Version=x.Pack!.Manifest.Version,State="installed"})};
+            case "bootstrap": UpdateStartup.MarkReady();return new {Profile=await accounts.Restore(),Settings=settings,LauncherUpdate=launcherUpdate,WindowMaximized=WindowState==WindowState.Maximized,Installs=Routes.Domains.Keys.Select(id=>new {Id=id,Pack=new TransactionalInstaller(settings.Root).ReadInstalled(id)}).Where(x=>x.Pack is not null).ToDictionary(x=>x.Id,x=>new {Version=x.Pack!.Manifest.Version,State="installed"})};
+            case "launcher.update.check":return await CheckLauncherUpdate(true);
+            case "launcher.update.status":return launcherUpdate;
+            case "launcher.update.restart":
+                if(checkingLauncherUpdate||games.Count>0||transfers.Count>0||pendingPacks.Count>0||microsoftLogin is not null)throw new InvalidDataException("请先结束游戏、下载或登录任务。");
+                var update=await launcherUpdates.Ready(AppContext.BaseDirectory,typeof(App).Assembly.GetName().Version!);
+                if(update is null)throw new InvalidDataException("没有已准备好的启动器更新。");
+                restartingLauncher=true;
+                try{if(!await UpdateStartup.Start(launcherUpdates,update))throw new InvalidDataException("新版启动失败，当前版本已保留。");Application.Current.Shutdown();return null;}
+                finally{restartingLauncher=false;}
             case "auth.login":if(microsoftLogin is not null)throw new InvalidDataException("请先取消正在进行的微软登录。");return await accounts.Login("login",args);
             case "auth.register":if(microsoftLogin is not null)throw new InvalidDataException("请先取消正在进行的微软登录。");return await accounts.Login("register",args);
             case "auth.recover":return await accounts.Recover(args);
@@ -224,6 +240,39 @@ public partial class MainWindow : Window
         pendingRollbackPins[id]=new(pack.Version,pack.Sequence,server.Release!.Sequence);
         await Transfer(pack);
     }
+    private async Task<object> CheckLauncherUpdate(bool retry=false)
+    {
+        if(checkingLauncherUpdate||restartingLauncher)return launcherUpdate;
+        checkingLauncherUpdate=true;
+        void State(string phase,string? version=null,long downloaded=0,long total=0,string? error=null)
+        {
+            launcherUpdate=new {Phase=phase,Version=version,Downloaded=downloaded,Total=total,Error=error};
+            if(initialized)Event("launcher-update",launcherUpdate);
+        }
+        try
+        {
+            State("checking");
+            var envelope=await launcherUpdates.Fetch(updateApi);
+            if(envelope is not null)
+            {
+                var release=launcherUpdates.AcceptMetadata(envelope);
+                if(retry)launcherUpdates.Retry(release);
+                if(launcherUpdates.HasFailed(release))throw new InvalidDataException("新版启动失败，已保留原版本。可以重新检查更新。");
+                if(Version.Parse(release.Version.Split('-')[0])>=new Version(typeof(App).Assembly.GetName().Version!.ToString(3)))
+                {
+                    State("downloading",release.Version,total:release.Archive.Size);
+                    using var downloader=new Downloader(Path.Combine(launcherUpdates.Root,"cache"),settings);
+                    long received=0,last=0;
+                    await launcherUpdates.Prepare(envelope,downloader,bytes=>{received+=bytes;var now=Environment.TickCount64;if(now-last>500){last=now;State("downloading",release.Version,received,release.Archive.Size);}});
+                }
+            }
+            var ready=await launcherUpdates.Ready(AppContext.BaseDirectory,typeof(App).Assembly.GetName().Version!);
+            State(ready is null?"current":"ready",ready?.Release.Version);
+        }
+        catch(Exception ex){State("failed",error:Friendly(ex));Log("launcher-update",ex);}
+        finally{checkingLauncherUpdate=false;}
+        return launcherUpdate;
+    }
     private async Task Launch(string id,bool checkForUpdates=true)
     {
         if(games.ContainsKey(id))throw new InvalidDataException("此世界已在运行。");
@@ -300,37 +349,28 @@ public partial class MainWindow : Window
     {
         var dialog=new OpenFolderDialog {Title="选择旧客户端的游戏实例目录"};if(dialog.ShowDialog(this)!=true)return new {Message="已取消导入"};
         var source=dialog.FolderName;var installer=new TransactionalInstaller(settings.Root);using var gate=installer.Acquire(id);var target=installer.InstancePath(id);
-        if(Path.GetFullPath(source).Equals(Path.GetFullPath(target),StringComparison.OrdinalIgnoreCase))throw new InvalidDataException("旧客户端与当前实例不能使用同一个目录。");
-        var count=0;
-        // Only known player-owned data is imported. Old launchers, authentication caches and FRP files are never copied.
-        foreach(var name in new[]{"saves","screenshots","journeymap","XaeroWaypoints","XaeroWorldMap","resourcepacks","shaderpacks","options.txt","optionsof.txt"})
-        {
-            var from=ContentSecurity.SafePath(source,name);if(!File.Exists(from)&&!Directory.Exists(from))continue;
-            var files=File.Exists(from)?new[]{from}:Directory.GetFiles(from,"*",SearchOption.AllDirectories);
-            foreach(var file in files)
-            {
-                var relative=Path.GetRelativePath(source,file).Replace('\\','/');ContentSecurity.SafePath(source,relative);
-                var dest=ContentSecurity.SafePath(target,relative);
-                if(File.Exists(dest))dest=ContentSecurity.SafePath(target,".hub/import-conflicts/"+DateTime.UtcNow.ToString("yyyyMMddHHmmss")+"/"+relative);
-                await Task.Run(()=>TransactionalInstaller.AtomicCopy(file,dest));count++;
-            }
-        }
+        var count=await Task.Run(()=>PlayerFiles.Import(source,target));
         return new {Message=$"已导入 {count} 个个人文件。游戏模组由对应服务器的正式清单安装。"};
     }
     private async Task<object> Migrate()
     {
-        if(games.Count>0||transfers.Count>0)throw new InvalidDataException("请先结束游戏和下载任务。");
+        if(games.Count>0||transfers.Count>0||pendingPacks.Count>0)throw new InvalidDataException("请先结束游戏和下载任务。");
         var dialog=new OpenFolderDialog{Title="选择新的内容目录（需为空目录）"};if(dialog.ShowDialog(this)!=true)return new {Message="已取消迁移"};
-        var destination=Path.GetFullPath(dialog.FolderName);var old=Path.GetFullPath(settings.Root);
-        if(destination.Equals(old,StringComparison.OrdinalIgnoreCase)||destination.StartsWith(old+Path.DirectorySeparatorChar,StringComparison.OrdinalIgnoreCase)||Directory.EnumerateFileSystemEntries(destination).Any())throw new InvalidDataException("请选择独立的空目录。");
-        if(Directory.Exists(old))foreach(var file in Directory.EnumerateFiles(old,"*",SearchOption.AllDirectories))
+        migratingContent=true;
+        await settingsGate.WaitAsync();
+        var gates=new List<IDisposable>();
+        try
         {
-            var relative=Path.GetRelativePath(old,file).Replace('\\','/');ContentSecurity.SafePath(old,relative);
-            if(relative.EndsWith("run.lock",StringComparison.OrdinalIgnoreCase))continue;
-            await Task.Run(()=>TransactionalInstaller.AtomicCopy(file,ContentSecurity.SafePath(destination,relative)));
+            var destination=Path.GetFullPath(dialog.FolderName);var old=Path.GetFullPath(settings.Root);
+            var installer=new TransactionalInstaller(old);
+            foreach(var id in Routes.Domains.Keys)gates.Add(installer.Acquire(id));
+            await Task.Run(()=>PlayerFiles.CopyForMigration(old,destination));
+            var previous=settings.Root;
+            try{settings.Root=destination;Json.Write(Path.Combine(appData,"settings.json"),settings);}
+            catch{settings.Root=previous;throw;}
+            return new {Message="目录迁移完成。旧目录保留，可核验后自行清理。",Settings=settings};
         }
-        settings.Root=destination;Json.Write(Path.Combine(appData,"settings.json"),settings);
-        return new {Message="目录迁移完成。旧目录保留，可核验后自行清理。",Settings=settings};
+        finally{foreach(var gate in gates)gate.Dispose();settingsGate.Release();migratingContent=false;}
     }
     private object CleanCache()
     {

@@ -2,6 +2,7 @@ using System.Text.Json;
 using Boshan.Desktop;
 using Boshan.Launcher;
 
+if(args is ["--launcher-update-smoke",var fixture]){await LauncherUpdateSmoke.Run(fixture);return;}
 if(args is ["--microsoft-contract"]){await MicrosoftContract.Run();return;}
 if(args is ["--microsoft-live"]){MicrosoftLive.Run();return;}
 if(args is ["--microsoft-network"]){await MicrosoftNetwork.Run();return;}

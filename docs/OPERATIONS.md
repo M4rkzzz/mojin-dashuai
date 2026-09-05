@@ -70,3 +70,7 @@ API 0.1.2 已部署，升级备份为 `/vol1/mc-client-hub/backups/upgrades/api-
 Windows 默认使用 CmlLib 的官方文档接法，`microsoftClientId` 留空。自有 Azure 应用 ID 仅用于可选设备码方式，不是默认登录的必需配置。用户就绪后，先重新构建 `tests/NativeAccountSmoke` 的 Release，再手动执行 `python tools/accept-microsoft-login.py --dotnet PATH_TO_DOTNET`。此命令会显示一个微软授权窗口，不显示启动器大厅或启动游戏。
 
 成功后检查真实游戏所有权、DPAPI 会话恢复、静默认证、角色与皮肤，并生成不含账号标识或凭据的 `packs/launcher-acceptance.json`。认证代码或配置变化会使验收指纹失效；需要重新验收。合成测试仅使用 `--microsoft-contract`，不会写入真人验收记录。
+
+## 启动器更新与当前 API
+
+API 0.1.4 已部署，46 项隔离检查通过。升级备份 `/vol1/mc-client-hub/backups/upgrades/api-0.1.4-20260905T085926Z`，其他容器启动时间未变化。新增 `/v1/launcher` 只提供公开签名清单；尚未激活时返回 404。打包、签名、上传及激活见 [启动器更新](LAUNCHER-UPDATES.md)。

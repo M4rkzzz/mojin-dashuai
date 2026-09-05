@@ -15,6 +15,32 @@ try
 {
     switch(args[0])
     {
+        case "check-launcher-update":
+        {
+            var root=Path.GetFullPath(args[3]);
+            if(!root.Contains(Path.DirectorySeparatorChar+".local"+Path.DirectorySeparatorChar,StringComparison.OrdinalIgnoreCase))throw new InvalidDataException("Update checks require an isolated .local directory.");
+            var keys=JsonDocument.Parse(File.ReadAllText(args[2])).RootElement.GetProperty("publicKeys").Deserialize<Dictionary<string,string>>(Json.Options)!;
+            var updates=new LauncherUpdates(root,keys);
+            using var downloader=new Downloader(Path.Combine(root,"cache"),new LauncherSettings{LimitMiB=2});
+            var prepared=await updates.Prepare(Json.Read<SignedEnvelope>(args[1]),downloader);
+            var report=new{prepared.Release.Version,Files=prepared.Release.Files.Length,prepared.Release.Archive.Size,DownloadedAndVerified=true,GameStarted=false,Activated=false};
+            Json.Write(Path.Combine(root,"report.json"),report);Console.WriteLine(JsonSerializer.Serialize(report,Json.Options));break;
+        }
+        case "bundle-launcher":
+            if(args.Length!=6)throw new ArgumentException("bundle-launcher DIRECTORY VERSION SEQUENCE PUBLIC_BASE OUTPUT_DIRECTORY");
+            await LauncherBundle.Build(args[1],args[2],long.Parse(args[3]),args[4],args[5]);break;
+        case "sign-launcher":
+        {
+            var release=Json.Read<LauncherRelease>(args[1]);LauncherUpdates.Validate(release);
+            Json.Write(args[3],ContentSecurity.Sign(release,"release-1",File.ReadAllText(args[2])));
+            Console.WriteLine("Launcher update signed.");break;
+        }
+        case "verify-launcher":
+        {
+            var keys=System.Text.Json.JsonDocument.Parse(File.ReadAllText(args[2])).RootElement.GetProperty("publicKeys").Deserialize<Dictionary<string,string>>(Json.Options)!;
+            LauncherUpdates.Validate(ContentSecurity.Verify<LauncherRelease>(Json.Read<SignedEnvelope>(args[1]),keys));
+            Console.WriteLine("Launcher signature and inventory valid.");break;
+        }
         case "keygen":
             using(var key=ECDsa.Create(ECCurve.NamedCurves.nistP256))
             {

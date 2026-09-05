@@ -60,12 +60,15 @@ try:
         time.sleep(.5)
     check(api('/health')[0]==200,'isolated API healthy')
     check(api('/v1/catalog')[0]==503,'unpublished catalog stays unavailable')
+    check(api('/v1/launcher')[0]==404,'unpublished launcher update returns not found')
     check(api('/v1/manifests/mb/1')[0]==404,'missing manifest returns not found')
     envelope={'keyId':'isolated-fixture','payload':'e30=','signature':'test-only'}
     manifest_path=public_path/'manifests'/'mb'/'1.signed.json'
     manifest_path.parent.mkdir(parents=True)
     manifest_path.write_text(json.dumps(envelope))
     (public_path/'catalog.signed.json').write_text(json.dumps(envelope))
+    (public_path/'launcher.signed.json').write_text(json.dumps(envelope))
+    check(api('/v1/launcher')==(200,envelope),'launcher update serves only the public signed envelope')
     check(api('/v1/catalog')==(200,envelope),'public catalog serves exact envelope without credentials')
     check(api('/v1/manifests/mb/1')==(200,envelope),'public manifest serves exact envelope without credentials')
     check(api('/v1/manifests/unknown/1')[0]==404 and api('/v1/manifests/mb/0')[0]==404,'manifest route restricts instance and positive release number')

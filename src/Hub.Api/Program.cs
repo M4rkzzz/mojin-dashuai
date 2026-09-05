@@ -80,6 +80,10 @@ app.MapGet("/v1/catalog", () => {
     var bytes=PublicMetadata.Catalog(builder.Configuration["PublicPath"]??"public");
     return bytes is not null ? Results.Bytes(bytes, "application/json") : Results.Json(new { error = "正式内容正在验收，目录尚未发布。" }, statusCode: 503);
 });
+app.MapGet("/v1/launcher", () => {
+    var bytes=PublicMetadata.Launcher(builder.Configuration["PublicPath"]??"public");
+    return bytes is not null?Results.Bytes(bytes,"application/json"):Results.NotFound();
+});
 app.MapGet("/v1/manifests/{instance}/{sequence:long}", (string instance,long sequence) => {
     var bytes=PublicMetadata.Manifest(builder.Configuration["PublicPath"]??"public",instance,sequence);
     return bytes is not null ? Results.Bytes(bytes,"application/json") : Results.NotFound();

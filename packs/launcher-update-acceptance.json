@@ -1,0 +1,15 @@
+{
+  "version": "0.1.2-beta.2",
+  "sequence": 2,
+  "sha256": "4be1b280260fe7e547a773ed2b2b8032ff0f4e547d08b11043d4922a3b7ede6a",
+  "bytes": 78066869,
+  "publicDownloadVerified": true,
+  "activated": false,
+  "codeTestsPassed": 91,
+  "nativeProcessHandshake": true,
+  "failedLaunchRetainsPrevious": true,
+  "uiStatesVerified": true,
+  "publicArchiveRoundTripVerified": true,
+  "fullNativeUiRestartVerified": false,
+  "formalReleaseActivated": false
+}

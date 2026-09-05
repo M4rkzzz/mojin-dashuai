@@ -30,12 +30,15 @@ jobs:
         working-directory: ui
       - run: dotnet test tests/Hub.Tests/Hub.Tests.csproj -c Release
       - run: dotnet publish src/Launcher.Desktop/Launcher.Desktop.csproj -c Release -r win-x64 --self-contained true "-p:Version=$env:VERSION" -o artifacts/MojinDashuai
+      - run: dotnet build src/Publisher/Publisher.csproj -c Release
       - name: Package and create draft
         env:
           GH_TOKEN: ${{ github.token }}
         shell: pwsh
         run: |
           if ($env:VERSION -notmatch '^\d+\.\d+\.\d+(-[a-z0-9.]+)?$') { throw 'Invalid version' }
-          Compress-Archive -Path artifacts/MojinDashuai/* -DestinationPath artifacts/MojinDashuai-windows-x64.zip
-          (Get-FileHash artifacts/MojinDashuai-windows-x64.zip).Hash | Set-Content artifacts/SHA256.txt
-          gh release create "launcher-v$env:VERSION" artifacts/MojinDashuai-windows-x64.zip artifacts/SHA256.txt --draft --title "魔金大帅 $env:VERSION" --notes 'Windows x64 启动器。游戏内容通过独立签名目录发布。'
+          $sequence = [DateTimeOffset]::UtcNow.ToUnixTimeSeconds()
+          dotnet src/Publisher/bin/Release/net10.0/Publisher.dll bundle-launcher artifacts/MojinDashuai $env:VERSION $sequence http://103.40.14.100:21708 artifacts/launcher-release
+          if ($LASTEXITCODE -ne 0) { throw 'Launcher bundle failed' }
+          (Get-FileHash artifacts/launcher-release/MojinDashuai-windows-x64.zip).Hash | Set-Content artifacts/launcher-release/SHA256.txt
+          gh release create "launcher-v$env:VERSION" artifacts/launcher-release/MojinDashuai-windows-x64.zip artifacts/launcher-release/launcher-release.json artifacts/launcher-release/SHA256.txt --draft --title "魔金大帅 $env:VERSION" --notes 'Windows x64 启动器。游戏内容通过独立签名目录发布。'

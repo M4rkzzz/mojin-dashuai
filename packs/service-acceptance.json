@@ -1,10 +1,10 @@
 {
-  "apiVersion": "0.1.3",
-  "isolatedChecksPassed": 44,
-  "checkedAt": "2026-09-05T08:21:54Z",
+  "apiVersion": "0.1.4",
+  "isolatedChecksPassed": 46,
+  "checkedAt": "2026-09-05T08:59:26Z",
   "deployedHealthy": true,
   "publicHealthStatus": 200,
-  "upgradeBackup": "/vol1/mc-client-hub/backups/upgrades/api-0.1.3-20260905T082231Z",
+  "upgradeBackup": "/vol1/mc-client-hub/backups/upgrades/api-0.1.4-20260905T085926Z",
   "otherContainerStartTimesUnchanged": true,
   "gameSkinApi": {
     "protocol": "CustomSkinAPI",
@@ -16,5 +16,6 @@
     ],
     "textureHashVerified": true,
     "inGameVisualAcceptance": false
-  }
+  },
+  "launcherUpdateEndpoint": true
 }

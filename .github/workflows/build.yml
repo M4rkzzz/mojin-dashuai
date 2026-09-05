@@ -49,6 +49,8 @@ jobs:
       - run: dotnet test tests/Hub.Tests/Hub.Tests.csproj -c Release --logger trx
       - run: dotnet build tests/NativeAccountSmoke/NativeAccountSmoke.csproj -c Release
       - run: dotnet tests/NativeAccountSmoke/bin/Release/net10.0-windows/NativeAccountSmoke.dll --microsoft-contract
+      - run: dotnet publish tests/LauncherUpdateFixture/LauncherUpdateFixture.csproj -c Release -r win-x64 --self-contained true -o .local/launcher-update-fixture
+      - run: dotnet tests/NativeAccountSmoke/bin/Release/net10.0-windows/NativeAccountSmoke.dll --launcher-update-smoke .local/launcher-update-fixture
       - run: dotnet publish src/Launcher.Desktop/Launcher.Desktop.csproj -c Release -r win-x64 --self-contained true -o artifacts/MojinDashuai
       - uses: actions/upload-artifact@v4
         with:
