@@ -1,0 +1,24 @@
+{
+  "passed": true,
+  "channel": "beta",
+  "manifestSha256": "69045648c0e2010e692ce365d6c2b3544f9a507e816e7f4b4abcd39d8057cfce",
+  "cleanWindows": false,
+  "joinedServer": true,
+  "allSourcesAutomated": true,
+  "javaMajor": 25,
+  "loader": "cleanroom",
+  "map": true,
+  "quests": true,
+  "machines": true,
+  "deferredChecks": [
+    "cleanWindows"
+  ],
+  "scope": "Beta acceptance; full clean Windows acceptance remains pending",
+  "evidence": [
+    "packs/native-install-status.json",
+    "packs/network-install-acceptance.json",
+    "packs/route-acceptance.json",
+    "packs/launcher-acceptance.json"
+  ],
+  "approvedDeferral": "packs/beta-authorization.json"
+}

@@ -2,7 +2,7 @@
 
 Windows 三服统一客户端。React + TypeScript / WebView2 / .NET 10。自建账号服务使用 ASP.NET Core Identity + PostgreSQL。
 
-当前处于实施与兼容测试阶段，**尚未达到三服正式交付条件**。实际进度见 [实施状态](docs/IMPLEMENTATION-STATUS.md)。
+**0.1.2-beta.4 已开放内测。** [下载 Windows x64 版](http://103.40.14.100:21708/launcher/0.1.2-beta.4/MojinDashuai-windows-x64.zip) · [使用说明](docs/BETA-0.1.2.md)。干净 Windows 验收按用户决定延后，仍保留未通过记录；本次不认定为完整稳定版交付。
 
 ## 启动开发环境
 
@@ -35,7 +35,7 @@ dotnet publish src/Launcher.Desktop/Launcher.Desktop.csproj -c Release -r win-x6
 
 ## 发布规则
 
-发布清单使用 ECDSA P-256 和 SHA256。签名前必须提供与清单哈希对应的验收记录。先上传不可变文件与清单，最后切换目录；GitHub 的客户端发布流程只创建草稿。
+发布清单使用 ECDSA P-256 和 SHA256。签名前必须提供与清单哈希对应的验收记录。稳定版必须通过干净 Windows；明确批准的 beta 可以只延后这一项，仍要求真实入服、全自动来源与正确 Java。先上传不可变文件与清单，最后切换目录；GitHub 的客户端发布流程只创建草稿。
 
 三服游戏服务器保持现有离线认证。群服账号只验证启动器身份，不能阻止其他客户端使用同一昵称连接。
 

@@ -4080,5 +4080,9 @@
         "publicSizeVerified": true
       }
     }
-  ]
+  ],
+  "betaReady": true,
+  "betaSequence": 1,
+  "betaManifestSha256": "7f87ccef03890deb15c2d5790bce59cd0ebb834e8a656faed79b75cd7a901209",
+  "betaPublished": true
 }

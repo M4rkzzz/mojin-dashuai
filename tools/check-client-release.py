@@ -1,12 +1,19 @@
 """Stop a player-facing release while authentication or required game content is unconfigured."""
-import json
+import argparse,json
 from pathlib import Path
 from urllib.parse import urlsplit
 import uuid
 from release_config import auth_fingerprint
 
 root=Path(__file__).resolve().parents[1]
+parser=argparse.ArgumentParser()
+parser.add_argument('--beta',action='store_true',help='Use the explicitly approved beta acceptance without claiming clean Windows passed')
+args=parser.parse_args()
 errors=[]
+if args.beta:
+    decision=json.loads((root/'packs/beta-authorization.json').read_text(encoding='utf-8'))
+    if decision.get('approved') is not True or decision.get('deferredChecks')!=['cleanWindows']:
+        errors.append('Beta publication must record the user-approved clean Windows deferral.')
 config=json.loads((root/'src/Launcher.Desktop/launcher.json').read_text(encoding='utf-8-sig'))
 if config.get('microsoftClientId','').strip():
     try:
@@ -31,10 +38,22 @@ for instance in ['m3e','dc2','mb']:
              (row.get('downloadVerification',{}).get('verified') and (row.get('verifiedSources') or row.get('sources'))))]
     if missing:
         errors.append(instance+': '+str(len(missing))+' files still need automatic fallback publication.')
-    if audit.get('releaseReady') is not True:
+    if args.beta:
+        sequence=audit.get('betaSequence')
+        if not isinstance(sequence,int) or sequence<=0:
+            errors.append(instance+': beta sequence is missing.')
+            continue
+        evidence=json.loads((root/f'packs/acceptance/{instance}-{sequence}.json').read_text(encoding='utf-8'))
+        if evidence.get('manifestSha256')!=audit.get('betaManifestSha256'):
+            errors.append(instance+': beta acceptance does not match its content audit.')
+        if audit.get('betaReady') is not True or evidence.get('channel')!='beta' or not all(evidence.get(k) is True for k in ['passed','joinedServer','allSourcesAutomated']) or evidence.get('javaMajor')!={'m3e':8,'dc2':17,'mb':25}[instance]:
+            errors.append(instance+': beta acceptance is not complete.')
+        if instance=='mb' and (evidence.get('loader')!='cleanroom' or not all(evidence.get(k) is True for k in ['map','quests','machines'])):
+            errors.append('MeatballCraft game acceptance is not complete.')
+    elif audit.get('releaseReady') is not True:
         errors.append(instance+': native content release and game acceptance are not complete.')
 if errors:
     print('Player release blocked:')
     for message in errors:print('- '+message)
     raise SystemExit(1)
-print('Required release configuration is present. Signed pack acceptance remains mandatory.')
+print(('Beta' if args.beta else 'Stable')+' release configuration is present. Signed pack acceptance remains mandatory.')

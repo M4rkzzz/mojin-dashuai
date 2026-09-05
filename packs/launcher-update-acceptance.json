@@ -4,8 +4,8 @@
   "sha256": "804922543cbd6748ebf6768f02efc9a16c5c0d9ca0c25b703fca938ebbc14021",
   "bytes": 78071559,
   "publicDownloadVerified": true,
-  "activated": false,
-  "codeTestsPassed": 113,
+  "activated": true,
+  "codeTestsPassed": 115,
   "nativeProcessHandshake": true,
   "failedLaunchRetainsPrevious": true,
   "uiStatesVerified": true,
@@ -19,5 +19,7 @@
   "oldLauncherExitedNormally": true,
   "newLauncherOpenedAndClosedNormally": true,
   "settingsUpdateButtonManuallyVerified": false,
-  "localCandidateActivated": true
+  "localCandidateActivated": true,
+  "downloadUrl": "http://103.40.14.100:21708/launcher/0.1.2-beta.4/MojinDashuai-windows-x64.zip",
+  "publicBetaActivated": true
 }

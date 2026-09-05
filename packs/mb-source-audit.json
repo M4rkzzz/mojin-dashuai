@@ -14965,5 +14965,9 @@
         "https://cdn.modrinth.com/data/rHpb85Mf/versions/BM8zU1AX/zerocore-1.12.2-0.1.2.9.jar"
       ]
     }
-  ]
+  ],
+  "betaReady": true,
+  "betaSequence": 1,
+  "betaManifestSha256": "69045648c0e2010e692ce365d6c2b3544f9a507e816e7f4b4abcd39d8057cfce",
+  "betaPublished": true
 }

@@ -74,3 +74,14 @@ Windows 默认使用 CmlLib 的官方文档接法，`microsoftClientId` 留空�
 ## 启动器更新与当前 API
 
 API 0.1.4 已部署，46 项隔离检查通过。升级备份 `/vol1/mc-client-hub/backups/upgrades/api-0.1.4-20260905T085926Z`，其他容器启动时间未变化。新增 `/v1/launcher` 只提供公开签名清单；尚未激活时返回 404。打包、签名、上传及激活见 [启动器更新](LAUNCHER-UPDATES.md)。
+
+## 内测目录发布
+
+0.1.2-beta.4 已开放，用户批准暂缓干净 Windows 验收，记录见 `packs/beta-authorization.json`。`Publisher sign-beta` 只允许 beta 验收记录延后这一项，真实入服、正确 Java、自动来源以及三服地图/任务书/机器要求仍保留。稳定版 `sign` 不接受未通过干净 Windows 的记录。
+
+```powershell
+python tools/publish-catalog.py --beta --sequence 1 --key PRIVATE_KEY_PATH
+python tools/publish-launcher-update.py artifacts/launcher-update-0.1.2-beta.4 --activate --beta
+```
+
+后续目录发布必须提高序号；脚本先上传不可变清单，保留旧目录备份，再原子切换。当前目录序号 1，启动器更新序号 4。三服生产进程没有重启。

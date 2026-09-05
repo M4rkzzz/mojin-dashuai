@@ -1,5 +1,5 @@
 """Upload an immutable launcher ZIP; activate its signed metadata only with --activate."""
-import argparse,base64,hashlib,json,pathlib,subprocess,sys,urllib.request,uuid
+import argparse,base64,hashlib,json,pathlib,subprocess,sys,urllib.parse,urllib.request,uuid
 
 ROOT=pathlib.Path(__file__).resolve().parents[1]
 parser=argparse.ArgumentParser(description=__doc__)
@@ -7,6 +7,7 @@ parser.add_argument('bundle',type=pathlib.Path)
 parser.add_argument('--dotnet',default='dotnet')
 parser.add_argument('--publisher',type=pathlib.Path,default=ROOT/'src/Publisher/bin/Release/net10.0/Publisher.dll')
 parser.add_argument('--activate',action='store_true')
+parser.add_argument('--beta',action='store_true',help='Use approved beta acceptance; clean Windows stays unverified')
 args=parser.parse_args()
 bundle=args.bundle.resolve()
 signed=bundle/'launcher.signed.json'
@@ -17,7 +18,8 @@ archive=bundle/'MojinDashuai-windows-x64.zip'
 with archive.open('rb') as f:digest=hashlib.file_digest(f,'sha256').hexdigest()
 if digest!=release['archive']['sha256'].lower() or archive.stat().st_size!=release['archive']['size']:raise ValueError('Archive does not match signed launcher release')
 if release['archive']['path']!='objects/sha256/'+digest:raise ValueError('Launcher object path must use its SHA256')
-if args.activate:subprocess.run([sys.executable,str(ROOT/'tools/check-client-release.py')],check=True,cwd=ROOT)
+if args.beta and '-beta.' not in release['version']:raise ValueError('Beta publication requires a beta launcher version')
+if args.activate:subprocess.run([sys.executable,str(ROOT/'tools/check-client-release.py'),*(['--beta'] if args.beta else [])],check=True,cwd=ROOT)
 config=json.loads((ROOT/'packs/distributions.json').read_text(encoding='utf-8'))
 expected=config['frpBase'].rstrip('/')+'/objects/sha256/'+digest
 if expected not in release['archive']['sources']:raise ValueError('Launcher ZIP must include the configured direct download route')
@@ -31,7 +33,7 @@ def ssh(*parameters):
     return result.stdout.decode('utf-8',errors='replace').strip()
 for path,suffix in [(archive,'.zip'),(signed,'.json')]:ssh('--send',str(path),remote+suffix)
 script=stage/(run+'.py')
-script.write_text('''import base64,hashlib,json,pathlib,shutil,datetime
+script.write_text('''import base64,hashlib,json,pathlib,shutil,datetime,os
 root=pathlib.Path('/vol1/mc-client-hub/public').resolve()
 source=pathlib.Path(BASE+'.zip')
 envelope=json.loads(pathlib.Path(BASE+'.json').read_text())
@@ -46,6 +48,13 @@ if target.exists():
  if old!=sha:raise ValueError('Existing immutable object differs')
 else:
  staged=target.with_name(sha+'.stage-'+RUN);shutil.copyfile(source,staged);staged.chmod(0o644);staged.replace(target)
+download=root/'launcher'/release['version']/'MojinDashuai-windows-x64.zip'
+if download.is_symlink() or not download.resolve().is_relative_to(root):raise ValueError('Unsafe download alias')
+download.parent.mkdir(parents=True,exist_ok=True)
+if download.exists():
+ with download.open('rb') as f:existing=hashlib.file_digest(f,'sha256').hexdigest()
+ if existing!=sha:raise ValueError('Published launcher version already has different bytes')
+else:os.link(target,download)
 metadata=root/'launcher.signed.json'
 if ACTIVATE:
  if metadata.exists():
@@ -64,6 +73,9 @@ with urllib.request.urlopen(urllib.request.Request(expected,method='HEAD'),timeo
 if args.activate:
     with urllib.request.urlopen(config['publicBase'].rstrip('/')+'/v1/launcher',timeout=25) as response:
         if json.load(response)!=envelope:raise ValueError('Public launcher metadata differs')
-report={'version':release['version'],'sequence':release['sequence'],'sha256':digest,'bytes':archive.stat().st_size,'publicDownloadVerified':True,'activated':args.activate}
+download=config['frpBase'].rstrip('/')+'/launcher/'+urllib.parse.quote(release['version'],safe='.-')+'/MojinDashuai-windows-x64.zip'
+with urllib.request.urlopen(urllib.request.Request(download,method='HEAD'),timeout=25) as response:
+    if response.status!=200 or int(response.headers['Content-Length'])!=archive.stat().st_size:raise ValueError('Named download unavailable')
+report={'version':release['version'],'sequence':release['sequence'],'sha256':digest,'bytes':archive.stat().st_size,'downloadUrl':download,'publicDownloadVerified':True,'activated':args.activate}
 (bundle/'publication.json').write_text(json.dumps(report,indent=2)+'\n',encoding='utf-8')
 print(json.dumps(report))

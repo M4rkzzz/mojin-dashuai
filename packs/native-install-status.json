@@ -111,5 +111,9 @@
       "mb"
     ],
     "report": "packs/network-install-acceptance.json"
-  }
+  },
+  "betaReady": true,
+  "betaPublished": true,
+  "publicSignedCatalogVerified": true,
+  "publicManifestInstallRecheckPassed": true
 }

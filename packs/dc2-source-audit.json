@@ -10875,5 +10875,9 @@
         "errors": []
       }
     }
-  ]
+  ],
+  "betaReady": true,
+  "betaSequence": 1,
+  "betaManifestSha256": "ee754c30cf5558c30acd95299a3d7ceebd56b5e7644ccb500c10a73d41a64f85",
+  "betaPublished": true
 }

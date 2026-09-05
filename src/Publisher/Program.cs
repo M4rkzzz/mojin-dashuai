@@ -52,14 +52,14 @@ try
         case "verify":
             ContentSecurity.Validate(Json.Read<PackManifest>(args[1]));Console.WriteLine("Manifest structure and runtime constraints valid.");break;
         case "sign":
+        case "sign-beta":
         {
             var manifest=Json.Read<PackManifest>(args[1]);ContentSecurity.Validate(manifest);
             var hash=await ContentSecurity.HashFile(args[1]);
             foreach(var evidence in manifest.ValidationEvidence)
             {
                 var report=Json.Read<AcceptanceReport>(evidence);
-                if(!report.Passed||report.ManifestSha256!=hash||!report.CleanWindows||!report.JoinedServer||!report.AllSourcesAutomated||report.JavaMajor!=manifest.Runtime.Major)throw new InvalidDataException("Release blocked: acceptance evidence does not cover this exact manifest.");
-                if(manifest.Instance=="mb"&&(!report.Map||!report.Quests||!report.Machines||report.Loader!="cleanroom"))throw new InvalidDataException("Release blocked: MeatballCraft acceptance incomplete.");
+                ReleaseAcceptance.Require(manifest,hash,report,args[0]=="sign-beta");
             }
             Json.Write(args[3],ContentSecurity.Sign(manifest,"release-1",File.ReadAllText(args[2])));Console.WriteLine("Pack manifest signed.");break;
         }
@@ -73,6 +73,24 @@ try
                 foreach(var release in server.Rollbacks.Concat(server.Release is null?[]:new[]{server.Release}))if(!ContentSecurity.HashPattern().IsMatch(release.Sha256)||new Uri(release.ManifestUrl).Scheme!="https")throw new InvalidDataException("Invalid release reference.");
             }
             Json.Write(args[3],ContentSecurity.Sign(directory,"release-1",File.ReadAllText(args[2])));Console.WriteLine("Catalog signed.");break;
+        }
+        case "check-catalog":
+        {
+            var root=Path.GetFullPath(args[2]);
+            if(!root.Contains(Path.DirectorySeparatorChar+".local"+Path.DirectorySeparatorChar,StringComparison.OrdinalIgnoreCase))throw new InvalidDataException("Catalog checks require an isolated .local directory.");
+            var config=JsonDocument.Parse(File.ReadAllText(args[1])).RootElement;
+            var keys=config.GetProperty("publicKeys").Deserialize<Dictionary<string,string>>(Json.Options)!;
+            var client=new CatalogClient(config.GetProperty("api").GetString()!,keys,Path.Combine(root,"checkpoint.json"));
+            var directory=await client.Fetch();
+            if(directory.Servers.Length!=3)throw new InvalidDataException("Expected all three servers.");
+            foreach(var server in directory.Servers)
+            {
+                if(!Routes.Domains.TryGetValue(server.Id,out var domains)||!server.Routes.SequenceEqual(domains)||server.Release is null)throw new InvalidDataException("Incomplete server catalog.");
+                var pack=await client.GetManifest(server.Id,server.Release);
+                Json.Write(Path.Combine(root,server.Id+"-manifest.json"),pack);
+                Console.WriteLine(JsonSerializer.Serialize(new{pack.Instance,pack.Version,pack.Sequence,Files=pack.Files.Length,JavaMajor=pack.Runtime.Major,SignatureAndHashVerified=true},Json.Options));
+            }
+            Json.Write(Path.Combine(root,"report.json"),new{directory.Sequence,Servers=directory.Servers.Length,PublicCatalogVerified=true});break;
         }
         case "diff":
         {
@@ -170,4 +188,3 @@ try
     }
 }
 catch(Exception ex){Console.Error.WriteLine(ex is InvalidDataException or ArgumentException or IOException?ex.Message:ex.GetType().Name);Environment.ExitCode=1;}
-public sealed record AcceptanceReport(bool Passed,string ManifestSha256,bool CleanWindows,bool JoinedServer,bool AllSourcesAutomated,int JavaMajor,string Loader,bool Map,bool Quests,bool Machines);

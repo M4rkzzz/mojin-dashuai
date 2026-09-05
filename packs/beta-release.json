@@ -1,0 +1,27 @@
+{
+  "version": "0.1.2-beta.4",
+  "channel": "beta",
+  "publishedAt": "2026-09-05T09:44:19.984163+00:00",
+  "downloadUrl": "http://103.40.14.100:21708/launcher/0.1.2-beta.4/MojinDashuai-windows-x64.zip",
+  "bytes": 78071559,
+  "sha256": "804922543cbd6748ebf6768f02efc9a16c5c0d9ca0c25b703fca938ebbc14021",
+  "catalogSequence": 1,
+  "launcherSequence": 4,
+  "api": "https://launcher.boshan.uk",
+  "publicCatalogVerified": true,
+  "publicManifestsVerified": [
+    "m3e",
+    "dc2",
+    "mb"
+  ],
+  "publicManifestInstallRecheckPassed": true,
+  "networkInstallRootInitiallyEmpty": true,
+  "actualGamesPreviouslyJoined": true,
+  "actualWpfStartupUpdatePassed": true,
+  "unitTestsPassed": 115,
+  "apiIsolatedChecksPassed": 46,
+  "cleanWindows": false,
+  "completeDeliveryClaimed": false,
+  "approval": "packs/beta-authorization.json",
+  "playerDataAndProductionServersUnchanged": true
+}
