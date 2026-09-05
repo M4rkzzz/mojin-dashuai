@@ -1,0 +1,13 @@
+# 两条线路的地图记录
+
+2026-09-05 实测一服使用不同线路域名时，Xaero 自动创建不同目录，旧记录并未丢失。两条线路的 Minecraft 状态均可达，一次宿迁探测超时后复测恢复；未修改转发或生产游戏服。
+
+统一端为每个服务器使用独立实例。一、二服启动准备阶段启用现有 Xaero 内置的 `differentiateByServerAddress:false`，两条线路使用该实例的 `Multiplayer_Any Address`。一服目录为 `XaeroWorldMap` / `XaeroWaypoints`，二服新版为 `xaero/world-map` / `xaero/minimap`。该设置用于只承载对应群服的专用实例。
+
+首次准备时，从该服两个已知域名的地图中，选择数据量较大的记录作为基础，复制其他记录中不存在的文件。不会尝试合并二进制区域文件，也不会覆盖已有共享地图。原地图目录完整保留，冲突区域仍可在原记录中找到。配置只修改上述一个设置，原文件在 `.hub/map-config-backup` 保留；已有共享地图里的新进度不会被再次初始化覆盖。
+
+代码从实际使用的固定模组 JAR 核实了内置选项及目录命名；复制、冲突保留、再次启动保留新进度和其他配置不变已有测试。实际游戏画面验收以 `packs/route-acceptance.json` 为准。三服 JourneyMap 使用不同机制，不套用 Xaero 的设置。
+
+旧端导入同时保留旧、新两种 Xaero 目录。地图数据均不允许进入托管发布清单，也不公开上传。
+
+作者关于地址改变与原地图记录的说明：[Xaero World Map FAQ](https://www.curseforge.com/minecraft/mc-mods/xaeros-world-map)。此处保留原目录，不执行作者说明中的删除步骤。

@@ -16,7 +16,7 @@ from datetime import date
 
 ROOT = Path(__file__).resolve().parents[1]
 FORBIDDEN = {'pcl', 'saves', 'screenshots', 'logs', 'crash-reports', 'backups', 'journeymap',
-             'xaeroworldmap', 'xaerowaypoints', 'profilecache', 'accounts', '.hub'}
+             'xaeroworldmap', 'xaerowaypoints', 'xaero', 'profilecache', 'accounts', '.hub'}
 PRIVATE_NAMES = {'usercache.json', 'usernamecache.json', 'servers.dat', 'servers.dat_old', '.reauth.cfg',
                  'launcher_accounts.json', 'launcher_profiles.json', 'knownkeys.txt', 'variables.dat',
                  'customskinapiplus-clientid', 'options.txt', 'optionsof.txt', 'optionsnf.txt'}

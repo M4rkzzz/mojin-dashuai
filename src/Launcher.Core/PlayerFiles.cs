@@ -15,7 +15,7 @@ public static class PlayerFiles
         SeparateRoots(source,destination);
         if(!Directory.Exists(source))throw new DirectoryNotFoundException("旧客户端目录不存在。");
         var count=0;var conflict=".hub/import-conflicts/"+Guid.NewGuid().ToString("N")+"/";
-        foreach(var name in new[]{"saves","screenshots","journeymap","XaeroWaypoints","XaeroWorldMap","resourcepacks","shaderpacks","options.txt","optionsof.txt"})
+        foreach(var name in new[]{"saves","screenshots","journeymap","XaeroWaypoints","XaeroWorldMap","xaero","resourcepacks","shaderpacks","options.txt","optionsof.txt"})
         {
             var from=ContentSecurity.SafePath(source,name);if(!File.Exists(from)&&!Directory.Exists(from))continue;
             var files=File.Exists(from)?new[]{from}:Directory.GetFiles(from,"*",SearchOption.AllDirectories);

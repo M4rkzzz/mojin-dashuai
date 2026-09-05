@@ -17,5 +17,12 @@
   "latencyUnit": "ms",
   "m3eSuqianInitialTimeoutThenRecovered": true,
   "routeConfigurationChanged": false,
-  "sameInstanceMapSwitchVerified": false
+  "sameInstanceMapSwitchVerified": false,
+  "m3eMapCheck": {
+    "splitProfilesObserved": true,
+    "nativeSharedProfilePrepared": true,
+    "sharedProfileWrittenInGame": true,
+    "originalProfilesRetained": true,
+    "userVisualConfirmationPending": true
+  }
 }

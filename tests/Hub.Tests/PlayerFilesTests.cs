@@ -12,12 +12,14 @@ public sealed class PlayerFilesTests:IDisposable
     {
         Put("old/options.txt","old keys");Put("current/options.txt","current keys");Put("old/saves/world/level.dat","old world");
         Put("old/XaeroWaypoints/server/waypoints.txt","markers");Put("old/accounts.json","private fixture");Put("old/frpc.toml","private fixture");Put("old/mods/old.jar","incompatible mod");
-        Assert.Equal(3,PlayerFiles.Import(Dir("old"),Dir("current")));
+        Put("old/xaero/world-map/server/region.zip","modern map");
+        Assert.Equal(4,PlayerFiles.Import(Dir("old"),Dir("current")));
         Assert.Equal("current keys",File.ReadAllText(Dir("current/options.txt")));
         var conflict=Assert.Single(Directory.GetFiles(Dir("current/.hub/import-conflicts"),"options.txt",SearchOption.AllDirectories));
         Assert.Equal("old keys",File.ReadAllText(conflict));
         Assert.Equal("old world",File.ReadAllText(Dir("current/saves/world/level.dat")));
         Assert.Equal("markers",File.ReadAllText(Dir("current/XaeroWaypoints/server/waypoints.txt")));
+        Assert.Equal("modern map",File.ReadAllText(Dir("current/xaero/world-map/server/region.zip")));
         Assert.False(File.Exists(Dir("current/accounts.json")));Assert.False(File.Exists(Dir("current/frpc.toml")));Assert.False(Directory.Exists(Dir("current/mods")));
         Assert.True(File.Exists(Dir("old/saves/world/level.dat")));
     }

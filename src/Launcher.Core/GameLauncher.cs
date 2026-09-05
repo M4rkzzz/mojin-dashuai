@@ -26,6 +26,7 @@ public sealed class GameLauncher
         var installer=new TransactionalInstaller(settings.Root);var instance=installer.InstancePath(manifest.Instance);
         var java=string.IsNullOrEmpty(settings.Java[manifest.Instance])?ContentSecurity.SafePath(RuntimeManager.RuntimeRoot(settings.Root,manifest.Runtime),manifest.Runtime.JavaPath):settings.Java[manifest.Instance];
         await RuntimeManager.Validate(java,manifest.Runtime.Major,token);
+        await Task.Run(()=>MapIdentity.Prepare(instance,manifest.Instance),token);
         if(manifest.Instance=="mb")CleanroomAdapter.ValidatePrepared(instance,manifest);
         var launcher=FromInstalledFiles(instance);
         var adapter=manifest.Instance switch {"m3e"=>"mods/mojin-autoconnect-1.7.10-0.1.0.jar","mb"=>"mods/mojin-autoconnect-cleanroom-0.1.0.jar",_=>null};

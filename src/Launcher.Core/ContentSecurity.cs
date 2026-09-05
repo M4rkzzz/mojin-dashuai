@@ -38,7 +38,7 @@ public static partial class ContentSecurity
         {
             ValidateRelativePath(file.Path); ValidateFile(file);
             var prefix = file.Path.Split('/')[0];
-            if (new[] { ".hub", "saves", "screenshots", "logs", "crash-reports", "backups", "journeymap", "XaeroWaypoints", "XaeroWorldMap" }.Contains(prefix, StringComparer.OrdinalIgnoreCase)) throw new InvalidDataException("发布清单不能管理玩家数据。");
+            if (new[] { ".hub", "saves", "screenshots", "logs", "crash-reports", "backups", "journeymap", "XaeroWaypoints", "XaeroWorldMap", "xaero" }.Contains(prefix, StringComparer.OrdinalIgnoreCase)) throw new InvalidDataException("发布清单不能管理玩家数据。");
             if (file.Path.Equals("options.txt", StringComparison.OrdinalIgnoreCase) && file.Policy == FilePolicy.Managed) throw new InvalidDataException("玩家设置不能强制覆盖。");
         }
         ValidateFile(manifest.Runtime.Archive);
