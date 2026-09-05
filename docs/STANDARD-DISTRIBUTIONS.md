@@ -32,9 +32,9 @@ Java 清单与内容关联但不嵌入标准压缩包。魔金大帅负责按所
 
 原站下载失败时可使用 `https://launcher.boshan.uk/objects/<sha256>.jar`。同一对象也可经现有 FRP 下载，账号和文件请求分离。Cloudflare 的路径路由将 objects/distributions 交给只读 downloads 容器，其余 API 路由保持原样；没有重启游戏容器。
 
-`publish-fallback-file.py` 一次只接收一个已在来源审计中固定的文件；验证大小、SHA1、SHA256，要求具体的分发依据和随附许可文字，以不可变哈希命名上传。公开端再核对完整内容及 Range 206，成功后才登记可用备用地址。文件损坏或源失败由原生 Downloader 尝试后续来源，所有请求不带账号授权头或 Cookie。
+按用户要求，没有可用原站的文件自动使用所提供客户端中的原文件，经 `build-standard-packs.py --publish-missing` 批量上传自建源。发布时核对大小和 SHA256，服务器落盘校验后只做公开地址的可用性检查，不再逐个重复完整下载。自动保留包内现有声明，没有声明也不会阻塞上传。来源记录如实标记为用户提供的客户端基线。
 
-不能把“本地存在”写成“已获作者许可”，也不能悄悄替换修改过的老版模组。原站能下载的文件无需重新托管。GitHub、CurseForge CDN、Modrinth 各来源都必须匹配原来的文件哈希。
+`publish-fallback-file.py INSTANCE PATH --file LOCAL_FILE --publish` 也可单独补一个文件，`--basis` 和 `--notice` 仅用于补充已有信息，不是必填项。原站能下载的文件无需重新托管；所有来源使用同一个固定文件哈希，不按名称替换模组。原生 Downloader 在文件损坏或来源失败后尝试后续来源，请求不带账号授权头或 Cookie。
 
 ## 构建与检查
 
@@ -42,13 +42,12 @@ Java 清单与内容关联但不嵌入标准压缩包。魔金大帅负责按所
 
 ```powershell
 python tools/prepare-format-tools.py
-python -m unittest discover -s tests -p 'test_*.py'
-python tools/build-standard-packs.py
+python tools/build-standard-packs.py --publish-missing
 ```
 
-输入配置为 `packs/distributions.json`，输入来源审计为三个 `*-source-audit.json`。输出写入忽略目录 `artifacts/distributions/`：标准压缩包、内容清单、构建报告，以及待发布的 public/distributions 目录。该目录不会自动上传，不会切换正式 catalog。
+输入配置为 `packs/distributions.json`，输入文件清单为三个 `*-source-audit.json`。命令先补齐单文件自建源，再生成标准压缩包、内容清单、报告及 public/distributions 目录，写入忽略目录 `artifacts/distributions/`。该步骤只发布缺少来源的单文件；整包和 packwiz 目录仍待发布，不会切换正式 catalog。每次构建自动刷新 `packs/standard-distribution-status.json`，避免已补齐的文件仍显示缺失。
 
-来源未齐时默认阻止生成该服的候选包，并写明具体缺项。`--draft` 只用于本地审查，文件名带 draft；其中的预定备用地址可能尚未上传，不能交付玩家。缺少本地文件而无法计算必需哈希时，连不完整草稿也不会生成。
+不带 `--publish-missing` 可仅做本地构建，缺少可用地址时会提示补传。`--draft` 保留给本地审查，不作为玩家包。实际缺少原文件或文件损坏才需要补齐，缺少发布出处不会卡住流程。
 
 原站查找工具：`resolve-curseforge-sources.py` 通过公开 MCIM 缓存解析固定 ID；`detect-curseforge-files.py` 用指纹查找后再核对 SHA1/大小；`resolve-github-sources.py` 查相同版本发行资产；`verify-pack-downloads.py` 完整下载、校验并记录真正可用的地址。MCIM 不被转售、包装或反向代理成我们的 API。
 
@@ -60,4 +59,6 @@ python tools/build-standard-packs.py
 
 格式测试覆盖 Windows 路径、重复路径、带凭据地址、配置中的凭据、Java 版本限制、PCL/Modrinth 格式边界、packwiz 哈希和玩家文件保留。原生 Publisher 新增 `fetch CONTENT_FILE CACHE`，用同一个 Downloader 检验失效来源后切换自建源，缓存限制在 .local 下。
 
-标准结构检查、来源检查、分发依据和实际游戏验收分开记录。所有构建报告的 releaseReady 仍为 false；没有伪造正式验收或发布 beta。
+一服 117 个文件已具备下载源，其中 99 个原站、18 个自建；二服 317 个、三服 377 个都有可用原站。三服另有一个已验证的自建备用文件。三个标准包均已生成，当前没有缺少下载地址的模组。
+
+构建报告的 releaseReady 仍为 false，原因是原生完整安装清单和实际入服验收未完成，与发布出处无关。

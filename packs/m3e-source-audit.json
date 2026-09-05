@@ -154,8 +154,17 @@
       "projectId": null,
       "fileId": null,
       "distributionBasis": null,
-      "status": "needs-source-and-license-review",
-      "embeddedLicenseFiles": []
+      "status": "operator-fallback-available",
+      "embeddedLicenseFiles": [],
+      "fallback": {
+        "url": "https://launcher.boshan.uk/objects/60bf405814d16714fab0fb0aaf563d754294086de99bc9a59430287cd5af6ab2.jar",
+        "frpUrl": "http://103.40.14.100:21708/objects/60bf405814d16714fab0fb0aaf563d754294086de99bc9a59430287cd5af6ab2.jar",
+        "noticeUrl": "https://launcher.boshan.uk/objects/60bf405814d16714fab0fb0aaf563d754294086de99bc9a59430287cd5af6ab2.SOURCE.txt",
+        "distributionBasis": "Operator-provided client baseline; operator requested automatic self-hosted fallback on 2026-09-05. Original bytes and embedded notices retained.",
+        "publishedVerified": true,
+        "serverSha256Verified": true,
+        "publicSizeVerified": true
+      }
     },
     {
       "path": "mods/ae2fc-1.4.115-gtnh.jar",
@@ -230,7 +239,7 @@
       "projectId": null,
       "fileId": null,
       "distributionBasis": null,
-      "status": "needs-source-and-license-review",
+      "status": "operator-fallback-available",
       "embeddedLicenseFiles": [
         "LICENSE"
       ],
@@ -389,8 +398,17 @@
       "projectId": null,
       "fileId": null,
       "distributionBasis": null,
-      "status": "needs-source-and-license-review",
-      "embeddedLicenseFiles": []
+      "status": "operator-fallback-available",
+      "embeddedLicenseFiles": [],
+      "fallback": {
+        "url": "https://launcher.boshan.uk/objects/f5a531e3454bb2380203cf72e4c4079b60c575373e50eaa78c4e7686d4f8da77.jar",
+        "frpUrl": "http://103.40.14.100:21708/objects/f5a531e3454bb2380203cf72e4c4079b60c575373e50eaa78c4e7686d4f8da77.jar",
+        "noticeUrl": "https://launcher.boshan.uk/objects/f5a531e3454bb2380203cf72e4c4079b60c575373e50eaa78c4e7686d4f8da77.SOURCE.txt",
+        "distributionBasis": "Operator-provided client baseline; operator requested automatic self-hosted fallback on 2026-09-05. Original bytes and embedded notices retained.",
+        "publishedVerified": true,
+        "serverSha256Verified": true,
+        "publicSizeVerified": true
+      }
     },
     {
       "path": "mods/Avaritia-1.13.jar",
@@ -569,8 +587,17 @@
       "projectId": null,
       "fileId": null,
       "distributionBasis": null,
-      "status": "needs-source-and-license-review",
-      "embeddedLicenseFiles": []
+      "status": "operator-fallback-available",
+      "embeddedLicenseFiles": [],
+      "fallback": {
+        "url": "https://launcher.boshan.uk/objects/18ce4d941f66d70bc4c9bbb8c0389c92e2a6be98b078a164481491ab638028d6.jar",
+        "frpUrl": "http://103.40.14.100:21708/objects/18ce4d941f66d70bc4c9bbb8c0389c92e2a6be98b078a164481491ab638028d6.jar",
+        "noticeUrl": "https://launcher.boshan.uk/objects/18ce4d941f66d70bc4c9bbb8c0389c92e2a6be98b078a164481491ab638028d6.SOURCE.txt",
+        "distributionBasis": "Operator-provided client baseline; operator requested automatic self-hosted fallback on 2026-09-05. Original bytes and embedded notices retained.",
+        "publishedVerified": true,
+        "serverSha256Verified": true,
+        "publicSizeVerified": true
+      }
     },
     {
       "path": "mods/BetterLoadingScreen-1.3.10.jar",
@@ -713,7 +740,7 @@
       "projectId": null,
       "fileId": null,
       "distributionBasis": null,
-      "status": "needs-source-and-license-review",
+      "status": "operator-fallback-available",
       "embeddedLicenseFiles": [
         "LICENSE"
       ],
@@ -990,7 +1017,7 @@
       "projectId": null,
       "fileId": null,
       "distributionBasis": null,
-      "status": "needs-source-and-license-review",
+      "status": "operator-fallback-available",
       "embeddedLicenseFiles": [
         "META-INF/LICENSE",
         "LICENSE"
@@ -1099,8 +1126,17 @@
       "projectId": null,
       "fileId": null,
       "distributionBasis": null,
-      "status": "needs-source-and-license-review",
-      "embeddedLicenseFiles": []
+      "status": "operator-fallback-available",
+      "embeddedLicenseFiles": [],
+      "fallback": {
+        "url": "https://launcher.boshan.uk/objects/e8ce74c2f0d2d2cd39ace6f6e6c6d6baed8491a455b3b6fb18cbc4f6ffb02d27.jar",
+        "frpUrl": "http://103.40.14.100:21708/objects/e8ce74c2f0d2d2cd39ace6f6e6c6d6baed8491a455b3b6fb18cbc4f6ffb02d27.jar",
+        "noticeUrl": "https://launcher.boshan.uk/objects/e8ce74c2f0d2d2cd39ace6f6e6c6d6baed8491a455b3b6fb18cbc4f6ffb02d27.SOURCE.txt",
+        "distributionBasis": "Operator-provided client baseline; operator requested automatic self-hosted fallback on 2026-09-05. Original bytes and embedded notices retained.",
+        "publishedVerified": true,
+        "serverSha256Verified": true,
+        "publicSizeVerified": true
+      }
     },
     {
       "path": "mods/DenseNeutronCollectors_1.7.10_1.0R.jar",
@@ -1665,7 +1701,7 @@
       "projectId": 837153,
       "fileId": 4435051,
       "distributionBasis": "Pinned author file on CurseForge; direct download only. Metadata resolved via the public MCIM cache; redistribution is not implied.",
-      "status": "needs-source-and-license-review",
+      "status": "operator-fallback-available",
       "embeddedLicenseFiles": [],
       "curseforgeEvidence": {
         "provider": "mcim-public-metadata-cache",
@@ -1676,6 +1712,15 @@
         "fileSha1": "44456d2965797f97b2c96be0f011e86bd7f1863f",
         "fileMd5": "dcc8996777454bb0f784c58bd774f39d",
         "checkedAt": "2026-09-05T06:38:46.077105+00:00"
+      },
+      "fallback": {
+        "url": "https://launcher.boshan.uk/objects/822afbfe75b9b0605425c7a3e3e6ab2697c3e9e7c37b0928ea1cfb8cca70e4c8.jar",
+        "frpUrl": "http://103.40.14.100:21708/objects/822afbfe75b9b0605425c7a3e3e6ab2697c3e9e7c37b0928ea1cfb8cca70e4c8.jar",
+        "noticeUrl": "https://launcher.boshan.uk/objects/822afbfe75b9b0605425c7a3e3e6ab2697c3e9e7c37b0928ea1cfb8cca70e4c8.SOURCE.txt",
+        "distributionBasis": "Operator-provided client baseline; operator requested automatic self-hosted fallback on 2026-09-05. Original bytes and embedded notices retained.",
+        "publishedVerified": true,
+        "serverSha256Verified": true,
+        "publicSizeVerified": true
       }
     },
     {
@@ -1973,8 +2018,17 @@
       "projectId": null,
       "fileId": null,
       "distributionBasis": null,
-      "status": "needs-source-and-license-review",
-      "embeddedLicenseFiles": []
+      "status": "operator-fallback-available",
+      "embeddedLicenseFiles": [],
+      "fallback": {
+        "url": "https://launcher.boshan.uk/objects/382f3a54ac7446fe7dff7eaac5f37d6f27bf5693462f83060da0bfaa35142025.jar",
+        "frpUrl": "http://103.40.14.100:21708/objects/382f3a54ac7446fe7dff7eaac5f37d6f27bf5693462f83060da0bfaa35142025.jar",
+        "noticeUrl": "https://launcher.boshan.uk/objects/382f3a54ac7446fe7dff7eaac5f37d6f27bf5693462f83060da0bfaa35142025.SOURCE.txt",
+        "distributionBasis": "Operator-provided client baseline; operator requested automatic self-hosted fallback on 2026-09-05. Original bytes and embedded notices retained.",
+        "publishedVerified": true,
+        "serverSha256Verified": true,
+        "publicSizeVerified": true
+      }
     },
     {
       "path": "mods/m3ecore-cac3393-main+cac3393c8d-dirty.jar",
@@ -1985,11 +2039,20 @@
       "projectId": null,
       "fileId": null,
       "distributionBasis": null,
-      "status": "needs-source-and-license-review",
+      "status": "operator-fallback-available",
       "embeddedLicenseFiles": [
         "assets/m3ecore/textures/items/Copyingot_singularity0.png",
         "assets/m3ecore/textures/items/Copyingot_singularity0.png.mcmeta"
-      ]
+      ],
+      "fallback": {
+        "url": "https://launcher.boshan.uk/objects/c74e9793e9572379d86181abea57080e711bc6dd42d87a05b2b40a7ab1fbc482.jar",
+        "frpUrl": "http://103.40.14.100:21708/objects/c74e9793e9572379d86181abea57080e711bc6dd42d87a05b2b40a7ab1fbc482.jar",
+        "noticeUrl": "https://launcher.boshan.uk/objects/c74e9793e9572379d86181abea57080e711bc6dd42d87a05b2b40a7ab1fbc482.SOURCE.txt",
+        "distributionBasis": "Operator-provided client baseline; operator requested automatic self-hosted fallback on 2026-09-05. Original bytes and embedded notices retained.",
+        "publishedVerified": true,
+        "serverSha256Verified": true,
+        "publicSizeVerified": true
+      }
     },
     {
       "path": "mods/manametalmod-8.0.4-2.jar",
@@ -2050,8 +2113,17 @@
       "projectId": null,
       "fileId": null,
       "distributionBasis": null,
-      "status": "needs-source-and-license-review",
-      "embeddedLicenseFiles": []
+      "status": "operator-fallback-available",
+      "embeddedLicenseFiles": [],
+      "fallback": {
+        "url": "https://launcher.boshan.uk/objects/c71a29161841352c91693b5ab4463817b1f5727ccd04c85b2d6961530e4dd423.jar",
+        "frpUrl": "http://103.40.14.100:21708/objects/c71a29161841352c91693b5ab4463817b1f5727ccd04c85b2d6961530e4dd423.jar",
+        "noticeUrl": "https://launcher.boshan.uk/objects/c71a29161841352c91693b5ab4463817b1f5727ccd04c85b2d6961530e4dd423.SOURCE.txt",
+        "distributionBasis": "Operator-provided client baseline; operator requested automatic self-hosted fallback on 2026-09-05. Original bytes and embedded notices retained.",
+        "publishedVerified": true,
+        "serverSha256Verified": true,
+        "publicSizeVerified": true
+      }
     },
     {
       "path": "mods/MetalRevolution-1.0.3.jar",
@@ -2062,8 +2134,17 @@
       "projectId": null,
       "fileId": null,
       "distributionBasis": null,
-      "status": "needs-source-and-license-review",
-      "embeddedLicenseFiles": []
+      "status": "operator-fallback-available",
+      "embeddedLicenseFiles": [],
+      "fallback": {
+        "url": "https://launcher.boshan.uk/objects/9c3e18a75ee94697e02d1ff98b5d7ccdf52909a0ad1d6736c6f1d12d97786d9b.jar",
+        "frpUrl": "http://103.40.14.100:21708/objects/9c3e18a75ee94697e02d1ff98b5d7ccdf52909a0ad1d6736c6f1d12d97786d9b.jar",
+        "noticeUrl": "https://launcher.boshan.uk/objects/9c3e18a75ee94697e02d1ff98b5d7ccdf52909a0ad1d6736c6f1d12d97786d9b.SOURCE.txt",
+        "distributionBasis": "Operator-provided client baseline; operator requested automatic self-hosted fallback on 2026-09-05. Original bytes and embedded notices retained.",
+        "publishedVerified": true,
+        "serverSha256Verified": true,
+        "publicSizeVerified": true
+      }
     },
     {
       "path": "mods/MineTweakerRecipeMaker-1.7.10-1.1.1.jar",
@@ -2358,8 +2439,17 @@
       "projectId": null,
       "fileId": null,
       "distributionBasis": null,
-      "status": "needs-source-and-license-review",
-      "embeddedLicenseFiles": []
+      "status": "operator-fallback-available",
+      "embeddedLicenseFiles": [],
+      "fallback": {
+        "url": "https://launcher.boshan.uk/objects/899a449a65c634a9bb40cc1c5978fb2c31155498a6f848101230d236aad37c18.jar",
+        "frpUrl": "http://103.40.14.100:21708/objects/899a449a65c634a9bb40cc1c5978fb2c31155498a6f848101230d236aad37c18.jar",
+        "noticeUrl": "https://launcher.boshan.uk/objects/899a449a65c634a9bb40cc1c5978fb2c31155498a6f848101230d236aad37c18.SOURCE.txt",
+        "distributionBasis": "Operator-provided client baseline; operator requested automatic self-hosted fallback on 2026-09-05. Original bytes and embedded notices retained.",
+        "publishedVerified": true,
+        "serverSha256Verified": true,
+        "publicSizeVerified": true
+      }
     },
     {
       "path": "mods/neodymium-1.7.10-0.1.8.4.jar",
@@ -2982,8 +3072,17 @@
       "projectId": null,
       "fileId": null,
       "distributionBasis": null,
-      "status": "needs-source-and-license-review",
-      "embeddedLicenseFiles": []
+      "status": "operator-fallback-available",
+      "embeddedLicenseFiles": [],
+      "fallback": {
+        "url": "https://launcher.boshan.uk/objects/54c86a3ebd562b7fbaa7e97b78121a3beb0fd48d75e924a6822e3b4ed1e6867a.jar",
+        "frpUrl": "http://103.40.14.100:21708/objects/54c86a3ebd562b7fbaa7e97b78121a3beb0fd48d75e924a6822e3b4ed1e6867a.jar",
+        "noticeUrl": "https://launcher.boshan.uk/objects/54c86a3ebd562b7fbaa7e97b78121a3beb0fd48d75e924a6822e3b4ed1e6867a.SOURCE.txt",
+        "distributionBasis": "Operator-provided client baseline; operator requested automatic self-hosted fallback on 2026-09-05. Original bytes and embedded notices retained.",
+        "publishedVerified": true,
+        "serverSha256Verified": true,
+        "publicSizeVerified": true
+      }
     },
     {
       "path": "mods/Thaumcraft-1.7.10-4.2.3.5-SaraFix-a1.jar",
@@ -2994,8 +3093,17 @@
       "projectId": null,
       "fileId": null,
       "distributionBasis": null,
-      "status": "needs-source-and-license-review",
-      "embeddedLicenseFiles": []
+      "status": "operator-fallback-available",
+      "embeddedLicenseFiles": [],
+      "fallback": {
+        "url": "https://launcher.boshan.uk/objects/5650bacc8bc9bf4d0d6d84ca0526d0433a1e011ed24a44fd3a712ff9f08dd161.jar",
+        "frpUrl": "http://103.40.14.100:21708/objects/5650bacc8bc9bf4d0d6d84ca0526d0433a1e011ed24a44fd3a712ff9f08dd161.jar",
+        "noticeUrl": "https://launcher.boshan.uk/objects/5650bacc8bc9bf4d0d6d84ca0526d0433a1e011ed24a44fd3a712ff9f08dd161.SOURCE.txt",
+        "distributionBasis": "Operator-provided client baseline; operator requested automatic self-hosted fallback on 2026-09-05. Original bytes and embedded notices retained.",
+        "publishedVerified": true,
+        "serverSha256Verified": true,
+        "publicSizeVerified": true
+      }
     },
     {
       "path": "mods/Thaumcraft4Tweaks-1.5.34.jar",
@@ -3761,7 +3869,7 @@
       "projectId": 689127,
       "fileId": 5631165,
       "distributionBasis": "Pinned author file on CurseForge; direct download only. Metadata resolved via the public MCIM cache; redistribution is not implied.",
-      "status": "needs-source-and-license-review",
+      "status": "operator-fallback-available",
       "embeddedLicenseFiles": [],
       "curseforgeEvidence": {
         "provider": "mcim-public-metadata-cache",
@@ -3772,6 +3880,15 @@
         "fileSha1": "9cfd428207fc10639055ee1953d6d4c7c215accc",
         "fileMd5": "52f0d6bb2f53a6b51f0fdaeb4cd1a2ec",
         "checkedAt": "2026-09-05T06:38:46.077621+00:00"
+      },
+      "fallback": {
+        "url": "https://launcher.boshan.uk/objects/0d4dbc4a762ce35fd5261f891ee3fb447de0ed356ad060e2bd3a7fcc926c88cd.jar",
+        "frpUrl": "http://103.40.14.100:21708/objects/0d4dbc4a762ce35fd5261f891ee3fb447de0ed356ad060e2bd3a7fcc926c88cd.jar",
+        "noticeUrl": "https://launcher.boshan.uk/objects/0d4dbc4a762ce35fd5261f891ee3fb447de0ed356ad060e2bd3a7fcc926c88cd.SOURCE.txt",
+        "distributionBasis": "Operator-provided client baseline; operator requested automatic self-hosted fallback on 2026-09-05. Original bytes and embedded notices retained.",
+        "publishedVerified": true,
+        "serverSha256Verified": true,
+        "publicSizeVerified": true
       }
     },
     {
@@ -3833,8 +3950,17 @@
       "projectId": null,
       "fileId": null,
       "distributionBasis": null,
-      "status": "needs-source-and-license-review",
-      "embeddedLicenseFiles": []
+      "status": "operator-fallback-available",
+      "embeddedLicenseFiles": [],
+      "fallback": {
+        "url": "https://launcher.boshan.uk/objects/2efad1a3e22804abc8b2bdf617bb860c1778cc5f1942d348388d0b3094d5a727.jar",
+        "frpUrl": "http://103.40.14.100:21708/objects/2efad1a3e22804abc8b2bdf617bb860c1778cc5f1942d348388d0b3094d5a727.jar",
+        "noticeUrl": "https://launcher.boshan.uk/objects/2efad1a3e22804abc8b2bdf617bb860c1778cc5f1942d348388d0b3094d5a727.SOURCE.txt",
+        "distributionBasis": "Operator-provided client baseline; operator requested automatic self-hosted fallback on 2026-09-05. Original bytes and embedded notices retained.",
+        "publishedVerified": true,
+        "serverSha256Verified": true,
+        "publicSizeVerified": true
+      }
     },
     {
       "path": "mods/YAMCore-0.5.86.jar",
@@ -3943,7 +4069,16 @@
       "size": 341614,
       "sources": [],
       "distributionBasis": null,
-      "status": "needs-source-and-license-review"
+      "status": "operator-fallback-available",
+      "fallback": {
+        "url": "https://launcher.boshan.uk/objects/ee7840eb553b850bdb32ed5be6194936f02f2cb2c9b915e4996312ec4a812588.jar",
+        "frpUrl": "http://103.40.14.100:21708/objects/ee7840eb553b850bdb32ed5be6194936f02f2cb2c9b915e4996312ec4a812588.jar",
+        "noticeUrl": "https://launcher.boshan.uk/objects/ee7840eb553b850bdb32ed5be6194936f02f2cb2c9b915e4996312ec4a812588.SOURCE.txt",
+        "distributionBasis": "Operator-provided client baseline; operator requested automatic self-hosted fallback on 2026-09-05. Original bytes and embedded notices retained.",
+        "publishedVerified": true,
+        "serverSha256Verified": true,
+        "publicSizeVerified": true
+      }
     }
   ]
 }

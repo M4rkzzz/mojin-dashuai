@@ -50,7 +50,9 @@ docker compose --profile tunnel up -d --no-deps cloudflared
 
 `Publisher sign-catalog CATALOG PRIVATE OUTPUT` 签名目录。目录序号只能递增，授权回退放在新目录的 `rollbacks` 中。不要通过降低目录序号回滚。三服回退目标始终是已验证的 Cleanroom + Java 25。
 
-上传文件时不附带账号令牌。发布大文件前逐项完成 `packs/*-source-audit.json` 的来源和分发依据审计；“本地已有”不构成再分发依据。
+上传和下载文件不附带玩家账号令牌。执行 `python tools/build-standard-packs.py --publish-missing` 时，缺少原站的文件自动从用户提供的客户端或固定缓存上传到自建源，保留原文件和现有内嵌声明；无需逐个补充发布出处。只核对必要的大小、SHA256 和公开地址可用性。操作细节见 [标准分发](STANDARD-DISTRIBUTIONS.md)。
+
+玩家启动已安装实例时会先检查新版；临时网络故障允许使用已安装内容，签名或内容异常仍会报错。下载暂停后不进入游戏，续传完成后继续启动。手动回退在当前正式版本仍授权该回退时保持，下次正式版本更新或撤销该回退时恢复自动更新。
 
 
 ## 皮肤与 API 升级

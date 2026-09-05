@@ -31,7 +31,7 @@ function App(){
  function openSkin(){if(!profile){setPage('login');return;}setSkinOpen(true);}
  useEffect(()=>subscribe(d=>{if(d.event==='window-state')setMaximized(d.data.maximized);}),[]);
  async function refresh(openLobby=false){const s=await invoke('bootstrap'); setProfile(s.profile); setSettings(s.settings); setInstalls(s.installs||{}); if(s.profile&&(openLobby||!s.settings.contentDirectoryConfigured))setPage(s.settings.contentDirectoryConfigured?'lobby':'storage');if(typeof s.windowMaximized==='boolean')setMaximized(s.windowMaximized);}
- useEffect(()=>{ if(isNative)refresh(true).catch(e=>setError(e.message)).finally(()=>setReady(true)); else setReady(true); return subscribe(d=>{if(d.event==='progress')setProgress(d.data); if(d.event==='installed'){setProgress(null);refresh().catch(()=>{});} if(d.event==='error')setError(d.data);});},[]);
+ useEffect(()=>{ if(isNative)refresh(true).catch(e=>setError(e.message)).finally(()=>setReady(true)); else setReady(true); return subscribe(d=>{if(d.event==='progress')setProgress(d.data); if(d.event==='installed'){setProgress(null);refresh().catch(()=>{});} if(d.event==='account-signed-out'){setProfile(null);setPage('login');setSkinOpen(false);setRecovery('');} if(d.event==='error')setError(d.data);});},[]);
  useEffect(()=>{document.documentElement.dataset.motion=settings.reducedMotion?'reduced':'full';},[settings.reducedMotion]);
  async function act<T,>(fn:()=>Promise<T>){setError('');setBusy(true);try{return await fn();}catch(e){setError((e as Error).message);}finally{setBusy(false);}}
  async function login(command:string,args:unknown){

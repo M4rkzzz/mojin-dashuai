@@ -27,8 +27,12 @@ if not config.get('publicKeys'):
     errors.append('No release-signing public keys are embedded.')
 for instance in ['m3e','dc2','mb']:
     audit=json.loads((root/f'packs/{instance}-source-audit.json').read_text(encoding='utf-8-sig'))
+    missing=[row['path'] for row in audit['files'] if not (row.get('fallback',{}).get('publishedVerified') or
+             (row.get('downloadVerification',{}).get('verified') and (row.get('verifiedSources') or row.get('sources'))))]
+    if missing:
+        errors.append(instance+': '+str(len(missing))+' files still need automatic fallback publication.')
     if audit.get('releaseReady') is not True:
-        errors.append(instance+': automated download sources and distribution audit are not complete.')
+        errors.append(instance+': native content release and game acceptance are not complete.')
 if errors:
     print('Player release blocked:')
     for message in errors:print('- '+message)

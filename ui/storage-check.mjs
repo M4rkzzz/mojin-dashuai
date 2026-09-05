@@ -24,6 +24,9 @@ async function fixture({restored=false,configured=false}={}){
     result={profile:state.profile,...(request.command==='auth.register'?{recoveryCode:'TEST-RECOVERY-CODE'}:{})};
    }
    if(request.command==='auth.logout')state.profile=null;
+   if(request.command==='account.password'){
+    state.profile=null;emit({event:'account-signed-out',data:null});result={message:'密码已修改，请重新登录。'};
+   }
    if(request.command==='directory.choose')result=window.testFolder;
    if(request.command==='directory.initialize'){
     if(request.args.root==='X:\\blocked')return emit({id:request.id,ok:false,error:'没有写入这个文件夹的权限，请选择其他位置。'});
@@ -97,6 +100,11 @@ try{
  const existing=await fixture({restored:true,configured:true});
  await expect(existing.getByRole('heading',{name:'选择服务器'})).toBeVisible();
  expect(await existing.evaluate(()=>window.testCommands.includes('directory.choose'))).toBe(false);
+ await existing.getByRole('button',{name:'启动器设置'}).click();
+ await existing.getByRole('button',{name:'账号与诊断',exact:true}).click();
+ await existing.locator('.field-row').filter({hasText:'修改密码'}).getByRole('button',{name:'打开'}).click();
+ await expect(existing.getByRole('heading',{name:'登录',exact:true})).toBeVisible();
+ await expect(existing.getByRole('button',{name:'启动器设置'})).toHaveCount(0);
  await existing.close();
  expect(errors).toEqual([]);
  fs.writeFileSync('../.local/storage-check.json',JSON.stringify({passed:true,loginMethods:['hub','microsoft','register'],cancel:true,writeError:true,restart:true,existingUser:true,viewports:[1280,820,640],nativeFolderDialogVerified:false,errors},null,2));

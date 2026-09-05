@@ -11,6 +11,7 @@ import re
 import struct
 import urllib.parse
 import zipfile
+from datetime import date
 
 ROOT = Path(__file__).resolve().parents[1]
 FORBIDDEN = {'pcl', 'saves', 'screenshots', 'logs', 'crash-reports', 'backups', 'journeymap',
@@ -19,6 +20,22 @@ PRIVATE_NAMES = {'usercache.json', 'usernamecache.json', 'servers.dat', 'servers
                  'launcher_accounts.json', 'launcher_profiles.json', 'knownkeys.txt', 'variables.dat',
                  'customskinapiplus-clientid', 'options.txt', 'optionsof.txt', 'optionsnf.txt'}
 SECRET = re.compile(rb'(?i)(?:access[_-]?token|refresh[_-]?token|client[_-]?secret|password|api[_-]?key)\s*["\']?\s*[:=]\s*["\']?([A-Za-z0-9_./+\-]{16,})')
+
+
+def update_source_status():
+    path = ROOT / 'packs/standard-distribution-status.json'
+    status = json.loads(path.read_text(encoding='utf-8')) if path.is_file() else {}
+    entries = []
+    for instance in ('m3e', 'dc2', 'mb'):
+        audit = json.loads((ROOT / f'packs/{instance}-source-audit.json').read_text(encoding='utf-8'))
+        rows = audit['files']
+        original = lambda row: bool(row.get('downloadVerification', {}).get('verified') and (row.get('verifiedSources') or row.get('sources')))
+        hosted = lambda row: bool(row.get('fallback', {}).get('publishedVerified'))
+        entries.append({'instance': instance, 'files': len(rows), 'verifiedAuthorDownloads': sum(map(original, rows)),
+                        'publishedFallbackFiles': sum(map(hosted, rows)),
+                        'pendingFiles': [row['path'] for row in rows if not (original(row) or hosted(row))], 'releaseReady': bool(audit.get('releaseReady'))})
+    status.update(asOf=date.today().isoformat(), instances=entries)
+    path.write_text(json.dumps(status, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
 
 
 def safe_path(value):
@@ -228,7 +245,7 @@ def build(instance, config, destination, draft=False):
         sources = row.get('verifiedSources', [])
         if not sources and row.get('downloadVerification', {}).get('verified'):
             sources = row['sources'][:1]
-        # Rehosting must have an explicit file-level record; availability alone is insufficient.
+        # Missing upstream files use the operator's supplied bytes through the same download service.
         fallback = row.get('fallback', {})
         if fallback.get('publishedVerified') and fallback.get('distributionBasis'):
             sources = [*sources, public_url(fallback['url'])]
@@ -236,7 +253,7 @@ def build(instance, config, destination, draft=False):
             url = config['publicBase'] + '/objects/' + hashes['sha256'] + '.jar'
             planned.append({'path': path, 'sha256': hashes['sha256'], 'size': len(data), 'url': url,
                             'distributionBasis': fallback.get('distributionBasis'), 'publishedVerified': False})
-            blockers.append({'path': path, 'reason': 'fallback needs distribution review and publication'})
+            blockers.append({'path': path, 'reason': 'fallback not uploaded; run with --publish-missing'})
             if not draft:
                 continue
             sources = [url]

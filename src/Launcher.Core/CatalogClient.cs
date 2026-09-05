@@ -13,8 +13,8 @@ public sealed class CatalogClient(string api, IReadOnlyDictionary<string,string>
         if(client.DefaultRequestHeaders.UserAgent.Count==0)client.DefaultRequestHeaders.UserAgent.ParseAdd("MojinDashuai/"+typeof(CatalogClient).Assembly.GetName().Version);
         var uri = new Uri(new Uri(api), "/v1/catalog");
         if (uri.Scheme != "https") throw new InvalidDataException("发布目录必须通过 HTTPS 获取。");
-        var response = await client.GetAsync(uri, token);
-        if (!response.IsSuccessStatusCode) throw new IOException("正式内容尚未发布，或目录服务暂时不可用。请稍后重试。");
+        using var response = await client.GetAsync(uri, token);
+        if (!response.IsSuccessStatusCode) throw new HttpRequestException("正式内容尚未发布，或目录服务暂时不可用。请稍后重试。", null, response.StatusCode);
         var bytes = await response.Content.ReadAsByteArrayAsync(token);
         var envelope = JsonSerializer.Deserialize<SignedEnvelope>(bytes,Json.Options)!;
         var catalog = ContentSecurity.Verify<Catalog>(envelope,publicKeys);

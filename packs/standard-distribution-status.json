@@ -5,24 +5,8 @@
       "instance": "m3e",
       "files": 117,
       "verifiedAuthorDownloads": 99,
-      "publishedFallbackFiles": 3,
-      "pendingFiles": [
-        "mods/AdvancedSolarPanel_1.7.10_Edition.jar",
-        "mods/AquaManGift-1.0.jar",
-        "mods/BetterBuildersWands-d93187f.jar",
-        "mods/CustomThings-1.7.10-0.0.3-59.jar",
-        "mods/HarvestDay-Day-1.jar",
-        "mods/M3 Tweaker-0.7.5.jar",
-        "mods/m3ecore-cac3393-main+cac3393c8d-dirty.jar",
-        "mods/Mekanism-Community-Edition-1.7.10-9.10.37-ALL.jar",
-        "mods/MetalRevolution-1.0.3.jar",
-        "mods/nechar-GTNH 2.7.0.jar",
-        "mods/tcneiadditions-1.4.1.jar",
-        "mods/Thaumcraft-1.7.10-4.2.3.5-SaraFix-a1.jar",
-        "mods/WithCoffee-1.6.jar",
-        "mods/XaerosWorldMap_1.14.1.31_Forge_1.7.10.jar",
-        "mods/ic2/EJML-core-0.26.jar"
-      ],
+      "publishedFallbackFiles": 18,
+      "pendingFiles": [],
       "releaseReady": false
     },
     {

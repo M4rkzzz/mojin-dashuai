@@ -24,6 +24,8 @@ public partial class MainWindow : Window
     private readonly Dictionary<string,CancellationTokenSource> transfers=[];
     private readonly Dictionary<string,TransferProgress> transferProgress=[];
     private readonly Dictionary<string,PackManifest> pendingPacks=[];
+    private readonly HashSet<string> launchAfterDownload=[];
+    private readonly Dictionary<string,RollbackPin> pendingRollbackPins=[];
     private LauncherSettings settings=new();
     private Accounts accounts=null!;
     private CatalogClient catalog=null!;
@@ -151,7 +153,9 @@ public partial class MainWindow : Window
             case "routes.probe":return (await Routes.ProbeAll(Id())).Select(x=>x.Latency).ToArray();
             case "instance.install":
             {
-                var id=Id();await Install(id);if(!pendingPacks.ContainsKey(id))await Launch(id);return null;
+                var id=Id();launchAfterDownload.Add(id);
+                try{await Install(id);}finally{if(!pendingPacks.ContainsKey(id))launchAfterDownload.Remove(id);}
+                if(!pendingPacks.ContainsKey(id))await Launch(id,false);return null;
             }
             case "instance.repair":await Install(Id());return null;
             case "instance.rollback":await Rollback(Id());return null;
@@ -161,7 +165,8 @@ public partial class MainWindow : Window
             }
             case "download.resume":
             {
-                var id=Id();if(!pendingPacks.TryGetValue(id,out var pack))throw new InvalidDataException("没有可续传的任务。");await Transfer(pack);return null;
+                var id=Id();if(!pendingPacks.TryGetValue(id,out var pack))throw new InvalidDataException("没有可续传的任务。");await Transfer(pack);
+                if(!pendingPacks.ContainsKey(id)&&launchAfterDownload.Remove(id))await Launch(id,false);return null;
             }
             case "instance.launch":await Launch(Id());return null;
             case "instance.folder":OpenFolder(new TransactionalInstaller(settings.Root).InstancePath(Id()));return null;
@@ -182,6 +187,7 @@ public partial class MainWindow : Window
     }
     private async Task Install(string id)
     {
+        pendingRollbackPins.Remove(id);
         await accounts.GameSession();
         var directory=await catalog.Fetch();var server=directory.Servers.SingleOrDefault(s=>s.Id==id);
         if(server?.Release is null)throw new InvalidDataException("这个世界正在完成安装与入服验收，正式内容尚未开放。");
@@ -196,6 +202,7 @@ public partial class MainWindow : Window
         try
         {
             await new TransactionalInstaller(settings.Root).Install(pack,downloader,settings.Concurrency,progress,cancellation.Token);
+            if(pendingRollbackPins.Remove(pack.Instance,out var pin))Json.Write(Path.Combine(new TransactionalInstaller(settings.Root).InstancePath(pack.Instance),".hub","rollback-pin.json"),pin);
             pendingPacks.Remove(pack.Instance);Event("installed",new{Instance=pack.Instance});
         }
         catch(OperationCanceledException)when(cancellation.IsCancellationRequested)
@@ -212,12 +219,37 @@ public partial class MainWindow : Window
         var old=Json.Read<InstalledPack>(oldPath);var directory=await catalog.Fetch();var server=directory.Servers.Single(s=>s.Id==id);
         var release=server.Rollbacks.SingleOrDefault(r=>r.Version==old.Manifest.Version&&r.Compatibility==server.Release?.Compatibility);
         if(release is null)throw new InvalidDataException("上一版本未被列为当前服务器可用的回退版本。");
-        await Transfer(await catalog.GetManifest(id,release));
+        var pack=await catalog.GetManifest(id,release);
+        launchAfterDownload.Remove(id);
+        pendingRollbackPins[id]=new(pack.Version,pack.Sequence,server.Release!.Sequence);
+        await Transfer(pack);
     }
-    private async Task Launch(string id)
+    private async Task Launch(string id,bool checkForUpdates=true)
     {
         if(games.ContainsKey(id))throw new InvalidDataException("此世界已在运行。");
-        var session=await accounts.GameSession();var installer=new TransactionalInstaller(settings.Root);var gate=installer.Acquire(id);
+        if(pendingPacks.ContainsKey(id))throw new InvalidDataException("请先完成当前下载。");
+        await accounts.GameSession();var installer=new TransactionalInstaller(settings.Root);
+        if(checkForUpdates)
+        {
+            PackManifest installed;
+            using(var preparation=installer.Acquire(id))
+            {
+                installer.Recover(id);installed=(installer.ReadInstalled(id)??throw new InvalidDataException("请先安装这个世界。")).Manifest;
+            }
+            var pinPath=Path.Combine(installer.InstancePath(id),".hub","rollback-pin.json");
+            var pin=File.Exists(pinPath)?Json.Read<RollbackPin>(pinPath):null;
+            using var timeout=new CancellationTokenSource(TimeSpan.FromSeconds(8));
+            var release=await LaunchUpdates.Check(installed,pin,catalog.Fetch,timeout.Token);
+            if(release is not null)
+            {
+                var updated=await catalog.GetManifest(id,release);
+                pendingRollbackPins.Remove(id);launchAfterDownload.Add(id);await Transfer(updated);
+                if(pendingPacks.ContainsKey(id))return;
+                launchAfterDownload.Remove(id);
+            }
+        }
+        // Installation can outlive an access token; obtain a current session just before launching.
+        var session=await accounts.GameSession();var gate=installer.Acquire(id);
         try
         {
             installer.Recover(id);var pack=installer.ReadInstalled(id)??throw new InvalidDataException("请先安装这个世界。");
@@ -325,7 +357,7 @@ public partial class MainWindow : Window
             var result=await accounts.Authorized("/v1/account/recovery-code",new {LoginName="",Password=dialog.CurrentPassword});
             new RecoveryWindow(result!.Value.GetProperty("recoveryCode").GetString()!){Owner=this}.ShowDialog();return new {Message="恢复码已重新生成"};
         }
-        await accounts.Authorized("/v1/account/password",new {CurrentPassword=dialog.CurrentPassword,NewPassword=dialog.NewPassword});await accounts.Logout();return new {Message="密码已修改，请退出当前界面后重新登录。"};
+        await accounts.Authorized("/v1/account/password",new {CurrentPassword=dialog.CurrentPassword,NewPassword=dialog.NewPassword});await accounts.Logout();Event("account-signed-out",null);return new {Message="密码已修改，请重新登录。"};
     }
     private async Task<object> SkinDialog(JsonElement args)
     {
