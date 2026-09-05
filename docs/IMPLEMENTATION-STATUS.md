@@ -12,7 +12,8 @@
 - 本地 UI 不接收登录令牌；皮肤下载不附带账号凭据。原生层验证纹理地址和 PNG，服务器限制尺寸、解压量、CRC，并清除图片附带元数据。
 - C#/.NET 10 + React/TypeScript/WebView2 自包含 Windows 包可构建。UI 资源本地加载，Java 与三服内容不包含在初始包中。
 - Identity + PostgreSQL 普通/超级邀请码、固定游戏名、保护名、恢复码、会话轮换、撤销、管理员 SSH 命令已实现。
-- 124 的独立 `mc-client-hub` Compose 已部署 API 0.1.1、PostgreSQL、downloads。API 为 `127.0.0.1:18081`，下载为 `192.168.5.124:18080`。
+- 124 的独立 `mc-client-hub` Compose 已部署 API 0.1.1、PostgreSQL、downloads。API 为 `127.0.0.1:18081`，下载同时绑定 `127.0.0.1:18080` 和 `192.168.5.124:18080`。
+- 下载公网入口 `http://103.40.14.100:21708` 已接通，13:17 实测健康检查、64 KiB 文件 SHA256、HTTP Range 续传通过。补充回环监听时仅重建 downloads，账号及游戏容器均未重启。
 - 23 个原名已保护，另 1 组大小写冲突已整体保留，普通码和超级码均不能认领；未选择角色、合并身份或改动存档。
 - 每日数据库备份保留七份，皮肤目录纳入每日备份；API 升级前额外保留数据库快照。此次升级核对其他容器的启动时间未变化。
 - 私有仓库 https://github.com/M4rkzzz/mojin-dashuai 已推送初始实现，首次 Windows/API Actions 均通过。后续检查增加无界面 UI 验证。
@@ -36,7 +37,7 @@
 ## 外部配置及剩余工作
 
 - 原 cloud-mail Token 可读 Zone/Tunnel，新建 Tunnel 返回 HTTP 403。尚未创建 Tunnel 或修改 DNS；新仓库独立 `CLOUDFLARE_API_TOKEN`、`CLOUDFLARE_ACCOUNT_ID` 尚待提供。公网目标保持 `launcher.boshan.uk`。
-- 13:09 的只读权限复核确认现有 Token 有效，账号下仍无 Tunnel，`launcher.boshan.uk` 仍无 DNS 记录；读取该 Token 自身的权限元数据也返回 403，未尝试扩权。下载 FRP 的实际节点地址及分配端口等待填写，配置见 `docs/FRP.md`。
+- 13:09 的只读权限复核确认现有 Token 有效，账号下仍无 Tunnel，`launcher.boshan.uk` 仍无 DNS 记录；读取该 Token 自身的权限元数据也返回 403，未尝试扩权。已接通一个下载 FRP 入口，线路名称待确认，配置见 `docs/FRP.md`。
 - 本项目 Microsoft 公共客户端 ID 尚未配置。代码已接 MSAL/Xbox/Minecraft 流程，但真实正版登录和正版皮肤同步尚不能认定通过。
 - 三服内容及运行时仍需逐文件完成自动来源、分发依据与正式签名清单；不能将本地已有文件视为有权公开分发。
 - 群服皮肤的启动器上传/头像链路已实现，游戏内皮肤模组仍待逐服适配和入服验证。
