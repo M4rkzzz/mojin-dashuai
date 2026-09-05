@@ -21,6 +21,14 @@
       "native": true,
       "partial": true,
       "catalogChanged": false
+    },
+    {
+      "publishedFiles": 1,
+      "publicSampleChecks": 1,
+      "standard": false,
+      "native": true,
+      "partial": true,
+      "catalogChanged": false
     }
   ],
   "standardPublished": true,

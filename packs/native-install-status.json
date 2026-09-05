@@ -11,9 +11,9 @@
       "localVersionPrepared": true,
       "gameStarted": false,
       "joinedServer": false,
-      "elapsedSeconds": 8.1865245,
-      "files": 4778,
-      "manifestSha256": "2cf8b6298ab4cdae2446636b9fcc3311b63c67e8b130533fc4367d70612431dd",
+      "elapsedSeconds": 7.6208976,
+      "files": 4779,
+      "manifestSha256": "93fa3aa8894bcc10541cf52be1973aa40a3c19e97dad605355b078eed59b2d5e",
       "verification": "cached-install-and-process-preparation"
     },
     {
@@ -44,10 +44,17 @@
   "playChecks": {
     "m3e": {
       "javaMajor": 8,
-      "modsLoaded": 148,
-      "joinedServer": false,
-      "state": "initial-auto-connect-handshake-timeout; awaiting manual reconnect",
-      "libraryConflictFixed": true
+      "modsLoaded": 149,
+      "joinedServer": true,
+      "automaticConnection": true,
+      "account": "saved-microsoft-session",
+      "gameName": "M4rkzzz",
+      "existingPlayerDataPresent": true,
+      "oldCharacterConfirmedByUser": false,
+      "libraryConflictFixed": true,
+      "startupHandshakeFixed": true,
+      "state": "waiting-for-user-to-confirm-original-character",
+      "renderLogFloodObserved": true
     },
     "dc2": {
       "state": "not-started"

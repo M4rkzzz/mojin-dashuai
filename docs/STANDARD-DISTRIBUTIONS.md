@@ -49,6 +49,7 @@ python tools/build-standard-packs.py --publish-missing
 
 ```powershell
 python tools/prepare-engine-profiles.py
+python tools/build-game-integration.py
 python tools/prepare-native-content.py
 python tools/publish-content-files.py --standard --native
 python tools/check-native-install.py
@@ -57,6 +58,10 @@ python tools/check-native-install.py
 原生依赖来自 CmlLib 实际文件提取器；一服的合并 MSE 配置消除被后续 Forge 依赖覆盖的同名旧库。Java 下载与发布单独固定版本，玩家安装时由原生运行时管理器自动解压。首次安装使用压缩 overrides 批量填充校验缓存，后续更新继续按变化文件下载。发布路径不可变，已有同路径不同内容会失败；改变标准包内容时递增版本。2026-09-05 已成功公开 35,719 个标准分发文件和 266 个原生依赖文件，见 `packs/content-publication.json`；正式 catalog 尚未切换。
 
 安装检查使用隔离 `.local` 目录和已校验源缓存，实际执行原生安装器与启动参数构造，但不冒充干净网络下载、干净 Windows 或真实入服验收。`Publisher play-check MANIFEST ROOT ROUTE_DOMAIN` 可使用独立测试名启动游戏，输出进程记录和日志；用户观察游戏界面，工具不执行电脑 UI 操作。
+
+`play-check` 始终使用 `Mojin_QA`，应在用户观察前明确告知，不能用它核对旧角色。需要验证已登录玩家时，使用 `NativeAccountSmoke --play-saved-account MANIFEST ROOT ROUTE EXPECTED_GAME_NAME`；它从原生加密会话恢复登录，严格核对游戏名，不允许通过改昵称冒充当前账号，也不迁移服务端存档。输出日志会遮盖已知游戏令牌。
+
+一服原生清单额外包含启动器自有的微型连接组件，在游戏初始化完成后再自动入服，解决直接传入 `--server` 引发的首次握手超时。标准外部启动器导入包仍使用原有内容，不依赖该连接组件，见 `src/GameIntegration/README.md`。
 
 不带 `--publish-missing` 可仅做本地构建，缺少可用地址时会提示补传。`--draft` 保留给本地审查，不作为玩家包。实际缺少原文件或文件损坏才需要补齐，缺少发布出处不会卡住流程。
 

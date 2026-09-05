@@ -28,11 +28,16 @@ public sealed class GameLauncher
         await RuntimeManager.Validate(java,manifest.Runtime.Major,token);
         if(manifest.Instance=="mb")CleanroomAdapter.ValidatePrepared(instance,manifest);
         var launcher=FromInstalledFiles(instance);
+        var delayedJoin=manifest.Instance=="m3e";
+        if(delayedJoin&&!manifest.Files.Any(f=>f.Path=="mods/mojin-autoconnect-1.7.10-0.1.0.jar"))throw new InvalidDataException("一服连接组件尚未安装，请先更新客户端。");
+        if(delayedJoin&&(!System.Text.RegularExpressions.Regex.IsMatch(route.Host,"^[A-Za-z0-9.-]+$")||route.Port is <1 or >65535))throw new InvalidDataException("服务器地址无效。");
+        var jvm=new List<MArgument>{MArgument.FromCommandLine(settings.Jvm[manifest.Instance])};
+        if(delayedJoin)jvm.Add(MArgument.FromCommandLine($"-Dmojin.join.host={route.Host} -Dmojin.join.port={route.Port}"));
         var options=new MLaunchOption {
             Session=session,JavaPath=java,MaximumRamMb=settings.Memory[manifest.Instance],MinimumRamMb=Math.Min(2048,settings.Memory[manifest.Instance]),
-            ScreenWidth=settings.Width,ScreenHeight=settings.Height,FullScreen=settings.Fullscreen,ServerIp=route.Host,ServerPort=route.Port,
+            ScreenWidth=settings.Width,ScreenHeight=settings.Height,FullScreen=settings.Fullscreen,ServerIp=delayedJoin?null:route.Host,ServerPort=route.Port,
             GameLauncherName="MojinDashuai",GameLauncherVersion="0.1.0",
-            ExtraJvmArguments=[MArgument.FromCommandLine(settings.Jvm[manifest.Instance])]
+            ExtraJvmArguments=jvm
         };
         // Installation is performed exclusively from the signed file inventory. CmlLib only builds the launch process.
         var process=await launcher.BuildProcessAsync(manifest.LaunchVersion,options);

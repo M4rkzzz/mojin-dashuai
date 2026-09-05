@@ -5,6 +5,7 @@ using Boshan.Launcher;
 if(args is ["--microsoft-contract"]){await MicrosoftContract.Run();return;}
 if(args is ["--microsoft-live"]){MicrosoftLive.Run();return;}
 if(args is ["--microsoft-network"]){await MicrosoftNetwork.Run();return;}
+if(args.Length>0&&args[0] is "--saved-profile" or "--play-saved-account"){await SavedAccountPlay.Run(args);return;}
 
 // Read a disposable test account from stdin; never accept credentials in arguments or print them.
 var input=JsonSerializer.Deserialize<SmokeInput>(await Console.In.ReadToEndAsync(),Json.Options)!;

@@ -157,6 +157,12 @@ for instance in args.instances:
     content = json.loads((ROOT / f'artifacts/distributions/{instance}-content.json').read_text(encoding='utf-8'))
     for item in content['files']:
         records[item['path']] = {key: item[key] for key in ['path', 'size', 'sha256', 'sources', 'policy', 'distributionBasis']}
+    if instance == 'm3e':
+        adapter = ROOT / 'artifacts/game-integration/mojin-autoconnect-1.7.10-0.1.0.jar'
+        if not adapter.is_file(): raise ValueError('Run tools/build-game-integration.py first')
+        relative = 'mods/' + adapter.name
+        records[relative] = record(adapter, relative, [object_source(adapter, hashes(adapter)[1])],
+                                   basis='Launcher-owned client connection adapter; source in src/GameIntegration/m3e')
     version_base = f'distributions/{instance}/{spec["version"]}'
     overrides = ROOT / 'artifacts/distributions/public' / version_base
     for path in overrides.rglob('*'):

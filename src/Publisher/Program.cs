@@ -133,8 +133,8 @@ try
             var instance=installer.InstancePath(manifest.Instance);var log=Path.Combine(root,manifest.Instance+"-play-check.log");
             process.Start();
             Json.Write(Path.Combine(instance,".hub","active-game.json"),new ActiveGame(process.Id,process.StartTime.ToUniversalTime()));
-            Json.Write(Path.Combine(root,manifest.Instance+"-play-process.json"),new{process.Id,StartedAt=process.StartTime.ToUniversalTime(),Route=args[3],JavaMajor=manifest.Runtime.Major});
-            Console.WriteLine($"Started {manifest.Instance} on {args[3]}; PID {process.Id}.");
+            Json.Write(Path.Combine(root,manifest.Instance+"-play-process.json"),new{process.Id,StartedAt=process.StartTime.ToUniversalTime(),GameName="Mojin_QA",TestPlayer=true,Route=args[3],JavaMajor=manifest.Runtime.Major});
+            Console.WriteLine($"Started {manifest.Instance} as test player Mojin_QA on {args[3]}; PID {process.Id}. This does not use the signed-in player's save.");
             using var writer=new StreamWriter(log,false);using var logGate=new SemaphoreSlim(1);
             async Task Drain(StreamReader reader){string? line;while((line=await reader.ReadLineAsync())is not null){await logGate.WaitAsync();try{await writer.WriteLineAsync(line);await writer.FlushAsync();}finally{logGate.Release();}}}
             await Task.WhenAll(Drain(process.StandardOutput),Drain(process.StandardError));await process.WaitForExitAsync();
