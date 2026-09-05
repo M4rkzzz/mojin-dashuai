@@ -35,6 +35,7 @@ try{
   await expect(notice).toBeVisible();await expect(notice).toHaveText('检查更新');
   await page.evaluate(()=>window.emitUpdate({phase:'failed',version:'0.1.2-beta.12',error:'下载超时，请重试。'}));
   await expect(notice).toHaveText('检查更新');
+  await page.mouse.move(0,0);
   await expect(notice).toHaveCSS('color','rgb(146, 214, 162)');
   await expect(notice).toHaveCSS('-webkit-app-region','no-drag');
   const button=await notice.boundingBox(),minimize=await page.getByRole('button',{name:'最小化',exact:true}).boundingBox();
