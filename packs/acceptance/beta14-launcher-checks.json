@@ -2,7 +2,7 @@
   "version": "0.1.2-beta.14",
   "checkedAt": "2026-09-05T16:26:25.598022+00:00",
   "scope": "Resume against the current unified catalog, terminal progress ordering and installation record writes.",
-  "unitTestsPassed": 229,
+  "unitTestsPassed": 250,
   "pythonDistributionTestsPassed": 44,
   "dispatcher": {
     "passed": true,
@@ -35,5 +35,12 @@
   },
   "cleanWindows": false,
   "published": false,
-  "ciPending": true
+  "ciPending": true,
+  "javaLaunchArgumentTestsPassed": 11,
+  "splashCompatibilityTestsPassed": 10,
+  "fourthServerG1Default": true,
+  "heapLimitPreserved": true,
+  "fourthServerNativeWorkerCap": 4,
+  "fourthServerGameRetest": "Tracked separately in the fourth-server task; latest test reached initialization completion but hit the now-addressed Forge/Angelica splash conflict.",
+  "forgeSplashCompatibility": "vw / angelica-2.1.38 only; original configuration backed up"
 }
