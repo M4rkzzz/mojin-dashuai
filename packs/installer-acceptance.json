@@ -1,5 +1,5 @@
 {
-  "version": "0.1.2-beta.6",
+  "version": "0.1.2-beta.7",
   "passed": true,
   "realInstallerExecuted": true,
   "separateTestAppId": true,
@@ -13,18 +13,10 @@
   "playerFilesPreservedInsideAndOutsideInstall": true,
   "gameOrLauncherStarted": false,
   "cleanWindows": false,
-  "publication": {
-    "version": "0.1.2-beta.6",
-    "fileName": "MojinDashuai-Setup-0.1.2-beta.6-x64.exe",
-    "bytes": 55577360,
-    "sha256": "a9fb72d439a8fd4b3c68c4663ec39a10d83f9b5d908efb294f4993b8fb057d15",
-    "format": "inno-setup",
-    "perUser": true,
-    "acceptanceFixture": false,
-    "downloadUrl": "http://103.40.14.100:21708/launcher/0.1.2-beta.6/MojinDashuai-Setup-0.1.2-beta.6-x64.exe",
-    "publicDownloadVerified": true,
-    "publicArchiveRoundTripVerified": true
-  },
-  "productionInstallerInstalledSilently": true,
-  "actualProductionWindowOpened": false
+  "installerSha256": "e7b37a1b90fd8568f98daa838d76e697b1898a79ecbf91853af9ca1acce66402",
+  "installerBytes": 55589918,
+  "publicDownloadVerified": true,
+  "ci": "https://github.com/M4rkzzz/mojin-dashuai/actions/runs/33962904778",
+  "installedPlayerDirectory": "D:\\魔金大帅",
+  "localInstallationReport": "packs/local-installer-acceptance.json"
 }

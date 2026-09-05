@@ -1,11 +1,11 @@
 {
-  "version": "0.1.2-beta.6",
-  "sequence": 6,
-  "sha256": "6a96f092a25b29fab6c7d0a9b454b5cd3d2ef754c06332b8e287a574bdb32616",
-  "bytes": 78275070,
+  "version": "0.1.2-beta.7",
+  "sequence": 7,
+  "sha256": "fe4e5a4b8b2da597ef0056950030e048702b58d8d3ae9455a832ce6934d5e003",
+  "bytes": 78283640,
   "publicDownloadVerified": true,
   "activated": true,
-  "codeTestsPassed": 115,
+  "codeTestsPassed": 124,
   "nativeProcessHandshake": true,
   "failedLaunchRetainsPrevious": true,
   "uiStatesVerified": true,
@@ -20,7 +20,7 @@
   "newLauncherOpenedAndClosedNormally": false,
   "settingsUpdateButtonManuallyVerified": false,
   "localCandidateActivated": false,
-  "downloadUrl": "http://103.40.14.100:21708/launcher/0.1.2-beta.6/MojinDashuai-windows-x64.zip",
+  "downloadUrl": "http://103.40.14.100:21708/launcher/0.1.2-beta.7/MojinDashuai-windows-x64.zip",
   "publicBetaActivated": true,
   "localCandidatePrepared": false,
   "desktopShortcutUpdated": true,
@@ -35,5 +35,7 @@
   "uiBrandingVerified": true,
   "executableIconVerified": true,
   "locallyInstalledBySetup": true,
-  "serverRouteLatencyUiVerified": true
+  "serverRouteLatencyUiVerified": true,
+  "installDirectoryPreservedAcrossNativeUpdate": true,
+  "ci": "https://github.com/M4rkzzz/mojin-dashuai/actions/runs/33962904778"
 }
