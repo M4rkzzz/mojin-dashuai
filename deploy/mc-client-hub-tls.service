@@ -1,0 +1,7 @@
+[Unit]
+Description=Renew Mojin direct HTTPS certificate
+After=network-online.target docker.service
+
+[Service]
+Type=oneshot
+ExecStart=/var/apps/mc-client-hub/certbot-venv/bin/certbot renew --quiet --config-dir /vol1/mc-client-hub/tls --work-dir /var/apps/mc-client-hub/certbot-work --logs-dir /var/apps/mc-client-hub/certbot-logs --deploy-hook "docker exec mc-client-hub-downloads-1 nginx -s reload"

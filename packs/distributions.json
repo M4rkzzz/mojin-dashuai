@@ -1,7 +1,7 @@
 {
   "formatVersion": 1,
-  "publicBase": "https://launcher.boshan.uk",
-  "frpBase": "http://103.40.14.100:21708",
+  "publicBase": "https://launcher-direct.boshan.uk:21708",
+  "frpBase": "https://launcher-direct.boshan.uk:21708",
   "instances": {
     "m3e": {
       "name": "魔法金属", "version": "8.0.4-2-mojin.1", "minecraft": "1.7.10",

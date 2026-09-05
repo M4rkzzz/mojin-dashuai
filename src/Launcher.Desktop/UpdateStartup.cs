@@ -11,6 +11,8 @@ internal static class UpdateStartup
     internal static string? Nonce;
     internal static string DataRoot=>Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),"Boshan","Launcher","updates");
     internal const string ProgramDirectoryVariable="MOJIN_INSTALL_DIRECTORY";
+    internal const string CheckedNonceVariable="MOJIN_UPDATE_CHECKED";
+    internal static bool ParentChecked=>Nonce is not null&&Environment.GetEnvironmentVariable(CheckedNonceVariable)==Nonce;
     internal static string ProgramDirectory
     {
         get
@@ -37,6 +39,7 @@ internal static class UpdateStartup
         var readyFile=ContentSecurity.SafePath(updates.Root,"ready/"+nonce+".json");
         var info=new ProcessStartInfo(prepared.Executable){UseShellExecute=false,CreateNoWindow=true,WorkingDirectory=prepared.Directory};
         info.Environment[ProgramDirectoryVariable]=ProgramDirectory;
+        info.Environment[CheckedNonceVariable]=nonce;
         info.ArgumentList.Add("--update-ready");info.ArgumentList.Add(nonce);
         Process? started;
         try{started=Process.Start(info);}

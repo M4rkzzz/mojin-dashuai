@@ -24,4 +24,5 @@ try {
   await check('storage-check.mjs');
   await check('microsoft-check.mjs');
   await check('update-check.mjs');
+  await check('instance-check.mjs');
 } finally {server.kill();}

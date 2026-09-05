@@ -13,6 +13,7 @@ public static class LaunchUpdates
         try { directory = await fetch(timeout); }
         // A temporary outage may use the installed pack. Invalid signatures and local IO failures must still surface.
         catch (HttpRequestException e) when (e.StatusCode is null or HttpStatusCode.RequestTimeout or HttpStatusCode.TooManyRequests || (int)e.StatusCode >= 500) { return null; }
+        catch (NetworkFailure e) when(e.Diagnostic.HttpStatus is null or 408 or 429 or >=500){return null;}
         catch (OperationCanceledException) when (timeout.IsCancellationRequested) { return null; }
         var server = directory.Servers.SingleOrDefault(s => s.Id == installed.Instance);
         var release = server?.Release;

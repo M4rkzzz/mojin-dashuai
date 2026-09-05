@@ -50,15 +50,17 @@ jobs:
       - run: dotnet test tests/Hub.Tests/Hub.Tests.csproj -c Release --logger trx
       - run: dotnet build tests/NativeAccountSmoke/NativeAccountSmoke.csproj -c Release
       - run: dotnet tests/NativeAccountSmoke/bin/Release/net10.0-windows/NativeAccountSmoke.dll --microsoft-contract
+      - run: dotnet tests/NativeAccountSmoke/bin/Release/net10.0-windows/NativeAccountSmoke.dll --instance-state-smoke
+      - run: dotnet tests/NativeAccountSmoke/bin/Release/net10.0-windows/NativeAccountSmoke.dll --dispatcher-install-smoke
       - run: dotnet publish tests/LauncherUpdateFixture/LauncherUpdateFixture.csproj -c Release -r win-x64 --self-contained true -o .local/launcher-update-fixture
       - run: dotnet tests/NativeAccountSmoke/bin/Release/net10.0-windows/NativeAccountSmoke.dll --launcher-update-smoke .local/launcher-update-fixture
-      - run: dotnet publish src/Launcher.Desktop/Launcher.Desktop.csproj -c Release -r win-x64 --self-contained true -p:Version=0.1.2-beta.7 -o artifacts/MojinDashuai
+      - run: dotnet publish src/Launcher.Desktop/Launcher.Desktop.csproj -c Release -r win-x64 --self-contained true -p:Version=0.1.2-beta.8 -o artifacts/MojinDashuai
       - name: Build and verify Windows installer
         shell: pwsh
         run: |
           $compiler = ./tools/ensure-inno.ps1
-          ./tools/build-installer.ps1 -Version 0.1.2-beta.7 -Source artifacts/MojinDashuai -Output artifacts/installer -Compiler $compiler
-          ./tools/check-installer.ps1 -Version 0.1.2-beta.7 -Source artifacts/MojinDashuai -Compiler $compiler
+          ./tools/build-installer.ps1 -Version 0.1.2-beta.8 -Source artifacts/MojinDashuai -Output artifacts/installer -Compiler $compiler
+          ./tools/check-installer.ps1 -Version 0.1.2-beta.8 -Source artifacts/MojinDashuai -Compiler $compiler
       - uses: actions/upload-artifact@v4
         with:
           name: MojinDashuai-windows-x64-installer

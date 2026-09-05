@@ -5,7 +5,9 @@ using System.Text.Json;
 
 namespace Boshan.Launcher;
 
-public sealed record LauncherRelease(long Sequence,string Version,string Platform,ContentFile Archive,ContentFile[] Files);
+// Optional for compatibility: beta.7 still reads Archive, while newer launchers
+// download individual signed file objects when Differential is present.
+public sealed record LauncherRelease(long Sequence,string Version,string Platform,ContentFile Archive,ContentFile[] Files,bool Differential=false);
 public sealed record PreparedLauncher(LauncherRelease Release,string Directory,string Executable);
 
 // Each update lives in a separate directory. Running executables, account data,
@@ -52,27 +54,106 @@ public sealed class LauncherUpdates(string root,IReadOnlyDictionary<string,strin
         Json.Write(CheckpointPath,new CatalogCheckpoint(release.Sequence,hash));return release;
     }
 
-    public async Task<SignedEnvelope?> Fetch(string api,CancellationToken token=default)
+    public async Task<SignedEnvelope?> Fetch(string api,CancellationToken token=default,HttpMessageHandler? handler=null)
     {
         var uri=new Uri(new Uri(api),"/v1/launcher");
         if(uri.Scheme!="https"||uri.UserInfo.Length!=0)throw new InvalidDataException("更新地址必须使用 HTTPS。");
-        using var client=new HttpClient(new HttpClientHandler{UseCookies=false}){Timeout=TimeSpan.FromSeconds(30),MaxResponseContentBufferSize=4*1024*1024};
-        using var response=await client.GetAsync(uri,token);
-        if(response.StatusCode==HttpStatusCode.NotFound)return null;
-        response.EnsureSuccessStatusCode();
-        return JsonSerializer.Deserialize<SignedEnvelope>(await response.Content.ReadAsByteArrayAsync(token),Json.Options)
-            ??throw new InvalidDataException("启动器更新信息为空。");
+        using var client=new HttpClient(handler??NetworkPolicy.Handler()){Timeout=TimeSpan.FromSeconds(10),MaxResponseContentBufferSize=4*1024*1024};
+        Exception? last=null;
+        foreach(var source in NetworkPolicy.MetadataSources(uri))
+        {
+            token.ThrowIfCancellationRequested();
+            try
+            {
+                using var response=await client.GetAsync(source,token);
+                if(response.StatusCode==HttpStatusCode.NotFound)return null;
+                response.EnsureSuccessStatusCode();
+                return JsonSerializer.Deserialize<SignedEnvelope>(await response.Content.ReadAsByteArrayAsync(token),Json.Options)
+                    ??throw new InvalidDataException("启动器更新信息为空。");
+            }
+            catch(OperationCanceledException) when(token.IsCancellationRequested){throw;}
+            catch(Exception ex) when(NetworkPolicy.IsNetwork(ex))
+            {
+                var failure=NetworkPolicy.Failure(ex,"检查启动器更新",source);
+                if(failure.Diagnostic.HttpStatus is int status&&status is not (408 or 429)&&status<500)throw failure;
+                last=failure;
+            }
+        }
+        throw last??new IOException("启动器更新地址不可用。");
     }
 
     private string ReleaseDirectory(LauncherRelease release)=>ContentSecurity.SafePath(Root,"releases/"+release.Sequence+"-"+release.Archive.Sha256.ToLowerInvariant());
     private string FailurePath(LauncherRelease release)=>ContentSecurity.SafePath(Root,"failed/"+release.Sequence+"-"+release.Archive.Sha256.ToLowerInvariant()+".signed.json");
     public bool HasFailed(LauncherRelease release)=>File.Exists(FailurePath(release));
     public void Retry(LauncherRelease release){var path=FailurePath(release);if(File.Exists(path))File.Delete(path);}
-    public async Task<PreparedLauncher> Prepare(SignedEnvelope envelope,Downloader downloader,Action<long>? progress=null,CancellationToken token=default)
+    public async Task<PreparedLauncher> Prepare(SignedEnvelope envelope,Downloader downloader,Action<long>? progress=null,CancellationToken token=default,string? currentDirectory=null)
     {
         var release=AcceptMetadata(envelope);
+        if(release.Differential)return await PrepareFiles(envelope,release,downloader,currentDirectory??AppContext.BaseDirectory,progress,token);
         var archive=await downloader.Get(release.Archive,progress,token);
         return await PrepareArchive(envelope,archive,token);
+    }
+    private IEnumerable<string> ReuseDirectories(string currentDirectory)
+    {
+        yield return Path.GetFullPath(currentDirectory);
+        foreach(var path in new[]{ReadyPath,ActivePath,PreviousPath})
+        {
+            if(!File.Exists(path))continue;
+            LauncherRelease? release=null;
+            try{release=ContentSecurity.Verify<LauncherRelease>(Json.Read<SignedEnvelope>(path),publicKeys);Validate(release);}
+            catch(Exception ex) when(ex is InvalidDataException or JsonException or CryptographicException or FormatException or IOException){ }
+            if(release is not null)yield return ReleaseDirectory(release);
+        }
+    }
+    private static async Task<string?> Reusable(ContentFile file,IReadOnlyList<string> directories,CancellationToken token)
+    {
+        foreach(var directory in directories)
+        {
+            string candidate;
+            try{candidate=ContentSecurity.SafePath(directory,file.Path);}
+            catch(InvalidDataException){continue;}
+            if(await ContentSecurity.Matches(candidate,file,token))return candidate;
+        }
+        return null;
+    }
+    public async Task<long> PendingDownloadBytes(LauncherRelease release,string currentDirectory,CancellationToken token=default)
+    {
+        Validate(release);
+        if(!release.Differential)return release.Archive.Size;
+        var directories=ReuseDirectories(currentDirectory).Distinct(StringComparer.OrdinalIgnoreCase).ToArray();
+        var seen=new HashSet<string>(StringComparer.OrdinalIgnoreCase);long total=0;
+        foreach(var file in release.Files)
+            if(seen.Add(file.Sha256)&&await Reusable(file,directories,token) is null
+                &&!await ContentSecurity.Matches(ContentSecurity.SafePath(Root,"cache/"+file.Sha256.ToLowerInvariant()),file,token))total+=file.Size;
+        return total;
+    }
+    private async Task<PreparedLauncher> PrepareFiles(SignedEnvelope envelope,LauncherRelease release,Downloader downloader,string currentDirectory,Action<long>? progress,CancellationToken token)
+    {
+        var destination=ReleaseDirectory(release);
+        if(!await Complete(destination,release,token))
+        {
+            var stage=ContentSecurity.SafePath(Root,"stage-"+Guid.NewGuid().ToString("N"));Directory.CreateDirectory(stage);
+            var directories=ReuseDirectories(currentDirectory).Distinct(StringComparer.OrdinalIgnoreCase).ToArray();
+            try
+            {
+                foreach(var file in release.Files)
+                {
+                    token.ThrowIfCancellationRequested();
+                    var source=await Reusable(file,directories,token)??await downloader.Get(file,progress,token);
+                    var target=ContentSecurity.SafePath(stage,file.Path);Directory.CreateDirectory(Path.GetDirectoryName(target)!);
+                    // Copy into a fresh version so neither an active executable nor
+                    // its immutable rollback copy can be changed during an update.
+                    await using(var input=File.OpenRead(source))await using(var output=File.Create(target))await input.CopyToAsync(output,token);
+                    if(!await ContentSecurity.Matches(target,file,token))throw new InvalidDataException("启动器文件校验失败。");
+                }
+                Directory.CreateDirectory(Path.GetDirectoryName(destination)!);
+                if(Directory.Exists(destination))Directory.Move(destination,ContentSecurity.SafePath(Root,"damaged-"+Guid.NewGuid().ToString("N")));
+                Directory.Move(stage,destination);
+            }
+            finally{if(Directory.Exists(stage))Directory.Delete(ContentSecurity.SafePath(Root,Path.GetFileName(stage)),true);}
+        }
+        Json.Write(ReadyPath,envelope);
+        return new(release,destination,ContentSecurity.SafePath(destination,EntryPoint));
     }
     public async Task<PreparedLauncher> PrepareArchive(SignedEnvelope envelope,string archive,CancellationToken token=default)
     {

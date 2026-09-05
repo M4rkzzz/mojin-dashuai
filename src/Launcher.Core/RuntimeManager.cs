@@ -7,14 +7,17 @@ namespace Boshan.Launcher;
 public static partial class RuntimeManager
 {
     public static string RuntimeRoot(string root, RuntimeSpec spec) => ContentSecurity.SafePath(root, "runtimes/" + spec.Archive.Sha256.ToLowerInvariant());
-    public static async Task Install(string root, RuntimeSpec spec, Downloader downloader, CancellationToken token)
+    public async static Task Install(string root, RuntimeSpec spec, Downloader downloader, CancellationToken token,IProgress<TransferProgress>? progress=null,string instance="")
     {
         var path = RuntimeRoot(root, spec); var marker = Path.Combine(path, ".verified");
-        if (File.Exists(marker)) { await Validate(ContentSecurity.SafePath(path, spec.JavaPath), spec.Major, token); return; }
+        if (File.Exists(marker)) {progress?.Report(new(instance,"验证 Java "+spec.Major,0,0,0)); await Validate(ContentSecurity.SafePath(path, spec.JavaPath), spec.Major, token); return; }
         var locks = ContentSecurity.SafePath(root, "runtimes/" + spec.Archive.Sha256 + ".lock"); Directory.CreateDirectory(Path.GetDirectoryName(locks)!);
         await using var gate = new FileStream(locks, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.None);
-        var archive = await downloader.Get(spec.Archive, token: token);
+        var clock=Stopwatch.StartNew();long bytes=0;
+        var archive = await downloader.Get(spec.Archive,count=>bytes+=count,token,position=>progress?.Report(new(instance,"下载 Java "+spec.Major,position,spec.Archive.Size,bytes/Math.Max(1,clock.Elapsed.TotalSeconds))));
         var temp = path + ".staging-" + Guid.NewGuid().ToString("N"); Directory.CreateDirectory(temp);
+        try{
+        progress?.Report(new(instance,"解压 Java "+spec.Major,0,spec.ExpandedSize,0));
         using(var zip = ZipFile.OpenRead(archive))
         {
             long size = 0; var names = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
@@ -28,13 +31,16 @@ public static partial class RuntimeManager
                 Directory.CreateDirectory(Path.GetDirectoryName(target)!);
                 await using var input = entry.Open(); await using var output = File.Create(target);
                 await input.CopyToAsync(output, token);
+                progress?.Report(new(instance,"解压 Java "+spec.Major,size,spec.ExpandedSize,0));
             }
         }
+        progress?.Report(new(instance,"验证 Java "+spec.Major,spec.ExpandedSize,spec.ExpandedSize,0));
         await Validate(ContentSecurity.SafePath(temp, spec.JavaPath), spec.Major, token);
         // Runtime directories are immutable and addressed by archive hash, so another instance cannot be overwritten.
         if (Directory.Exists(path)) throw new IOException("运行环境目录不完整，请通过修复清理该未完成版本。");
         File.WriteAllText(Path.Combine(temp, ".verified"), spec.Archive.Sha256);
         Directory.Move(temp, path);
+        }finally{if(Directory.Exists(temp))Directory.Delete(temp,true);}
     }
     [GeneratedRegex("(?:java|openjdk) version \"(?<v>[0-9]+)(?:\\.(?<minor>[0-9]+))?")] private static partial Regex VersionPattern();
     public static async Task Validate(string java, int expected, CancellationToken token = default)

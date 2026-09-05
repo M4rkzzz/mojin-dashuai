@@ -9,9 +9,15 @@ import subprocess
 import sys
 import urllib.error
 import urllib.request
+import urllib.parse
 
 ROOT=Path(__file__).resolve().parents[1]
 SSH=ROOT.parent/'tools/ssh124.py'
+endpoint=json.loads((ROOT/'src/Launcher.Desktop/launcher.json').read_text(encoding='utf-8-sig'))['api'].rstrip('/')
+origin=urllib.parse.urlsplit(endpoint)
+if origin.scheme!='https' or not origin.hostname or origin.username or origin.password or origin.path or origin.query or origin.fragment:
+    raise ValueError('The configured account service must be an HTTPS origin without credentials.')
+direct=urllib.request.build_opener(urllib.request.ProxyHandler({}))
 checks=[]
 parser=argparse.ArgumentParser(description=__doc__)
 parser.add_argument('--native',action='store_true',help='Also exercise the compiled Windows account manager without opening a window.')
@@ -31,10 +37,10 @@ def ssh(command):
 def api(path,body=None,token=None):
     headers={'Content-Type':'application/json','User-Agent':'MojinDashuai/0.1.1'}
     if token:headers['Authorization']='Bearer '+token
-    request=urllib.request.Request('https://launcher.boshan.uk'+path,
+    request=urllib.request.Request(endpoint+path,
         data=None if body is None else json.dumps(body).encode(),headers=headers)
     try:
-        with urllib.request.urlopen(request,timeout=20) as response:
+        with direct.open(request,timeout=20) as response:
             data=response.read();return response.status,json.loads(data) if data else None
     except urllib.error.HTTPError as error:
         data=error.read()
@@ -66,7 +72,7 @@ try:
     invite_id=re.search(r'Invitation ID: ([a-f0-9-]+)',output)[1]
     invitation=re.search(r'Code \(shown once\): ([a-f0-9]+)',output)[1]
     status,registered=api('/v1/auth/register',{'loginName':name,'gameName':name,'password':password,'invitation':invitation})
-    check(status==200,'Register through Cloudflare Tunnel')
+    check(status==200,'Register through the configured direct HTTPS origin')
     user_id=registered['profile']['id']
     check(registered['profile']['gameName']==name and bool(registered['recoveryCode']),'Preserve exact game name and issue recovery code')
     check(api('/v1/account/me',token=registered['accessToken'])[0]==200,'Access-token authenticated profile')
@@ -90,6 +96,6 @@ finally:
     try:cleanup()
     except Exception:sys.exit('Smoke-test cleanup failed; inspect only this test account before retrying.')
 
-report={'passed':len(checks),'checks':checks,'temporaryAccountRemoved':True,'endpoint':'https://launcher.boshan.uk'}
+report={'passed':len(checks),'checks':checks,'temporaryAccountRemoved':True,'endpoint':endpoint,'proxyMode':'direct'}
 (ROOT/'.local/public-auth-smoke.json').write_text(json.dumps(report,indent=2),encoding='utf-8')
 print(json.dumps(report,indent=2))

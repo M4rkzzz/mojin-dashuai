@@ -42,10 +42,14 @@ public sealed class LauncherSettings
     public int Concurrency { get; set; } = 4;
     public int LimitMiB { get; set; }
     public string Proxy { get; set; } = "";
+    public string ProxyMode { get; set; } = "direct";
+    public string SkinSource { get; set; } = "account";
     public bool ReducedMotion { get; set; }
     public string Theme { get; set; } = "dark";
     public void Validate()
     {
+        if (ProxyMode is not ("direct" or "system" or "manual") || SkinSource is not ("account" or "littleskin")) throw new InvalidDataException("网络或皮肤来源设置无效。");
+        if (ProxyMode == "manual" && string.IsNullOrWhiteSpace(Proxy)) throw new InvalidDataException("请填写代理地址。");
         if (!Path.IsPathFullyQualified(Root) || Concurrency is < 1 or > 16 || LimitMiB is < 0 or > 10240 || Width is < 640 or > 16384 || Height is < 480 or > 16384 || Memory.Values.Any(m => m is < 1024 or > 65536)) throw new InvalidDataException("请检查目录、内存、窗口或下载设置的范围。");
         if (Proxy.Length > 0 && (!Uri.TryCreate(Proxy, UriKind.Absolute, out var proxy) || proxy.Scheme is not ("http" or "https" or "socks5") || proxy.UserInfo.Length != 0)) throw new InvalidDataException("代理地址无效，请勿在代理地址中保存账号凭据。");
         foreach (var id in new[] { "m3e", "dc2", "mb" }) if (!Memory.ContainsKey(id) || !Java.ContainsKey(id) || !Jvm.ContainsKey(id) || !SelectedRoutes.ContainsKey(id) || SelectedRoutes[id] is not ("auto" or "0" or "1")) throw new InvalidDataException("实例设置不完整。");

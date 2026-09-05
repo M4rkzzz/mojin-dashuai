@@ -3,6 +3,9 @@ using Boshan.Desktop;
 using Boshan.Launcher;
 
 if(args is ["--launcher-update-smoke",var fixture]){await LauncherUpdateSmoke.Run(fixture);return;}
+if(args is ["--instance-state-smoke"]){InstanceStateSmoke.Run();return;}
+if(args is ["--dispatcher-install-smoke"]){DispatcherInstallSmoke.Run();return;}
+if(args is ["--microsoft-resume"]){await MicrosoftResume.Run();return;}
 if(args is ["--microsoft-contract"]){await MicrosoftContract.Run();return;}
 if(args is ["--content-path-smoke",var contentRoot]){await ContentPathSmoke.Run(contentRoot);return;}
 if(args is ["--route-latency-smoke"]){foreach(var instance in Routes.Domains.Keys)Console.WriteLine(System.Text.Json.JsonSerializer.Serialize(new{instance,routes=await Routes.ProbeAll(instance)}));return;}
@@ -21,8 +24,9 @@ var passed=new List<string>();
 void Check(bool condition,string name){if(!condition)throw new InvalidOperationException(name);passed.Add(name);}
 try
 {
+    NetworkPolicy.Configure(new LauncherSettings{ProxyMode="direct"});
     var vault=new Vault(root);
-    accounts=new(vault,"https://launcher.boshan.uk","");
+    accounts=new(vault,NetworkPolicy.DirectApi,"");
     var credentials=JsonSerializer.SerializeToElement(new {input.LoginName,input.Password},Json.Options);
     await accounts.Login("login",credentials);
     Check(accounts.Current?.Profile.GameName==input.LoginName,"Native login deserializes the exact fixed game name");
@@ -30,7 +34,7 @@ try
     Check(File.Exists(Path.Combine(root,"account.dpapi")),"Native session is persisted with Windows DPAPI");
     var ciphertext=await File.ReadAllBytesAsync(Path.Combine(root,"account.dpapi"));
     Check(!System.Text.Encoding.UTF8.GetString(ciphertext).Contains(accounts.Current!.AccessToken),"Persisted file contains no plaintext access token");
-    accounts=new(new Vault(root),"https://launcher.boshan.uk","");
+    accounts=new(new Vault(root),NetworkPolicy.DirectApi,"");
     var restored=await accounts.Restore();
     Check(restored?.GameName==input.LoginName,"A new native account manager restores the session");
     var game=await accounts.GameSession();

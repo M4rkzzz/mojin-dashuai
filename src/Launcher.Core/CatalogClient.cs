@@ -7,15 +7,11 @@ namespace Boshan.Launcher;
 public sealed record CatalogCheckpoint(long Sequence, string Hash);
 public sealed class CatalogClient(string api, IReadOnlyDictionary<string,string> publicKeys, string checkpointPath)
 {
-    private readonly HttpClient client = new(new HttpClientHandler { UseCookies = false }) { Timeout = TimeSpan.FromSeconds(30), MaxResponseContentBufferSize = 16*1024*1024 };
     public async Task<Catalog> Fetch(CancellationToken token = default)
     {
-        if(client.DefaultRequestHeaders.UserAgent.Count==0)client.DefaultRequestHeaders.UserAgent.ParseAdd("MojinDashuai/"+typeof(CatalogClient).Assembly.GetName().Version);
         var uri = new Uri(new Uri(api), "/v1/catalog");
         if (uri.Scheme != "https") throw new InvalidDataException("发布目录必须通过 HTTPS 获取。");
-        using var response = await client.GetAsync(uri, token);
-        if (!response.IsSuccessStatusCode) throw new HttpRequestException("正式内容尚未发布，或目录服务暂时不可用。请稍后重试。", null, response.StatusCode);
-        var bytes = await response.Content.ReadAsByteArrayAsync(token);
+        var bytes = await NetworkPolicy.Metadata(uri,"获取服务器目录",token);
         var envelope = JsonSerializer.Deserialize<SignedEnvelope>(bytes,Json.Options)!;
         var catalog = ContentSecurity.Verify<Catalog>(envelope,publicKeys);
         var hash = Convert.ToHexString(SHA256.HashData(bytes));
@@ -38,11 +34,13 @@ public sealed class CatalogClient(string api, IReadOnlyDictionary<string,string>
         if (!ContentSecurity.HashPattern().IsMatch(release.Sha256)) throw new InvalidDataException("发布引用缺少校验信息。");
         var uri = new Uri(release.ManifestUrl);
         if (uri.Scheme != "https" || uri.UserInfo.Length != 0) throw new InvalidDataException("发布清单来源无效。");
-        var bytes = await client.GetByteArrayAsync(uri,token);
+        var bytes = await NetworkPolicy.Metadata(uri,"获取客户端清单",token).ConfigureAwait(false);
+        return await Task.Run(()=>{
         if (!Convert.ToHexString(SHA256.HashData(bytes)).Equals(release.Sha256,StringComparison.OrdinalIgnoreCase)) throw new InvalidDataException("发布清单哈希无效。");
         var manifest=ContentSecurity.Verify<PackManifest>(JsonSerializer.Deserialize<SignedEnvelope>(bytes,Json.Options)!,publicKeys);
         ContentSecurity.Validate(manifest);
         if (manifest.Instance != instance || manifest.Version != release.Version || manifest.Sequence != release.Sequence || manifest.Compatibility != release.Compatibility) throw new InvalidDataException("清单与选中的服务器版本不一致。");
         return manifest;
+        },token).ConfigureAwait(false);
     }
 }

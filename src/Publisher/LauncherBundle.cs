@@ -36,8 +36,15 @@ internal static class LauncherBundle
         var archive=new ContentFile(archiveRelative,new FileInfo(archivePath).Length,hash,[url],FilePolicy.Managed,"魔金大帅启动器构建产物");
         var files=new List<ContentFile>();
         foreach(var (relative,file) in inventory)
-            files.Add(new(relative,new FileInfo(file).Length,await ContentSecurity.HashFile(file),[url],FilePolicy.Managed,"启动器压缩包内文件，仅从完整签名压缩包提取"));
-        var release=new LauncherRelease(sequence,version,"windows-x64",archive,files.ToArray());LauncherUpdates.Validate(release);
+        {
+            var fileHash=await ContentSecurity.HashFile(file);
+            var objectRelative="objects/sha256/"+fileHash;
+            var objectPath=ContentSecurity.SafePath(output,objectRelative);
+            Directory.CreateDirectory(Path.GetDirectoryName(objectPath)!);
+            if(!File.Exists(objectPath))File.Copy(file,objectPath);
+            files.Add(new(relative,new FileInfo(file).Length,fileHash,[new Uri(uri,objectRelative).AbsoluteUri],FilePolicy.Managed,"魔金大帅启动器构建产物，按文件签名校验"));
+        }
+        var release=new LauncherRelease(sequence,version,"windows-x64",archive,files.ToArray(),Differential:true);LauncherUpdates.Validate(release);
         Json.Write(Path.Combine(output,"launcher-release.json"),release);
         Console.WriteLine($"Launcher bundle prepared: {files.Count} files, {archive.Size} bytes, SHA256 {hash}.");
     }

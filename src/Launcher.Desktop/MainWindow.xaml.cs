@@ -17,6 +17,7 @@ namespace Boshan.Desktop;
 
 public sealed record AppConfig(string Api,string MicrosoftClientId,Dictionary<string,string> PublicKeys);
 public sealed record BridgeRequest(string Id,string Command,JsonElement Args);
+public sealed record ResumeDownload(ReleaseRef Release,bool LaunchAfter,TransferProgress? Progress=null,RollbackPin? Rollback=null);
 public partial class MainWindow : Window
 {
     private readonly string appData=Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),"Boshan","Launcher");
@@ -25,6 +26,14 @@ public partial class MainWindow : Window
     private readonly Dictionary<string,TransferProgress> transferProgress=[];
     private readonly Dictionary<string,PackManifest> pendingPacks=[];
     private readonly HashSet<string> launchAfterDownload=[];
+    private readonly HashSet<string> instanceOperations=[];
+    private readonly HashSet<string> cancelledDownloads=[];
+    private readonly HashSet<string> pausedDownloads=[];
+    private readonly Dictionary<string,NetworkDiagnostic> diagnostics=[];
+    private readonly Dictionary<string,ResumeDownload> savedDownloads=[];
+    private readonly Dictionary<string,long> savedProgressAt=[];
+    private readonly Dictionary<string,(DateTime Written,long Length,string Version)> installedVersions=[];
+    private readonly object logGate=new();
     private readonly Dictionary<string,RollbackPin> pendingRollbackPins=[];
     private LauncherSettings settings=new();
     private Accounts accounts=null!;
@@ -36,7 +45,7 @@ public partial class MainWindow : Window
     private LauncherUpdates launcherUpdates=null!;
     private string updateApi="";
     private bool checkingLauncherUpdate,restartingLauncher,migratingContent;
-    private object launcherUpdate=new {Phase="idle",Version=(string?)null,Downloaded=0L,Total=0L};
+    private object launcherUpdate=App.StartupUpdateState;
     public MainWindow()
     {
         InitializeComponent();
@@ -52,10 +61,11 @@ public partial class MainWindow : Window
             Directory.CreateDirectory(appData);
             var config=Json.Read<AppConfig>(Path.Combine(AppContext.BaseDirectory,"launcher.json"));
             launcherUpdates=new(UpdateStartup.DataRoot,config.PublicKeys);updateApi=config.Api;
-            var settingsPath=Path.Combine(appData,"settings.json");settings=ContentDirectorySetup.LoadSettings(settingsPath,UpdateStartup.ProgramDirectory);settings.Validate();
+            var settingsPath=Path.Combine(appData,"settings.json");settings=ContentDirectorySetup.LoadSettings(settingsPath,UpdateStartup.ProgramDirectory);settings.Validate();NetworkPolicy.Configure(settings);
             var microsoftId=config.MicrosoftClientId??"";
             accounts=new(new Vault(appData),config.Api,microsoftId.Trim(),()=>new MicrosoftWebUi(this,Path.Combine(appData,"MicrosoftAuth")));
             catalog=new(config.Api,config.PublicKeys,Path.Combine(appData,"catalog-checkpoint.json"));
+            RestoreDownloads();
             try{CoreWebView2Environment.GetAvailableBrowserVersionString();}
             catch(WebView2RuntimeNotFoundException){await InstallWebView();}
             var options=new CoreWebView2EnvironmentOptions();
@@ -76,7 +86,7 @@ public partial class MainWindow : Window
             core.PermissionRequested+=(_,e)=>e.State=CoreWebView2PermissionState.Deny;
             core.DownloadStarting+=(_,e)=>e.Cancel=true;
             core.WebMessageReceived+=HandleMessage;
-            core.NavigationCompleted+=(_,_)=>{Loading.Visibility=Visibility.Collapsed;Event("window-state",new {Maximized=WindowState==WindowState.Maximized});_=CheckLauncherUpdate();};
+            core.NavigationCompleted+=(_,_)=>{Loading.Visibility=Visibility.Collapsed;Event("window-state",new {Maximized=WindowState==WindowState.Maximized});};
             initialized=true;core.Navigate("https://app.boshan.local/index.html");
         }
         catch(Exception ex){Loading.Text="启动器准备失败："+Friendly(ex);File.WriteAllText(Path.Combine(appData,"startup-diagnostic.txt"),ex.GetType().FullName+"\n"+ex.HResult+"\n"+ex.StackTrace);}
@@ -108,7 +118,9 @@ public partial class MainWindow : Window
         }
         catch(Exception ex)
         {
-            if(initialized&&request is not null)Web.CoreWebView2.PostWebMessageAsJson(JsonSerializer.Serialize(new {request.Id,Ok=false,Error=Friendly(ex)},Json.Options));
+            var diagnostic=NetworkPolicy.Find(ex)??(NetworkPolicy.IsNetwork(ex)?NetworkPolicy.Failure(ex,request?.Command??"连接服务").Diagnostic:null);
+            if(diagnostic is not null)RememberDiagnostic(diagnostic);
+            if(initialized&&request is not null)Web.CoreWebView2.PostWebMessageAsJson(JsonSerializer.Serialize(new {request.Id,Ok=false,Error=Friendly(ex),Diagnostic=diagnostic},Json.Options));
             Log(request?.Command??"bridge",ex);
         }
     }
@@ -121,11 +133,16 @@ public partial class MainWindow : Window
             throw new InvalidDataException("请先设置游戏文件保存位置。");
         switch(command)
         {
-            case "bootstrap": UpdateStartup.MarkReady();return new {Profile=await accounts.Restore(),Settings=settings,LauncherUpdate=launcherUpdate,WindowMaximized=WindowState==WindowState.Maximized,Installs=Routes.Domains.Keys.Select(id=>new {Id=id,Pack=new TransactionalInstaller(settings.Root).ReadInstalled(id)}).Where(x=>x.Pack is not null).ToDictionary(x=>x.Id,x=>new {Version=x.Pack!.Manifest.Version,State="installed"})};
+            case "bootstrap":
+                UpdateStartup.MarkReady();
+                if(await App.CompleteLegacyStartupUpdate()){Application.Current.Shutdown();return null;}
+                launcherUpdate=App.StartupUpdateState;
+                return new {Profile=await accounts.Restore(),Settings=settings,LauncherUpdate=launcherUpdate,WindowMaximized=WindowState==WindowState.Maximized,Installs=await InstalledStates(),Progress=transferProgress,States=InstanceStates()};
+            case "instances.status":return new {Installs=await InstalledStates(),Progress=transferProgress,States=InstanceStates()};
             case "launcher.update.check":return await CheckLauncherUpdate(true);
             case "launcher.update.status":return launcherUpdate;
             case "launcher.update.restart":
-                if(checkingLauncherUpdate||games.Count>0||transfers.Count>0||pendingPacks.Count>0||microsoftLogin is not null)throw new InvalidDataException("请先结束游戏、下载或登录任务。");
+                if(checkingLauncherUpdate||games.Count>0||instanceOperations.Count>0||transfers.Count>0||savedDownloads.Count>0||microsoftLogin is not null)throw new InvalidDataException("请先结束游戏、下载或登录任务。");
                 var update=await launcherUpdates.Ready(AppContext.BaseDirectory,App.ReleaseVersion);
                 if(update is null)throw new InvalidDataException("没有已准备好的启动器更新。");
                 restartingLauncher=true;
@@ -150,7 +167,7 @@ public partial class MainWindow : Window
                 try
                 {
                     if(accounts.Current is null)throw new InvalidDataException("请先登录账号。");
-                    if(games.Count>0||transfers.Count>0||pendingPacks.Count>0)throw new InvalidDataException("请先结束游戏和下载任务。");
+                    if(games.Count>0||instanceOperations.Count>0||transfers.Count>0||savedDownloads.Count>0)throw new InvalidDataException("请先结束游戏和下载任务。");
                     settings=ContentDirectorySetup.Complete(settings,Path.Combine(appData,"settings.json"),args.GetProperty("root").GetString()??"");
                     return settings;
                 }
@@ -163,28 +180,53 @@ public partial class MainWindow : Window
                     next.ContentDirectoryConfigured=settings.ContentDirectoryConfigured;
                     if(!Path.GetFullPath(next.Root).Equals(Path.GetFullPath(settings.Root),StringComparison.OrdinalIgnoreCase))throw new InvalidDataException("请通过目录迁移功能更换内容目录。");
                     foreach(var id in Routes.Domains.Keys)if(next.Java[id]!=settings.Java[id]&&!string.IsNullOrEmpty(next.Java[id]))await RuntimeManager.Validate(next.Java[id],id=="m3e"?8:id=="dc2"?17:25);
-                    Json.Write(Path.Combine(appData,"settings.json"),next);settings=next;return null;
+                    Json.Write(Path.Combine(appData,"settings.json"),next);settings=next;NetworkPolicy.Configure(settings);accounts.ReconfigureNetwork();return null;
                 }
                 finally{settingsGate.Release();}
             case "routes.probe":return (await Routes.ProbeAll(Id())).Select(x=>x.Latency).ToArray();
             case "instance.install":
             {
-                var id=Id();launchAfterDownload.Add(id);
-                try{await Install(id);}finally{if(!pendingPacks.ContainsKey(id))launchAfterDownload.Remove(id);}
-                if(!pendingPacks.ContainsKey(id))await Launch(id,false);return null;
+                var id=Id();var downloadOnly=args.TryGetProperty("downloadOnly",out var only)&&only.GetBoolean();
+                await InstanceOperation(id,async()=>
+                {
+                    if(downloadOnly)launchAfterDownload.Remove(id);else launchAfterDownload.Add(id);
+                    await Install(id);
+                    if(!pendingPacks.ContainsKey(id)&&launchAfterDownload.Remove(id)&&!cancelledDownloads.Contains(id)&&!pausedDownloads.Contains(id))await Launch(id,false);
+                });return null;
             }
-            case "instance.repair":await Install(Id());return null;
-            case "instance.rollback":await Rollback(Id());return null;
+            case "instance.repair":{var id=Id();await InstanceOperation(id,()=>Install(id));return null;}
+            case "instance.rollback":{var id=Id();await InstanceOperation(id,()=>Rollback(id));return null;}
             case "download.pause":
             {
-                var id=Id();if(transfers.TryGetValue(id,out var transfer))transfer.Cancel();return null;
+                var id=Id();pausedDownloads.Add(id);if(transfers.TryGetValue(id,out var transfer))transfer.Cancel();return null;
             }
             case "download.resume":
             {
-                var id=Id();if(!pendingPacks.TryGetValue(id,out var pack))throw new InvalidDataException("没有可续传的任务。");await Transfer(pack);
-                if(!pendingPacks.ContainsKey(id)&&launchAfterDownload.Remove(id))await Launch(id,false);return null;
+                var id=Id();await InstanceOperation(id,async()=>
+                {
+                    if(!pendingPacks.TryGetValue(id,out var pack))
+                    {
+                        if(!savedDownloads.TryGetValue(id,out var saved))throw new InvalidDataException("没有可续传的任务。");
+                        await accounts.GameSession();
+                        if(cancelledDownloads.Contains(id))return;
+                        var directory=await catalog.Fetch();var server=directory.Servers.Single(x=>x.Id==id);
+                        if(cancelledDownloads.Contains(id))return;
+                        var release=server.Release?.Sha256==saved.Release.Sha256?server.Release:server.Rollbacks.FirstOrDefault(r=>r.Sha256==saved.Release.Sha256)??server.Release;
+                        if(release is null)throw new InvalidDataException("此版本当前不可下载。");
+                        pack=await catalog.GetManifest(id,release);if(cancelledDownloads.Contains(id))return;TrackDownload(id,release);
+                    }
+                    await Transfer(pack);
+                    if(!pendingPacks.ContainsKey(id)&&launchAfterDownload.Remove(id)&&!cancelledDownloads.Contains(id)&&!pausedDownloads.Contains(id))await Launch(id,false);
+                });return null;
             }
-            case "instance.launch":await Launch(Id());return null;
+            case "download.cancel":
+            {
+                var id=Id();launchAfterDownload.Remove(id);cancelledDownloads.Add(id);
+                if(transfers.TryGetValue(id,out var transfer))transfer.Cancel();
+                else{pendingPacks.Remove(id);pendingRollbackPins.Remove(id);transferProgress.Remove(id);ForgetDownload(id);Event("download-cancelled",new{Instance=id});Event("instance-state",new{Instance=id,State=InstanceState(id)});}
+                return null;
+            }
+            case "instance.launch":{var id=Id();await InstanceOperation(id,()=>Launch(id));return null;}
             case "instance.folder":OpenFolder(new TransactionalInstaller(settings.Root).InstancePath(Id()));return null;
             case "instance.import":return await Import(Id(),args);
             case "instance.import.backups":OpenFolder(ContentSecurity.SafePath(new TransactionalInstaller(settings.Root).InstancePath(Id()),".hub/personal-import"));return null;
@@ -192,9 +234,24 @@ public partial class MainWindow : Window
             case "cache.clean":return CleanCache();
             case "content.manage":return ContentDialog(Id());
             case "diagnostics.export":return ExportDiagnostics();
+            case "diagnostics.copy":
+                var diagnosticId=args.GetProperty("id").GetString()??"";
+                if(!diagnostics.TryGetValue(diagnosticId,out var diagnostic))throw new InvalidDataException("诊断记录已过期，请重新检测。");
+                Clipboard.SetText(JsonSerializer.Serialize(diagnostic,Json.Options));return null;
+            case "network.check":
+                var checks=await NetworkChecks.Run(settings);
+                foreach(var check in checks)if(check.Diagnostic is not null)RememberDiagnostic(check.Diagnostic);
+                return checks;
             case "account.password":return await AccountDialog(false);
             case "account.recovery":return await AccountDialog(true);
-            case "account.avatar":return await accounts.Skin();
+            case "account.avatar":return await accounts.Skin(settings.SkinSource,args.TryGetProperty("refresh",out var refreshSkin)&&refreshSkin.GetBoolean());
+            case "account.skin.source":
+                var source=args.GetProperty("source").GetString();
+                if(source is not ("account" or "littleskin"))throw new InvalidDataException("不支持的皮肤来源。");
+                settings.SkinSource=source;Json.Write(Path.Combine(appData,"settings.json"),settings);
+                return await accounts.Skin(settings.SkinSource,refresh:true);
+            case "account.skin.open":
+                Process.Start(new ProcessStartInfo("https://littleskin.cn/user"){UseShellExecute=true});return null;
             case "account.skin":return await SkinDialog(args);
             case "window.minimize":WindowState=WindowState.Minimized;return null;
             case "window.maximize":WindowState=WindowState==WindowState.Maximized?WindowState.Normal:WindowState.Maximized;return null;
@@ -202,43 +259,143 @@ public partial class MainWindow : Window
             default:throw new InvalidDataException("启动器不支持此操作。");
         }
     }
+    private string InstanceState(string id)
+    {
+        if(games.ContainsKey(id)||new TransactionalInstaller(settings.Root).IsRunning(id))return "running";
+        if(transferProgress.TryGetValue(id,out var p))return p.Paused?"paused":"downloading";
+        if(instanceOperations.Contains(id))return "preparing";
+        return File.Exists(Path.Combine(new TransactionalInstaller(settings.Root).InstancePath(id),".hub","installed.json"))?"installed":"not-installed";
+    }
+    private Dictionary<string,string> InstanceStates()=>Routes.Domains.Keys.ToDictionary(id=>id,InstanceState);
+    private async Task<object> InstalledStates()
+    {
+        var found=new Dictionary<string,object>();
+        foreach(var id in Routes.Domains.Keys)
+        {
+            var path=Path.Combine(new TransactionalInstaller(settings.Root).InstancePath(id),".hub","installed.json");
+            var info=new FileInfo(path);if(!info.Exists){installedVersions.Remove(path);continue;}
+            if(!installedVersions.TryGetValue(path,out var cached)||cached.Written!=info.LastWriteTimeUtc||cached.Length!=info.Length)
+            {
+                var version=await Task.Run(()=>Json.Read<InstalledPack>(path).Manifest.Version);
+                cached=(info.LastWriteTimeUtc,info.Length,version);installedVersions[path]=cached;
+            }
+            found[id]=new{Version=cached.Version,State=InstanceState(id)};
+        }
+        return found;
+    }
+    private string DownloadRecordPath(string id)=>ContentSecurity.SafePath(new TransactionalInstaller(settings.Root).InstancePath(id),".hub/download.json");
+    private void RestoreDownloads()
+    {
+        if(!settings.ContentDirectoryConfigured)return;
+        foreach(var id in Routes.Domains.Keys)
+        {
+            var path=DownloadRecordPath(id);if(!File.Exists(path))continue;
+            try
+            {
+                var saved=Json.Read<ResumeDownload>(path);savedDownloads[id]=saved;
+                if(saved.LaunchAfter)launchAfterDownload.Add(id);
+                if(saved.Rollback is not null)pendingRollbackPins[id]=saved.Rollback;
+                transferProgress[id]=(saved.Progress??new(id,"下载已暂停",0,0,0)) with {Instance=id,Phase="下载已暂停",Paused=true,BytesPerSecond=0};
+            }
+            catch(Exception ex)when(ex is IOException or JsonException or InvalidDataException){Log("download.restore",ex);}
+        }
+    }
+    private void TrackDownload(string id,ReleaseRef release)
+    {
+        savedDownloads[id]=new(release,launchAfterDownload.Contains(id),transferProgress.GetValueOrDefault(id),pendingRollbackPins.GetValueOrDefault(id));
+        Json.Write(DownloadRecordPath(id),savedDownloads[id]);
+    }
+    private void SaveDownloadProgress(TransferProgress progress,bool force=false)
+    {
+        if(!savedDownloads.TryGetValue(progress.Instance,out var saved))return;
+        var now=Environment.TickCount64;if(!force&&now-savedProgressAt.GetValueOrDefault(progress.Instance)<2000)return;
+        savedProgressAt[progress.Instance]=now;savedDownloads[progress.Instance]=saved with {Progress=progress};
+        try{Json.Write(DownloadRecordPath(progress.Instance),savedDownloads[progress.Instance]);}
+        catch(IOException ex){Log("download.checkpoint",ex);}
+    }
+    private void ForgetDownload(string id)
+    {
+        savedDownloads.Remove(id);savedProgressAt.Remove(id);var path=DownloadRecordPath(id);if(File.Exists(path))File.Delete(path);
+    }
+    private async Task InstanceOperation(string id,Func<Task> operation)
+    {
+        if(!instanceOperations.Add(id))throw new InvalidDataException("此世界已有任务正在进行。");
+        cancelledDownloads.Remove(id);pausedDownloads.Remove(id);Event("instance-state",new{Instance=id,State="preparing"});
+        try{await operation();}
+        catch
+        {
+            if(savedDownloads.ContainsKey(id)&&!transferProgress.ContainsKey(id))
+            {
+                var paused=new TransferProgress(id,"下载未完成",0,0,0,true);transferProgress[id]=paused;SaveDownloadProgress(paused,true);Event("progress",paused);
+            }
+            throw;
+        }
+        finally
+        {
+            instanceOperations.Remove(id);cancelledDownloads.Remove(id);pausedDownloads.Remove(id);
+            if(!pendingPacks.ContainsKey(id)&&!savedDownloads.ContainsKey(id))launchAfterDownload.Remove(id);
+            Event("instance-state",new{Instance=id,State=InstanceState(id)});
+        }
+    }
     private async Task Install(string id)
     {
         pendingRollbackPins.Remove(id);
         await accounts.GameSession();
+        if(cancelledDownloads.Contains(id))return;
         var directory=await catalog.Fetch();var server=directory.Servers.SingleOrDefault(s=>s.Id==id);
+        if(cancelledDownloads.Contains(id))return;
         if(server?.Release is null)throw new InvalidDataException("这个世界正在完成安装与入服验收，正式内容尚未开放。");
-        await Transfer(await catalog.GetManifest(id,server.Release));
+        TrackDownload(id,server.Release);
+        var pack=await catalog.GetManifest(id,server.Release);if(cancelledDownloads.Contains(id))return;await Transfer(pack);
     }
     private async Task Transfer(PackManifest pack)
     {
+        if(cancelledDownloads.Contains(pack.Instance))return;
         if(transfers.ContainsKey(pack.Instance))throw new InvalidDataException("此世界已有下载任务。");
         pendingPacks[pack.Instance]=pack;using var cancellation=new CancellationTokenSource();transfers[pack.Instance]=cancellation;
-        using var downloader=new Downloader(Path.Combine(settings.Root,"cache"),settings);
-        var progress=new Progress<TransferProgress>(p=>{transferProgress[p.Instance]=p;Event("progress",p);});
+        using var downloader=new Downloader(Path.Combine(settings.Root,"cache"),settings,origin:NetworkPolicy.DirectApi);
+        transferProgress[pack.Instance]=new(pack.Instance,"正在准备文件",0,pack.Files.Sum(f=>f.Size),0);Event("progress",transferProgress[pack.Instance]);
+        var root=settings.Root;var concurrency=settings.Concurrency;string? phase=null;
+        using var progress=new DispatcherTransferProgress(Dispatcher,p=>
+        {
+            if(transfers.TryGetValue(p.Instance,out var active)&&ReferenceEquals(active,cancellation)&&!cancellation.IsCancellationRequested){transferProgress[p.Instance]=p;SaveDownloadProgress(p);Event("progress",p);}
+        },p=>
+        {
+            if(phase is not null)LogPhase(pack.Instance,phase,"completed");phase=p.Phase;LogPhase(pack.Instance,phase,"started");
+        });
         try
         {
-            await new TransactionalInstaller(settings.Root).Install(pack,downloader,settings.Concurrency,progress,cancellation.Token);
+            await BackgroundInstallation.Run(()=>new TransactionalInstaller(root).Install(pack,downloader,concurrency,progress,cancellation.Token),cancellation.Token);
+            if(phase is not null)LogPhase(pack.Instance,phase,"completed");phase=null;
             if(pendingRollbackPins.Remove(pack.Instance,out var pin))Json.Write(Path.Combine(new TransactionalInstaller(settings.Root).InstancePath(pack.Instance),".hub","rollback-pin.json"),pin);
-            pendingPacks.Remove(pack.Instance);Event("installed",new{Instance=pack.Instance});
+            pendingPacks.Remove(pack.Instance);transferProgress.Remove(pack.Instance);ForgetDownload(pack.Instance);Event("installed",new{Instance=pack.Instance});
         }
         catch(OperationCanceledException)when(cancellation.IsCancellationRequested)
         {
-            var last=transferProgress.GetValueOrDefault(pack.Instance)??new(pack.Instance,"下载已暂停",0,pack.Files.Sum(f=>f.Size),0);
-            Event("progress",last with {Paused=true,BytesPerSecond=0});
+            if(progress.Current is {} latest)transferProgress[pack.Instance]=latest;
+            if(phase is not null)LogPhase(pack.Instance,phase,cancelledDownloads.Contains(pack.Instance)?"cancelled":"paused");phase=null;
+            if(cancelledDownloads.Contains(pack.Instance)){pendingPacks.Remove(pack.Instance);pendingRollbackPins.Remove(pack.Instance);transferProgress.Remove(pack.Instance);ForgetDownload(pack.Instance);Event("download-cancelled",new{Instance=pack.Instance});}
+            else PauseProgress(pack,"下载已暂停");
         }
+        catch{if(progress.Current is {} latest)transferProgress[pack.Instance]=latest;if(phase is not null)LogPhase(pack.Instance,phase,"failed");PauseProgress(pack,"下载未完成");throw;}
         finally{transfers.Remove(pack.Instance);}
+    }
+    private void PauseProgress(PackManifest pack,string phase)
+    {
+        var last=transferProgress.GetValueOrDefault(pack.Instance)??new(pack.Instance,phase,0,pack.Files.Sum(f=>f.Size),0);
+        var paused=last with {Phase=phase,Paused=true,BytesPerSecond=0};transferProgress[pack.Instance]=paused;SaveDownloadProgress(paused,true);Event("progress",paused);
     }
     private async Task Rollback(string id)
     {
         var installer=new TransactionalInstaller(settings.Root);var oldPath=Path.Combine(installer.InstancePath(id),".hub","previous.json");
         if(!File.Exists(oldPath))throw new InvalidDataException("没有可回退的上一版本。");
-        var old=Json.Read<InstalledPack>(oldPath);var directory=await catalog.Fetch();var server=directory.Servers.Single(s=>s.Id==id);
+        var old=await Task.Run(()=>Json.Read<InstalledPack>(oldPath));var directory=await catalog.Fetch();var server=directory.Servers.Single(s=>s.Id==id);
         var release=server.Rollbacks.SingleOrDefault(r=>r.Version==old.Manifest.Version&&r.Compatibility==server.Release?.Compatibility);
         if(release is null)throw new InvalidDataException("上一版本未被列为当前服务器可用的回退版本。");
         var pack=await catalog.GetManifest(id,release);
         launchAfterDownload.Remove(id);
         pendingRollbackPins[id]=new(pack.Version,pack.Sequence,server.Release!.Sequence);
+        TrackDownload(id,release);
         await Transfer(pack);
     }
     private async Task<object> CheckLauncherUpdate(bool retry=false)
@@ -261,14 +418,21 @@ public partial class MainWindow : Window
                 {
                     if(retry)launcherUpdates.Retry(release);
                     if(launcherUpdates.HasFailed(release))throw new InvalidDataException("新版启动失败，已保留原版本。可以重新检查更新。");
-                    State("downloading",release.Version,total:release.Archive.Size);
-                    using var downloader=new Downloader(Path.Combine(launcherUpdates.Root,"cache"),settings);
+                    var downloadBytes=await launcherUpdates.PendingDownloadBytes(release,AppContext.BaseDirectory);
+                    State("downloading",release.Version,total:downloadBytes);
+                    using var downloader=new Downloader(Path.Combine(launcherUpdates.Root,"cache"),settings,origin:NetworkPolicy.DirectApi);
                     long received=0,last=0;
-                    await launcherUpdates.Prepare(envelope,downloader,bytes=>{received+=bytes;var now=Environment.TickCount64;if(now-last>500){last=now;State("downloading",release.Version,received,release.Archive.Size);}});
+                    await launcherUpdates.Prepare(envelope,downloader,bytes=>{received+=bytes;var now=Environment.TickCount64;if(now-last>500){last=now;State("downloading",release.Version,received,downloadBytes);}});
                 }
             }
             var ready=await launcherUpdates.Ready(AppContext.BaseDirectory,App.ReleaseVersion);
             State(ready is null?"current":"ready",ready?.Release.Version);
+            if(ready is not null&&games.Count==0&&transfers.Count==0&&instanceOperations.Count==0&&savedDownloads.Count==0&&microsoftLogin is null)
+            {
+                restartingLauncher=true;
+                try{if(await UpdateStartup.Start(launcherUpdates,ready)){Application.Current.Shutdown();return launcherUpdate;}}
+                finally{restartingLauncher=false;}
+            }
         }
         catch(Exception ex){State("failed",error:Friendly(ex));Log("launcher-update",ex);}
         finally{checkingLauncherUpdate=false;}
@@ -277,15 +441,15 @@ public partial class MainWindow : Window
     private async Task Launch(string id,bool checkForUpdates=true)
     {
         if(games.ContainsKey(id))throw new InvalidDataException("此世界已在运行。");
-        if(pendingPacks.ContainsKey(id))throw new InvalidDataException("请先完成当前下载。");
+        if(savedDownloads.ContainsKey(id))throw new InvalidDataException("请先完成当前下载。");
         await accounts.GameSession();var installer=new TransactionalInstaller(settings.Root);
         if(checkForUpdates)
         {
-            PackManifest installed;
-            using(var preparation=installer.Acquire(id))
+            var installed=await Task.Run(()=>
             {
-                installer.Recover(id);installed=(installer.ReadInstalled(id)??throw new InvalidDataException("请先安装这个世界。")).Manifest;
-            }
+                using var preparation=installer.Acquire(id);
+                installer.Recover(id);return (installer.ReadInstalled(id)??throw new InvalidDataException("请先安装这个世界。")).Manifest;
+            });
             var pinPath=Path.Combine(installer.InstancePath(id),".hub","rollback-pin.json");
             var pin=File.Exists(pinPath)?Json.Read<RollbackPin>(pinPath):null;
             using var timeout=new CancellationTokenSource(TimeSpan.FromSeconds(8));
@@ -293,8 +457,8 @@ public partial class MainWindow : Window
             if(release is not null)
             {
                 var updated=await catalog.GetManifest(id,release);
-                pendingRollbackPins.Remove(id);launchAfterDownload.Add(id);await Transfer(updated);
-                if(pendingPacks.ContainsKey(id))return;
+                pendingRollbackPins.Remove(id);launchAfterDownload.Add(id);TrackDownload(id,release);await Transfer(updated);
+                if(pendingPacks.ContainsKey(id)||pausedDownloads.Contains(id)||cancelledDownloads.Contains(id))return;
                 launchAfterDownload.Remove(id);
             }
         }
@@ -302,10 +466,11 @@ public partial class MainWindow : Window
         var session=await accounts.GameSession();var gate=installer.Acquire(id);
         try
         {
-            installer.Recover(id);var pack=installer.ReadInstalled(id)??throw new InvalidDataException("请先安装这个世界。");
+            var pack=await Task.Run(()=>{installer.Recover(id);return installer.ReadInstalled(id)??throw new InvalidDataException("请先安装这个世界。");});
             var route=await Routes.Select(id,settings.SelectedRoutes[id]);
             var process=await new GameLauncher().Launch(pack.Manifest,settings,session,route);
             games[id]=process;Json.Write(Path.Combine(installer.InstancePath(id),".hub","active-game.json"),new ActiveGame(process.Id,process.StartTime.ToUniversalTime()));
+            Event("instance-state",new{Instance=id,State="running"});
             _=ObserveGame(id,process,gate);
             if(settings.WindowBehavior=="minimize")WindowState=WindowState.Minimized;
             if(settings.WindowBehavior=="hide")Hide();
@@ -315,7 +480,7 @@ public partial class MainWindow : Window
     private async Task ObserveGame(string id,Process process,FileStream gate)
     {
         await process.WaitForExitAsync();var code=process.ExitCode;
-        await Dispatcher.InvokeAsync(()=>{games.Remove(id);gate.Dispose();process.Dispose();Show();if(code!=0)Event("error","游戏已退出。可导出诊断日志帮助定位问题。");});
+        await Dispatcher.InvokeAsync(()=>{games.Remove(id);gate.Dispose();process.Dispose();Event("instance-state",new{Instance=id,State=InstanceState(id)});Show();if(code!=0)Event("error","游戏已退出。可导出诊断日志帮助定位问题。");});
     }
     private MicrosoftDevicePrompt ActiveMicrosoftPrompt()
     {
@@ -348,7 +513,7 @@ public partial class MainWindow : Window
     private void OpenFolder(string path){Directory.CreateDirectory(path);Process.Start(new ProcessStartInfo(path){UseShellExecute=true});}
     private async Task<object?> Import(string id,JsonElement args)
     {
-        if(games.ContainsKey(id)||transfers.ContainsKey(id)||pendingPacks.ContainsKey(id))throw new InvalidDataException("请先结束当前服务器的游戏和下载任务。");
+        if(games.ContainsKey(id)||instanceOperations.Contains(id)||transfers.ContainsKey(id)||savedDownloads.ContainsKey(id))throw new InvalidDataException("请先结束当前服务器的游戏和下载任务。");
         if(new TransactionalInstaller(settings.Root).ReadInstalled(id) is null)throw new InvalidDataException("下载后才可以导入。");
         var categories=args.TryGetProperty("categories",out var values)?values.Deserialize<string[]>(Json.Options)??[]:["settings","maps"];
         var dialog=new OpenFolderDialog {Title="选择旧客户端文件夹"};if(dialog.ShowDialog(this)!=true)return null;
@@ -357,7 +522,7 @@ public partial class MainWindow : Window
     }
     private async Task<object> Migrate()
     {
-        if(games.Count>0||transfers.Count>0||pendingPacks.Count>0)throw new InvalidDataException("请先结束游戏和下载任务。");
+        if(games.Count>0||instanceOperations.Count>0||transfers.Count>0||savedDownloads.Count>0)throw new InvalidDataException("请先结束游戏和下载任务。");
         var dialog=new OpenFolderDialog{Title="选择新的内容目录（需为空目录）"};if(dialog.ShowDialog(this)!=true)return new {Message="已取消迁移"};
         migratingContent=true;
         await settingsGate.WaitAsync();
@@ -377,7 +542,7 @@ public partial class MainWindow : Window
     }
     private object CleanCache()
     {
-        if(games.Count>0||transfers.Count>0||pendingPacks.Count>0)throw new InvalidDataException("请先结束游戏和下载任务。");
+        if(games.Count>0||instanceOperations.Count>0||transfers.Count>0||savedDownloads.Count>0)throw new InvalidDataException("请先结束游戏和下载任务。");
         var cache=Path.Combine(settings.Root,"cache");long bytes=0;
         if(Directory.Exists(cache))foreach(var file in Directory.EnumerateFiles(cache))
         {
@@ -425,13 +590,23 @@ public partial class MainWindow : Window
         using var zip=ZipFile.Open(dialog.FileName,ZipArchiveMode.Create);
         var logs=Path.Combine(appData,"diagnostic.log");
         if(File.Exists(logs)){var entry=zip.CreateEntry("launcher.log");using var writer=new StreamWriter(entry.Open());writer.Write(File.ReadAllText(logs));}
-        var info=zip.CreateEntry("environment.json");using(var writer=new StreamWriter(info.Open()))writer.Write(JsonSerializer.Serialize(new{Launcher=typeof(MainWindow).Assembly.GetName().Version?.ToString(),OS=Environment.OSVersion.VersionString,X64=Environment.Is64BitOperatingSystem,settings.Memory,settings.Width,settings.Height,settings.Concurrency},Json.Options));
+        var info=zip.CreateEntry("environment.json");using(var writer=new StreamWriter(info.Open()))writer.Write(JsonSerializer.Serialize(new{Launcher=typeof(MainWindow).Assembly.GetName().Version?.ToString(),OS=Environment.OSVersion.VersionString,X64=Environment.Is64BitOperatingSystem,settings.Memory,settings.Width,settings.Height,settings.Concurrency,settings.ProxyMode,Diagnostics=diagnostics.Values},Json.Options));
         return new {Message="诊断日志已导出"};
     }
     private void Log(string command,Exception ex)
     {
         // Do not serialize exception messages, request bodies, game command lines, URLs or account objects.
-        File.AppendAllText(Path.Combine(appData,"diagnostic.log"),$"{DateTimeOffset.UtcNow:O} {command} {ex.GetType().Name}\n");
+        try{lock(logGate)File.AppendAllText(Path.Combine(appData,"diagnostic.log"),JsonSerializer.Serialize(new{At=DateTimeOffset.UtcNow,Command=command,Type=ex.GetType().Name,Diagnostic=NetworkPolicy.Find(ex)},Json.Options)+"\n");}
+        catch(Exception loggingError)when(loggingError is IOException or UnauthorizedAccessException){ }
     }
-    private static string Friendly(Exception ex)=>ex is InvalidDataException or FileNotFoundException?ex.Message:ex is UnauthorizedAccessException?"没有写入这个文件夹的权限，请选择其他位置。":ex is IOException?"文件操作未完成，请检查磁盘空间、目录权限或文件占用。":ex is HttpRequestException or TaskCanceledException?"网络连接暂时不可用，请稍后重试。":"操作未完成。可导出诊断日志并联系管理员。";
+    private void LogPhase(string instance,string phase,string state)
+    {
+        try{lock(logGate)File.AppendAllText(Path.Combine(appData,"diagnostic.log"),JsonSerializer.Serialize(new{At=DateTimeOffset.UtcNow,Instance=instance,Phase=phase,State=state},Json.Options)+"\n");}
+        catch(Exception ex)when(ex is IOException or UnauthorizedAccessException){ }
+    }
+    private void RememberDiagnostic(NetworkDiagnostic diagnostic)
+    {
+        diagnostics[diagnostic.Id]=diagnostic;if(diagnostics.Count>30)diagnostics.Remove(diagnostics.Keys.First());
+    }
+    private static string Friendly(Exception ex)=>NetworkPolicy.Find(ex) is {} diagnostic?NetworkPolicy.Message(diagnostic):ex is InvalidDataException or FileNotFoundException?ex.Message:ex is UnauthorizedAccessException?"没有写入这个文件夹的权限，请选择其他位置。":ex is IOException?"文件操作未完成，请检查磁盘空间、目录权限或文件占用。":ex is HttpRequestException or TaskCanceledException?"网络连接暂时不可用，请稍后重试。":"操作未完成。可导出诊断日志并联系管理员。";
 }

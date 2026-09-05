@@ -8,6 +8,13 @@ public sealed record ActiveGame(int Pid,DateTime StartedAt);
 
 public sealed class TransactionalInstaller(string root)
 {
+    public bool IsRunning(string id)
+    {
+        var marker=Path.Combine(InstancePath(id),".hub","active-game.json");
+        if(!File.Exists(marker))return false;
+        try{var game=Json.Read<ActiveGame>(marker);using var process=Process.GetProcessById(game.Pid);return !process.HasExited&&Math.Abs((process.StartTime.ToUniversalTime()-game.StartedAt).TotalSeconds)<1;}
+        catch(Exception e)when(e is ArgumentException or IOException or System.ComponentModel.Win32Exception or System.Text.Json.JsonException){return false;}
+    }
     public string InstancePath(string id)
     {
         if (id is not ("m3e" or "dc2" or "mb")) throw new InvalidDataException("未知服务器。");
@@ -61,6 +68,7 @@ public sealed class TransactionalInstaller(string root)
         using var instanceLock = Acquire(manifest.Instance);
         Recover(manifest.Instance);
         var instance = InstancePath(manifest.Instance); var previous = ReadInstalled(manifest.Instance);
+        progress?.Report(new(manifest.Instance,"检查本地文件",0,0,0));
         var previousFiles = previous?.Manifest.Files.ToDictionary(f => f.Path, StringComparer.OrdinalIgnoreCase) ?? new Dictionary<string, ContentFile>(StringComparer.OrdinalIgnoreCase);
         var changed = new List<ContentFile>();
         foreach (var file in manifest.Files)
@@ -72,7 +80,7 @@ public sealed class TransactionalInstaller(string root)
             if (File.Exists(path) && file.Policy is FilePolicy.Seed or FilePolicy.Preserve) continue;
             if (!await ContentSecurity.Matches(path, file, token)) changed.Add(file);
         }
-        var total = changed.Sum(f => f.Size); long completed = 0; var clock = Stopwatch.StartNew();
+        var total = changed.Sum(f => f.Size); long transferred = 0; var clock = Stopwatch.StartNew();
         var required = total * 2 + manifest.Runtime.Archive.Size + manifest.Runtime.ExpandedSize + 256L * 1024 * 1024;
         var drive = new DriveInfo(Path.GetPathRoot(Path.GetFullPath(root))!);
         if (drive.AvailableFreeSpace < required) throw new IOException($"磁盘空间不足，需要至少 {required / (1024.0*1024*1024):F1} GiB 可用空间。");
@@ -82,14 +90,24 @@ public sealed class TransactionalInstaller(string root)
             long bundleDone=0;
             progress?.Report(new(manifest.Instance,"下载世界配置",0,bundle.Archive.Size,0));
             await downloader.PrimeBundle(bundle,changed.ToDictionary(f=>f.Path,StringComparer.OrdinalIgnoreCase),
-                count=>{bundleDone+=count;progress?.Report(new(manifest.Instance,"下载世界配置",bundleDone,bundle.Archive.Size,bundleDone/Math.Max(1,clock.Elapsed.TotalSeconds)));},token);
+                count=>bundleDone+=count,token,
+                position=>progress?.Report(new(manifest.Instance,"下载世界配置",position,bundle.Archive.Size,bundleDone/Math.Max(1,clock.Elapsed.TotalSeconds))),
+                ()=>progress?.Report(new(manifest.Instance,"解压世界配置",bundle.Archive.Size,bundle.Archive.Size,0)));
         }
         var downloaded = new System.Collections.Concurrent.ConcurrentDictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+        var positions=new System.Collections.Concurrent.ConcurrentDictionary<string,long>(StringComparer.OrdinalIgnoreCase);
+        foreach(var file in changed)positions[file.Path]=await downloader.Available(file,token);
+        long completed=positions.Values.Sum();clock.Restart();
+        progress?.Report(new(manifest.Instance,"正在下载世界内容",completed,total,0));
         await Parallel.ForEachAsync(changed, new ParallelOptions { MaxDegreeOfParallelism = concurrency, CancellationToken = token }, async (file, ct) => {
-            var path = await downloader.Get(file, count => { var done = Interlocked.Add(ref completed, count); progress?.Report(new(manifest.Instance, "正在下载世界内容", Math.Min(total,done), total, done / Math.Max(1,clock.Elapsed.TotalSeconds))); }, ct);
+            var path = await downloader.Get(file,count=>Interlocked.Add(ref transferred,count),ct,position=>{
+                var old=positions[file.Path];positions[file.Path]=position;var done=Interlocked.Add(ref completed,position-old);
+                progress?.Report(new(manifest.Instance,"正在下载世界内容",Math.Clamp(done,0,total),total,Interlocked.Read(ref transferred)/Math.Max(1,clock.Elapsed.TotalSeconds)));
+            });
             downloaded[file.Path] = path;
         });
-        await RuntimeManager.Install(root, manifest.Runtime, downloader, token);
+        await RuntimeManager.Install(root, manifest.Runtime, downloader, token,progress,manifest.Instance);
+        progress?.Report(new(manifest.Instance,"校验并准备更新",total,total,0));
         token.ThrowIfCancellationRequested();
         var id = Guid.NewGuid().ToString("N"); var actions = new List<FileChange>();
         var incoming = manifest.Files.ToDictionary(x => x.Path, StringComparer.OrdinalIgnoreCase);

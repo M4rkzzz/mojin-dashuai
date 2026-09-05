@@ -6,7 +6,9 @@ if(!directory.Contains(Path.DirectorySeparatorChar+"launcher-update-smoke"+Path.
 if(File.Exists(Path.Combine(directory,"simulate-failure")))return 9;
 var origin=Environment.GetEnvironmentVariable("MOJIN_INSTALL_DIRECTORY");
 if(string.IsNullOrWhiteSpace(origin)||!Path.IsPathFullyQualified(origin))return 10;
+if(Environment.GetEnvironmentVariable("MOJIN_UPDATE_CHECKED")!=nonce)return 11;
 File.WriteAllText(Path.Combine(directory,"program-directory.txt"),origin);
+File.WriteAllText(Path.Combine(directory,"update-checked.txt"),"checked-before-login");
 var root=Directory.GetParent(directory.TrimEnd(Path.DirectorySeparatorChar))!.Parent!.FullName;
 var ready=Path.Combine(root,"ready",nonce+".json");
 Directory.CreateDirectory(Path.GetDirectoryName(ready)!);

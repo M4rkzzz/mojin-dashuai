@@ -22,19 +22,19 @@ docker compose exec hub-api dotnet Hub.Api.dll admin reset LoginName
 
 普通邀请码只能使用一次；超级邀请码重复使用且默认不自动过期。任何邀请码均不赋予游戏权限。邀请码和管理员重置凭据只在生成命令的终端显示一次，请勿把终端输出复制到公开日志。
 
-上线注册前，先导入三个游戏服的既有玩家名字为受保护名字；保留原大小写。不要公开发放未保护旧名字时生成的超级邀请码。
+API 0.1.5 按用户要求放开超级邀请码的保护名限制：尚未绑定账号的名字可以注册；已经绑定账号的名字仍由唯一性约束保护。普通绑定邀请码保留原有用途。新注册不自动迁移、合并历史角色，也不改变游戏服离线验证方式。
 
 ## Cloudflare
 
 按用户最新要求，Cloudflare Global API Key 明文保存在本机 `D:/project/cfapi/credentials.json`，不依赖 GitHub Secrets。通过 `python tools/cloudflare-local.py inspect` 验证，`provision-launcher` 配置专用 Tunnel/DNS。主密钥不上传服务器；仅将单独生成的 Tunnel 凭据安装至 `secrets/tunnel-token`。完整说明见 [共用凭据](CLOUDFLARE-CREDENTIALS.md)。
 
-当前入口 `https://launcher.boshan.uk` 已接通；cloudflared 固定使用 HTTP/2，因为 124 的出站 UDP 不通。API 主机的 Browser Integrity Check 单独关闭，账号限流与验证由 API 执行。
+旧入口 `https://launcher.boshan.uk` 保留兼容，cloudflared 使用 HTTP/2。beta.8 使用 `https://launcher-direct.boshan.uk:21708` 的统一 HTTPS FRP 入口，不在玩家侧回退到旧域名或第三方文件源。Cloudflare 在此用于 DNS 等维护，不再是新版客户端的内容分发必经入口。
 
 ```sh
 docker compose --profile tunnel up -d --no-deps cloudflared
 ```
 
-账号 API 的直接端口仅绑定主机回环地址。`TrustCloudflareTunnel=true` 只允许在此独立 Tunnel 网络结构使用，不要把 API 端口直接映射到公网。
+账号 API 的内部端口仍仅绑定主机回环地址，由受控 HTTPS 网关转发；不要将内部明文 API 端口直接映射到公网。代理信任范围必须与网关和容器网络配置一致，不能盲目信任公网传入的转发头。
 
 ## 数据备份
 
@@ -73,7 +73,15 @@ Windows 默认使用 CmlLib 的官方文档接法，`microsoftClientId` 留空�
 
 ## 启动器更新与当前 API
 
-API 0.1.4 已部署，46 项隔离检查通过。升级备份 `/vol1/mc-client-hub/backups/upgrades/api-0.1.4-20260905T085926Z`，其他容器启动时间未变化。新增 `/v1/launcher` 只提供公开签名清单；尚未激活时返回 404。打包、签名、上传及激活见 [启动器更新](LAUNCHER-UPDATES.md)。
+API 0.1.5 已部署。beta.8 的专项及最终发布状态见 `packs/beta8-acceptance.json`；不沿用 API 0.1.4 的检查次数作为本次结果。`/v1/launcher` 提供公开签名清单；尚未激活时返回 404。打包、签名、上传及激活见 [启动器更新](LAUNCHER-UPDATES.md)。历史 API 0.1.4 的升级备份与验收记录仍保留。
+
+## 统一下载对象
+
+三服原版资源、模组、依赖库、Java 和配置压缩包全部预存至 `/vol1/mc-client-hub/public/objects/sha256/{sha}`，客户端只请求统一 HTTPS 入口的对应路径。构建阶段保留原始来源用于维护，玩家侧不按原站列表切换来源。
+
+`tools/audit-single-origin.py` 对三份 native 清单和保留文件做只读 SHA256 审计；`tools/stage-single-origin.py prepare INVENTORY OUTPUT.tar` 仅打包服务器缺少的本地对象。上传 tar 和脚本后，在 124 执行 `python3 stage-single-origin.py import INPUT.tar`：重新校验 SHA256、复用已有文件的硬链接、原子添加不可变对象，不改正式清单，不覆盖既有对象。
+
+只有导入报告 `complete=true`，并完成统一入口实际下载、Java 安装和文件核验后，才切换本版正式清单。初始审计共 33,962 个对象、3,967,908,019 字节；不能将来源齐备当作下载验收通过。
 
 ## 内测目录发布
 

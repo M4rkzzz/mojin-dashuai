@@ -1,6 +1,8 @@
 using System.IO.Compression;
 using System.Security.Cryptography;
 using System.Text;
+using System.Net;
+using System.Text.Json;
 using Boshan.Launcher;
 using Xunit;
 
@@ -86,6 +88,124 @@ public sealed class LauncherUpdateTests:IDisposable
         Assert.True(await ContentSecurity.Matches(repaired.Executable,release.Files[0]));
         File.AppendAllText(zip,"bad archive");
         await Assert.ThrowsAsync<InvalidDataException>(()=>updates.PrepareArchive(Sign(release),zip));
+    }
+    private sealed class ObjectsHandler(Dictionary<string,byte[]> contents):HttpMessageHandler
+    {
+        internal readonly List<string> Requests=[];
+        protected override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request,CancellationToken token)
+        {
+            var hash=request.RequestUri!.Segments.Last();Requests.Add(hash);
+            return Task.FromResult(contents.TryGetValue(hash,out var bytes)
+                ?new HttpResponseMessage(HttpStatusCode.OK){Content=new ByteArrayContent(bytes)}
+                :new HttpResponseMessage(HttpStatusCode.NotFound));
+        }
+    }
+    private static ContentFile ObjectFile(string name,byte[] bytes)
+    {
+        var file=Record(name,bytes);
+        return file with {Sources=["https://download.example/objects/sha256/"+file.Sha256]};
+    }
+    [Fact]
+    public async Task DifferentialUpdateDownloadsOnlyChangedFilesAndDoesNotCarryDeletedFilesForward()
+    {
+        var (first,zip)=Fixture();var old=await updates.PrepareArchive(Sign(first),zip);updates.Activate(old);
+        File.WriteAllText(Path.Combine(old.Directory,"obsolete.dll"),"old version only");
+        var changed=Encoding.UTF8.GetBytes("new executable");
+        var files=first.Files.Select(file=>file.Path==LauncherUpdates.EntryPoint?ObjectFile(file.Path,changed):file).ToArray();
+        var next=first with {Sequence=2,Version="0.2.0-beta.2",Files=files,Differential=true};
+        using var handler=new ObjectsHandler(new(){{files[0].Sha256,changed}});
+        using var downloader=new Downloader(Path.Combine(updates.Root,"cache"),new LauncherSettings(),handler);
+        Assert.Equal(changed.Length,await updates.PendingDownloadBytes(next,old.Directory));
+        long downloaded=0;
+        var prepared=await updates.Prepare(Sign(next),downloader,n=>downloaded+=n,currentDirectory:old.Directory);
+        Assert.Equal(changed.Length,downloaded);Assert.Equal([files[0].Sha256],handler.Requests);
+        Assert.False(File.Exists(Path.Combine(prepared.Directory,"obsolete.dll")));
+        Assert.Equal("version 1",File.ReadAllText(old.Executable));
+        Assert.Equal("new executable",File.ReadAllText(prepared.Executable));
+        Assert.Equal(1,ContentSecurity.Verify<LauncherRelease>(Json.Read<SignedEnvelope>(Path.Combine(updates.Root,"active.signed.json")),new Dictionary<string,string>{{"test",key.ExportSubjectPublicKeyInfoPem()}}).Sequence);
+        Assert.Equal(0,await updates.PendingDownloadBytes(next,old.Directory));
+    }
+    [Fact]
+    public async Task DifferentialUpdateRepairsCorruptFilesAndReusesDownloadCacheAfterInterruption()
+    {
+        var (first,zip)=Fixture();var old=await updates.PrepareArchive(Sign(first),zip);updates.Activate(old);
+        var unchanged=Encoding.UTF8.GetBytes("version 1");
+        var changed=Encoding.UTF8.GetBytes("new web page");
+        var files=first.Files.Select(file=>ObjectFile(file.Path,file.Path=="web/index.html"?changed:unchanged)).ToArray();
+        var next=first with {Sequence=2,Version="0.2.0-beta.2",Files=files,Differential=true};
+        File.WriteAllText(old.Executable,"damaged version");
+        using(var handler=new ObjectsHandler(new(){{files[0].Sha256,unchanged}}))
+        using(var downloader=new Downloader(Path.Combine(updates.Root,"cache"),new LauncherSettings(),handler))
+            await Assert.ThrowsAsync<IOException>(()=>updates.Prepare(Sign(next),downloader,currentDirectory:old.Directory));
+        Assert.Empty(Directory.GetDirectories(updates.Root,"stage-*"));
+        Assert.Equal("damaged version",File.ReadAllText(old.Executable));
+        using var retryHandler=new ObjectsHandler(new(){{files[3].Sha256,changed}});
+        using var retryDownloader=new Downloader(Path.Combine(updates.Root,"cache"),new LauncherSettings(),retryHandler);
+        var prepared=await updates.Prepare(Sign(next),retryDownloader,currentDirectory:old.Directory);
+        Assert.Equal([files[3].Sha256],retryHandler.Requests);
+        Assert.Equal("version 1",File.ReadAllText(prepared.Executable));
+    }
+    [Fact]
+    public async Task CancelledDifferentialUpdateKeepsPreviouslyReadyRelease()
+    {
+        var (first,zip)=Fixture();var old=await updates.PrepareArchive(Sign(first),zip);updates.Activate(old);
+        var next=first with {Sequence=2,Version="0.2.0-beta.2",Differential=true};
+        using var handler=new ObjectsHandler(new());using var downloader=new Downloader(Path.Combine(updates.Root,"cache"),new LauncherSettings(),handler);
+        using var cancellation=new CancellationTokenSource();cancellation.Cancel();
+        await Assert.ThrowsAnyAsync<OperationCanceledException>(()=>updates.Prepare(Sign(next),downloader,token:cancellation.Token,currentDirectory:old.Directory));
+        Assert.Empty(handler.Requests);
+        Assert.Equal(1,(await updates.Ready(Path.Combine(root,"installed"),"0.1.0"))!.Release.Sequence);
+    }
+    private sealed record LegacyRelease(long Sequence,string Version,string Platform,ContentFile Archive,ContentFile[] Files);
+    [Fact]
+    public async Task NewDifferentialReleaseRetainsTheLegacyZipUpgradePath()
+    {
+        var (release,zip)=Fixture();release=release with {Differential=true};
+        var signed=Sign(release);
+        var legacy=JsonSerializer.Deserialize<LegacyRelease>(Convert.FromBase64String(signed.Payload),Json.Options)!;
+        Assert.Equal(release.Archive.Sha256,legacy.Archive.Sha256);
+        var prepared=await updates.PrepareArchive(signed,zip);
+        Assert.Equal("version 1",File.ReadAllText(prepared.Executable));
+    }
+    private sealed class MetadataHandler(SignedEnvelope envelope,HttpStatusCode? firstStatus=null):HttpMessageHandler
+    {
+        internal readonly List<Uri> Requests=[];
+        protected override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request,CancellationToken token)
+        {
+            Requests.Add(request.RequestUri!);
+            if(Requests.Count==1)
+            {
+                if(firstStatus is null)throw NetworkPolicy.Failure(new HttpRequestException("test network failure"),"连接服务",request.RequestUri);
+                if(firstStatus!=HttpStatusCode.OK)return Task.FromResult(new HttpResponseMessage(firstStatus.Value){RequestMessage=request});
+            }
+            return Task.FromResult(new HttpResponseMessage(HttpStatusCode.OK){Content=new StringContent(JsonSerializer.Serialize(envelope,Json.Options)),RequestMessage=request});
+        }
+    }
+    [Theory]
+    [InlineData(null)]
+    [InlineData(HttpStatusCode.BadGateway)]
+    [InlineData(HttpStatusCode.RequestTimeout)]
+    public async Task UpdateMetadataFailureNeverFallsBackToAnotherOrigin(HttpStatusCode? firstStatus)
+    {
+        var (release,_)=Fixture();var signed=Sign(release);
+        using var handler=new MetadataHandler(signed,firstStatus);
+        var error=await Assert.ThrowsAsync<NetworkFailure>(()=>updates.Fetch("https://launcher.boshan.uk",handler:handler));
+        Assert.Equal(firstStatus is null?null:(int?)firstStatus,error.Diagnostic.HttpStatus);
+        Assert.Equal(["launcher-direct.boshan.uk"],handler.Requests.Select(uri=>uri.Host));
+    }
+    [Fact]
+    public async Task UpdateMetadataUsesTheSingleOriginEvenForAnOlderConfiguredAddress()
+    {
+        var (release,_)=Fixture();var signed=Sign(release);using var handler=new MetadataHandler(signed,HttpStatusCode.OK);
+        Assert.Equal(signed,await updates.Fetch("https://launcher.boshan.uk",handler:handler));
+        Assert.Equal(["launcher-direct.boshan.uk"],handler.Requests.Select(uri=>uri.Host));
+    }
+    [Fact]
+    public async Task UpdateMetadataDoesNotMaskAnAuthorizationErrorWithAnotherRoute()
+    {
+        var (release,_)=Fixture();using var handler=new MetadataHandler(Sign(release),HttpStatusCode.Forbidden);
+        var error=await Assert.ThrowsAsync<NetworkFailure>(()=>updates.Fetch("https://launcher.boshan.uk",handler:handler));
+        Assert.Single(handler.Requests);Assert.Equal(403,error.Diagnostic.HttpStatus);Assert.Equal("检查启动器更新",error.Diagnostic.Stage);
     }
     [Theory]
     [InlineData("0.1.2-beta.2","0.1.2-beta.10",-1)]

@@ -4,6 +4,7 @@ using System.Net.Http.Headers;
 using System.Text.Json;
 using System.Security.Cryptography;
 using System.Text.RegularExpressions;
+using Boshan.Launcher;
 using CmlLib.Core.Auth.Microsoft;
 using CmlLib.Core.Auth.Microsoft.Sessions;
 using XboxAuthNet.Game;
@@ -23,7 +24,7 @@ public static class WindowsMicrosoftLogin
         token.ThrowIfCancellationRequested();
         if(!interactive&&current?.MicrosoftClientId!=Provider)throw new InvalidDataException("微软账号需要重新登录。");
         var storage=new MicrosoftAccountStorage(vault,interactive,token);
-        var transport=new AuthTransport {InnerHandler=new HttpClientHandler{UseCookies=false,AllowAutoRedirect=false}};
+        var transport=new AuthTransport {InnerHandler=NetworkPolicy.Handler(allowRedirect:false)};
         using var http=new HttpClient(transport){Timeout=TimeSpan.FromSeconds(30),MaxResponseContentBufferSize=2*1024*1024};
         http.DefaultRequestHeaders.UserAgent.ParseAdd("MojinDashuai/"+typeof(Accounts).Assembly.GetName().Version);
         try
@@ -66,6 +67,7 @@ public static class WindowsMicrosoftLogin
         }
         catch(OperationCanceledException){throw;}
         catch(InvalidDataException){throw;}
+        catch(NetworkFailure ex){throw NetworkPolicy.Failure(ex,"正版登录 / "+transport.Stage);}
         catch(HttpRequestException ex)
         {
             var error=new HttpRequestException("微软登录服务暂时无法连接，请稍后重试。",null,ex.StatusCode);

@@ -17,17 +17,26 @@ public sealed record AccountSession(PlayerProfile Profile,string AccessToken,Dat
 public sealed class Accounts
 {
     private readonly Vault vault;
-    private readonly HttpClient api;
+    private HttpClient api;
     private readonly string microsoftId;
     private readonly Func<IWebUI>? microsoftWebUi;
     public string MicrosoftLoginMode=>string.IsNullOrWhiteSpace(microsoftId)?"window":"device-code";
     private readonly SemaphoreSlim gate=new(1);
     public AccountSession? Current {get;private set;}
+    public void ReconfigureNetwork()
+    {
+        var old=api;
+        api=new HttpClient(NetworkPolicy.Handler(allowRedirect:false)){BaseAddress=old.BaseAddress,Timeout=TimeSpan.FromSeconds(20)};
+        api.DefaultRequestHeaders.UserAgent.ParseAdd("MojinDashuai/"+typeof(Accounts).Assembly.GetName().Version);
+        // Allow in-flight account operations to finish with their original transport.
+        _=Retire(old);
+    }
+    private static async Task Retire(HttpClient old){await Task.Delay(TimeSpan.FromMinutes(1));old.Dispose();}
     public Accounts(Vault vault,string apiUrl,string microsoftId,Func<IWebUI>? microsoftWebUi=null)
     {
         this.vault=vault;this.microsoftId=microsoftId;this.microsoftWebUi=microsoftWebUi;
         var uri=new Uri(apiUrl);if(uri.Scheme!="https")throw new InvalidDataException("账号服务必须使用 HTTPS。");
-        api=new HttpClient(new HttpClientHandler {UseCookies=false,AllowAutoRedirect=false}){BaseAddress=uri,Timeout=TimeSpan.FromSeconds(20)};
+        api=new HttpClient(NetworkPolicy.Handler(allowRedirect:false)){BaseAddress=uri,Timeout=TimeSpan.FromSeconds(20)};
         api.DefaultRequestHeaders.UserAgent.ParseAdd("MojinDashuai/"+typeof(Accounts).Assembly.GetName().Version);
         Current=vault.Read<AccountSession>("account");
     }
@@ -55,8 +64,7 @@ public sealed class Accounts
                 if((int)response.StatusCode<500)await Check(response);
                 else if(current.AccessExpiresAt<=DateTimeOffset.UtcNow)throw new InvalidDataException("登录已过期。");
             }
-            catch(HttpRequestException) when(current.AccessExpiresAt>DateTimeOffset.UtcNow) { }
-            catch(TaskCanceledException) when(current.AccessExpiresAt>DateTimeOffset.UtcNow) { }
+            catch(Exception ex) when(NetworkPolicy.IsNetwork(ex)&&current.AccessExpiresAt>DateTimeOffset.UtcNow) { }
         }
         return current.Profile.Kind=="microsoft"?new MSession(current.Profile.GameName,current.AccessToken,current.Profile.Id){UserType="msa",Xuid=current.MicrosoftXuid}:MSession.CreateOfflineSession(current.Profile.GameName);
     }
@@ -72,15 +80,14 @@ public sealed class Accounts
                 if(current.Profile.Kind=="microsoft")await MicrosoftLogin(false);
                 else Store(await Post<AccountSession>("/v1/auth/refresh",new {current.RefreshToken}));
             }
-            catch(HttpRequestException) when(current.AccessExpiresAt>DateTimeOffset.UtcNow) { /* Only an already valid session may survive an outage. */ }
-            catch(TaskCanceledException) when(current.AccessExpiresAt>DateTimeOffset.UtcNow) { }
+            catch(Exception ex) when(NetworkPolicy.IsNetwork(ex)&&current.AccessExpiresAt>DateTimeOffset.UtcNow) { /* Only an already valid session may survive an outage. */ }
         }
         finally{gate.Release();}
     }
     public async Task Logout()
     {
         try{if(Current?.Profile.Kind=="hub")await Authorized("/v1/auth/logout",new{});}
-        catch(HttpRequestException){}catch(TaskCanceledException){}
+        catch(Exception ex) when(NetworkPolicy.IsNetwork(ex)){}
         finally {Current=null;vault.Delete("account");vault.Delete("msal");vault.Delete(MicrosoftAccountStorage.Key);if(Guid.TryParse(microsoftId,out var appId))vault.Delete("msal-"+appId.ToString("N"));}
     }
     public async Task<JsonElement?> Authorized(string path,object args)
@@ -102,27 +109,41 @@ public sealed class Accounts
         if(response.StatusCode==HttpStatusCode.TooManyRequests)throw new InvalidDataException("操作过于频繁，请稍后重试。");
         try{var json=await response.Content.ReadFromJsonAsync<JsonElement>();if(json.TryGetProperty("error",out var error)&&error.ValueKind==JsonValueKind.String)throw new InvalidDataException(error.GetString());}
         catch(JsonException){}
-        throw new HttpRequestException("账号服务暂时不可用，请稍后重试。",null,response.StatusCode);
+        throw NetworkPolicy.Failure(new HttpRequestException("账号服务暂时不可用，请稍后重试。",null,response.StatusCode),"账号服务",response.RequestMessage?.RequestUri);
     }
     private void Store(AccountSession value){vault.Write("account",value with {RecoveryCode=null});Current=value;}
-    public async Task<SkinTexture?> Skin()
+    private readonly SkinTextureCache skinCache=new(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),"Boshan","Launcher","skin-cache"));
+    public async Task<SkinTexture?> Skin(string source="account",bool refresh=false)
     {
-        var current=Current;
-        if(current is null)return null;
-        using var http=new HttpClient(new HttpClientHandler{UseCookies=false,AllowAutoRedirect=false}){Timeout=TimeSpan.FromSeconds(15)};
+        var current=Current;if(current is null)return null;
+        if(source is not ("account" or "littleskin"))throw new InvalidDataException("皮肤来源无效。");
+        if(source=="littleskin")
+        {
+            using var http=new HttpClient(NetworkPolicy.Handler(allowRedirect:false)){Timeout=TimeSpan.FromSeconds(5)};
+            var texture=await new ThirdPartySkins(http,skinCache).LittleSkin(current.Profile.GameName,refresh);
+            if(texture is not null)return texture;
+        }
+        return await skinCache.Get("account:"+current.Profile.Kind+":"+current.Profile.Id,token=>AccountSkin(current,token),refresh);
+    }
+    private async Task<SkinTexture?> AccountSkin(AccountSession current,CancellationToken token)
+    {
+        using var http=new HttpClient(NetworkPolicy.Handler(allowRedirect:false)){Timeout=TimeSpan.FromSeconds(5)};
         Uri address;
         var model=current.SkinModel;
         if(current.Profile.Kind=="microsoft")
         {
-            await Ensure();current=Current!;
-            using var profileRequest=new HttpRequestMessage(HttpMethod.Get,"https://api.minecraftservices.com/minecraft/profile");
-            profileRequest.Headers.Authorization=new AuthenticationHeaderValue("Bearer",current.AccessToken);
-            using var profileResponse=await http.SendAsync(profileRequest);
-            if(profileResponse.IsSuccessStatusCode)
+            if(current.AccessExpiresAt>DateTimeOffset.UtcNow)
             {
-                var profile=await profileResponse.Content.ReadFromJsonAsync<JsonElement>();
-                var active=MinecraftAuthentication.ActiveSkin(profile);
-                Store(current with {SkinUrl=active.Url,SkinModel=active.Model});current=Current!;model=current.SkinModel;
+                using var profileRequest=new HttpRequestMessage(HttpMethod.Get,"https://api.minecraftservices.com/minecraft/profile");
+                profileRequest.Headers.Authorization=new AuthenticationHeaderValue("Bearer",current.AccessToken);
+                using var profileResponse=await http.SendAsync(profileRequest,token);
+                if(profileResponse.IsSuccessStatusCode)
+                {
+                    var profile=await profileResponse.Content.ReadFromJsonAsync<JsonElement>(token);
+                    var active=MinecraftAuthentication.ActiveSkin(profile);
+                    current=current with {SkinUrl=active.Url,SkinModel=active.Model};model=current.SkinModel;
+                    if(Current?.Profile.Id==current.Profile.Id&&Current.AccessToken==current.AccessToken)Store(current);
+                }
             }
             if(string.IsNullOrEmpty(current.SkinUrl))return null;
             if(!Uri.TryCreate(current.SkinUrl,UriKind.Absolute,out var uri)||uri.Host!="textures.minecraft.net"||!uri.IsDefaultPort||!string.IsNullOrEmpty(uri.UserInfo)||uri.Scheme is not ("http" or "https")||!System.Text.RegularExpressions.Regex.IsMatch(uri.AbsolutePath,"^/texture/[a-fA-F0-9]{32,64}$"))throw new InvalidDataException("皮肤资源地址无效。");
@@ -130,15 +151,15 @@ public sealed class Accounts
         }
         else address=new Uri(api.BaseAddress!,"/v1/skins/"+Uri.EscapeDataString(current.Profile.GameName));
         // Texture requests use a separate client without account credentials or cookies.
-        using var response=await http.GetAsync(address,HttpCompletionOption.ResponseHeadersRead);
+        using var response=await http.GetAsync(address,HttpCompletionOption.ResponseHeadersRead,token);
         if(response.StatusCode==HttpStatusCode.NotFound)return null;
         await Check(response);
         if(response.Content.Headers.ContentLength>SkinImage.MaxBytes)throw new InvalidDataException("皮肤文件过大。");
         if(current.Profile.Kind=="hub")model=response.Headers.TryGetValues("X-Skin-Model",out var values)&&values.FirstOrDefault()=="slim"?"slim":"classic";
-        await using var stream=await response.Content.ReadAsStreamAsync();
+        await using var stream=await response.Content.ReadAsStreamAsync(token);
         using var bytes=new MemoryStream();
         var buffer=new byte[8192];int count;
-        while((count=await stream.ReadAsync(buffer))>0){if(bytes.Length+count>SkinImage.MaxBytes)throw new InvalidDataException("皮肤文件过大。");bytes.Write(buffer,0,count);}
+        while((count=await stream.ReadAsync(buffer,token))>0){if(bytes.Length+count>SkinImage.MaxBytes)throw new InvalidDataException("皮肤文件过大。");bytes.Write(buffer,0,count);}
         return new(Convert.ToBase64String(SkinImage.Normalize(bytes.ToArray())),model);
     }
     public async Task<SkinTexture> SaveSkin(SkinTexture texture)
@@ -147,7 +168,9 @@ public sealed class Accounts
         if(Current?.Profile.Kind!="hub")throw new InvalidDataException("请在微软账号页面更换正版皮肤。");
         texture=SkinImage.Normalize(texture);
         var result=await Authorized("/v1/account/skin",texture);
-        return result!.Value.Deserialize<SkinTexture>(Json.Options)!;
+        var saved=result!.Value.Deserialize<SkinTexture>(Json.Options)!;
+        skinCache.Store("account:"+Current.Profile.Kind+":"+Current.Profile.Id,saved);
+        return saved;
     }
     public async Task<object> MicrosoftLogin(bool interactive=true,Func<MicrosoftDevicePrompt,Task>? showCode=null,CancellationToken token=default)
     {
@@ -196,7 +219,7 @@ public sealed class Accounts
             });
         }
         token.ThrowIfCancellationRequested();
-        using var http=new HttpClient(new HttpClientHandler{UseCookies=false,AllowAutoRedirect=false}){Timeout=TimeSpan.FromSeconds(30),MaxResponseContentBufferSize=2*1024*1024};
+        using var http=new HttpClient(NetworkPolicy.Handler(allowRedirect:false)){Timeout=TimeSpan.FromSeconds(30),MaxResponseContentBufferSize=2*1024*1024};
         var identity=await new MinecraftAuthentication(http).Login(oauth.AccessToken,token);
         var player=new PlayerProfile(identity.Id,oauth.Account.Username,identity.Name,"microsoft");
         token.ThrowIfCancellationRequested();

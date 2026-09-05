@@ -37,11 +37,12 @@ internal static class LauncherUpdateSmoke
         if(!await Start(good))throw new InvalidOperationException("The replacement process did not complete the native handshake.");
         var origin=File.ReadAllText(Path.Combine(good.Directory,"program-directory.txt"));
         if(!Path.TrimEndingDirectorySeparator(origin).Equals(Path.TrimEndingDirectorySeparator(AppContext.BaseDirectory),StringComparison.OrdinalIgnoreCase))throw new InvalidOperationException("The original program directory was lost during the update handoff.");
+        if(File.ReadAllText(Path.Combine(good.Directory,"update-checked.txt"))!="checked-before-login")throw new InvalidOperationException("The startup update check would be repeated in the replacement process.");
         var bad=await Prepare(2,true);
         if(await Start(bad)||!updates.HasFailed(bad.Release))throw new InvalidOperationException("An unhealthy replacement was not rejected.");
         var fallback=await updates.Ready(Path.Combine(root,"old"),new Version(0,1,0));
         if(fallback?.Release.Sequence!=1)throw new InvalidOperationException("The healthy previous version was lost.");
-        var report=new{passed=true,actualChildProcess=true,activationHandshake=true,programDirectoryPreserved=true,failedLaunchRetainsPrevious=true,noGameOrAccountFilesTouched=true};
+        var report=new{passed=true,actualChildProcess=true,activationHandshake=true,programDirectoryPreserved=true,startupCheckPropagated=true,failedLaunchRetainsPrevious=true,noGameOrAccountFilesTouched=true};
         Json.Write(Path.Combine(root,"report.json"),report);Console.WriteLine(JsonSerializer.Serialize(report));
     }
 }

@@ -21,9 +21,12 @@ try
             if(!root.Contains(Path.DirectorySeparatorChar+".local"+Path.DirectorySeparatorChar,StringComparison.OrdinalIgnoreCase))throw new InvalidDataException("Update checks require an isolated .local directory.");
             var keys=JsonDocument.Parse(File.ReadAllText(args[2])).RootElement.GetProperty("publicKeys").Deserialize<Dictionary<string,string>>(Json.Options)!;
             var updates=new LauncherUpdates(root,keys);
-            using var downloader=new Downloader(Path.Combine(root,"cache"),new LauncherSettings{LimitMiB=2});
-            var prepared=await updates.Prepare(Json.Read<SignedEnvelope>(args[1]),downloader);
-            var report=new{prepared.Release.Version,Files=prepared.Release.Files.Length,prepared.Release.Archive.Size,DownloadedAndVerified=true,GameStarted=false,Activated=false};
+            var envelope=Json.Read<SignedEnvelope>(args[1]);var release=updates.AcceptMetadata(envelope);
+            var current=args.Length>4?Path.GetFullPath(args[4]):AppContext.BaseDirectory;
+            var pending=await updates.PendingDownloadBytes(release,current);long received=0;
+            using var downloader=new Downloader(Path.Combine(root,"cache"),new LauncherSettings{LimitMiB=8},origin:NetworkPolicy.DirectApi);
+            var prepared=await updates.Prepare(envelope,downloader,count=>Interlocked.Add(ref received,count),currentDirectory:current);
+            var report=new{prepared.Release.Version,Files=prepared.Release.Files.Length,prepared.Release.Archive.Size,DownloadedAndVerified=true,ExpectedDownloadBytes=pending,ActualDownloadBytes=received,SingleOrigin=true,GameStarted=false,Activated=false};
             Json.Write(Path.Combine(root,"report.json"),report);Console.WriteLine(JsonSerializer.Serialize(report,Json.Options));break;
         }
         case "bundle-launcher":
@@ -149,11 +152,13 @@ try
             Json.Write(args[3],new{LaunchVersion=args[2],Files=files});Console.WriteLine($"Extracted {files.Count} engine file references; bundled Java remains separate.");break;
         }
         case "check-install":
+        case "check-install-origin":
         {
             var manifest=Json.Read<PackManifest>(args[1]);var root=Path.GetFullPath(args[2]);
             if(!root.Contains(Path.DirectorySeparatorChar+".local"+Path.DirectorySeparatorChar,StringComparison.OrdinalIgnoreCase))throw new InvalidDataException("Installation checks require an isolated .local directory.");
-            var settings=new LauncherSettings{Root=root,Concurrency=4,LimitMiB=2};
-            using var downloader=new Downloader(Path.Combine(root,"cache"),settings);
+            var unified=args[0]=="check-install-origin";
+            var settings=new LauncherSettings{Root=root,Concurrency=4,LimitMiB=unified?8:2};
+            using var downloader=new Downloader(Path.Combine(root,"cache"),settings,origin:unified?NetworkPolicy.DirectApi:null);
             var installer=new TransactionalInstaller(root);
             var watch=Stopwatch.StartNew();string phase="";
             var progress=new Progress<TransferProgress>(p=>{if(p.Phase!=phase){phase=p.Phase;Console.WriteLine(phase);}});
@@ -162,7 +167,7 @@ try
             var command=process.StartInfo.Arguments;
             var match=System.Text.RegularExpressions.Regex.Match(command,"(?:-cp|-classpath)\\s+\"([^\"]+)\"");
             if(match.Success&&match.Groups[1].Value.Split(Path.PathSeparator).Any(p=>!File.Exists(p)))throw new InvalidDataException("Generated classpath contains missing files.");
-            var report=new{manifest.Instance,Installed=true,JavaMajor=manifest.Runtime.Major,LocalVersionPrepared=true,GameStarted=false,JoinedServer=false,ElapsedSeconds=watch.Elapsed.TotalSeconds,Files=manifest.Files.Length};
+            var report=new{manifest.Instance,Installed=true,JavaMajor=manifest.Runtime.Major,LocalVersionPrepared=true,GameStarted=false,JoinedServer=false,ElapsedSeconds=watch.Elapsed.TotalSeconds,Files=manifest.Files.Length,SingleOrigin=unified,Origin=unified?NetworkPolicy.DirectApi:null};
             Json.Write(Path.Combine(root,manifest.Instance+"-install-check.json"),report);Console.WriteLine(JsonSerializer.Serialize(report,Json.Options));break;
         }
         case "play-check":

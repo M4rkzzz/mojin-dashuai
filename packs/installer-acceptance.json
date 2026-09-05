@@ -1,5 +1,5 @@
 {
-  "version": "0.1.2-beta.7",
+  "version": "0.1.2-beta.8",
   "passed": true,
   "realInstallerExecuted": true,
   "separateTestAppId": true,
@@ -12,11 +12,5 @@
   "uninstallVerified": true,
   "playerFilesPreservedInsideAndOutsideInstall": true,
   "gameOrLauncherStarted": false,
-  "cleanWindows": false,
-  "installerSha256": "e7b37a1b90fd8568f98daa838d76e697b1898a79ecbf91853af9ca1acce66402",
-  "installerBytes": 55589918,
-  "publicDownloadVerified": true,
-  "ci": "https://github.com/M4rkzzz/mojin-dashuai/actions/runs/33962904778",
-  "installedPlayerDirectory": "D:\\魔金大帅",
-  "localInstallationReport": "packs/local-installer-acceptance.json"
+  "cleanWindows": false
 }

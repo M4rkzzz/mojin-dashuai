@@ -18,15 +18,17 @@ public sealed class GameLauncher
     }
     public async Task<Process> Launch(PackManifest manifest,LauncherSettings settings,MSession session,RouteEndpoint route,CancellationToken token=default)
     {
-        var process=await Prepare(manifest,settings,session,route,token);process.Start();return process;
+        var process=await Prepare(manifest,settings,session,route,token).ConfigureAwait(false);process.Start();return process;
     }
     public async Task<Process> Prepare(PackManifest manifest,LauncherSettings settings,MSession session,RouteEndpoint route,CancellationToken token=default)
     {
-        ContentSecurity.Validate(manifest);settings.Validate();
+        await Task.Run(()=>{ContentSecurity.Validate(manifest);settings.Validate();},token).ConfigureAwait(false);
         var installer=new TransactionalInstaller(settings.Root);var instance=installer.InstancePath(manifest.Instance);
         var java=string.IsNullOrEmpty(settings.Java[manifest.Instance])?ContentSecurity.SafePath(RuntimeManager.RuntimeRoot(settings.Root,manifest.Runtime),manifest.Runtime.JavaPath):settings.Java[manifest.Instance];
-        await RuntimeManager.Validate(java,manifest.Runtime.Major,token);
-        await Task.Run(()=>MapIdentity.Prepare(instance,manifest.Instance),token);
+        await RuntimeManager.Validate(java,manifest.Runtime.Major,token).ConfigureAwait(false);
+        await Task.Run(()=>MapIdentity.Prepare(instance,manifest.Instance),token).ConfigureAwait(false);
+        // Skin services are optional. Their availability never gates game startup.
+        ThirdPartySkins.ConfigureInstance(instance,settings.SkinSource);
         if(manifest.Instance=="mb")CleanroomAdapter.ValidatePrepared(instance,manifest);
         var launcher=FromInstalledFiles(instance);
         var adapter=manifest.Instance switch {"m3e"=>"mods/mojin-autoconnect-1.7.10-0.1.0.jar","mb"=>"mods/mojin-autoconnect-cleanroom-0.1.0.jar",_=>null};
@@ -49,7 +51,7 @@ public sealed class GameLauncher
             ExtraJvmArguments=jvm
         };
         // Installation is performed exclusively from the signed file inventory. CmlLib only builds the launch process.
-        var process=await launcher.BuildProcessAsync(manifest.LaunchVersion,options);
+        var process=await launcher.BuildProcessAsync(manifest.LaunchVersion,options).ConfigureAwait(false);
         process.StartInfo.WorkingDirectory=instance;
         process.StartInfo.CreateNoWindow=true; process.StartInfo.UseShellExecute=false;
         return process;
