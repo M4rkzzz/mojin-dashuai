@@ -29,8 +29,25 @@ $linkName='魔金大帅 安装测试.lnk'
 $desktopLink=Join-Path ([Environment]::GetFolderPath('Desktop')) $linkName
 $menuLink=Join-Path ([Environment]::GetFolderPath('Programs')) $linkName
 $shell=New-Object -ComObject WScript.Shell
+if (!('InstallerPathCheck' -as [type])) {
+    Add-Type @'
+using System.Runtime.InteropServices;
+using System.Text;
+public static class InstallerPathCheck {
+    [DllImport("kernel32.dll", CharSet=CharSet.Unicode, SetLastError=true)]
+    public static extern uint GetLongPathName(string path, StringBuilder buffer, uint length);
+}
+'@
+}
+function Long-Path([string]$Path) {
+    $buffer=New-Object System.Text.StringBuilder 32768
+    if ([InstallerPathCheck]::GetLongPathName($Path,$buffer,32768) -eq 0) { throw "Cannot resolve installed path: $Path" }
+    $buffer.ToString()
+}
 foreach ($link in @($desktopLink,$menuLink)) {
-    if (!(Test-Path -LiteralPath $link) -or $shell.CreateShortcut($link).TargetPath -ne $installed) { throw 'Installer shortcut target mismatch' }
+    if (!(Test-Path -LiteralPath $link)) { throw "Installer shortcut missing: $link" }
+    $actual=$shell.CreateShortcut($link).TargetPath
+    if (!(Test-Path -LiteralPath $actual) -or !(Long-Path $actual).Equals((Long-Path $installed),[StringComparison]::OrdinalIgnoreCase)) { throw "Installer shortcut target mismatch: expected [$installed], got [$actual], link [$link]" }
 }
 $outside=Join-Path $testRoot '游戏文件\world.txt'
 $inside=Join-Path $installRoot 'player-data\keep.txt'

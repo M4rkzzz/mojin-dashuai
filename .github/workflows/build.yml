@@ -74,6 +74,15 @@ jobs:
         with:
           name: test-results
           path: tests/Hub.Tests/TestResults/
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: installer-check-logs
+          path: |
+            .local/installer-acceptance/**/*.log
+            .local/installer-acceptance/**/report.json
+          include-hidden-files: true
+          retention-days: 14
   api:
     runs-on: ubuntu-latest
     steps:
