@@ -22,3 +22,5 @@ python tools/publish-installer.py artifacts/installer-0.1.2-beta.6
 上传按哈希保存不可变文件，并从玩家下载地址完整读回校验。`installer.json`、`publication.json` 与 `packs/installer-acceptance.json` 保存本次证据。新版本必须使用新文件名，不覆盖已发布 EXE。
 
 当前 beta 安装包没有 Windows 代码签名；不能将内部更新清单的 ECDSA 签名当成 EXE 的 Authenticode 签名。干净 Windows 首次使用依然未验收，沿用用户已批准的 beta 延后记录。
+
+2026-09-05：[GitHub 验证 33961230776](https://github.com/M4rkzzz/mojin-dashuai/actions/runs/33961230776) 的 UI、API 和 Windows 检查全部通过，包含实际静默安装、覆盖升级、卸载、快捷方式、中文及空格路径、玩家文件保留。此前失败来自测试脚本的 WScript 接口无法读取当前 ANSI 代码页以外的快捷方式文件名；改用 `IShellLinkW` 后在本机及 GitHub Windows 均通过。此修正仅涉及测试，已发布 beta.6 安装包及其哈希不变。
