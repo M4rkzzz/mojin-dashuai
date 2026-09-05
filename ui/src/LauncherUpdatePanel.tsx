@@ -7,6 +7,7 @@ type Status={phase:string;version?:string;downloaded?:number;total?:number;error
 function useUpdateController(){
  const [state,setState]=useState<Status>({phase:'idle'}),[error,setError]=useState(''),[restarting,setRestarting]=useState(false);
  const revision=useRef(0);
+ const checking=useRef(false);
  const receive=(next:Status)=>setState(previous=>next.phase==='checking'?{...next,version:next.version||previous.version}:next);
  useEffect(()=>{
   if(!isNative)return;
@@ -16,7 +17,7 @@ function useUpdateController(){
   invoke<Status>('launcher.update.status').then(s=>{if(!disposed&&revision.current===initialRevision&&s?.phase)receive(s);}).catch(()=>{});
   return()=>{disposed=true;off();};
  },[]);
- async function check(){setError('');const before=revision.current;try{const s=await invoke<Status>('launcher.update.check');if(revision.current===before&&s?.phase)receive(s);}catch(e){setError((e as Error).message);}}
+ async function check(){if(checking.current)return;checking.current=true;setError('');setState(previous=>({...previous,phase:'checking'}));const before=revision.current;try{const s=await invoke<Status>('launcher.update.check');if(revision.current===before&&s?.phase)receive(s);}catch(e){setState(previous=>({...previous,phase:'failed'}));setError((e as Error).message);}finally{checking.current=false;}}
  async function restart(){setRestarting(true);setError('');try{await invoke('launcher.update.restart');}catch(e){setError((e as Error).message);}finally{setRestarting(false);}}
  const busy=state.phase==='checking'||state.phase==='downloading'||restarting;
  const label=state.phase==='checking'?'正在检查':state.phase==='downloading'?`正在下载 ${Math.min(100,Math.floor((state.downloaded||0)/Math.max(1,state.total||0)*100))}%`:state.phase==='ready'?`${state.version} 已就绪`:state.phase==='current'?'暂无更新':state.phase==='failed'?'更新暂不可用':'';
@@ -29,11 +30,10 @@ export function LauncherUpdateProvider({children}:{children:ReactNode}){
 }
 function useUpdate(){const controller=useContext(UpdateContext);if(!controller)throw new Error('Missing launcher update provider');return controller;}
 export function LauncherUpdateNotice(){
- const {state}=useUpdate();
+ const {state,busy,check}=useUpdate();
  const [open,setOpen]=useState(false);
  const trigger=useRef<HTMLButtonElement>(null),panel=useRef<HTMLDivElement>(null);
  const available=!!state.version&&['checking','downloading','ready','failed'].includes(state.phase);
- useEffect(()=>{if(!available)setOpen(false);},[available]);
  useEffect(()=>{
   if(!open)return;
   panel.current?.focus();
@@ -42,8 +42,8 @@ export function LauncherUpdateNotice(){
   document.addEventListener('keydown',key);document.addEventListener('pointerdown',outside);
   return()=>{document.removeEventListener('keydown',key);document.removeEventListener('pointerdown',outside);};
  },[open]);
- if(!isNative||!available)return null;
- return <><button ref={trigger} className="window-update" aria-expanded={open} aria-controls="window-update-panel" onClick={()=>setOpen(value=>!value)}>更新</button>{open&&createPortal(<div ref={panel} id="window-update-panel" className="window-update-panel" role="dialog" aria-label="启动器更新" tabIndex={-1}><button className="update-dismiss" aria-label="关闭更新面板" onClick={()=>{setOpen(false);trigger.current?.focus();}}><X size={16}/></button><LauncherUpdatePanel/></div>,document.body)}</>;
+ if(!isNative)return null;
+ return <><button ref={trigger} className={`window-update${available?' available':''}`} aria-expanded={open} aria-controls="window-update-panel" onClick={()=>{setOpen(value=>!value);if(!open&&!busy&&!available)void check();}}><RefreshCw size={13} className={busy?'spin':''}/>检查更新</button>{open&&createPortal(<div ref={panel} id="window-update-panel" className="window-update-panel" role="dialog" aria-label="启动器更新" tabIndex={-1}><button className="update-dismiss" aria-label="关闭更新面板" onClick={()=>{setOpen(false);trigger.current?.focus();}}><X size={16}/></button><LauncherUpdatePanel/></div>,document.body)}</>;
 }
 export function LauncherUpdatePanel(){
  const {state,error,restarting,busy,label,check,restart}=useUpdate();

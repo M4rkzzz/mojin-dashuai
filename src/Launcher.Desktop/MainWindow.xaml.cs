@@ -141,7 +141,7 @@ public partial class MainWindow : Window
                 UpdateStartup.MarkReady();
                 if(await App.CompleteLegacyStartupUpdate()){Application.Current.Shutdown();return null;}
                 launcherUpdate=App.StartupUpdateState;
-                return new {Profile=await accounts.Restore(),Settings=settings,LauncherUpdate=launcherUpdate,WindowMaximized=WindowState==WindowState.Maximized,Installs=await InstalledStates(),Progress=transferProgress,States=InstanceStates(),AvailableUpdates=availableUpdates};
+                return new {LauncherVersion=App.ReleaseVersion.Split('+')[0],Profile=await accounts.Restore(),Settings=settings,LauncherUpdate=launcherUpdate,WindowMaximized=WindowState==WindowState.Maximized,Installs=await InstalledStates(),Progress=transferProgress,States=InstanceStates(),AvailableUpdates=availableUpdates};
             case "instances.status":return new {Installs=await InstalledStates(),Progress=transferProgress,States=InstanceStates(),AvailableUpdates=availableUpdates};
             case "instances.updates.check":
             {
@@ -151,6 +151,8 @@ public partial class MainWindow : Window
                 catch(Exception ex){Log("content-updates.check",ex);}
                 return new {Installs=await InstalledStates(),Progress=transferProgress,States=InstanceStates(),AvailableUpdates=availableUpdates};
             }
+            case "community.join":
+                Process.Start(new ProcessStartInfo("https://qm.qq.com/q/Bfat8qcPvO"){UseShellExecute=true});return null;
             case "launcher.update.check":return await CheckLauncherUpdate(true);
             case "launcher.update.status":return launcherUpdate;
             case "launcher.update.restart":

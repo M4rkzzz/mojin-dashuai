@@ -48,10 +48,9 @@ try{
  await expect(page.locator('.routes .latency-good')).toHaveCount(1);
  const detailCalls=await page.evaluate(()=>window.routeCalls.length);
  await page.evaluate(()=>{window.holdRoutes=true;});
- await page.getByRole('button',{name:'帮助与反馈',exact:true}).click();
+ await page.getByRole('button',{name:'加入QQ群 1105114550',exact:true}).click();
  await expect(page.locator('.routes .latency-pending')).toHaveCount(0);
  expect(await page.evaluate(()=>window.routeCalls.length)).toBe(detailCalls);
- await page.getByRole('button',{name:'关闭提示',exact:true}).click();
  await page.getByRole('button',{name:'宿迁三网',exact:false}).click();
  await expect.poll(()=>page.evaluate(()=>window.savedRouteSettings?.selectedRoutes.mb)).toBe('1');
  expect(await page.evaluate(()=>window.routeCalls.length)).toBe(detailCalls);

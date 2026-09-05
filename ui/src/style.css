@@ -128,8 +128,10 @@ dialog{border-color:#454545;color:#f2f2f2}dialog::backdrop{background:#000b}.ski
 .network-test{margin:16px 0}.network-test>.secondary{display:inline-flex;gap:8px;align-items:center}.network-results{display:grid;gap:12px;margin-top:16px}.network-result{border:1px solid #454545;background:#141414;padding:14px}.network-result>div:first-child{display:flex;justify-content:space-between;gap:16px;margin-bottom:8px}.network-result>span{font-size:13px;color:#ddd;overflow-wrap:anywhere}.network-ok{color:#a3d3a2}.network-failed{color:#efa697}.network-result .network-diagnostic{margin-top:8px}
 .maintenance-row{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:18px;padding:24px 0;border-bottom:1px solid #242424}.maintenance-row>div:first-child{min-width:0}.maintenance-control{display:flex;align-items:center;justify-content:flex-end;gap:12px;flex-wrap:wrap;max-width:100%}.maintenance-control .secondary{display:inline-flex;align-items:center;gap:8px;min-width:104px;justify-content:center}.maintenance-control .secondary:disabled{cursor:not-allowed}.action-reason{color:#bbb;font-size:13px}.content-directory{flex:1}.content-directory input{flex:1;min-width:180px;max-width:520px}.import-scope{display:flex;flex-wrap:wrap;gap:8px 16px;margin-top:13px;color:#d4d4d4;font-size:13px}.maintenance-progress{flex-basis:100%;max-width:620px;padding:18px;border:1px solid #333;background:#111}.maintenance-progress .download-progress{margin-top:0}.maintenance-progress .download-actions{max-width:300px}.maintenance-result,.repair-result{display:flex;align-items:center;gap:9px;color:#d3e8bf;font-size:14px;margin:12px 0 0;line-height:1.6}.repair-result{flex-basis:100%;padding:16px;background:#111;border-left:2px solid #b9d69c}.repair-result svg,.maintenance-result svg{flex-shrink:0}@media(max-width:900px){.maintenance-row{align-items:flex-start}.maintenance-control{justify-content:flex-start}.content-directory{flex-basis:100%}.maintenance-progress{max-width:100%}}
 /* The update action shares the native title bar, including the login screen. */
-.window-chrome .window-update{width:58px;font-size:12px;font-weight:600;letter-spacing:0;color:#92d6a2}
-.window-chrome .window-update:hover{color:#b7edc3;background:#92d6a214}
+.window-chrome .window-update{width:104px;height:26px;margin:5px 6px 5px 0;display:flex;justify-content:center;gap:7px;border:1px solid #404740;border-radius:3px;background:#1a1e1a;font-size:12px;font-weight:500;letter-spacing:0;color:#e3e8e0}
+.window-chrome .window-update:hover{color:#fff;background:#2a302a;border-color:#6b756b}
+.window-chrome .window-update.available{color:#92d6a2;border-color:#56725b;background:#19251c}
+.window-chrome .window-update.available:hover{color:#b7edc3;background:#25392a}
 .window-update-panel{position:fixed;top:42px;right:138px;z-index:100;width:360px;max-width:calc(100vw - 32px);padding:22px;background:#141614;border:1px solid #353a35;box-shadow:0 12px 32px #0009;-webkit-app-region:no-drag}
 .window-update-panel:focus{outline:none}
 .window-update-panel .launcher-update{margin:0;border:0}
@@ -141,3 +143,11 @@ dialog{border-color:#454545;color:#f2f2f2}dialog::backdrop{background:#000b}.ski
 .mini-world small.update-required,.install-heading>span.update-required,.card-bottom .update-required{color:#f2a759}
 .play-button.update-button{background:#f2a759;color:#261904}
 .play-button.update-button:hover{background:#ffbb72}
+
+.login-scene header{display:flex;align-items:center;justify-content:space-between;gap:20px}
+.community-link{display:flex;align-items:center;gap:9px;color:#e3e8e0;font-size:13px;white-space:nowrap}
+.community-link:hover{color:#d7eabb}
+.sidebar .community-link{font-size:12px;gap:9px}
+.settings-heading{display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap}
+.launcher-version{color:#cbd1c8;font-size:13px;white-space:nowrap}
+.launcher-version b{margin-left:9px;color:#f1f3ef;font-weight:500}
