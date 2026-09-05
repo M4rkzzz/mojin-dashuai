@@ -87,5 +87,43 @@ public sealed class LauncherUpdateTests:IDisposable
         File.AppendAllText(zip,"bad archive");
         await Assert.ThrowsAsync<InvalidDataException>(()=>updates.PrepareArchive(Sign(release),zip));
     }
+    [Theory]
+    [InlineData("0.1.2-beta.2","0.1.2-beta.10",-1)]
+    [InlineData("0.1.2-beta.4","0.1.2-beta.3",1)]
+    [InlineData("0.1.2-beta.4+build1","0.1.2-beta.4+build2",0)]
+    [InlineData("0.1.2","0.1.2-beta.10",1)]
+    [InlineData("0.1.2-beta.10","0.1.2",-1)]
+    [InlineData("0.1.2-1","0.1.2-alpha",-1)]
+    [InlineData("0.1.2-beta","0.1.2-beta.1",-1)]
+    [InlineData("0.1.2-beta.9999999999999999999999","0.1.2-beta.10",1)]
+    [InlineData("0.2.0-beta.1","0.1.99",1)]
+    public void VersionOrderingIncludesPrereleaseAndIgnoresBuildMetadata(string left,string right,int expected)
+        =>Assert.Equal(expected,Math.Sign(LauncherVersion.Compare(left,right)));
+    [Theory]
+    [InlineData("0.1.2-beta..4")]
+    [InlineData("0.1.2-beta.04")]
+    [InlineData("0.01.2")]
+    [InlineData("0.1.2.0")]
+    [InlineData("0.1.2-")]
+    [InlineData("0.1.2\n")]
+    public void MetadataRejectsMalformedVersion(string version)
+    {
+        var (release,_)=Fixture();
+        Assert.Throws<InvalidDataException>(()=>updates.AcceptMetadata(Sign(release with {Version=version})));
+    }
+    [Theory]
+    [InlineData("0.1.2-beta.2","0.1.2-beta.10",true)]
+    [InlineData("0.1.2-beta.4","0.1.2-beta.3",false)]
+    [InlineData("0.1.2-beta.4+local","0.1.2-beta.4+published",false)]
+    [InlineData("0.1.2-beta.4","0.1.2",true)]
+    [InlineData("0.1.2","0.1.2-beta.10",false)]
+    public async Task OnlyStrictlyNewerVersionsCanBeSelectedFromReadyOrActive(string current,string candidate,bool expected)
+    {
+        var (release,zip)=Fixture();var prepared=await updates.PrepareArchive(Sign(release with {Version=candidate}),zip);
+        var installed=Path.Combine(root,"installed");
+        Assert.Equal(expected,await updates.Ready(installed,current) is not null);
+        updates.Activate(prepared);File.Delete(Path.Combine(updates.Root,"ready.signed.json"));
+        Assert.Equal(expected,await updates.Ready(installed,current) is not null);
+    }
     public void Dispose(){key.Dispose();Directory.Delete(root,true);}
 }

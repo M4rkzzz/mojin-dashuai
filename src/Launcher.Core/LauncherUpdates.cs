@@ -21,7 +21,8 @@ public sealed class LauncherUpdates(string root,IReadOnlyDictionary<string,strin
 
     public static void Validate(LauncherRelease release)
     {
-        if(release.Sequence<=0||release.Platform!="windows-x64"||!Version.TryParse(release.Version.Split('-')[0],out _))
+        LauncherVersion.Validate(release.Version);
+        if(release.Sequence<=0||release.Platform!="windows-x64")
             throw new InvalidDataException("启动器更新信息无效。");
         ContentSecurity.ValidateFile(release.Archive);
         if(release.Archive.Size is <=0 or >536870912||release.Files.Length is <4 or >10000)
@@ -124,14 +125,17 @@ public sealed class LauncherUpdates(string root,IReadOnlyDictionary<string,strin
             if(!await ContentSecurity.Matches(ContentSecurity.SafePath(directory,file.Path),file,token))return false;
         return true;
     }
-    public async Task<PreparedLauncher?> Ready(string currentDirectory,Version currentVersion,CancellationToken token=default)
+    public Task<PreparedLauncher?> Ready(string currentDirectory,Version currentVersion,CancellationToken token=default)
+        =>Ready(currentDirectory,$"{currentVersion.Major}.{currentVersion.Minor}.{Math.Max(0,currentVersion.Build)}",token);
+    public async Task<PreparedLauncher?> Ready(string currentDirectory,string currentVersion,CancellationToken token=default)
     {
+        LauncherVersion.Validate(currentVersion);
         foreach(var path in new[]{ReadyPath,ActivePath,PreviousPath})
         {
             if(!File.Exists(path))continue;
             var release=ContentSecurity.Verify<LauncherRelease>(Json.Read<SignedEnvelope>(path),publicKeys);Validate(release);
             if(HasFailed(release))continue;
-            if(Version.Parse(release.Version.Split('-')[0])<new Version(currentVersion.Major,currentVersion.Minor,Math.Max(0,currentVersion.Build)))continue;
+            if(LauncherVersion.Compare(release.Version,currentVersion)<=0)continue;
             var directory=ReleaseDirectory(release);
             if(Path.GetFullPath(currentDirectory).TrimEnd(Path.DirectorySeparatorChar).Equals(directory,StringComparison.OrdinalIgnoreCase))return null;
             if(await Complete(directory,release,token))return new(release,directory,ContentSecurity.SafePath(directory,EntryPoint));

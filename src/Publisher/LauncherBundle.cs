@@ -8,7 +8,8 @@ internal static class LauncherBundle
         source=Path.GetFullPath(source);output=Path.GetFullPath(output);
         if(output.StartsWith(source.TrimEnd(Path.DirectorySeparatorChar)+Path.DirectorySeparatorChar,StringComparison.OrdinalIgnoreCase)||source==output)
             throw new InvalidDataException("Bundle output must be outside the published application directory.");
-        if(!System.Text.RegularExpressions.Regex.IsMatch(version,@"^\d+\.\d+\.\d+(-[a-z0-9.]+)?$")||sequence<=0)
+        LauncherVersion.Validate(version);
+        if(sequence<=0)
             throw new InvalidDataException("Invalid launcher release version or sequence.");
         var uri=new Uri(publicBase.TrimEnd('/')+"/");
         if(uri.Scheme is not ("http" or "https")||uri.UserInfo.Length!=0||uri.Query.Length!=0||uri.Fragment.Length!=0)

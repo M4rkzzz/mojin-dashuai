@@ -17,12 +17,32 @@
   "latencyUnit": "ms",
   "m3eSuqianInitialTimeoutThenRecovered": true,
   "routeConfigurationChanged": false,
-  "sameInstanceMapSwitchVerified": false,
+  "sameInstanceMapSwitchVerified": true,
   "m3eMapCheck": {
     "splitProfilesObserved": true,
     "nativeSharedProfilePrepared": true,
     "sharedProfileWrittenInGame": true,
     "originalProfilesRetained": true,
-    "userVisualConfirmationPending": true
+    "userVisualConfirmationPending": false,
+    "freshDirectoryNoOldClientMapImported": true,
+    "visualOldClientMapImportVerified": false,
+    "verification": "native mapping and actual shared-profile writes; no claim that old-client exploration was imported"
+  },
+  "dc2MapCheck": {
+    "secondaryRouteJoined": true,
+    "nativeSharedProfilePrepared": true,
+    "sharedProfileWrittenInGame": true,
+    "originalProfilesRetained": true,
+    "freshDirectoryNoOldClientMapImported": true,
+    "visualOldClientMapImportVerified": false,
+    "normalExitCode": 0
+  },
+  "mbMapCheck": {
+    "secondaryRouteJoined": true,
+    "sharedProfile": "Command~Line",
+    "existingSharedFilesWritten": 6,
+    "originalManualRouteFilesRetained": 6,
+    "normalExitCode": 0,
+    "verification": "Existing auto-connect JourneyMap profile reused on the second route; no original map data deleted."
   }
 }

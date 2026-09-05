@@ -126,7 +126,7 @@ public partial class MainWindow : Window
             case "launcher.update.status":return launcherUpdate;
             case "launcher.update.restart":
                 if(checkingLauncherUpdate||games.Count>0||transfers.Count>0||pendingPacks.Count>0||microsoftLogin is not null)throw new InvalidDataException("请先结束游戏、下载或登录任务。");
-                var update=await launcherUpdates.Ready(AppContext.BaseDirectory,typeof(App).Assembly.GetName().Version!);
+                var update=await launcherUpdates.Ready(AppContext.BaseDirectory,App.ReleaseVersion);
                 if(update is null)throw new InvalidDataException("没有已准备好的启动器更新。");
                 restartingLauncher=true;
                 try{if(!await UpdateStartup.Start(launcherUpdates,update))throw new InvalidDataException("新版启动失败，当前版本已保留。");Application.Current.Shutdown();return null;}
@@ -256,17 +256,17 @@ public partial class MainWindow : Window
             if(envelope is not null)
             {
                 var release=launcherUpdates.AcceptMetadata(envelope);
-                if(retry)launcherUpdates.Retry(release);
-                if(launcherUpdates.HasFailed(release))throw new InvalidDataException("新版启动失败，已保留原版本。可以重新检查更新。");
-                if(Version.Parse(release.Version.Split('-')[0])>=new Version(typeof(App).Assembly.GetName().Version!.ToString(3)))
+                if(LauncherVersion.Compare(release.Version,App.ReleaseVersion)>0)
                 {
+                    if(retry)launcherUpdates.Retry(release);
+                    if(launcherUpdates.HasFailed(release))throw new InvalidDataException("新版启动失败，已保留原版本。可以重新检查更新。");
                     State("downloading",release.Version,total:release.Archive.Size);
                     using var downloader=new Downloader(Path.Combine(launcherUpdates.Root,"cache"),settings);
                     long received=0,last=0;
                     await launcherUpdates.Prepare(envelope,downloader,bytes=>{received+=bytes;var now=Environment.TickCount64;if(now-last>500){last=now;State("downloading",release.Version,received,release.Archive.Size);}});
                 }
             }
-            var ready=await launcherUpdates.Ready(AppContext.BaseDirectory,typeof(App).Assembly.GetName().Version!);
+            var ready=await launcherUpdates.Ready(AppContext.BaseDirectory,App.ReleaseVersion);
             State(ready is null?"current":"ready",ready?.Release.Version);
         }
         catch(Exception ex){State("failed",error:Friendly(ex));Log("launcher-update",ex);}

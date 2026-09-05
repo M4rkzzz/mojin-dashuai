@@ -4,6 +4,8 @@ using Boshan.Launcher;
 namespace Boshan.Desktop;
 public partial class App : Application
 {
+    internal static string ReleaseVersion=>System.Reflection.CustomAttributeExtensions.GetCustomAttribute<System.Reflection.AssemblyInformationalVersionAttribute>(typeof(App).Assembly)?.InformationalVersion
+        ??typeof(App).Assembly.GetName().Version!.ToString(3);
     protected override async void OnStartup(StartupEventArgs e)
     {
         base.OnStartup(e);
@@ -14,7 +16,7 @@ public partial class App : Application
             var updates=new LauncherUpdates(UpdateStartup.DataRoot,config.PublicKeys);
             for(var attempt=0;attempt<2;attempt++)
             {
-                var ready=await updates.Ready(AppContext.BaseDirectory,typeof(App).Assembly.GetName().Version!);
+                var ready=await updates.Ready(AppContext.BaseDirectory,ReleaseVersion);
                 if(ready is null)break;
                 if(await UpdateStartup.Start(updates,ready)){Shutdown();return;}
             }

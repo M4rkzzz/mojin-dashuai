@@ -22,9 +22,11 @@ python tools/publish-launcher-update.py artifacts/launcher-release
 dotnet src/Publisher/bin/Release/net10.0/Publisher.dll check-launcher-update artifacts/launcher-release/launcher.signed.json src/Launcher.Desktop/launcher.json .local/launcher-update-download-check
 ```
 
-整体验收后追加 `--activate`。脚本先执行玩家版本发布检查，再核对签名、大小和 SHA256，备份旧清单，原子切换 `public/launcher.signed.json`。内容改变时增加序号，不覆盖不可变对象。私钥保留在本地非公开目录。
+整体验收后追加 `--activate`。脚本先执行玩家版本发布检查，再核对签名、大小和 SHA256，备份旧清单，原子切换 `public/launcher.signed.json`。构建内容改变时同时提高版本号和发布序号，不覆盖不可变对象。私钥保留在本地非公开目录。
 
-GitHub Release 工作流生成 ZIP、文件清单和 SHA256，创建草稿；签名和激活由本地命令完成。回退用新的递增序号重新发布已验证构建，不降低已接受序号。
+更新比较完整语义版本号：`beta.10` 高于 `beta.2`，正式版本高于同一数字版本的 beta，`+` 后的构建标记不参与排序。当前版本和较旧版本不会重复下载或启动；较新 beta 不会因旧的活动清单而降回较旧 beta。
+
+GitHub Release 工作流生成 ZIP、文件清单和 SHA256，创建草稿；签名和激活由本地命令完成。回退用更高的版本号和递增序号重新发布已验证代码构建，不降低已接受序号。
 
 ## 验证范围
 
@@ -32,4 +34,4 @@ GitHub Release 工作流生成 ZIP、文件清单和 SHA256，创建草稿；签
 - Windows 辅助进程实际启动并完成握手；提前退出的候选被拒绝，旧版仍可启动。没有使用游戏或账号目录。
 - 无窗口浏览器检查进度、就绪、重启阻塞和错误后重试。
 - API 0.1.4 已部署；候选 ZIP 已上传，更新接口未激活。哈希及下载结果见 `packs/launcher-update-acceptance.json`。
-- 实际启动器窗口之间的重启尚未由用户验收，辅助进程测试不替代该结果。
+- 实际 beta.3 → beta.4 WPF 启动接管通过：旧进程 47416 正常退出，新进程 39004 打开窗口并报告就绪，随后正常关闭；原账号及游戏数据保留。此项使用真实发行构建和实际更新目录，不是辅助进程替身。设置中的“重启更新”按钮尚未人工点击，前端状态与命令测试已通过。
