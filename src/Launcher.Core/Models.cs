@@ -38,6 +38,7 @@ public sealed class LauncherSettings
     public int Width { get; set; } = 1280;
     public int Height { get; set; } = 720;
     public bool Fullscreen { get; set; }
+    public bool PreferDedicatedGpu { get; set; } = true;
     public string WindowBehavior { get; set; } = "keep";
     public int Concurrency { get; set; } = 4;
     public int LimitMiB { get; set; }

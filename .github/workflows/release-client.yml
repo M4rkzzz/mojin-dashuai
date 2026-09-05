@@ -32,6 +32,7 @@ jobs:
       - run: npm ci && npm run build
         working-directory: ui
       - run: dotnet test tests/Hub.Tests/Hub.Tests.csproj -c Release
+      - run: dotnet test tests/GraphicsPreference.Tests/GraphicsPreference.Tests.csproj -c Release
       - run: dotnet publish src/Launcher.Desktop/Launcher.Desktop.csproj -c Release -r win-x64 --self-contained true "-p:Version=$env:VERSION" -o artifacts/MojinDashuai
       - name: Build and verify player installer
         shell: pwsh
@@ -47,7 +48,7 @@ jobs:
         run: |
           if ($env:VERSION -notmatch '^\d+\.\d+\.\d+(-[a-z0-9.]+)?$') { throw 'Invalid version' }
           $sequence = [DateTimeOffset]::UtcNow.ToUnixTimeSeconds()
-          dotnet src/Publisher/bin/Release/net10.0/Publisher.dll bundle-launcher artifacts/MojinDashuai $env:VERSION $sequence http://103.40.14.100:21708 artifacts/launcher-release
+          dotnet src/Publisher/bin/Release/net10.0/Publisher.dll bundle-launcher artifacts/MojinDashuai $env:VERSION $sequence https://launcher-direct.boshan.uk:21708 artifacts/launcher-release
           if ($LASTEXITCODE -ne 0) { throw 'Launcher bundle failed' }
           $setup = "artifacts/installer/MojinDashuai-Setup-$env:VERSION-x64.exe"
           @($setup, 'artifacts/launcher-release/MojinDashuai-windows-x64.zip') | ForEach-Object { $file = Get-Item $_; '{0}  {1}' -f (Get-FileHash $file.FullName).Hash.ToLowerInvariant(),$file.Name } | Set-Content artifacts/launcher-release/SHA256.txt

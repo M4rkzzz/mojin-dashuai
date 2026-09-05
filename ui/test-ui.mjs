@@ -25,4 +25,5 @@ try {
   await check('microsoft-check.mjs');
   await check('update-check.mjs');
   await check('instance-check.mjs');
+  await check('maintenance-check.mjs');
 } finally {server.kill();}

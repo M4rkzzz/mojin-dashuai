@@ -39,19 +39,83 @@ public sealed class RecoveryWindow : HubDialog
 }
 public sealed class ContentWindow : HubDialog
 {
-    public ContentWindow(string root,Func<IDisposable> acquire):base("模组与资源管理",670,530)
+    [System.Runtime.InteropServices.DllImport("dwmapi.dll")]
+    private static extern int DwmSetWindowAttribute(IntPtr window,int attribute,ref int value,int size);
+    private static readonly Brush Surface=new SolidColorBrush(Color.FromRgb(17,17,17));
+    private static readonly Brush BorderColor=new SolidColorBrush(Color.FromRgb(65,65,65));
+    private static Button ActionButton(string text)
     {
-        var tabs=new ComboBox{ItemsSource=new[]{"mods","resourcepacks","shaderpacks"},SelectedIndex=0,Padding=new Thickness(8)};Body.Children.Add(tabs);
-        var list=new ListBox{Height=260,Margin=new Thickness(0,15,0,0),Background=new SolidColorBrush(Color.FromRgb(16,22,17)),Foreground=Foreground};Body.Children.Add(list);
-        void Reload(){var directory=ContentSecurity.SafePath(root,tabs.SelectedItem.ToString()!);Directory.CreateDirectory(directory);list.ItemsSource=Directory.GetFiles(directory).Select(Path.GetFileName).Order().ToArray();}
-        tabs.SelectionChanged+=(_,_)=>Reload();Reload();
-        Button("添加文件",(_,_)=>{
-            try{using var gate=acquire();var dialog=new OpenFileDialog{Filter="模组或资源|*.jar;*.zip",Multiselect=true};if(dialog.ShowDialog(this)!=true)return;foreach(var file in dialog.FileNames){var relative=tabs.SelectedItem+"/"+Path.GetFileName(file);var dest=ContentSecurity.SafePath(root,relative);if(File.Exists(dest))throw new InvalidDataException("存在同名文件，请先停用原文件。");TransactionalInstaller.AtomicCopy(file,dest);}Reload();}
-            catch(Exception ex){MessageBox.Show(this,ex is InvalidDataException?ex.Message:"文件暂时无法修改，请先关闭游戏。","内容管理");}
-        });
-        Button("停用选中文件 / 恢复 .disabled 文件",(_,_)=>{
-            try{if(list.SelectedItem is not string name)return;using var gate=acquire();var source=ContentSecurity.SafePath(root,tabs.SelectedItem+"/"+name);var dest=name.EndsWith(".disabled",StringComparison.OrdinalIgnoreCase)?source[..^9]:source+".disabled";File.Move(source,dest,false);Reload();}
-            catch{MessageBox.Show(this,"无法修改：文件可能正在使用或目标文件已存在。","内容管理");}
-        });
+        var button=new Button{Content=text,Padding=new Thickness(12,9,12,9),MinHeight=38,Background=new SolidColorBrush(Color.FromRgb(34,34,34)),Foreground=Brushes.White,BorderBrush=BorderColor,BorderThickness=new Thickness(1),FontSize=13};
+        button.Template=(ControlTemplate)System.Windows.Markup.XamlReader.Parse("""
+            <ControlTemplate xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" TargetType="Button">
+              <Border x:Name="frame" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Padding="{TemplateBinding Padding}">
+                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+              </Border>
+              <ControlTemplate.Triggers>
+                <Trigger Property="IsMouseOver" Value="True"><Setter TargetName="frame" Property="Background" Value="#333333"/></Trigger>
+                <Trigger Property="IsEnabled" Value="False"><Setter Property="Opacity" Value="0.45"/></Trigger>
+              </ControlTemplate.Triggers>
+            </ControlTemplate>
+            """);
+        return button;
+    }
+    public ContentWindow(string root,Func<IDisposable> acquire):base("模组与资源管理",670,560)
+    {
+        Background=Surface;Foreground=Brushes.White;ResizeMode=ResizeMode.CanResize;
+        var work=SystemParameters.WorkArea;Width=Math.Min(670,Math.Max(300,work.Width-24));Height=Math.Min(560,Math.Max(260,work.Height-24));
+        MinWidth=Math.Min(400,Width);MinHeight=Math.Min(300,Height);MaxWidth=Math.Max(Width,work.Width);MaxHeight=Math.Max(Height,work.Height);
+        SourceInitialized+=(_,_)=>{try{var dark=1;var handle=new System.Windows.Interop.WindowInteropHelper(this).Handle;if(DwmSetWindowAttribute(handle,20,ref dark,sizeof(int))!=0)DwmSetWindowAttribute(handle,19,ref dark,sizeof(int));}catch(Exception ex)when(ex is DllNotFoundException or EntryPointNotFoundException){ }};
+        var layout=new Grid{Margin=new Thickness(20),Background=Surface};Content=layout;
+        foreach(var height in new[]{GridLength.Auto,GridLength.Auto,new GridLength(1,GridUnitType.Star),GridLength.Auto,GridLength.Auto})layout.RowDefinitions.Add(new RowDefinition{Height=height});
+        void Place(UIElement element,int row){Grid.SetRow(element,row);layout.Children.Add(element);}
+        Place(new TextBlock{Text="模组与资源管理",FontSize=22,FontWeight=FontWeights.SemiBold,Margin=new Thickness(0,0,0,16)},0);
+        var tabs=new Grid();for(var i=0;i<3;i++)tabs.ColumnDefinitions.Add(new ColumnDefinition());Place(tabs,1);
+        var listArea=new Grid{Margin=new Thickness(0,14,0,0)};Place(listArea,2);
+        var list=new ListBox{Name="ContentFiles",Background=Surface,Foreground=Brushes.White,BorderBrush=BorderColor,BorderThickness=new Thickness(1),Padding=new Thickness(5),FontSize=13};
+        ScrollViewer.SetVerticalScrollBarVisibility(list,ScrollBarVisibility.Auto);ScrollViewer.SetHorizontalScrollBarVisibility(list,ScrollBarVisibility.Auto);listArea.Children.Add(list);
+        var empty=new TextBlock{Name="ContentEmptyState",Text="暂无模组",HorizontalAlignment=HorizontalAlignment.Center,VerticalAlignment=VerticalAlignment.Center,Foreground=new SolidColorBrush(Color.FromRgb(190,190,190)),FontSize=14,IsHitTestVisible=false};listArea.Children.Add(empty);
+        var status=new TextBlock{Name="ContentStatus",Margin=new Thickness(0,10,0,0),TextTrimming=TextTrimming.CharacterEllipsis,FontSize=13,Visibility=Visibility.Collapsed};Place(status,3);
+        var actions=new Grid{Name="ContentActions",Margin=new Thickness(0,14,0,0)};actions.ColumnDefinitions.Add(new ColumnDefinition());actions.ColumnDefinitions.Add(new ColumnDefinition());Place(actions,4);
+        var add=ActionButton("添加文件");add.Margin=new Thickness(0,0,6,0);actions.Children.Add(add);
+        var toggle=ActionButton("选择文件后停用");toggle.IsEnabled=false;toggle.Margin=new Thickness(6,0,0,0);Grid.SetColumn(toggle,1);actions.Children.Add(toggle);
+        var names=new[]{"mods","resourcepacks","shaderpacks"};var labels=new[]{"模组","资源包","光影"};var tabButtons=new List<Button>();var selected=0;var busy=false;
+        void Message(string text,bool error=false){status.Text=text;status.Foreground=error?new SolidColorBrush(Color.FromRgb(241,164,148)):new SolidColorBrush(Color.FromRgb(207,231,190));status.Visibility=Visibility.Visible;}
+        void Selection(){toggle.IsEnabled=!busy&&list.SelectedItem is string;toggle.Content=list.SelectedItem is string name?(name.EndsWith(".disabled",StringComparison.OrdinalIgnoreCase)?"恢复选中文件":"停用选中文件"):"选择文件后停用";}
+        void Reload()
+        {
+            var directory=ContentSecurity.SafePath(root,names[selected]);Directory.CreateDirectory(directory);var files=Directory.GetFiles(directory).Select(Path.GetFileName).Order().ToArray();list.ItemsSource=files;
+            empty.Text="暂无"+labels[selected];empty.Visibility=files.Length==0?Visibility.Visible:Visibility.Collapsed;Selection();
+        }
+        void SetBusy(bool value){busy=value;add.IsEnabled=!value;list.IsEnabled=!value;foreach(var button in tabButtons)button.IsEnabled=!value;Selection();}
+        for(var index=0;index<3;index++)
+        {
+            var tab=index;var button=ActionButton(labels[index]);button.Margin=new Thickness(index==0?0:4,0,index==2?0:4,0);Grid.SetColumn(button,index);tabs.Children.Add(button);tabButtons.Add(button);
+            button.Click+=(_,_)=>{selected=tab;foreach(var item in tabButtons)item.Background=new SolidColorBrush(Color.FromRgb(34,34,34));button.Background=new SolidColorBrush(Color.FromRgb(53,53,53));status.Visibility=Visibility.Collapsed;Reload();};
+        }
+        tabButtons[0].Background=new SolidColorBrush(Color.FromRgb(53,53,53));list.SelectionChanged+=(_,_)=>Selection();Reload();
+        add.Click+=async(_,_)=>
+        {
+            SetBusy(true);
+            try
+            {
+                using var gate=acquire();var dialog=new OpenFileDialog{Title="添加"+labels[selected],Filter=selected==0?"模组文件|*.jar;*.zip":"资源文件|*.zip",Multiselect=true};if(dialog.ShowDialog(this)!=true)return;
+                var files=dialog.FileNames;var folder=names[selected];Message("正在添加文件");
+                await Task.Run(()=>{foreach(var file in files){var dest=ContentSecurity.SafePath(root,folder+"/"+Path.GetFileName(file));if(File.Exists(dest))throw new InvalidDataException("存在同名文件，请先停用原文件。");TransactionalInstaller.AtomicCopy(file,dest);}});
+                Reload();Message($"已添加 {files.Length} 个文件");
+            }
+            catch(Exception ex){Message(ex is InvalidDataException?ex.Message:"无法添加文件，请检查游戏是否关闭及目录权限。",true);}
+            finally{SetBusy(false);}
+        };
+        toggle.Click+=async(_,_)=>
+        {
+            if(list.SelectedItem is not string name)return;SetBusy(true);
+            try
+            {
+                using var gate=acquire();var source=ContentSecurity.SafePath(root,names[selected]+"/"+name);var restoring=name.EndsWith(".disabled",StringComparison.OrdinalIgnoreCase);var dest=restoring?source[..^9]:source+".disabled";
+                await Task.Run(()=>File.Move(source,dest,false));Reload();Message(restoring?"已恢复选中文件":"已停用选中文件");
+            }
+            catch{Message("无法修改文件：文件正在使用或目标文件已存在。",true);}
+            finally{SetBusy(false);}
+        };
     }
 }

@@ -1,0 +1,63 @@
+{
+  "passed": true,
+  "checks": [
+    {
+      "scale": 1,
+      "screen": "1280x720",
+      "buttonsVisible": true,
+      "listHeight": 318.06,
+      "screenshot": "content-100-1280x720.png"
+    },
+    {
+      "scale": 1,
+      "screen": "1920x1080",
+      "buttonsVisible": true,
+      "listHeight": 318.06,
+      "screenshot": "content-100-1920x1080.png"
+    },
+    {
+      "scale": 1.25,
+      "screen": "1280x720",
+      "buttonsVisible": true,
+      "listHeight": 318.06,
+      "screenshot": "content-125-1280x720.png"
+    },
+    {
+      "scale": 1.25,
+      "screen": "1920x1080",
+      "buttonsVisible": true,
+      "listHeight": 318.06,
+      "screenshot": "content-125-1920x1080.png"
+    },
+    {
+      "scale": 1.5,
+      "screen": "1280x720",
+      "buttonsVisible": true,
+      "listHeight": 228.06,
+      "screenshot": "content-150-1280x720.png"
+    },
+    {
+      "scale": 1.5,
+      "screen": "1920x1080",
+      "buttonsVisible": true,
+      "listHeight": 318.06,
+      "screenshot": "content-150-1920x1080.png"
+    },
+    {
+      "scale": 2,
+      "screen": "1280x720",
+      "buttonsVisible": true,
+      "listHeight": 108.06,
+      "screenshot": "content-200-1280x720.png"
+    },
+    {
+      "scale": 2,
+      "screen": "1920x1080",
+      "buttonsVisible": true,
+      "listHeight": 288.06,
+      "screenshot": "content-200-1920x1080.png"
+    }
+  ],
+  "emptyState": true,
+  "noNativeWindow": true
+}

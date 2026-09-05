@@ -1,0 +1,52 @@
+{
+  "dc2": {
+    "instance": "dc2",
+    "installed": true,
+    "javaMajor": 17,
+    "localVersionPrepared": true,
+    "gameStarted": false,
+    "joinedServer": false,
+    "elapsedSeconds": 236.9051065,
+    "files": 9863,
+    "singleOrigin": true,
+    "origin": "https://launcher-direct.boshan.uk:21708"
+  },
+  "m3e": {
+    "instance": "m3e",
+    "installed": true,
+    "javaMajor": 8,
+    "localVersionPrepared": true,
+    "gameStarted": false,
+    "joinedServer": false,
+    "elapsedSeconds": 156.3724147,
+    "files": 4780,
+    "singleOrigin": true,
+    "origin": "https://launcher-direct.boshan.uk:21708"
+  },
+  "mb": {
+    "instance": "mb",
+    "installed": true,
+    "javaMajor": 25,
+    "localVersionPrepared": true,
+    "gameStarted": false,
+    "joinedServer": false,
+    "elapsedSeconds": 381.9034093,
+    "files": 26889,
+    "singleOrigin": true,
+    "origin": "https://launcher-direct.boshan.uk:21708"
+  },
+  "interruption": {
+    "simulatedProcessInterruption": true,
+    "partial": [],
+    "at": "2026-09-05T12:31:58.9399690Z",
+    "cachedBytes": 695993108.0,
+    "cacheFiles": 7731
+  },
+  "realRangeResume": {
+    "initialResponse": 206,
+    "savedBytes": 1048576,
+    "fileBytes": 40104826,
+    "completedByNewNativeDownloader": true,
+    "sha256Verified": true
+  }
+}

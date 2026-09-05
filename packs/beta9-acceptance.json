@@ -1,8 +1,8 @@
 {
-  "version": "0.1.2-beta.8",
+  "version": "0.1.2-beta.9",
   "channel": "beta",
   "recordedOn": "2026-09-05",
-  "status": "candidate-verified-superseded-before-activation",
+  "status": "candidate-superseded-before-activation",
   "completeDeliveryClaimed": false,
   "changes": {
     "independentConcurrentInstanceDownloads": true,
@@ -12,7 +12,12 @@
     "importLabel": "导入旧客户端配置",
     "downloadOnlyOption": true,
     "superInviteAcceptsUnboundProtectedNames": true,
-    "preLoginAutomaticDifferentialLauncherUpdate": true
+    "preLoginAutomaticDifferentialLauncherUpdate": true,
+    "contentManagerResponsiveLayout": true,
+    "repairProgressAndOutcome": true,
+    "consistentImportFlow": true,
+    "silentRouteSelectionSave": true,
+    "preferDedicatedGpuDefault": true
   },
   "service": {
     "apiVersion": "0.1.5",
@@ -78,39 +83,39 @@
     "nativeUpdateCheckMarkerPropagated": true,
     "failedReplacementRetainsOldVersion": true,
     "localMirrorStagingAndIdempotentImportFixture": true,
-    "finalUnitTestsPassed": 159,
-    "finalUnitTestsEvidence": "tests/Hub.Tests/TestResults/beta8-final.trx",
-    "ci": "https://github.com/M4rkzzz/mojin-dashuai/actions/runs/33966636602",
+    "finalUnitTestsPassed": 160,
+    "finalUnitTestsEvidence": "tests/Hub.Tests/TestResults/beta9-final.trx",
+    "ci": null,
     "nativeInstanceChecksPassed": 13,
     "dispatcherFixtureFiles": 1200,
-    "dispatcherMaxGapMs": 17,
+    "dispatcherMaxGapMs": 25,
     "floodReports": 100000,
-    "floodCallbacks": 2
+    "floodCallbacks": 2,
+    "graphicsPreferenceTestsPassed": 14,
+    "graphicsPreferenceTestsEvidence": "tests/GraphicsPreference.Tests/TestResults/beta9-graphics.trx",
+    "contentDialogLayoutCasesPassed": 8,
+    "contentDialogLayoutEvidence": "packs/acceptance/beta9-content-layout.json",
+    "maintenanceUiPassed": true,
+    "silentRouteSaveAndExplicitSaveFeedbackPassed": true
   },
   "launcherUpdate": {
-    "sequence": 8,
+    "sequence": 9,
     "differentialPerFile": true,
     "unchangedFilesReusedLocally": true,
-    "ecdsaAndSha256AndSequenceChecksRetained": true,
     "legacyBeta7UsesArchiveForFirstUpgrade": true,
-    "legacyShortcutCheckBeforeAccountRestore": true,
-    "publicFilesVerified": true,
-    "publicArchiveRoundTripVerified": true,
     "activated": false,
-    "archiveSha256": "62047f50d3d434bc8eb0ea88bb14ae1289b69871e501faa2155e31fde8abe0ff",
-    "archiveBytes": 78324763,
-    "publicVerificationEvidence": "artifacts/launcher-update-0.1.2-beta.8-final/publication.json",
-    "actualDifferentialDownloadBytes": 1105466
+    "publicFilesVerified": null,
+    "archiveSha256": null,
+    "archiveBytes": null
   },
   "installer": {
-    "version": "0.1.2-beta.8",
-    "downloadUrl": "https://launcher-direct.boshan.uk:21708/launcher/0.1.2-beta.8/MojinDashuai-Setup-0.1.2-beta.8-x64.exe",
-    "sha256": "5bc30942870dd90c12024c1a65e6e3c7d07e2dcd37e6325684f624ac8ca6c629",
-    "bytes": 55616027,
-    "lifecyclePassed": true,
-    "publicDownloadVerified": true,
-    "localInstallationVerified": false,
-    "evidence": "Candidate installer lifecycle passed; active user launcher was not closed or replaced"
+    "version": "0.1.2-beta.9",
+    "downloadUrl": null,
+    "sha256": null,
+    "bytes": null,
+    "lifecyclePassed": null,
+    "publicDownloadVerified": null,
+    "localInstallationVerified": false
   },
   "notAccepted": {
     "cleanWindowsWithoutPreinstalledJava": false,
@@ -129,7 +134,13 @@
     "Null final-publication fields mean pending, not passed.",
     "Prior clean-cache installs and real game joins remain historical evidence and do not replace beta.8 single-origin installation checks.",
     "LittleSkin protocol/cache/configuration checks do not establish the new provider's appearance in a real game window.",
-    "No GPU selection was specified by this change; the new graphics screenshot requires further confirmation."
+    "Windows per-Java high-performance preference is enabled by default and reversible; actual dual-GPU renderer and frame-rate have not been verified."
   ],
-  "supersededBy": "0.1.2-beta.9"
+  "baseline": "packs/beta8-acceptance.json",
+  "cleanup": {
+    "attempted": true,
+    "completed": false,
+    "reason": "Automatic approval review rejected deletion with blocked by policy; test content retained"
+  },
+  "supersededBy": "0.1.2-beta.10"
 }

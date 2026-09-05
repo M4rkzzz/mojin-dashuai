@@ -102,7 +102,7 @@ try{
  expect(await existing.evaluate(()=>window.testCommands.includes('directory.choose'))).toBe(false);
  await existing.getByRole('button',{name:'启动器设置'}).click();
  await existing.getByRole('button',{name:'账号与诊断',exact:true}).click();
- await existing.locator('.field-row').filter({hasText:'修改密码'}).getByRole('button',{name:'打开'}).click();
+ await existing.locator('.field-row').filter({hasText:'修改密码'}).getByRole('button',{name:'修改密码',exact:true}).click();
  await expect(existing.getByRole('heading',{name:'登录',exact:true})).toBeVisible();
  await expect(existing.getByRole('button',{name:'启动器设置'})).toHaveCount(0);
  await existing.close();

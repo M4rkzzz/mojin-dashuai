@@ -1,0 +1,18 @@
+{
+  "passed": 10,
+  "checks": [
+    "HTTPS health and TLS verification",
+    "Register through the configured direct HTTPS origin",
+    "Preserve exact game name and issue recovery code",
+    "Access-token authenticated profile",
+    "Logout through HTTPS",
+    "Logout revokes old access token",
+    "Password login returns same account",
+    "Refresh rotates credential through HTTPS",
+    "Refreshed access token is usable",
+    "End the smoke-test session"
+  ],
+  "temporaryAccountRemoved": true,
+  "endpoint": "https://launcher-direct.boshan.uk:21708",
+  "proxyMode": "direct"
+}

@@ -5,6 +5,7 @@ using Boshan.Launcher;
 if(args is ["--launcher-update-smoke",var fixture]){await LauncherUpdateSmoke.Run(fixture);return;}
 if(args is ["--instance-state-smoke"]){InstanceStateSmoke.Run();return;}
 if(args is ["--dispatcher-install-smoke"]){DispatcherInstallSmoke.Run();return;}
+if(args is ["--content-layout-smoke",var layoutRoot]){ContentDialogLayoutSmoke.Run(layoutRoot);return;}
 if(args is ["--microsoft-resume"]){await MicrosoftResume.Run();return;}
 if(args is ["--microsoft-contract"]){await MicrosoftContract.Run();return;}
 if(args is ["--content-path-smoke",var contentRoot]){await ContentPathSmoke.Run(contentRoot);return;}
