@@ -29,8 +29,8 @@
   "ciPending": false,
   "releaseOnHold": false,
   "reason": "Fourth server accepted and unified-client actual join passed; fresh installer rebuilt.",
-  "publicLauncherVersion": "0.1.2-beta.12",
-  "published": false,
+  "publicLauncherVersion": "0.1.2-beta.13",
+  "published": true,
   "activationAllowed": true,
   "ciPassed": true,
   "fourthServerAccepted": true,
@@ -43,7 +43,7 @@
   "ci": "https://github.com/M4rkzzz/mojin-dashuai/actions/runs/33975951100",
   "pythonDistributionTestsPassed": 44,
   "launcherDifferentialUpdateVerified": true,
-  "launcherDifferentialDownloadBytes": 1408085,
+  "launcherDifferentialDownloadBytes": 1408113,
   "launcherDifferentialBaseline": "0.1.2-beta.12",
   "playerConfirmedFourthServer": true,
   "windowsCachePublicationRaceFixed": true,
@@ -53,5 +53,10 @@
     "windows": "success"
   },
   "installerBytes": 55859208,
-  "installerSha256": "5926b36cb1e7c458a47e50ab34a78bbcb4392c8bb8afb5540a3286ff2a674f80"
+  "installerSha256": "5926b36cb1e7c458a47e50ab34a78bbcb4392c8bb8afb5540a3286ff2a674f80",
+  "publishedAt": "2026-09-05T15:57:57.000833+00:00",
+  "finalInstaller": "artifacts/installer-0.1.2-beta.13-r2",
+  "finalUpdate": "artifacts/launcher-update-0.1.2-beta.13-r2",
+  "catalogSignatureCheck": ".local/beta13-public-catalog-check",
+  "allRequiredTransfersUseUnifiedOrigin": true
 }
