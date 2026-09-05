@@ -28,14 +28,37 @@ if (!(Test-Path -LiteralPath $installed) -or (Get-ItemProperty $registryPath).Di
 $linkName='魔金大帅 安装测试.lnk'
 $desktopLink=Join-Path ([Environment]::GetFolderPath('Desktop')) $linkName
 $menuLink=Join-Path ([Environment]::GetFolderPath('Programs')) $linkName
-$shell=New-Object -ComObject WScript.Shell
 if (!('InstallerPathCheck' -as [type])) {
     Add-Type @'
+using System;
 using System.Runtime.InteropServices;
+using System.Runtime.InteropServices.ComTypes;
 using System.Text;
 public static class InstallerPathCheck {
     [DllImport("kernel32.dll", CharSet=CharSet.Unicode, SetLastError=true)]
     public static extern uint GetLongPathName(string path, StringBuilder buffer, uint length);
+
+    // Use the Unicode shell interface, independent of the runner's ANSI code page.
+    // GetPath is the first IShellLinkW method after IUnknown; no later slots are used.
+    [ComImport, Guid("000214F9-0000-0000-C000-000000000046")]
+    [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
+    private interface IShellLinkW {
+        void GetPath([Out, MarshalAs(UnmanagedType.LPWStr)] StringBuilder path,
+                     int capacity, IntPtr findData, uint flags);
+    }
+
+    public static string ShortcutTarget(string file) {
+        object link = Activator.CreateInstance(Type.GetTypeFromCLSID(
+            new Guid("00021401-0000-0000-C000-000000000046")));
+        try {
+            ((IPersistFile)link).Load(file, 0);
+            var path = new StringBuilder(32768);
+            ((IShellLinkW)link).GetPath(path, path.Capacity, IntPtr.Zero, 0);
+            return path.ToString();
+        } finally {
+            Marshal.FinalReleaseComObject(link);
+        }
+    }
 }
 '@
 }
@@ -46,7 +69,7 @@ function Long-Path([string]$Path) {
 }
 foreach ($link in @($desktopLink,$menuLink)) {
     if (!(Test-Path -LiteralPath $link)) { throw "Installer shortcut missing: $link" }
-    $actual=$shell.CreateShortcut($link).TargetPath
+    $actual=[InstallerPathCheck]::ShortcutTarget($link)
     if (!(Test-Path -LiteralPath $actual) -or !(Long-Path $actual).Equals((Long-Path $installed),[StringComparison]::OrdinalIgnoreCase)) { throw "Installer shortcut target mismatch: expected [$installed], got [$actual], link [$link]" }
 }
 $outside=Join-Path $testRoot '游戏文件\world.txt'
