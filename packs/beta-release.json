@@ -18,7 +18,7 @@
   "networkInstallRootInitiallyEmpty": true,
   "actualGamesPreviouslyJoined": true,
   "actualWpfStartupUpdatePassed": false,
-  "unitTestsPassed": 204,
+  "unitTestsPassed": 211,
   "graphicsPreferenceTestsPassed": 14,
   "apiIsolatedChecksPassed": 47,
   "publicAccountChecksPassed": 10,
@@ -70,14 +70,14 @@
   "previousPublication": "packs/acceptance/beta11-publication-history.json",
   "automaticRoutePolling": false,
   "routeMeasurement": "once-per-page-entry-or-manual",
-  "ciPending": true,
+  "ciPending": false,
   "greenUpdateNoticeBeforeLogin": true,
   "automaticUpgradeFromBeta10Enabled": true,
-  "ciPassed": false,
+  "ciPassed": true,
   "ciJobs": {
     "api": "success",
     "ui": "success",
-    "windows": "in_progress"
+    "windows": "success"
   },
   "contentUpdateTargetedTestsPassed": 10,
   "automaticUpgradeFromBeta11Enabled": true,
@@ -112,5 +112,6 @@
       "compatibility": "mb-1.12.2-cleanroom"
     }
   },
-  "finalDc2BroomRecipeSynced": true
+  "finalDc2BroomRecipeSynced": true,
+  "githubRelease": "https://github.com/M4rkzzz/mojin-dashuai/releases/tag/launcher-v0.1.2-beta.12"
 }

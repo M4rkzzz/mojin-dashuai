@@ -180,5 +180,10 @@
   "publishedCatalogSequence": 2,
   "publicManifestsVerified": true,
   "installerPublicReadBackVerified": true,
-  "launcherUpdatePublishedSequence": 14
+  "launcherUpdatePublishedSequence": 14,
+  "ciHubTests": 211,
+  "ciGraphicsPreferenceTests": 14,
+  "ciPythonTests": 43,
+  "ciPassed": true,
+  "ci": "https://github.com/M4rkzzz/mojin-dashuai/actions/runs/33971718287"
 }
