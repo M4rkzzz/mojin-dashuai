@@ -1,0 +1,42 @@
+{
+  "passed": true,
+  "channel": "beta",
+  "manifestSha256": "a9920ca802e5ee01cb7cc64ab9952c3c9b36f07dc4660944b9ca3ada3d0a7d20",
+  "cleanWindows": false,
+  "joinedServer": true,
+  "allSourcesAutomated": true,
+  "javaMajor": 8,
+  "loader": "forge",
+  "map": true,
+  "quests": false,
+  "machines": false,
+  "scope": "Content-only hotfix: same r2 engine/runtime/mods plus a 6761-byte operator coremod sanitizing GregAPI loading-bar text immediately before its reflective Field.set. Same isolated GUI scale 3 instance starts in an English path; moving it to a Chinese path reproduces SplashFontRenderer.bindTexture crash with the exact Config File path captured. Final patch starts successfully in that Chinese path, retains GUI scale 3, establishes a modded server connection and produces private status with in-world player. User confirmed loading and entering game are both normal. Previously accepted gameplay checks remain r2 baseline evidence; no repeat full install or clean Windows test.",
+  "checkedAt": "2026-09-05T19:13:58.572523+00:00",
+  "evidence": [
+    "packs/acceptance/vw-r3-splash-regression.json",
+    "artifacts/complete-client-staged/vw-r3-sequence-3/report.json",
+    "artifacts/complete-client-staged/vw-r3-sequence-3/publication.json"
+  ],
+  "deferredChecks": [
+    "cleanWindows",
+    "questUi",
+    "machineUi",
+    "repeatFullArchiveInstallation",
+    "finalSchedulerInGameTiming"
+  ],
+  "fullArchiveInstallVerified": false,
+  "allFrozenFilesInArchiveHashVerified": true,
+  "frozenFilesUnchanged": 995,
+  "serverTps": 20,
+  "playerVisualConfirmation": true,
+  "loadingVisualConfirmation": true,
+  "worldMapVisualConfirmation": true,
+  "omniOcularVisualConfirmation": true,
+  "veinMiningConfirmed": true,
+  "ftbClaimModificationVerified": true,
+  "baseAcceptance": "packs/acceptance/vw-2.json",
+  "changedFiles": 1,
+  "deltaBytes": 6761,
+  "chinesePathStartupVerified": true,
+  "guiScale": 3
+}

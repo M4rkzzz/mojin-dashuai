@@ -156,6 +156,9 @@
           "name": "宿迁三网",
           "host": "gt.bk.mc.boshan.uk"
         }
+      ],
+      "retiredReleaseSequences": [
+        2
       ]
     }
   }

@@ -6,7 +6,7 @@
   "bytes": 55863794,
   "sha256": "bff931bfc9db2de7f217d8c30e45a3fc5a67805e35b3e943e8c28832ced6ac5e",
   "githubRelease": "https://github.com/M4rkzzz/mojin-dashuai/releases/tag/launcher-v0.1.2-beta.15",
-  "catalogSequence": 6,
+  "catalogSequence": 7,
   "launcherSequence": 17,
   "minimumLauncher": "0.1.2.15",
   "api": "https://launcher-direct.boshan.uk:21708",
@@ -41,10 +41,10 @@
       "compatibility": "mb-1.12.2-cleanroom"
     },
     "vw": {
-      "version": "1.1.9.1-boshan-r2",
-      "sequence": 2,
-      "manifestUrl": "https://launcher-direct.boshan.uk:21708/v1/manifests/vw/2",
-      "sha256": "7b0ec54c6254c944262e266a030756a36087a2818f655d7a67c448629ba761ab",
+      "version": "1.1.9.1-boshan-r3",
+      "sequence": 3,
+      "manifestUrl": "https://launcher-direct.boshan.uk:21708/v1/manifests/vw/3",
+      "sha256": "d70ee0c00200c482b599b15914d481dd69124d4ddb1f6ad8ddc6d3236289bdbc",
       "compatibility": "vw-1.7.10-forge-r1"
     }
   },
@@ -81,5 +81,12 @@
   "littleSkinInGameVisualVerified": false,
   "previousPublication": "packs/acceptance/beta14-publication-history.json",
   "acceptance": "packs/acceptance/beta15-launcher-checks.json",
-  "fourthServerAcceptance": "packs/acceptance/vw-2.json"
+  "fourthServerAcceptance": "packs/acceptance/vw-2.json",
+  "contentHotfix": {
+    "version": "1.1.9.1-boshan-r3",
+    "publishedAt": "2026-09-05T19:16:36.753372+00:00",
+    "deltaBytes": 6761,
+    "launcherChanged": false,
+    "chinesePathLoadingAndJoinVerified": true
+  }
 }

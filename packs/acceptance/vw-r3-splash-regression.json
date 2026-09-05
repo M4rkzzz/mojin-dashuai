@@ -1,0 +1,53 @@
+{
+  "checkedAt": "2026-09-05T19:13:58.572523+00:00",
+  "reportedCrash": "crash-2026-09-06_02.54.44-client.txt",
+  "exception": "SplashFontRenderer.bindTexture -> FontRenderer.renderUnicodeChar -> IllegalArgumentException",
+  "cause": "GregAPI UT$LoadingBar.step reflectively writes the full Config File path, bypassing Forge special-character filtering. Chinese path triggers an unsupported Unicode font page in the splash renderer.",
+  "englishPathGuiScale3": {
+    "pid": 61772,
+    "startupPassed": true,
+    "mode": "diagnostic-only; no text mutation"
+  },
+  "chinesePathBeforeFix": {
+    "pid": 54480,
+    "crashReproduced": true,
+    "unsupportedText": "Config File: .../中文客户端/instances/vw/config/GregTech/gregtech.cfg",
+    "evidence": "../_voidwayfarer4-deploy/r2-client-audit/reports/splash-diagnostic/chinese-path-latest.log"
+  },
+  "chinesePathAfterFix": {
+    "pid": 38308,
+    "startupPassed": true,
+    "guiScale": 3,
+    "inWorldPlayerVerified": true,
+    "userVisualConfirmation": "加载和进游戏都正常",
+    "evidence": "../_voidwayfarer4-deploy/r2-client-audit/reports/splash-fixed/game.log"
+  },
+  "patch": {
+    "path": "mods/mojin-forge-splash-text-1.0.0.jar",
+    "sha256": "643334c715ac46fd91e49b38910098efd97854a9224dd30ae3fae74267236f41",
+    "size": 6761,
+    "sources": [
+      "https://launcher-direct.boshan.uk:21708/objects/sha256/643334c715ac46fd91e49b38910098efd97854a9224dd30ae3fae74267236f41"
+    ],
+    "policy": "managed",
+    "distributionBasis": "Operator-authored open-source GregAPI loading text compatibility; source embedded in JAR and published with launcher repository"
+  },
+  "launcherChanged": false,
+  "userFilesChanged": false,
+  "freshWindowsVerified": false,
+  "publication": {
+    "instance": "vw",
+    "version": "1.1.9.1-boshan-r3",
+    "archiveSha256": "358fd09e535da2ebb3801cee77a09f09269747e7e2939b0d6d7958be089870da",
+    "archiveBytes": 278449987,
+    "verifiedEntries": 1727,
+    "newObjects": 2,
+    "officialOnlyFiles": [],
+    "catalogActivated": true,
+    "gameServersTouched": false,
+    "publicPatchHashVerified": true,
+    "deltaFiles": 1,
+    "deltaBytes": 6761,
+    "catalogSequence": 7
+  }
+}

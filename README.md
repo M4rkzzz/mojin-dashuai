@@ -4,6 +4,8 @@ Windows 四服统一客户端。React + TypeScript / WebView2 / .NET 10。自建
 
 **0.1.2-beta.15 已开放内测。** [下载 Windows 安装包](https://launcher-direct.boshan.uk:21708/launcher/0.1.2-beta.15/MojinDashuai-Setup-0.1.2-beta.15-x64.exe) · [使用说明](docs/BETA-0.1.2.md)。干净 Windows 验收按用户决定延后，仍保留未通过记录；本次不认定为完整稳定版交付。
 
+四服现为 **r3**：修复中文安装路径下 Greg-API 加载闪退。r2 玩家重开启动器后点击四服“更新”，仅补下载约 7 KB，启动器本体保持 beta15。
+
 ## 启动开发环境
 
 需要 Node.js 22、.NET SDK 10。先执行 `npm ci` 和 `npm run build`（在 `ui` 目录），再执行 `dotnet build Boshan.slnx`。

@@ -28897,6 +28897,23 @@
       }
     },
     {
+      "path": "mods/mojin-forge-splash-text-1.0.0.jar",
+      "sha256": "643334c715ac46fd91e49b38910098efd97854a9224dd30ae3fae74267236f41",
+      "size": 6761,
+      "sources": [
+        "https://launcher-direct.boshan.uk:21708/objects/sha256/643334c715ac46fd91e49b38910098efd97854a9224dd30ae3fae74267236f41"
+      ],
+      "policy": "managed",
+      "distributionBasis": "Operator-authored open-source GregAPI loading text compatibility; source embedded in JAR and published with launcher repository",
+      "status": "unified-origin-object-verified",
+      "publishedVerified": true,
+      "downloadVerification": {
+        "verified": true,
+        "at": "2026-09-05T19:13:58.572523+00:00",
+        "evidence": "artifacts/complete-client-staged/vw-r3-sequence-3/publication.json"
+      }
+    },
+    {
       "path": "mods/nechar-1.7.10-1.5.5-GTNH.jar",
       "size": 653167,
       "sha256": "f7cec6c872b706c38641aca9fe5ea3f31522836d5bd97c938efc2e8fa1645352",
@@ -29359,10 +29376,18 @@
     "mods/mojin-autoconnect-1.7.10-0.1.0.jar"
   ],
   "immutableObjectsPublished": true,
-  "publicationReceipt": "artifacts/vw-r2-final-input/publication-receipt.txt",
-  "verifiedAt": "2026-09-05T18:48:29.645857+00:00",
+  "publicationReceipt": "artifacts/complete-client-staged/vw-r3-sequence-3/publication.json",
+  "verifiedAt": "2026-09-05T19:13:58.572523+00:00",
   "betaReady": true,
-  "betaSequence": 2,
-  "betaManifestSha256": "0b9b5756cb91949c898630005fde57f1b317ca190e9bd86e97e7c73db9628098",
-  "betaPublished": false
+  "betaSequence": 3,
+  "betaManifestSha256": "a9920ca802e5ee01cb7cc64ab9952c3c9b36f07dc4660944b9ca3ada3d0a7d20",
+  "betaPublished": true,
+  "contentHotfix": {
+    "baseVersion": "1.1.9.1-boshan-r2",
+    "baseFrozenFilesUnchanged": 995,
+    "addedFiles": [
+      "mods/mojin-forge-splash-text-1.0.0.jar"
+    ],
+    "reason": "Chinese installation path in GregAPI loading bar crashes native Forge splash"
+  }
 }
