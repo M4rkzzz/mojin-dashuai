@@ -37,6 +37,31 @@ public class NetworkPolicyTests
             await downloader.Get(file);Assert.Equal([NetworkPolicy.DirectApi+"/objects/sha256/"+hash],urls);
         }finally{if(Directory.Exists(root))Directory.Delete(root,true);}
     }
+    [Theory]
+    [InlineData("https://cdn.modrinth.com/data/project/versions/version/mod.jar")]
+    [InlineData("https://mediafilez.forgecdn.net/files/1234/567/mod.jar")]
+    [InlineData("https://edge.forgecdn.net/files/1234/567/mod.jar")]
+    public void OfficialOnlyFilesAcceptOneAnonymousFixedOfficialHttpsSource(string source)
+    {
+        var file=new ContentFile("mods/official.jar",1,new string('a',64),[source],FilePolicy.Managed,"official distribution only",OfficialOnly:true);
+        ContentSecurity.ValidateFile(file);
+        Assert.Throws<InvalidDataException>(()=>ContentSecurity.ValidateFile(file with {Sources=[source,source]}));
+    }
+    [Theory]
+    [InlineData("http://cdn.modrinth.com/data/project/versions/version/mod.jar")]
+    [InlineData("https://user:secret@cdn.modrinth.com/data/project/versions/version/mod.jar")]
+    [InlineData("https://cdn.modrinth.com:444/data/project/versions/version/mod.jar")]
+    [InlineData("https://cdn.modrinth.com/data/project/versions/version/mod.jar?token=secret")]
+    [InlineData("https://cdn.modrinth.com/data/project/versions/version/mod.jar#fragment")]
+    [InlineData("https://cdn.modrinth.com/")]
+    [InlineData("https://cdn.modrinth.com.evil.example/mod.jar")]
+    [InlineData("https://unified.example/objects/sha256/abcd")]
+    [InlineData("https://github.com/project/releases/latest/download/mod.jar")]
+    public void OfficialOnlyFilesRejectCredentialsDynamicOrUnapprovedSources(string source)
+    {
+        var file=new ContentFile("mods/official.jar",1,new string('a',64),[source],FilePolicy.Managed,"official distribution only",OfficialOnly:true);
+        Assert.Throws<InvalidDataException>(()=>ContentSecurity.ValidateFile(file));
+    }
     private sealed class Handler(Func<HttpRequestMessage,HttpResponseMessage> respond):HttpMessageHandler
     {protected override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request,CancellationToken token)=>Task.FromResult(respond(request));}
 }

@@ -14,7 +14,7 @@ public static partial class RuntimeManager
         var locks = ContentSecurity.SafePath(root, "runtimes/" + spec.Archive.Sha256 + ".lock"); Directory.CreateDirectory(Path.GetDirectoryName(locks)!);
         await using var gate = new FileStream(locks, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.None);
         var clock=Stopwatch.StartNew();long bytes=0;
-        var archive = await downloader.Get(spec.Archive,count=>bytes+=count,token,position=>progress?.Report(new(instance,"下载 Java "+spec.Major,position,spec.Archive.Size,bytes/Math.Max(1,clock.Elapsed.TotalSeconds))));
+        var archive = await downloader.Get(spec.Archive,count=>bytes+=count,token,position=>progress?.Report(new(instance,bytes==0&&position==spec.Archive.Size?"校验 Java "+spec.Major+" 安装包":"下载 Java "+spec.Major,position,spec.Archive.Size,bytes/Math.Max(1,clock.Elapsed.TotalSeconds))));
         var temp = path + ".staging-" + Guid.NewGuid().ToString("N"); Directory.CreateDirectory(temp);
         try{
         progress?.Report(new(instance,"解压 Java "+spec.Major,0,spec.ExpandedSize,0));

@@ -33,7 +33,10 @@ public partial class MainWindow : Window
     private readonly Dictionary<string,NetworkDiagnostic> diagnostics=[];
     private readonly Dictionary<string,ResumeDownload> savedDownloads=[];
     private readonly Dictionary<string,long> savedProgressAt=[];
-    private readonly Dictionary<string,(DateTime Written,long Length,string Version)> installedVersions=[];
+    private readonly Dictionary<string,(DateTime Written,long Length,PackManifest Manifest)> installedVersions=[];
+    private readonly Dictionary<string,ReleaseRef> availableUpdates=[];
+    private readonly ContentUpdateTracker contentUpdates=new();
+    private readonly SemaphoreSlim contentCatalogGate=new(1),contentStateGate=new(1);
     private readonly object logGate=new();
     private readonly Dictionary<string,RollbackPin> pendingRollbackPins=[];
     private LauncherSettings settings=new();
@@ -138,8 +141,16 @@ public partial class MainWindow : Window
                 UpdateStartup.MarkReady();
                 if(await App.CompleteLegacyStartupUpdate()){Application.Current.Shutdown();return null;}
                 launcherUpdate=App.StartupUpdateState;
-                return new {Profile=await accounts.Restore(),Settings=settings,LauncherUpdate=launcherUpdate,WindowMaximized=WindowState==WindowState.Maximized,Installs=await InstalledStates(),Progress=transferProgress,States=InstanceStates()};
-            case "instances.status":return new {Installs=await InstalledStates(),Progress=transferProgress,States=InstanceStates()};
+                return new {Profile=await accounts.Restore(),Settings=settings,LauncherUpdate=launcherUpdate,WindowMaximized=WindowState==WindowState.Maximized,Installs=await InstalledStates(),Progress=transferProgress,States=InstanceStates(),AvailableUpdates=availableUpdates};
+            case "instances.status":return new {Installs=await InstalledStates(),Progress=transferProgress,States=InstanceStates(),AvailableUpdates=availableUpdates};
+            case "instances.updates.check":
+            {
+                if(accounts.Current is null||!settings.ContentDirectoryConfigured)return null;
+                using var timeout=new CancellationTokenSource(TimeSpan.FromSeconds(8));
+                try{await FetchContentCatalog(timeout.Token);}
+                catch(Exception ex){Log("content-updates.check",ex);}
+                return new {Installs=await InstalledStates(),Progress=transferProgress,States=InstanceStates(),AvailableUpdates=availableUpdates};
+            }
             case "launcher.update.check":return await CheckLauncherUpdate(true);
             case "launcher.update.status":return launcherUpdate;
             case "launcher.update.restart":
@@ -205,6 +216,13 @@ public partial class MainWindow : Window
                 await InstanceOperation(id,async()=>{launchAfterDownload.Remove(id);repairDownloads.Add(id);summary=await Install(id);});
                 return summary is null?new{Paused=transferProgress.ContainsKey(id),Cancelled=!transferProgress.ContainsKey(id),Message=(string?)null}:new{Summary=summary,Message=RepairMessage(summary,id)};
             }
+            case "instance.update":
+            {
+                var id=Id();
+                if(!File.Exists(Path.Combine(new TransactionalInstaller(settings.Root).InstancePath(id),".hub","installed.json")))throw new InvalidDataException("请先安装这个世界。");
+                await InstanceOperation(id,async()=>{launchAfterDownload.Remove(id);repairDownloads.Remove(id);await Install(id,onlyUpdates:true);});
+                return null;
+            }
             case "instance.rollback":{var id=Id();await InstanceOperation(id,()=>Rollback(id));return null;}
             case "download.pause":
             {
@@ -219,7 +237,7 @@ public partial class MainWindow : Window
                         if(!savedDownloads.TryGetValue(id,out var saved))throw new InvalidDataException("没有可续传的任务。");
                         await accounts.GameSession();
                         if(cancelledDownloads.Contains(id))return;
-                        var directory=await catalog.Fetch();var server=directory.Servers.Single(x=>x.Id==id);
+                        var directory=await FetchContentCatalog();var server=directory.Servers.Single(x=>x.Id==id);
                         if(cancelledDownloads.Contains(id))return;
                         var release=server.Release?.Sha256==saved.Release.Sha256?server.Release:server.Rollbacks.FirstOrDefault(r=>r.Sha256==saved.Release.Sha256)??server.Release;
                         if(release is null)throw new InvalidDataException("此版本当前不可下载。");
@@ -274,24 +292,42 @@ public partial class MainWindow : Window
         if(games.ContainsKey(id)||new TransactionalInstaller(settings.Root).IsRunning(id))return "running";
         if(transferProgress.TryGetValue(id,out var p))return p.Paused?"paused":"downloading";
         if(instanceOperations.Contains(id))return "preparing";
-        return File.Exists(Path.Combine(new TransactionalInstaller(settings.Root).InstancePath(id),".hub","installed.json"))?"installed":"not-installed";
+        return File.Exists(Path.Combine(new TransactionalInstaller(settings.Root).InstancePath(id),".hub","installed.json"))?(availableUpdates.ContainsKey(id)?"update-available":"installed"):"not-installed";
     }
     private Dictionary<string,string> InstanceStates()=>Routes.Domains.Keys.ToDictionary(id=>id,InstanceState);
     private async Task<object> InstalledStates()
     {
+        await contentStateGate.WaitAsync();
+        try
+        {
         var found=new Dictionary<string,object>();
         foreach(var id in Routes.Domains.Keys)
         {
             var path=Path.Combine(new TransactionalInstaller(settings.Root).InstancePath(id),".hub","installed.json");
-            var info=new FileInfo(path);if(!info.Exists){installedVersions.Remove(path);continue;}
+            var info=new FileInfo(path);if(!info.Exists){installedVersions.Remove(path);availableUpdates.Remove(id);continue;}
             if(!installedVersions.TryGetValue(path,out var cached)||cached.Written!=info.LastWriteTimeUtc||cached.Length!=info.Length)
             {
-                var version=await Task.Run(()=>Json.Read<InstalledPack>(path).Manifest.Version);
-                cached=(info.LastWriteTimeUtc,info.Length,version);installedVersions[path]=cached;
+                var manifest=await Task.Run(()=>Json.Read<InstalledPack>(path).Manifest);
+                cached=(info.LastWriteTimeUtc,info.Length,manifest);installedVersions[path]=cached;
             }
-            found[id]=new{Version=cached.Version,State=InstanceState(id)};
+            var pinPath=Path.Combine(Path.GetDirectoryName(path)!,"rollback-pin.json");
+            var pin=await Task.Run(()=>File.Exists(pinPath)?Json.Read<RollbackPin>(pinPath):null);
+            var available=await contentUpdates.Available(cached.Manifest,pin);
+            if(available is null)availableUpdates.Remove(id);else availableUpdates[id]=available;
+            found[id]=new{Version=cached.Manifest.Version,Sequence=cached.Manifest.Sequence,State=InstanceState(id)};
         }
         return found;
+        }
+        finally{contentStateGate.Release();}
+    }
+    private async Task<Catalog> FetchContentCatalog(CancellationToken token=default)
+    {
+        await contentCatalogGate.WaitAsync(token);
+        try
+        {
+            var directory=await catalog.Fetch(token);contentUpdates.Accept(directory);return directory;
+        }
+        finally{contentCatalogGate.Release();}
     }
     private string DownloadRecordPath(string id)=>ContentSecurity.SafePath(new TransactionalInstaller(settings.Root).InstancePath(id),".hub/download.json");
     private void RestoreDownloads()
@@ -331,7 +367,7 @@ public partial class MainWindow : Window
     private async Task InstanceOperation(string id,Func<Task> operation)
     {
         if(!instanceOperations.Add(id))throw new InvalidDataException("此世界已有任务正在进行。");
-        cancelledDownloads.Remove(id);pausedDownloads.Remove(id);Event("instance-state",new{Instance=id,State="preparing"});
+        cancelledDownloads.Remove(id);pausedDownloads.Remove(id);Event("instance-state",new{Instance=id,State=InstanceState(id)});
         try{await operation();}
         catch
         {
@@ -348,16 +384,26 @@ public partial class MainWindow : Window
             Event("instance-state",new{Instance=id,State=InstanceState(id)});
         }
     }
-    private async Task<InstallationSummary?> Install(string id)
+    private async Task<InstallationSummary?> Install(string id,bool onlyUpdates=false)
     {
         pendingRollbackPins.Remove(id);
         await accounts.GameSession();
         if(cancelledDownloads.Contains(id))return null;
-        var directory=await catalog.Fetch();var server=directory.Servers.SingleOrDefault(s=>s.Id==id);
+        var directory=await FetchContentCatalog();var server=directory.Servers.SingleOrDefault(s=>s.Id==id);
         if(cancelledDownloads.Contains(id))return null;
         if(server?.Release is null)throw new InvalidDataException("这个世界正在完成安装与入服验收，正式内容尚未开放。");
-        TrackDownload(id,server.Release);
-        var pack=await catalog.GetManifest(id,server.Release);if(cancelledDownloads.Contains(id))return null;return await Transfer(pack);
+        var release=server.Release;
+        if(onlyUpdates)
+        {
+            var installer=new TransactionalInstaller(settings.Root);
+            var installed=await Task.Run(()=>installer.ReadInstalled(id)?.Manifest??throw new InvalidDataException("请先安装这个世界。"));
+            var pinPath=Path.Combine(installer.InstancePath(id),".hub","rollback-pin.json");
+            var pin=await Task.Run(()=>File.Exists(pinPath)?Json.Read<RollbackPin>(pinPath):null);
+            release=await contentUpdates.Available(installed,pin);
+            if(release is null){await InstalledStates();return null;}
+        }
+        TrackDownload(id,release);
+        var pack=await catalog.GetManifest(id,release);if(cancelledDownloads.Contains(id))return null;return await Transfer(pack);
     }
     private async Task<InstallationSummary?> Transfer(PackManifest pack)
     {
@@ -381,7 +427,9 @@ public partial class MainWindow : Window
             if(phase is not null)LogPhase(pack.Instance,phase,"completed");phase=null;
             if(pendingRollbackPins.Remove(pack.Instance,out var pin))Json.Write(Path.Combine(new TransactionalInstaller(settings.Root).InstancePath(pack.Instance),".hub","rollback-pin.json"),pin);
             if(repairDownloads.Contains(pack.Instance)&&summary is not null)Event("repair-result",new{Instance=pack.Instance,Summary=summary,Message=RepairMessage(summary,pack.Instance)});
-            pendingPacks.Remove(pack.Instance);transferProgress.Remove(pack.Instance);ForgetDownload(pack.Instance);Event("installed",new{Instance=pack.Instance});return summary;
+            pendingPacks.Remove(pack.Instance);transferProgress.Remove(pack.Instance);ForgetDownload(pack.Instance);
+            installedVersions.Remove(Path.Combine(new TransactionalInstaller(settings.Root).InstancePath(pack.Instance),".hub","installed.json"));
+            await InstalledStates();Event("installed",new{Instance=pack.Instance});return summary;
         }
         catch(OperationCanceledException)when(cancellation.IsCancellationRequested)
         {
@@ -412,7 +460,7 @@ public partial class MainWindow : Window
     {
         var installer=new TransactionalInstaller(settings.Root);var oldPath=Path.Combine(installer.InstancePath(id),".hub","previous.json");
         if(!File.Exists(oldPath))throw new InvalidDataException("没有可回退的上一版本。");
-        var old=await Task.Run(()=>Json.Read<InstalledPack>(oldPath));var directory=await catalog.Fetch();var server=directory.Servers.Single(s=>s.Id==id);
+        var old=await Task.Run(()=>Json.Read<InstalledPack>(oldPath));var directory=await FetchContentCatalog();var server=directory.Servers.Single(s=>s.Id==id);
         var release=server.Rollbacks.SingleOrDefault(r=>r.Version==old.Manifest.Version&&r.Compatibility==server.Release?.Compatibility);
         if(release is null)throw new InvalidDataException("上一版本未被列为当前服务器可用的回退版本。");
         var pack=await catalog.GetManifest(id,release);
@@ -482,13 +530,12 @@ public partial class MainWindow : Window
             var pinPath=Path.Combine(installer.InstancePath(id),".hub","rollback-pin.json");
             var pin=File.Exists(pinPath)?Json.Read<RollbackPin>(pinPath):null;
             using var timeout=new CancellationTokenSource(TimeSpan.FromSeconds(8));
-            var release=await LaunchUpdates.Check(installed,pin,catalog.Fetch,timeout.Token);
+            var release=await LaunchUpdates.Check(installed,pin,FetchContentCatalog,timeout.Token);
             if(release is not null)
             {
                 var updated=await catalog.GetManifest(id,release);
-                pendingRollbackPins.Remove(id);launchAfterDownload.Add(id);TrackDownload(id,release);await Transfer(updated);
-                if(pendingPacks.ContainsKey(id)||pausedDownloads.Contains(id)||cancelledDownloads.Contains(id))return;
-                launchAfterDownload.Remove(id);
+                pendingRollbackPins.Remove(id);launchAfterDownload.Remove(id);TrackDownload(id,release);await Transfer(updated);
+                return;
             }
         }
         // Installation can outlive an access token; obtain a current session just before launching.

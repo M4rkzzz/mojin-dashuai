@@ -95,6 +95,15 @@ try
             }
             Json.Write(Path.Combine(root,"report.json"),new{directory.Sequence,Servers=directory.Servers.Length,PublicCatalogVerified=true});break;
         }
+        case "verify-catalog":
+        {
+            var keys=JsonDocument.Parse(File.ReadAllText(args[2])).RootElement.GetProperty("publicKeys").Deserialize<Dictionary<string,string>>(Json.Options)!;
+            var catalog=ContentSecurity.Verify<Catalog>(Json.Read<SignedEnvelope>(args[1]),keys);
+            if(catalog.Sequence<=0||catalog.Servers.Length!=3)throw new InvalidDataException("Invalid previous catalog.");
+            foreach(var server in catalog.Servers)
+                if(!Routes.Domains.TryGetValue(server.Id,out var expected)||!server.Routes.SequenceEqual(expected))throw new InvalidDataException("Catalog routes differ.");
+            Json.Write(args[3],catalog);Console.WriteLine("Catalog signature verified.");break;
+        }
         case "diff":
         {
             var old=Json.Read<PackManifest>(args[1]);var next=Json.Read<PackManifest>(args[2]);ContentSecurity.Validate(next);
@@ -167,7 +176,9 @@ try
             var command=process.StartInfo.Arguments;
             var match=System.Text.RegularExpressions.Regex.Match(command,"(?:-cp|-classpath)\\s+\"([^\"]+)\"");
             if(match.Success&&match.Groups[1].Value.Split(Path.PathSeparator).Any(p=>!File.Exists(p)))throw new InvalidDataException("Generated classpath contains missing files.");
-            var report=new{manifest.Instance,Installed=true,JavaMajor=manifest.Runtime.Major,LocalVersionPrepared=true,GameStarted=false,JoinedServer=false,ElapsedSeconds=watch.Elapsed.TotalSeconds,Files=manifest.Files.Length,SingleOrigin=unified,Origin=unified?NetworkPolicy.DirectApi:null};
+            var official=manifest.Files.Where(file=>file.OfficialOnly).Select(file=>file.Path).ToArray();
+            var complete=(manifest.Bundles??[]).SingleOrDefault(bundle=>bundle.Complete);
+            var report=new{manifest.Instance,manifest.Version,manifest.Sequence,ManifestSha256=await ContentSecurity.HashFile(args[1]),Installed=true,JavaMajor=manifest.Runtime.Major,LocalVersionPrepared=true,GameStarted=false,JoinedServer=false,ElapsedSeconds=watch.Elapsed.TotalSeconds,Files=manifest.Files.Length,SingleOrigin=unified&&official.Length==0,Origin=unified?NetworkPolicy.DirectApi:null,OfficialOnlyFiles=official,CompleteClientArchive=complete?.Archive.Sha256,CompleteClientArchiveBytes=complete?.Archive.Size};
             Json.Write(Path.Combine(root,manifest.Instance+"-install-check.json"),report);Console.WriteLine(JsonSerializer.Serialize(report,Json.Options));break;
         }
         case "play-check":

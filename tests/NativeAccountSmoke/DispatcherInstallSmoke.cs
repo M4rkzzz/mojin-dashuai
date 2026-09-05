@@ -12,7 +12,9 @@ internal static class DispatcherInstallSmoke
 {
     private sealed class Handler(byte[] archive):HttpMessageHandler
     {
-        protected override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request,CancellationToken token)=>Task.FromResult(new HttpResponseMessage(HttpStatusCode.OK){Content=new ByteArrayContent(archive)});
+        public int Requests {get;private set;}
+        protected override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request,CancellationToken token)
+        {Requests++;return Task.FromResult(new HttpResponseMessage(HttpStatusCode.OK){Content=new ByteArrayContent(archive)});}
     }
     public static void Run()
     {
@@ -27,23 +29,36 @@ internal static class DispatcherInstallSmoke
                 try
                 {
                     var files=new List<ContentFile>();using var output=new MemoryStream();
-                    using(var zip=new ZipArchive(output,ZipArchiveMode.Create,true))for(var index=0;index<1200;index++)
+                    // Cancellation is asserted during client extraction, before Java can run.
+                    // Keep a structurally valid nested runtime ZIP in the full client fixture.
+                    var java=Encoding.UTF8.GetBytes("dispatcher cancellation fixture; never executed");
+                    using var runtimeOutput=new MemoryStream();
+                    using(var runtimeZip=new ZipArchive(runtimeOutput,ZipArchiveMode.Create,true))
+                    {using var entry=runtimeZip.CreateEntry("bin/java.exe").Open();entry.Write(java);}
+                    var runtimeBytes=runtimeOutput.ToArray();
+                    var runtimeFile=new ContentFile("runtime.zip",runtimeBytes.Length,Convert.ToHexString(SHA256.HashData(runtimeBytes)).ToLowerInvariant(),["https://fixture.invalid/runtime"],FilePolicy.Managed,"local fixture");
+                    using(var zip=new ZipArchive(output,ZipArchiveMode.Create,true))
                     {
-                        var bytes=Encoding.UTF8.GetBytes("small configuration "+index);var path=$"config/fixture/{index}.cfg";
-                        files.Add(new(path,bytes.Length,Convert.ToHexString(SHA256.HashData(bytes)).ToLowerInvariant(),["https://fixture.invalid/"+path],FilePolicy.Seed,"local fixture"));
-                        using var entry=zip.CreateEntry("overrides/"+path).Open();entry.Write(bytes);
+                        for(var index=0;index<1200;index++)
+                        {
+                            var bytes=Encoding.UTF8.GetBytes("small configuration "+index);var path=$"config/fixture/{index}.cfg";
+                            files.Add(new(path,bytes.Length,Convert.ToHexString(SHA256.HashData(bytes)).ToLowerInvariant(),["https://fixture.invalid/"+path],FilePolicy.Seed,"local fixture"));
+                            using var entry=zip.CreateEntry(path).Open();entry.Write(bytes);
+                        }
+                        using var runtimeEntry=zip.CreateEntry(ContentBundle.RuntimeArchivePath).Open();runtimeEntry.Write(runtimeBytes);
                     }
                     var archive=output.ToArray();var bundleFile=new ContentFile("fixture.zip",archive.Length,Convert.ToHexString(SHA256.HashData(archive)).ToLowerInvariant(),["https://fixture.invalid/pack"],FilePolicy.Managed,"local fixture");
-                    var runtime=new RuntimeSpec("java17",17,"17","windows-x64",bundleFile,"bin/java.exe",1);
-                    var manifest=new PackManifest("dc2","fixture",1,"1.20.1","forge","47","fixture",runtime,8192,"fixture",files.ToArray(),["local smoke"],[new(bundleFile,"overrides/")]);
-                    using var downloader=new Downloader(Path.Combine(root,"cache"),new LauncherSettings{Root=root},new Handler(archive));
+                    var runtime=new RuntimeSpec("java17",17,"17","windows-x64",runtimeFile,"bin/java.exe",java.Length);
+                    var manifest=new PackManifest("dc2","fixture",1,"1.20.1","forge","47","fixture",runtime,8192,"fixture",files.ToArray(),["local smoke"],[new(bundleFile,"",Complete:true)]);
+                    var handler=new Handler(archive);
+                    using var downloader=new Downloader(Path.Combine(root,"cache"),new LauncherSettings{Root=root},handler);
                     using var cancel=new CancellationTokenSource(TimeSpan.FromSeconds(30));
                     var callbacks=0;var heartbeats=0;var extractionTicks=0;var phase="";var maximumGap=0L;var clock=Stopwatch.StartNew();var lastTick=0L;
                     var timer=new DispatcherTimer(DispatcherPriority.Input,dispatcher){Interval=TimeSpan.FromMilliseconds(10)};
                     timer.Tick+=(_,_)=>
                     {
                         var now=clock.ElapsedMilliseconds;maximumGap=Math.Max(maximumGap,now-lastTick);lastTick=now;heartbeats++;
-                        if(Volatile.Read(ref phase)=="解压世界配置"&&++extractionTicks>=3)cancel.Cancel();
+                        if(Volatile.Read(ref phase)=="解压客户端"&&++extractionTicks>=3)cancel.Cancel();
                     };
                     using var progress=new DispatcherTransferProgress(dispatcher,p=>callbacks++,p=>Volatile.Write(ref phase,p.Phase));
                     timer.Start();var cancelled=false;
@@ -52,6 +67,9 @@ internal static class DispatcherInstallSmoke
                     timer.Stop();
                     if(!cancelled||extractionTicks<3||heartbeats<3)throw new InvalidOperationException("Dispatcher did not process cancellation during extraction.");
                     if(maximumGap>1500)throw new InvalidOperationException("Dispatcher heartbeat was blocked for over 1.5 seconds.");
+                    if(handler.Requests!=1)throw new InvalidOperationException("Complete client extraction requested an individual file or Java archive.");
+                    if(new TransactionalInstaller(root).ReadInstalled("dc2") is not null)throw new InvalidOperationException("Cancelled extraction committed an installation.");
+                    if(Directory.EnumerateFiles(Path.Combine(root,"cache"),"*.extract-*").Any())throw new InvalidOperationException("Cancelled extraction left an unverified temporary object.");
                     var filesExtracted=Directory.EnumerateFiles(Path.Combine(root,"cache")).Count();
                     // Flooding native progress must not create one Dispatcher work item per report.
                     var floodCallbacks=0;
@@ -65,7 +83,7 @@ internal static class DispatcherInstallSmoke
                         await Task.Delay(250);
                     }
                     if(floodCallbacks>5)throw new InvalidOperationException("Chunk progress flooded the Dispatcher queue.");
-                    result=new{passed=true,fixtureFiles=files.Count,filesExtracted,heartbeats,extractionTicks,maximumGapMs=maximumGap,progressCallbacks=callbacks,floodReports=100000,floodCallbacks,cancelledDuringExtraction=cancelled};
+                    result=new{passed=true,fixtureFiles=files.Count,completeBundle=true,nestedRuntime=true,downloadRequests=handler.Requests,filesExtracted,heartbeats,extractionTicks,maximumGapMs=maximumGap,progressCallbacks=callbacks,floodReports=100000,floodCallbacks,cancelledDuringExtraction=cancelled};
                 }
                 catch(Exception ex){error=ex;}
                 finally{frame.Continue=false;}

@@ -138,3 +138,6 @@ dialog{border-color:#454545;color:#f2f2f2}dialog::backdrop{background:#000b}.ski
 .window-update-panel .update-dismiss{position:absolute;top:14px;right:14px;width:24px;height:24px;display:grid;place-items:center;color:#bec5be}
 .window-update-panel .update-dismiss:hover{color:#fff;background:#ffffff10}
 .window-update-panel .update-state{padding-right:20px}
+.mini-world small.update-required,.install-heading>span.update-required,.card-bottom .update-required{color:#f2a759}
+.play-button.update-button{background:#f2a759;color:#261904}
+.play-button.update-button:hover{background:#ffbb72}

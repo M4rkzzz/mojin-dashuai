@@ -27,6 +27,7 @@ public sealed class GameLauncher
         var java=string.IsNullOrEmpty(settings.Java[manifest.Instance])?ContentSecurity.SafePath(RuntimeManager.RuntimeRoot(settings.Root,manifest.Runtime),manifest.Runtime.JavaPath):settings.Java[manifest.Instance];
         await RuntimeManager.Validate(java,manifest.Runtime.Major,token).ConfigureAwait(false);
         await Task.Run(()=>MapIdentity.Prepare(instance,manifest.Instance),token).ConfigureAwait(false);
+        await Task.Run(()=>NewModDefaults.Prepare(instance,manifest),token).ConfigureAwait(false);
         // Skin services are optional. Their availability never gates game startup.
         ThirdPartySkins.ConfigureInstance(instance,settings.SkinSource);
         if(manifest.Instance=="mb")CleanroomAdapter.ValidatePrepared(instance,manifest);

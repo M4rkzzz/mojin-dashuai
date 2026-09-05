@@ -4,34 +4,53 @@ import argparse,base64,datetime,hashlib,json,pathlib,subprocess,sys,tarfile,urll
 ROOT=pathlib.Path(__file__).resolve().parents[1]
 parser=argparse.ArgumentParser(description=__doc__)
 parser.add_argument('--sequence',type=int,required=True)
+parser.add_argument('--minimum-launcher',default='0.1.2')
+parser.add_argument('--previous-catalog',type=pathlib.Path,help='Verified signed catalog whose compatible releases remain available for rollback')
 parser.add_argument('--beta',action='store_true')
 parser.add_argument('--dotnet',default='dotnet')
 parser.add_argument('--publisher',type=pathlib.Path,default=ROOT/'src/Publisher/bin/Release/net10.0/Publisher.dll')
 parser.add_argument('--key',type=pathlib.Path,required=True)
 args=parser.parse_args()
 if args.sequence<=0:parser.error('sequence must be positive')
+try:
+    minimum=tuple(int(part) for part in args.minimum_launcher.split('.'))
+    if len(minimum) not in (2,3,4) or any(part<0 for part in minimum):raise ValueError()
+except ValueError:parser.error('minimum launcher must be a numeric version')
 subprocess.run([sys.executable,str(ROOT/'tools/check-client-release.py'),*(['--beta'] if args.beta else [])],check=True,cwd=ROOT)
 config=json.loads((ROOT/'packs/distributions.json').read_text(encoding='utf-8'))
 stage=ROOT/'artifacts'/('catalog-'+('beta-' if args.beta else 'stable-')+str(args.sequence));stage.mkdir(parents=True,exist_ok=True)
 def publish(*arguments):subprocess.run([args.dotnet,str(args.publisher),*map(str,arguments)],check=True,cwd=ROOT)
+previous={}
+if args.previous_catalog:
+    decoded=stage/'previous-catalog.verified.json'
+    publish('verify-catalog',args.previous_catalog,ROOT/'src/Launcher.Desktop/launcher.json',decoded)
+    previous={server['id']:server for server in json.loads(decoded.read_text(encoding='utf-8-sig'))['servers']}
 servers=[];files={}
 for instance,spec in config['instances'].items():
     source=ROOT/f'artifacts/native/{instance}-manifest.json'
     manifest=json.loads(source.read_text(encoding='utf-8-sig'))
+    if (any(bundle.get('complete') for bundle in manifest.get('bundles',[])) or any(file.get('officialOnly') for file in manifest['files'])) and minimum+(0,)*(4-len(minimum))<(0,1,2,12):
+        raise ValueError('Complete archives and official-only files require launcher 0.1.2.12 or newer')
     relative=f'manifests/{instance}/{manifest["sequence"]}.signed.json'
     signed=stage/(instance+'.signed.json')
     if not signed.exists():publish('sign-beta' if args.beta else 'sign',source,args.key,signed)
     envelope=json.loads(signed.read_text(encoding='utf-8-sig'))
     if json.loads(base64.b64decode(envelope['payload']))!=manifest:raise ValueError('Staged signed manifest differs from accepted content')
     files[relative]=signed
+    old=previous.get(instance,{})
+    rollback_candidates=([old['release']] if old.get('release') else [])+old.get('rollbacks',[])
+    rollbacks=list({r['sequence']:r for r in rollback_candidates if r['sequence']<manifest['sequence'] and r['compatibility']==manifest['compatibility']}.values())
     servers.append({'id':instance,'name':spec['name'],'routes':[r['host'] for r in spec['routes']],
         'release':{'version':manifest['version'],'sequence':manifest['sequence'],'manifestUrl':config['publicBase']+'/v1/'+relative.removesuffix('.signed.json'),
-        'sha256':hashlib.sha256(signed.read_bytes()).hexdigest(),'compatibility':manifest['compatibility']},'rollbacks':[]})
+        'sha256':hashlib.sha256(signed.read_bytes()).hexdigest(),'compatibility':manifest['compatibility']},'rollbacks':rollbacks})
 catalog=stage/'catalog.json';signed_catalog=stage/'catalog.signed.json'
 if not catalog.exists():
-    catalog.write_text(json.dumps({'sequence':args.sequence,'minimumLauncher':'0.1.2','expiresAt':(datetime.datetime.now(datetime.timezone.utc)+datetime.timedelta(days=180)).isoformat(),'servers':servers},ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
-elif json.loads(catalog.read_text(encoding='utf-8'))['servers']!=servers:raise ValueError('Existing catalog candidate differs')
+    catalog.write_text(json.dumps({'sequence':args.sequence,'minimumLauncher':args.minimum_launcher,'expiresAt':(datetime.datetime.now(datetime.timezone.utc)+datetime.timedelta(days=180)).isoformat(),'servers':servers},ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
+elif (existing:=json.loads(catalog.read_text(encoding='utf-8')))['servers']!=servers or existing['minimumLauncher']!=args.minimum_launcher:raise ValueError('Existing catalog candidate differs')
 if not signed_catalog.exists():publish('sign-catalog',catalog,args.key,signed_catalog)
+publish('verify-catalog',signed_catalog,ROOT/'src/Launcher.Desktop/launcher.json',stage/'catalog.verified.json')
+if json.loads(base64.b64decode(json.loads(signed_catalog.read_text(encoding='utf-8-sig'))['payload']))!=json.loads(catalog.read_text(encoding='utf-8')):
+    raise ValueError('Staged signed catalog differs from the current candidate')
 files['catalog.signed.json']=signed_catalog
 run=uuid.uuid4().hex;archive=stage/(run+'.tar');inventory=stage/(run+'.json')
 with tarfile.open(archive,'w') as tar:

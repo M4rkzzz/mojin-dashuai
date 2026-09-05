@@ -96,6 +96,13 @@ public sealed class MicrosoftLoginTests
         else Assert.Throws<InvalidDataException>(()=>CatalogClient.ValidateMinimumLauncher(required,new Version(0,1,1,0)));
     }
 
+    [Fact]
+    public void CompleteClientCatalogRequiresTheCapableNumericBuild()
+    {
+        Assert.Throws<InvalidDataException>(()=>CatalogClient.ValidateMinimumLauncher("0.1.2.12",new Version(0,1,2,0)));
+        CatalogClient.ValidateMinimumLauncher("0.1.2.12",typeof(CatalogClient).Assembly.GetName().Version!);
+    }
+
     private sealed class FakeIdentityServer:HttpMessageHandler
     {
         public List<string> Calls {get;}=[];

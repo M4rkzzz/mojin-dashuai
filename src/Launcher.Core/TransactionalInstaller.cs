@@ -92,42 +92,86 @@ public sealed class TransactionalInstaller(string root)
         var instance = InstancePath(manifest.Instance); var previous = ReadInstalled(manifest.Instance);
         var previousFiles = previous?.Manifest.Files.ToDictionary(f => f.Path, StringComparer.OrdinalIgnoreCase) ?? new Dictionary<string, ContentFile>(StringComparer.OrdinalIgnoreCase);
         var inspection=await InspectFiles(manifest,progress,token);var changed=inspection.Changes;
-        var total = changed.Sum(f => f.Size); long transferred = 0; var clock = Stopwatch.StartNew();
-        var required = total * 2 + manifest.Runtime.Archive.Size + manifest.Runtime.ExpandedSize + 256L * 1024 * 1024;
+        var completeBundle=previous is null?(manifest.Bundles??[]).SingleOrDefault(bundle=>bundle.Complete):null;
+        var incoming = manifest.Files.ToDictionary(x => x.Path, StringComparer.OrdinalIgnoreCase);
+        var retired=previousFiles.Values.Where(f=>f.Policy==FilePolicy.Managed&&!incoming.ContainsKey(f.Path)).ToArray();
+        var runtimePrepared=!File.Exists(Path.Combine(RuntimeManager.RuntimeRoot(root,manifest.Runtime),".verified"));
+        long transferred = 0; var clock = Stopwatch.StartNew();
+        var downloaded = new System.Collections.Concurrent.ConcurrentDictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+        var remaining=completeBundle is null?changed:changed.Where(file=>file.OfficialOnly).ToArray();
+        // Only reserve space that will be newly allocated. A resumed archive and verified
+        // cache objects already occupy disk space; ZIP imports cannot reuse a partial object.
+        var objects=new Dictionary<string,(ContentFile File,bool Resumable)>(StringComparer.OrdinalIgnoreCase);
+        void Reserve(ContentFile file,bool resumable)
+        {
+            if(objects.TryGetValue(file.Sha256,out var old))resumable&=old.Resumable;
+            objects[file.Sha256]=(file,resumable);
+        }
+        foreach(var file in remaining)Reserve(file,true);
+        if(completeBundle is not null)
+        {
+            Reserve(completeBundle.Archive,true);
+            foreach(var file in manifest.Files.Where(file=>!file.OfficialOnly))Reserve(file,false);
+            Reserve(manifest.Runtime.Archive,false);
+        }
+        else if(runtimePrepared)Reserve(manifest.Runtime.Archive,true);
+        var available=new Dictionary<string,long>(StringComparer.OrdinalIgnoreCase);
+        var required=checked(changed.Sum(file=>file.Size)+(runtimePrepared?manifest.Runtime.ExpandedSize:0)+256L*1024*1024);
+        foreach(var (hash,reservation) in objects)
+        {
+            var present=await downloader.Available(reservation.File,token,includePartial:reservation.Resumable);
+            available[hash]=present;required=checked(required+reservation.File.Size-present);
+        }
+        // Reserve both transaction backups and a recoverable copy of any modified old file.
+        // Their existing on-disk sizes can be larger than the incoming manifest versions.
+        foreach(var file in changed.Concat(retired))
+        {
+            token.ThrowIfCancellationRequested();
+            var target=ContentSecurity.SafePath(instance,file.Path);
+            if(File.Exists(target))required=checked(required+new FileInfo(target).Length*2);
+        }
         var drive = new DriveInfo(Path.GetPathRoot(Path.GetFullPath(root))!);
         if (drive.AvailableFreeSpace < required) throw new IOException($"磁盘空间不足，需要至少 {required / (1024.0*1024*1024):F1} GiB 可用空间。");
-        // A first install can fetch compressed overrides once; later updates retain per-file differences.
-        if(previous is null&&changed.Length>0)foreach(var bundle in manifest.Bundles??[])
-        {
-            long bundleDone=0;
-            progress?.Report(new(manifest.Instance,"下载世界配置",0,bundle.Archive.Size,0));
-            await downloader.PrimeBundle(bundle,changed.ToDictionary(f=>f.Path,StringComparer.OrdinalIgnoreCase),
-                count=>bundleDone+=count,token,
-                position=>progress?.Report(new(manifest.Instance,"下载世界配置",position,bundle.Archive.Size,bundleDone/Math.Max(1,clock.Elapsed.TotalSeconds))),
-                ()=>progress?.Report(new(manifest.Instance,"解压世界配置",bundle.Archive.Size,bundle.Archive.Size,0)));
-        }
-        var downloaded = new System.Collections.Concurrent.ConcurrentDictionary<string, string>(StringComparer.OrdinalIgnoreCase);
         var positions=new System.Collections.Concurrent.ConcurrentDictionary<string,long>(StringComparer.OrdinalIgnoreCase);
-        foreach(var file in changed)positions[file.Path]=await downloader.Available(file,token);
-        long completed=positions.Values.Sum();clock.Restart();
-        progress?.Report(new(manifest.Instance,"正在下载世界内容",completed,total,0));
-        await Parallel.ForEachAsync(changed, new ParallelOptions { MaxDegreeOfParallelism = concurrency, CancellationToken = token }, async (file, ct) => {
-            var path = await downloader.Get(file,count=>Interlocked.Add(ref transferred,count),ct,position=>{
-                var old=positions[file.Path];positions[file.Path]=position;var done=Interlocked.Add(ref completed,position-old);
-                progress?.Report(new(manifest.Instance,"正在下载世界内容",Math.Clamp(done,0,total),total,Interlocked.Read(ref transferred)/Math.Max(1,clock.Elapsed.TotalSeconds)));
+        foreach(var file in remaining)positions[file.Path]=available[file.Sha256];
+        long completed=positions.Values.Sum();
+        var downloadTotal=remaining.Sum(file=>file.Size)+(completeBundle?.Archive.Size??0);
+        var phase=previous is null?"下载客户端":"正在下载世界内容";
+        clock.Restart();
+        async Task DownloadRemaining(CancellationToken cancellation)
+        {
+            if(remaining.Length==0)return;
+            progress?.Report(new(manifest.Instance,phase,completed,downloadTotal,0));
+            await Parallel.ForEachAsync(remaining, new ParallelOptions { MaxDegreeOfParallelism = concurrency, CancellationToken = cancellation }, async (file, ct) => {
+                var path = await downloader.Get(file,count=>Interlocked.Add(ref transferred,count),ct,position=>{
+                    var old=positions[file.Path];positions[file.Path]=position;var done=Interlocked.Add(ref completed,position-old);
+                    progress?.Report(new(manifest.Instance,phase,Math.Clamp(done,0,downloadTotal),downloadTotal,Interlocked.Read(ref transferred)/Math.Max(1,clock.Elapsed.TotalSeconds)));
+                });
+                downloaded[file.Path] = path;
             });
-            downloaded[file.Path] = path;
-        });
-        var runtimePrepared=!File.Exists(Path.Combine(RuntimeManager.RuntimeRoot(root,manifest.Runtime),".verified"));
+        }
+        // New first installs use one complete archive. Legacy override bundles are ignored;
+        // old manifests, upgrades and repairs continue to use verified per-file differences.
+        if(completeBundle is not null)
+        {
+            progress?.Report(new(manifest.Instance,phase,completed+available[completeBundle.Archive.Sha256],downloadTotal,0));
+            var imported=await downloader.PrimeBundle(completeBundle,manifest.Files.ToDictionary(f=>f.Path,StringComparer.OrdinalIgnoreCase),
+                count=>Interlocked.Add(ref transferred,count),token,
+                position=>progress?.Report(new(manifest.Instance,phase,completed+position,downloadTotal,Interlocked.Read(ref transferred)/Math.Max(1,clock.Elapsed.TotalSeconds))),
+                runtimeArchive:manifest.Runtime.Archive,
+                onExtractionProgress:(position,expanded)=>progress?.Report(new(manifest.Instance,"解压客户端",position,expanded,0)),
+                beforeExtract:async cancellation=>{completed+=completeBundle.Archive.Size;await DownloadRemaining(cancellation);});
+            foreach(var file in changed.Where(file=>!file.OfficialOnly))downloaded[file.Path]=imported[file.Path];
+        }
+        else await DownloadRemaining(token);
         await RuntimeManager.Install(root, manifest.Runtime, downloader, token,progress,manifest.Instance);
         token.ThrowIfCancellationRequested();
         var id = Guid.NewGuid().ToString("N"); var actions = new List<FileChange>();
-        var incoming = manifest.Files.ToDictionary(x => x.Path, StringComparer.OrdinalIgnoreCase);
-        var retired=previousFiles.Values.Where(f=>f.Policy==FilePolicy.Managed&&!incoming.ContainsKey(f.Path)).ToArray();
         var prepared=0;var preparationTotal=changed.Length+retired.Length;
         progress?.Report(new(manifest.Instance,"校验并准备更新",0,preparationTotal,0));
         foreach(var file in changed)
         {
+            token.ThrowIfCancellationRequested();
             var target = ContentSecurity.SafePath(instance, file.Path); var exists = File.Exists(target);
             if (exists)
             {
@@ -140,6 +184,7 @@ public sealed class TransactionalInstaller(string root)
         }
         foreach(var old in retired)
         {
+            token.ThrowIfCancellationRequested();
             var path = ContentSecurity.SafePath(instance, old.Path); if (!File.Exists(path)){prepared++;progress?.Report(new(manifest.Instance,"校验并准备更新",prepared,preparationTotal,0));continue;}
             // Modified formerly managed files are preserved in the recoverable disabled area.
             AtomicCopy(path, ContentSecurity.SafePath(instance, $".hub/transactions/{id}/backup/{old.Path}"));
@@ -148,6 +193,7 @@ public sealed class TransactionalInstaller(string root)
             prepared++;progress?.Report(new(manifest.Instance,"校验并准备更新",prepared,preparationTotal,0));
         }
         var journalPath = Path.Combine(instance, ".hub", "journal.json");
+        token.ThrowIfCancellationRequested();
         Json.Write(journalPath, new UpdateJournal(id, "committing", manifest, previous, actions.ToArray()));
         // Commit is deliberately not cancelable. Any exception or process interruption is recovered from the journal.
         try

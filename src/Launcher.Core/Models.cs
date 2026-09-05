@@ -17,9 +17,12 @@ public static class Json
     }
 }
 public enum FilePolicy { Managed, Seed, Preserve }
-public sealed record ContentFile(string Path, long Size, string Sha256, string[] Sources, FilePolicy Policy, string DistributionBasis);
+public sealed record ContentFile(string Path, long Size, string Sha256, string[] Sources, FilePolicy Policy, string DistributionBasis, bool OfficialOnly = false);
 public sealed record RuntimeSpec(string Id, int Major, string Version, string Platform, ContentFile Archive, string JavaPath, long ExpandedSize);
-public sealed record ContentBundle(ContentFile Archive, string Prefix);
+public sealed record ContentBundle(ContentFile Archive, string Prefix, bool Complete = false)
+{
+    public const string RuntimeArchivePath = "__runtime/runtime.zip";
+}
 public sealed record PackManifest(string Instance, string Version, long Sequence, string Minecraft, string Loader, string LoaderVersion, string LaunchVersion, RuntimeSpec Runtime, int MemoryMiB, string Compatibility, ContentFile[] Files, string[] ValidationEvidence, ContentBundle[]? Bundles = null);
 public sealed record SignedEnvelope(string KeyId, string Payload, string Signature);
 public sealed record ReleaseRef(string Version, long Sequence, string ManifestUrl, string Sha256, string Compatibility);
