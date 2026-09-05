@@ -34,13 +34,56 @@
     "settingsPassedToJava": true
   },
   "cleanWindows": false,
-  "published": false,
-  "ciPending": true,
+  "published": true,
+  "ciPending": false,
   "javaLaunchArgumentTestsPassed": 11,
   "splashCompatibilityTestsPassed": 10,
   "fourthServerG1Default": true,
   "heapLimitPreserved": true,
   "fourthServerNativeWorkerCap": 4,
-  "fourthServerGameRetest": "Tracked separately in the fourth-server task; latest test reached initialization completion but hit the now-addressed Forge/Angelica splash conflict.",
-  "forgeSplashCompatibility": "vw / angelica-2.1.38 only; original configuration backed up"
+  "fourthServerGameRetest": {
+    "joinedServer": true,
+    "observedAt": "2026-09-06T00:35:45+08:00",
+    "heapMiB": 8096,
+    "collector": "G1",
+    "threadCaps": {
+      "gc": 4,
+      "concurrentGc": 2,
+      "compiler": 4
+    },
+    "evidence": "Fourth-server task probe-play.log: initialization complete, connected to gt.mc.boshan.uk, island/home messages received",
+    "stringDeduplicationAdded": false,
+    "settingsFileModified": false,
+    "stabilityObservationPending": false,
+    "processUptimeSeconds": 192,
+    "inGameSecondsApprox": 130,
+    "noNewCrash": true,
+    "privateCommitGiB": 5.28,
+    "workingSetGiB": 4.94,
+    "systemCommitRemainingGiB": 6.81,
+    "actualVmFlagsVerified": true
+  },
+  "forgeSplashCompatibility": "vw / angelica-2.1.38 only; original configuration backed up",
+  "publishedAt": "2026-09-05T16:40:07.768917+00:00",
+  "ciPassed": true,
+  "ci": "https://github.com/M4rkzzz/mojin-dashuai/actions/runs/33978302917",
+  "ciJobs": {
+    "ui": "success",
+    "windows": "success",
+    "api": "success"
+  },
+  "installerSha256": "e23177f33c55f2d926d00e425b7cfb80814c3295f62973f6ef63a1be78fa8b7c",
+  "installerBytes": 55860958,
+  "finalInstaller": "artifacts/installer-0.1.2-beta.14-final",
+  "finalUpdate": "artifacts/launcher-update-0.1.2-beta.14-final",
+  "launcherDifferentialUpdateVerified": true,
+  "launcherDifferentialBaseline": "0.1.2-beta.13",
+  "launcherDifferentialDownloadBytes": 1150385,
+  "temporaryCleanup": {
+    "completed": false,
+    "autoApprovalRejected": true,
+    "reason": "blocked by policy; no more specific reason returned",
+    "scope": "Only superseded beta14 candidates and isolated updater cache",
+    "installedGamesTouched": false
+  }
 }

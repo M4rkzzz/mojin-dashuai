@@ -1,13 +1,13 @@
 {
-  "version": "0.1.2-beta.14",
+  "version": "0.1.2-beta.13",
   "channel": "beta",
-  "publishedAt": "2026-09-05T16:40:07.768917+00:00",
-  "downloadUrl": "https://launcher-direct.boshan.uk:21708/launcher/0.1.2-beta.14/MojinDashuai-Setup-0.1.2-beta.14-x64.exe",
-  "bytes": 55860958,
-  "sha256": "e23177f33c55f2d926d00e425b7cfb80814c3295f62973f6ef63a1be78fa8b7c",
-  "githubRelease": "https://github.com/M4rkzzz/mojin-dashuai/releases/tag/launcher-v0.1.2-beta.14",
+  "publishedAt": "2026-09-05T15:57:57.000833+00:00",
+  "downloadUrl": "https://launcher-direct.boshan.uk:21708/launcher/0.1.2-beta.13/MojinDashuai-Setup-0.1.2-beta.13-x64.exe",
+  "bytes": 55859208,
+  "sha256": "5926b36cb1e7c458a47e50ab34a78bbcb4392c8bb8afb5540a3286ff2a674f80",
+  "githubRelease": "https://github.com/M4rkzzz/mojin-dashuai/releases/tag/launcher-v0.1.2-beta.13",
   "catalogSequence": 5,
-  "launcherSequence": 16,
+  "launcherSequence": 15,
   "minimumLauncher": "0.1.2.13",
   "api": "https://launcher-direct.boshan.uk:21708",
   "apiImageVersion": "0.1.6",
@@ -49,27 +49,28 @@
     }
   },
   "updateArchive": {
-    "version": "0.1.2-beta.14",
-    "sequence": 16,
-    "sha256": "9e98f093c5721a4923c5bcfa647a423f198a660e1bd87c0617f146ab731c95e5",
-    "bytes": 78583658,
-    "downloadUrl": "https://launcher-direct.boshan.uk:21708/launcher/0.1.2-beta.14/MojinDashuai-windows-x64.zip",
+    "version": "0.1.2-beta.13",
+    "sequence": 15,
+    "sha256": "3b737710281a5dae57659e5d189b87f28b9c8ec085d14a4c641816436ffc86df",
+    "bytes": 78580724,
+    "downloadUrl": "https://launcher-direct.boshan.uk:21708/launcher/0.1.2-beta.13/r2/MojinDashuai-windows-x64.zip",
     "publicDownloadVerified": true,
     "differential": true,
     "fileObjects": 498,
     "activated": true,
-    "revision": ""
+    "revision": "r2"
   },
-  "codeCommit": "7ff33a1b5de1960884300623346cf36f0b3d0e2a",
-  "ci": "https://github.com/M4rkzzz/mojin-dashuai/actions/runs/33978302917",
+  "launcherDifferentialDownloadBytesFromBeta12": 1408113,
+  "codeCommit": "5eebd99f7da35fac753c77b25feeaf41c525ef9e",
+  "ci": "https://github.com/M4rkzzz/mojin-dashuai/actions/runs/33975951100",
   "ciPassed": true,
   "ciPending": false,
   "ciJobs": {
+    "api": "success",
     "ui": "success",
-    "windows": "success",
-    "api": "success"
+    "windows": "success"
   },
-  "unitTestsPassed": 250,
+  "unitTestsPassed": 213,
   "pythonDistributionTestsPassed": 44,
   "graphicsPreferenceTestsPassed": 14,
   "apiIsolatedChecksPassed": 47,
@@ -95,8 +96,8 @@
   "cleanWindows": false,
   "completeDeliveryClaimed": false,
   "approval": "packs/beta-authorization.json",
-  "acceptance": "packs/acceptance/beta14-launcher-checks.json",
-  "previousPublication": "packs/acceptance/beta13-publication-history.json",
+  "acceptance": "packs/acceptance/beta13-launcher-checks.json",
+  "previousPublication": "packs/acceptance/beta12-publication-history.json",
   "communityGroup": "1105114550",
   "communityJoinUrl": "https://qm.qq.com/q/Bfat8qcPvO",
   "alwaysVisibleUpdateButton": true,
@@ -104,6 +105,5 @@
   "retiredDc2ReleaseSequences": [
     1,
     2
-  ],
-  "launcherDifferentialDownloadBytesFromBeta13": 1150385
+  ]
 }

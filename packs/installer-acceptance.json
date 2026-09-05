@@ -1,5 +1,5 @@
 {
-  "version": "0.1.2-beta.13",
+  "version": "0.1.2-beta.14",
   "passed": true,
   "realInstallerExecuted": true,
   "separateTestAppId": true,
@@ -14,8 +14,8 @@
   "gameOrLauncherStarted": false,
   "cleanWindows": false,
   "evidenceSource": "GitHub Actions Windows installer fixture",
-  "ci": "https://github.com/M4rkzzz/mojin-dashuai/actions/runs/33975951100",
-  "scope": "Final four-server beta13; Windows CI installed, upgraded and uninstalled the complete current payload using the unchanged installer script.",
-  "sourceCommit": "5eebd99f7da35fac753c77b25feeaf41c525ef9e",
-  "localPublicInstallerSha256": "5926b36cb1e7c458a47e50ab34a78bbcb4392c8bb8afb5540a3286ff2a674f80"
+  "ci": "https://github.com/M4rkzzz/mojin-dashuai/actions/runs/33978302917",
+  "sourceCommit": "7ff33a1b5de1960884300623346cf36f0b3d0e2a",
+  "scope": "Final beta14: current installer installed, upgraded and uninstalled in an isolated Unicode/space path; player files preserved.",
+  "localPublicInstallerSha256": "e23177f33c55f2d926d00e425b7cfb80814c3295f62973f6ef63a1be78fa8b7c"
 }
