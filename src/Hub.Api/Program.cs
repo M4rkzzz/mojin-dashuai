@@ -76,8 +76,12 @@ app.MapGet("/v1/skins/{gameName}", async (string gameName, HubDb db, SkinService
     return Results.File(Convert.FromBase64String(skin.PngBase64),"image/png");
 });
 app.MapGet("/v1/catalog", () => {
-    var path = Path.Combine(builder.Configuration["PublicPath"] ?? "public", "catalog.signed.json");
-    return File.Exists(path) ? Results.File(path, "application/json") : Results.Json(new { error = "正式内容正在验收，目录尚未发布。" }, statusCode: 503);
+    var bytes=PublicMetadata.Catalog(builder.Configuration["PublicPath"]??"public");
+    return bytes is not null ? Results.Bytes(bytes, "application/json") : Results.Json(new { error = "正式内容正在验收，目录尚未发布。" }, statusCode: 503);
+});
+app.MapGet("/v1/manifests/{instance}/{sequence:long}", (string instance,long sequence) => {
+    var bytes=PublicMetadata.Manifest(builder.Configuration["PublicPath"]??"public",instance,sequence);
+    return bytes is not null ? Results.Bytes(bytes,"application/json") : Results.NotFound();
 });
 app.MapGet("/v1/announcements", () => new[] { new { id = "welcome", title = "欢迎来到群服大厅", body = "选择你的世界。客户端与 Java 会在首次进入时自动下载。" } });
 app.Run();

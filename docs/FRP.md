@@ -38,6 +38,6 @@ remotePort = 21708 # 已配置入口；其他节点替换为实际分配的端�
 
 下载服务仅公开 `/vol1/mc-client-hub/public`，不需要账号密码或访问令牌。文件清单通过 HTTPS 获取并验证 ECDSA 签名，下载文件按清单验证 SHA256。
 
-账号 API 当前绑定 `127.0.0.1:18081`，是内部 HTTP 接口；不应按上述下载代理直接开放。账号入口仍为计划中的 `https://launcher.boshan.uk`，待 Cloudflare Tunnel 凭据配置。若另行采用 FRP 承载账号入口，需先配置有效 HTTPS 证书与受信任反向代理。FRP 传输加密不能替代玩家到公网入口之间的 HTTPS。
+账号 API 当前绑定 `127.0.0.1:18081`，是内部 HTTP 接口；不应按上述下载代理直接开放。账号入口 `https://launcher.boshan.uk` 已通过 Cloudflare Tunnel 接通并通过公网注册、登录、刷新和退出验证。若另行采用 FRP 承载账号入口，需先配置有效 HTTPS 证书与受信任反向代理。FRP 传输加密不能替代玩家到公网入口之间的 HTTPS。
 
 参考：[FRP TCP 配置](https://gofrp.org/en/docs/examples/ssh/)、[FRP HTTP 与 HTTPS](https://gofrp.org/en/docs/examples/vhost-http/)。

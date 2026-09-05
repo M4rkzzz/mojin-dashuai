@@ -46,8 +46,8 @@ public partial class MainWindow : Window
             Directory.CreateDirectory(appData);
             var config=Json.Read<AppConfig>(Path.Combine(AppContext.BaseDirectory,"launcher.json"));
             var settingsPath=Path.Combine(appData,"settings.json");settings=ContentDirectorySetup.LoadSettings(settingsPath);settings.Validate();
-            var microsoftId=string.IsNullOrWhiteSpace(config.MicrosoftClientId)?Environment.GetEnvironmentVariable("PCL_MS_CLIENT_ID")??"":config.MicrosoftClientId;
-            accounts=new(new Vault(appData),config.Api,microsoftId.Trim());
+            var microsoftId=config.MicrosoftClientId??"";
+            accounts=new(new Vault(appData),config.Api,microsoftId.Trim(),()=>new MicrosoftWebUi(this,Path.Combine(appData,"MicrosoftAuth")));
             catalog=new(config.Api,config.PublicKeys,Path.Combine(appData,"catalog-checkpoint.json"));
             try{CoreWebView2Environment.GetAvailableBrowserVersionString();}
             catch(WebView2RuntimeNotFoundException){await InstallWebView();}
@@ -246,6 +246,7 @@ public partial class MainWindow : Window
         if(microsoftLogin is not null)throw new InvalidDataException("微软登录正在进行中。");
         using var cancellation=new CancellationTokenSource(TimeSpan.FromMinutes(16));
         microsoftLogin=cancellation;
+        Event("microsoft-mode",accounts.MicrosoftLoginMode);
         try
         {
             return await accounts.MicrosoftLogin(true,prompt=>Dispatcher.InvokeAsync(()=>
@@ -254,7 +255,7 @@ public partial class MainWindow : Window
                 microsoftPrompt=prompt;Event("microsoft-code",prompt);
             }).Task,cancellation.Token);
         }
-        catch(OperationCanceledException) when(cancellation.IsCancellationRequested){return new {Cancelled=true};}
+        catch(OperationCanceledException){return new {Cancelled=true};}
         finally{microsoftPrompt=null;microsoftLogin=null;Event("microsoft-code",null);}
     }
     private void Event(string name,object? data)=>Dispatcher.Invoke(()=>

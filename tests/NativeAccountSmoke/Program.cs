@@ -2,6 +2,10 @@ using System.Text.Json;
 using Boshan.Desktop;
 using Boshan.Launcher;
 
+if(args is ["--microsoft-contract"]){await MicrosoftContract.Run();return;}
+if(args is ["--microsoft-live"]){MicrosoftLive.Run();return;}
+if(args is ["--microsoft-network"]){await MicrosoftNetwork.Run();return;}
+
 // Read a disposable test account from stdin; never accept credentials in arguments or print them.
 var input=JsonSerializer.Deserialize<SmokeInput>(await Console.In.ReadToEndAsync(),Json.Options)!;
 if(!System.Text.RegularExpressions.Regex.IsMatch(input.LoginName,"^HubQA_[a-f0-9]{10}$"))

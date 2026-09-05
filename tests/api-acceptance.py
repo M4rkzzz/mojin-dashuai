@@ -1,6 +1,6 @@
 """Run on 124 against a disposable database and isolated API container. Never print credentials."""
 import concurrent.futures, json, os, pathlib, re, secrets, subprocess, time, urllib.request, urllib.error
-import base64, struct, zlib
+import base64, struct, zlib, tempfile
 
 def run(*args):
     result=subprocess.run(args,check=True,capture_output=True,text=True)
@@ -13,7 +13,10 @@ image=os.environ.get('HUB_API_TEST_IMAGE','boshan/hub-api:0.1.1')
 assert re.fullmatch(r'hub_acceptance_[a-f0-9]{8}',database)
 password=pathlib.Path('/var/apps/mc-client-hub/secrets/db-password').read_text().strip()
 env_file=pathlib.Path('/var/apps/mc-client-hub/secrets/acceptance.env')
-env_file.write_text('ConnectionStrings__Hub=Host=mc-client-hub-postgres-1;Database='+database+';Username=hub;Password='+password+'\nInitializeDatabase=true\nASPNETCORE_URLS=http://+:8080\nTrustCloudflareTunnel=true\nSkinPath=/tmp/acceptance-skins\n')
+public_fixture=tempfile.TemporaryDirectory(prefix='mojin-api-metadata-')
+public_path=pathlib.Path(public_fixture.name)
+public_path.chmod(0o755)
+env_file.write_text('ConnectionStrings__Hub=Host=mc-client-hub-postgres-1;Database='+database+';Username=hub;Password='+password+'\nInitializeDatabase=true\nASPNETCORE_URLS=http://+:8080\nTrustCloudflareTunnel=true\nSkinPath=/tmp/acceptance-skins\nPublicPath=/public-test\n')
 env_file.chmod(0o600)
 run('docker','exec','mc-client-hub-postgres-1','createdb','-U','hub',database)
 checks=[]
@@ -47,7 +50,7 @@ def public_skin(name):
             return response.status,response.read(),response.headers
     except urllib.error.HTTPError as error: return error.code,error.read(),error.headers
 try:
-    run('docker','create','--name',container,'--network','mc-client-hub_database','--env-file',str(env_file),'-p','127.0.0.1:18082:8080',image)
+    run('docker','create','--name',container,'--network','mc-client-hub_database','--env-file',str(env_file),'-v',str(public_path)+':/public-test:ro','-p','127.0.0.1:18082:8080',image)
     run('docker','network','connect','mc-client-hub_edge',container)
     run('docker','start',container)
     for _ in range(50):
@@ -56,6 +59,16 @@ try:
         except Exception: pass
         time.sleep(.5)
     check(api('/health')[0]==200,'isolated API healthy')
+    check(api('/v1/catalog')[0]==503,'unpublished catalog stays unavailable')
+    check(api('/v1/manifests/mb/1')[0]==404,'missing manifest returns not found')
+    envelope={'keyId':'isolated-fixture','payload':'e30=','signature':'test-only'}
+    manifest_path=public_path/'manifests'/'mb'/'1.signed.json'
+    manifest_path.parent.mkdir(parents=True)
+    manifest_path.write_text(json.dumps(envelope))
+    (public_path/'catalog.signed.json').write_text(json.dumps(envelope))
+    check(api('/v1/catalog')==(200,envelope),'public catalog serves exact envelope without credentials')
+    check(api('/v1/manifests/mb/1')==(200,envelope),'public manifest serves exact envelope without credentials')
+    check(api('/v1/manifests/unknown/1')[0]==404 and api('/v1/manifests/mb/0')[0]==404,'manifest route restricts instance and positive release number')
     super_id,super_code=invite('super')
     code,alice=register('alice','Alice',super_code);check(code==200,'super invite first registration')
     code,bob=register('bobby','Bobby',super_code);check(code==200,'super invite reusable registration')
@@ -118,3 +131,4 @@ finally:
     subprocess.run(['docker','rm','-f',container],stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL)
     subprocess.run(['docker','exec','mc-client-hub-postgres-1','dropdb','-U','hub',database],stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL)
     env_file.unlink(missing_ok=True)
+    public_fixture.cleanup()

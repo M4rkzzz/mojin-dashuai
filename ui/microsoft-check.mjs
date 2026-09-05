@@ -11,6 +11,7 @@ async function fixture(){
   const listeners=[];let loginRequest=null;
   const emit=data=>listeners.forEach(callback=>callback({data}));
   window.testCommands=[];
+  window.testMode=mode=>emit({event:'microsoft-mode',data:mode});
   window.testCode=expires=>emit({event:'microsoft-code',data:{userCode:'TEST-CODE',verificationUrl:'https://www.microsoft.com/link',expiresAt:new Date(Date.now()+expires).toISOString()}});
   window.testComplete=error=>{
    emit({event:'microsoft-code',data:null});
@@ -19,7 +20,7 @@ async function fixture(){
   };
   window.chrome={webview:{addEventListener:(_,callback)=>listeners.push(callback),postMessage:request=>queueMicrotask(()=>{
    window.testCommands.push(request.command);
-   if(request.command==='auth.microsoft'){loginRequest=request;return;}
+   if(request.command==='auth.microsoft'){loginRequest=request;emit({event:'microsoft-mode',data:'device-code'});return;}
    if(request.command==='auth.microsoft.cancel'&&loginRequest){emit({event:'microsoft-code',data:null});emit({id:loginRequest.id,ok:true,result:{cancelled:true}});loginRequest=null;}
    const result=request.command==='bootstrap'?{profile:null,installs:{},settings:{root:'C:\\Games',contentDirectoryConfigured:false,memory:{},java:{},jvm:{},width:1280,height:720,fullscreen:false,windowBehavior:'keep',concurrency:4,limitMiB:0,proxy:'',reducedMotion:true,theme:'dark',selectedRoutes:{}}}:null;
    emit({id:request.id,ok:true,result});
@@ -74,7 +75,16 @@ try{
  await expect(rejected.getByRole('alert')).toContainText('应用配置');
  await expect(rejected.getByRole('button',{name:'使用微软正版账号登录'})).toBeEnabled();
  await rejected.close();
+ for(const success of [false,true]){
+  const native=await fixture();
+  await native.evaluate(()=>window.testMode('window'));
+  await expect(native.getByRole('status')).toHaveText('请在微软窗口中完成登录');
+  await expect(native.getByLabel('微软登录码',{exact:true})).toHaveCount(0);
+  if(success){await native.evaluate(()=>window.testComplete());await expect(native.getByRole('heading',{name:'游戏文件保存位置'})).toBeVisible();}
+  else{await native.keyboard.press('Escape');await expect(native.getByRole('button',{name:'使用微软正版账号登录'})).toBeEnabled();}
+  await native.close();
+ }
  expect(errors).toEqual([]);
- fs.writeFileSync('../.local/microsoft-ui-check.json',JSON.stringify({passed:true,syntheticBridge:true,liveMicrosoftLoginVerified:false,states:['requesting','code','copy','open','success','cancelBeforeCode','cancelAfterCode','expired','applicationRejected'],noBrowserStorage:true,errors},null,2));
+ fs.writeFileSync('../.local/microsoft-ui-check.json',JSON.stringify({passed:true,syntheticBridge:true,liveMicrosoftLoginVerified:false,states:['requesting','code','copy','open','success','cancelBeforeCode','cancelAfterCode','expired','applicationRejected','nativeWindowCancel','nativeWindowSuccess'],noBrowserStorage:true,errors},null,2));
  console.log('Microsoft device-code UI passed: display, explicit browser action, cancellation, expiry and account transition (synthetic bridge).');
 }finally{await browser.close();}

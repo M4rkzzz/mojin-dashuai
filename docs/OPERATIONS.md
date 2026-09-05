@@ -59,4 +59,12 @@ docker compose --profile tunnel up -d --no-deps cloudflared
 
 `protect-conflict` 将大小写冲突组整体保留，数据库中以空 `ExactName` 标记未核实身份。该组不能生成绑定邀请码，既有绑定码也无法认领；普通 `protect` 不会自动解除冲突。管理员需要先核实历史角色，不能自动选择拼写或合并角色。
 
-先在隔离容器执行 `tests/api-acceptance.py`，通过后可在 124 执行 `python3 upgrade-api.py 0.1.1`。脚本检查发行目录和镜像，额外备份数据库，更新本项目 API，并验证健康状态；失败时恢复原镜像配置。只重建 `hub-api`，不操作其他服务。皮肤备份与数据库备份分别保留七份。
+先在隔离容器执行 `tests/api-acceptance.py`，通过后可在 124 执行 `python3 upgrade-api.py 0.1.2`。脚本检查发行目录和镜像，额外备份数据库，更新本项目 API，并验证健康状态；失败时恢复原镜像配置。只重建 `hub-api`，不操作其他服务。皮肤备份与数据库备份分别保留七份。
+
+API 0.1.2 已部署，升级备份为 `/vol1/mc-client-hub/backups/upgrades/api-0.1.2-20260905T060658Z`。`GET /v1/catalog` 返回公开目录签名封包；`GET /v1/manifests/{instance}/{sequence}` 返回 `public/manifests/{instance}/{sequence}.signed.json`，只接受三个实例和正整数发布序号。未发布时分别返回 503/404；下载不需要账号凭据。客户端负责验签、哈希与发布序号验证。
+
+## 微软登录验收
+
+Windows 默认使用 CmlLib 的官方文档接法，`microsoftClientId` 留空。自有 Azure 应用 ID 仅用于可选设备码方式，不是默认登录的必需配置。用户就绪后，先重新构建 `tests/NativeAccountSmoke` 的 Release，再手动执行 `python tools/accept-microsoft-login.py --dotnet PATH_TO_DOTNET`。此命令会显示一个微软授权窗口，不显示启动器大厅或启动游戏。
+
+成功后检查真实游戏所有权、DPAPI 会话恢复、静默认证、角色与皮肤，并生成不含账号标识或凭据的 `packs/launcher-acceptance.json`。认证代码或配置变化会使验收指纹失效；需要重新验收。合成测试仅使用 `--microsoft-contract`，不会写入真人验收记录。

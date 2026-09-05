@@ -13,7 +13,7 @@
       "projectId": null,
       "fileId": null,
       "distributionBasis": "Download the identical author-published file directly from Modrinth; no rehosting. Project license: LicenseRef-Mixed",
-      "status": "origin-identified-download-verification-pending",
+      "status": "author-origin-download-verified",
       "embeddedLicenseFiles": [
         "META-INF/licenses/module-common/LICENSE",
         "META-INF/licenses/module-mixin/LICENSE",
@@ -38,6 +38,11 @@
           "url": "https://github.com/LegacyModdingMC/UniMixins/blob/master/LICENSE"
         },
         "checkedAt": "2026-09-05T05:34:23.966239+00:00"
+      },
+      "downloadVerification": {
+        "verified": true,
+        "cached": true,
+        "at": "2026-09-05T06:16:39.984732+00:00"
       }
     },
     {
@@ -51,7 +56,7 @@
       "projectId": null,
       "fileId": null,
       "distributionBasis": "Download the identical author-published file directly from Modrinth; no rehosting. Project license: LicenseRef-NCCPL-License",
-      "status": "origin-identified-download-verification-pending",
+      "status": "author-origin-download-verified",
       "embeddedLicenseFiles": [],
       "originEvidence": {
         "provider": "modrinth",
@@ -67,6 +72,11 @@
           "url": "https://gist.github.com/AlexSocol/1a906c6643e1af403e9accc2c30e1aba"
         },
         "checkedAt": "2026-09-05T05:34:23.966239+00:00"
+      },
+      "downloadVerification": {
+        "verified": true,
+        "cached": true,
+        "at": "2026-09-05T06:16:39.982627+00:00"
       }
     },
     {
@@ -142,7 +152,7 @@
       "projectId": null,
       "fileId": null,
       "distributionBasis": "Download the identical author-published file directly from Modrinth; no rehosting. Project license: LicenseRef-NCCPL-License",
-      "status": "origin-identified-download-verification-pending",
+      "status": "author-origin-download-verified",
       "embeddedLicenseFiles": [],
       "originEvidence": {
         "provider": "modrinth",
@@ -158,6 +168,11 @@
           "url": "https://gist.github.com/AlexSocol/1a906c6643e1af403e9accc2c30e1aba"
         },
         "checkedAt": "2026-09-05T05:34:23.966239+00:00"
+      },
+      "downloadVerification": {
+        "verified": true,
+        "cached": true,
+        "at": "2026-09-05T06:16:40.031405+00:00"
       }
     },
     {
@@ -171,7 +186,7 @@
       "projectId": null,
       "fileId": null,
       "distributionBasis": "Download the identical author-published file directly from Modrinth; no rehosting. Project license: LicenseRef-Multiple---Primarily-LGPLv3",
-      "status": "origin-identified-download-verification-pending",
+      "status": "author-origin-download-verified",
       "embeddedLicenseFiles": [
         "COPYING",
         "COPYING.LESSER",
@@ -192,6 +207,11 @@
           "url": "https://github.com/GTNewHorizons/Angelica?tab=readme-ov-file#credits"
         },
         "checkedAt": "2026-09-05T05:34:23.966239+00:00"
+      },
+      "downloadVerification": {
+        "verified": true,
+        "cached": true,
+        "at": "2026-09-05T06:16:39.988874+00:00"
       }
     },
     {
@@ -301,7 +321,7 @@
       "projectId": null,
       "fileId": null,
       "distributionBasis": "Download the identical author-published file directly from Modrinth; no rehosting. Project license: GPL-3.0-only",
-      "status": "origin-identified-download-verification-pending",
+      "status": "author-origin-download-verified",
       "embeddedLicenseFiles": [],
       "originEvidence": {
         "provider": "modrinth",
@@ -317,6 +337,11 @@
           "url": null
         },
         "checkedAt": "2026-09-05T05:34:23.966239+00:00"
+      },
+      "downloadVerification": {
+        "verified": true,
+        "cached": true,
+        "at": "2026-09-05T06:16:39.990079+00:00"
       }
     },
     {
@@ -342,7 +367,7 @@
       "projectId": null,
       "fileId": null,
       "distributionBasis": "Download the identical author-published file directly from Modrinth; no rehosting. Project license: LicenseRef-All-Rights-Reserved",
-      "status": "origin-identified-download-verification-pending",
+      "status": "author-origin-download-verified",
       "embeddedLicenseFiles": [],
       "originEvidence": {
         "provider": "modrinth",
@@ -358,6 +383,11 @@
           "url": null
         },
         "checkedAt": "2026-09-05T05:34:23.966239+00:00"
+      },
+      "downloadVerification": {
+        "verified": true,
+        "cached": false,
+        "at": "2026-09-05T06:16:41.912668+00:00"
       }
     },
     {
@@ -397,7 +427,7 @@
       "projectId": null,
       "fileId": null,
       "distributionBasis": "Download the identical author-published file directly from Modrinth; no rehosting. Project license: MIT",
-      "status": "origin-identified-download-verification-pending",
+      "status": "author-origin-download-verified",
       "embeddedLicenseFiles": [],
       "originEvidence": {
         "provider": "modrinth",
@@ -413,6 +443,11 @@
           "url": "https://github.com/jss2a98aj/BugTorch/blob/master/LICENSE"
         },
         "checkedAt": "2026-09-05T05:34:23.966239+00:00"
+      },
+      "downloadVerification": {
+        "verified": true,
+        "cached": true,
+        "at": "2026-09-05T06:16:40.031917+00:00"
       }
     },
     {
@@ -438,7 +473,7 @@
       "projectId": null,
       "fileId": null,
       "distributionBasis": "Download the identical author-published file directly from Modrinth; no rehosting. Project license: MIT",
-      "status": "origin-identified-download-verification-pending",
+      "status": "author-origin-download-verified",
       "embeddedLicenseFiles": [],
       "originEvidence": {
         "provider": "modrinth",
@@ -454,6 +489,11 @@
           "url": null
         },
         "checkedAt": "2026-09-05T05:34:23.966239+00:00"
+      },
+      "downloadVerification": {
+        "verified": true,
+        "cached": true,
+        "at": "2026-09-05T06:16:40.032461+00:00"
       }
     },
     {
@@ -532,7 +572,7 @@
       "projectId": null,
       "fileId": null,
       "distributionBasis": "Download the identical author-published file directly from Modrinth; no rehosting. Project license: GPL-3.0-only",
-      "status": "origin-identified-download-verification-pending",
+      "status": "author-origin-download-verified",
       "embeddedLicenseFiles": [
         "LICENSE"
       ],
@@ -550,6 +590,11 @@
           "url": null
         },
         "checkedAt": "2026-09-05T05:34:23.966239+00:00"
+      },
+      "downloadVerification": {
+        "verified": true,
+        "cached": true,
+        "at": "2026-09-05T06:16:40.033969+00:00"
       }
     },
     {
@@ -637,7 +682,7 @@
       "projectId": null,
       "fileId": null,
       "distributionBasis": "Download the identical author-published file directly from Modrinth; no rehosting. Project license: MPL-2.0",
-      "status": "origin-identified-download-verification-pending",
+      "status": "author-origin-download-verified",
       "embeddedLicenseFiles": [],
       "originEvidence": {
         "provider": "modrinth",
@@ -653,6 +698,11 @@
           "url": null
         },
         "checkedAt": "2026-09-05T05:34:23.966239+00:00"
+      },
+      "downloadVerification": {
+        "verified": true,
+        "cached": true,
+        "at": "2026-09-05T06:16:40.034974+00:00"
       }
     },
     {
@@ -678,7 +728,7 @@
       "projectId": null,
       "fileId": null,
       "distributionBasis": "Download the identical author-published file directly from Modrinth; no rehosting. Project license: LicenseRef-Custom",
-      "status": "origin-identified-download-verification-pending",
+      "status": "author-origin-download-verified",
       "embeddedLicenseFiles": [
         "LICENSE.una",
         "LICENSE"
@@ -697,6 +747,11 @@
           "url": "https://github.com/asiekierka/FoamFix/blob/0.9.x-1.12.2/docs/licenses/COPYING"
         },
         "checkedAt": "2026-09-05T05:34:23.966239+00:00"
+      },
+      "downloadVerification": {
+        "verified": true,
+        "cached": true,
+        "at": "2026-09-05T06:16:40.035975+00:00"
       }
     },
     {
@@ -782,7 +837,7 @@
       "projectId": null,
       "fileId": null,
       "distributionBasis": "Download the identical author-published file directly from Modrinth; no rehosting. Project license: LGPL-3.0-only",
-      "status": "origin-identified-download-verification-pending",
+      "status": "author-origin-download-verified",
       "embeddedLicenseFiles": [
         "LICENSE.md",
         "META-INF/versions/17/LICENSE.md"
@@ -801,6 +856,11 @@
           "url": null
         },
         "checkedAt": "2026-09-05T05:34:23.966239+00:00"
+      },
+      "downloadVerification": {
+        "verified": true,
+        "cached": true,
+        "at": "2026-09-05T06:16:40.050439+00:00"
       }
     },
     {
@@ -826,7 +886,7 @@
       "projectId": null,
       "fileId": null,
       "distributionBasis": "Download the identical author-published file directly from Modrinth; no rehosting. Project license: LGPL-3.0-only",
-      "status": "origin-identified-download-verification-pending",
+      "status": "author-origin-download-verified",
       "embeddedLicenseFiles": [],
       "originEvidence": {
         "provider": "modrinth",
@@ -842,6 +902,11 @@
           "url": null
         },
         "checkedAt": "2026-09-05T05:34:23.966239+00:00"
+      },
+      "downloadVerification": {
+        "verified": true,
+        "cached": true,
+        "at": "2026-09-05T06:16:40.051966+00:00"
       }
     },
     {
@@ -966,7 +1031,7 @@
       "projectId": null,
       "fileId": null,
       "distributionBasis": "Download the identical author-published file directly from Modrinth; no rehosting. Project license: LicenseRef-All-Rights-Reserved",
-      "status": "origin-identified-download-verification-pending",
+      "status": "author-origin-download-verified",
       "embeddedLicenseFiles": [],
       "originEvidence": {
         "provider": "modrinth",
@@ -982,6 +1047,11 @@
           "url": null
         },
         "checkedAt": "2026-09-05T05:34:23.966239+00:00"
+      },
+      "downloadVerification": {
+        "verified": true,
+        "cached": true,
+        "at": "2026-09-05T06:16:40.162516+00:00"
       }
     },
     {
@@ -1043,7 +1113,7 @@
       "projectId": null,
       "fileId": null,
       "distributionBasis": "Download the identical author-published file directly from Modrinth; no rehosting. Project license: MIT",
-      "status": "origin-identified-download-verification-pending",
+      "status": "author-origin-download-verified",
       "embeddedLicenseFiles": [],
       "originEvidence": {
         "provider": "modrinth",
@@ -1059,6 +1129,11 @@
           "url": null
         },
         "checkedAt": "2026-09-05T05:34:23.966239+00:00"
+      },
+      "downloadVerification": {
+        "verified": true,
+        "cached": true,
+        "at": "2026-09-05T06:16:40.163556+00:00"
       }
     },
     {
@@ -1084,7 +1159,7 @@
       "projectId": null,
       "fileId": null,
       "distributionBasis": "Download the identical author-published file directly from Modrinth; no rehosting. Project license: LicenseRef-All-Rights-Reserved",
-      "status": "origin-identified-download-verification-pending",
+      "status": "author-origin-download-verified",
       "embeddedLicenseFiles": [],
       "originEvidence": {
         "provider": "modrinth",
@@ -1100,6 +1175,11 @@
           "url": null
         },
         "checkedAt": "2026-09-05T05:34:23.966239+00:00"
+      },
+      "downloadVerification": {
+        "verified": true,
+        "cached": true,
+        "at": "2026-09-05T06:16:40.164079+00:00"
       }
     },
     {
@@ -1113,7 +1193,7 @@
       "projectId": null,
       "fileId": null,
       "distributionBasis": "Download the identical author-published file directly from Modrinth; no rehosting. Project license: CC-BY-NC-SA-4.0",
-      "status": "origin-identified-download-verification-pending",
+      "status": "author-origin-download-verified",
       "embeddedLicenseFiles": [],
       "originEvidence": {
         "provider": "modrinth",
@@ -1129,6 +1209,11 @@
           "url": null
         },
         "checkedAt": "2026-09-05T05:34:23.966239+00:00"
+      },
+      "downloadVerification": {
+        "verified": true,
+        "cached": true,
+        "at": "2026-09-05T06:16:40.164602+00:00"
       }
     },
     {
@@ -1202,7 +1287,7 @@
       "projectId": null,
       "fileId": null,
       "distributionBasis": "Download the identical author-published file directly from Modrinth; no rehosting. Project license: LGPL-3.0-only",
-      "status": "origin-identified-download-verification-pending",
+      "status": "author-origin-download-verified",
       "embeddedLicenseFiles": [
         "META-INF/LICENSE.txt"
       ],
@@ -1220,6 +1305,11 @@
           "url": null
         },
         "checkedAt": "2026-09-05T05:34:23.966239+00:00"
+      },
+      "downloadVerification": {
+        "verified": true,
+        "cached": true,
+        "at": "2026-09-05T06:16:40.165126+00:00"
       }
     },
     {
@@ -1505,7 +1595,7 @@
       "projectId": null,
       "fileId": null,
       "distributionBasis": "Download the identical author-published file directly from Modrinth; no rehosting. Project license: LGPL-3.0-or-later",
-      "status": "origin-identified-download-verification-pending",
+      "status": "author-origin-download-verified",
       "embeddedLicenseFiles": [],
       "originEvidence": {
         "provider": "modrinth",
@@ -1521,6 +1611,11 @@
           "url": "https://github.com/GTNewHorizons/ThaumicHorizons/blob/master/LICENSE.txt"
         },
         "checkedAt": "2026-09-05T05:34:23.966239+00:00"
+      },
+      "downloadVerification": {
+        "verified": true,
+        "cached": true,
+        "at": "2026-09-05T06:16:40.167249+00:00"
       }
     },
     {
@@ -1658,7 +1753,7 @@
       "projectId": null,
       "fileId": null,
       "distributionBasis": "Download the identical author-published file directly from Modrinth; no rehosting. Project license: MPL-2.0",
-      "status": "origin-identified-download-verification-pending",
+      "status": "author-origin-download-verified",
       "embeddedLicenseFiles": [],
       "originEvidence": {
         "provider": "modrinth",
@@ -1674,6 +1769,11 @@
           "url": null
         },
         "checkedAt": "2026-09-05T05:34:23.966239+00:00"
+      },
+      "downloadVerification": {
+        "verified": true,
+        "cached": true,
+        "at": "2026-09-05T06:16:40.167249+00:00"
       }
     },
     {
@@ -1687,7 +1787,7 @@
       "projectId": null,
       "fileId": null,
       "distributionBasis": "Download the identical author-published file directly from Modrinth; no rehosting. Project license: LGPL-3.0-only",
-      "status": "origin-identified-download-verification-pending",
+      "status": "author-origin-download-verified",
       "embeddedLicenseFiles": [
         "LICENSE",
         "LICENSE-MIT"
@@ -1706,6 +1806,11 @@
           "url": null
         },
         "checkedAt": "2026-09-05T05:34:23.966239+00:00"
+      },
+      "downloadVerification": {
+        "verified": true,
+        "cached": true,
+        "at": "2026-09-05T06:16:40.168306+00:00"
       }
     },
     {
@@ -1755,7 +1860,7 @@
       "projectId": null,
       "fileId": null,
       "distributionBasis": "Download the identical author-published file directly from Modrinth; no rehosting. Project license: LicenseRef-All-Rights-Reserved",
-      "status": "origin-identified-download-verification-pending",
+      "status": "author-origin-download-verified",
       "embeddedLicenseFiles": [],
       "originEvidence": {
         "provider": "modrinth",
@@ -1771,6 +1876,11 @@
           "url": null
         },
         "checkedAt": "2026-09-05T05:34:23.966239+00:00"
+      },
+      "downloadVerification": {
+        "verified": true,
+        "cached": true,
+        "at": "2026-09-05T06:16:40.169310+00:00"
       }
     },
     {

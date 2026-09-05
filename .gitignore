@@ -13,3 +13,5 @@ artifacts/
 TestResults/
 *.log
 *.tsbuildinfo
+**/__pycache__/
+*.pyc

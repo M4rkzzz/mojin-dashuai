@@ -1,0 +1,18 @@
+{
+  "displayName": "魔金大帅",
+  "signInAudience": "PersonalMicrosoftAccount",
+  "isFallbackPublicClient": true,
+  "publicClient": {
+    "redirectUris": [
+      "http://localhost",
+      "https://login.microsoftonline.com/common/oauth2/nativeclient"
+    ]
+  },
+  "web": {
+    "redirectUris": [],
+    "implicitGrantSettings": {
+      "enableAccessTokenIssuance": false,
+      "enableIdTokenIssuance": false
+    }
+  }
+}

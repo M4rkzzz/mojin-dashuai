@@ -8,21 +8,24 @@ using Boshan.Launcher;
 using CmlLib.Core.Auth;
 using Microsoft.Identity.Client;
 using Boshan.Shared;
+using XboxAuthNet.OAuth.CodeFlow;
 
 namespace Boshan.Desktop;
 
 public sealed record PlayerProfile(string Id,string LoginName,string GameName,string Kind="hub");
-public sealed record AccountSession(PlayerProfile Profile,string AccessToken,DateTimeOffset AccessExpiresAt,string RefreshToken,DateTimeOffset RefreshExpiresAt,string? RecoveryCode=null,string? MicrosoftAccountId=null,string? SkinUrl=null,string SkinModel="classic",string? MicrosoftClientId=null);
+public sealed record AccountSession(PlayerProfile Profile,string AccessToken,DateTimeOffset AccessExpiresAt,string RefreshToken,DateTimeOffset RefreshExpiresAt,string? RecoveryCode=null,string? MicrosoftAccountId=null,string? SkinUrl=null,string SkinModel="classic",string? MicrosoftClientId=null,string? MicrosoftXuid=null);
 public sealed class Accounts
 {
     private readonly Vault vault;
     private readonly HttpClient api;
     private readonly string microsoftId;
+    private readonly Func<IWebUI>? microsoftWebUi;
+    public string MicrosoftLoginMode=>string.IsNullOrWhiteSpace(microsoftId)?"window":"device-code";
     private readonly SemaphoreSlim gate=new(1);
     public AccountSession? Current {get;private set;}
-    public Accounts(Vault vault,string apiUrl,string microsoftId)
+    public Accounts(Vault vault,string apiUrl,string microsoftId,Func<IWebUI>? microsoftWebUi=null)
     {
-        this.vault=vault;this.microsoftId=microsoftId;
+        this.vault=vault;this.microsoftId=microsoftId;this.microsoftWebUi=microsoftWebUi;
         var uri=new Uri(apiUrl);if(uri.Scheme!="https")throw new InvalidDataException("账号服务必须使用 HTTPS。");
         api=new HttpClient(new HttpClientHandler {UseCookies=false,AllowAutoRedirect=false}){BaseAddress=uri,Timeout=TimeSpan.FromSeconds(20)};
         api.DefaultRequestHeaders.UserAgent.ParseAdd("MojinDashuai/"+typeof(Accounts).Assembly.GetName().Version);
@@ -55,7 +58,7 @@ public sealed class Accounts
             catch(HttpRequestException) when(current.AccessExpiresAt>DateTimeOffset.UtcNow) { }
             catch(TaskCanceledException) when(current.AccessExpiresAt>DateTimeOffset.UtcNow) { }
         }
-        return current.Profile.Kind=="microsoft"?new MSession(current.Profile.GameName,current.AccessToken,current.Profile.Id){UserType="msa"}:MSession.CreateOfflineSession(current.Profile.GameName);
+        return current.Profile.Kind=="microsoft"?new MSession(current.Profile.GameName,current.AccessToken,current.Profile.Id){UserType="msa",Xuid=current.MicrosoftXuid}:MSession.CreateOfflineSession(current.Profile.GameName);
     }
     private async Task Ensure()
     {
@@ -78,7 +81,7 @@ public sealed class Accounts
     {
         try{if(Current?.Profile.Kind=="hub")await Authorized("/v1/auth/logout",new{});}
         catch(HttpRequestException){}catch(TaskCanceledException){}
-        finally {Current=null;vault.Delete("account");vault.Delete("msal");if(Guid.TryParse(microsoftId,out var appId))vault.Delete("msal-"+appId.ToString("N"));}
+        finally {Current=null;vault.Delete("account");vault.Delete("msal");vault.Delete(MicrosoftAccountStorage.Key);if(Guid.TryParse(microsoftId,out var appId))vault.Delete("msal-"+appId.ToString("N"));}
     }
     public async Task<JsonElement?> Authorized(string path,object args)
     {
@@ -148,6 +151,12 @@ public sealed class Accounts
     }
     public async Task<object> MicrosoftLogin(bool interactive=true,Func<MicrosoftDevicePrompt,Task>? showCode=null,CancellationToken token=default)
     {
+        if(string.IsNullOrWhiteSpace(microsoftId))
+        {
+            var result=await WindowsMicrosoftLogin.Login(vault,Current,interactive,microsoftWebUi,token);
+            token.ThrowIfCancellationRequested();Store(result);
+            return new {result.Profile};
+        }
         if(!Guid.TryParse(microsoftId,out var appId)||appId==Guid.Empty)throw new InvalidDataException("正版登录暂未开放，请等待管理员完成登录应用配置。");
         if(!interactive&&Current?.MicrosoftClientId!=microsoftId)throw new InvalidDataException("正版登录配置已更新，请重新登录。");
         var application=PublicClientApplicationBuilder.Create(microsoftId).WithAuthority(AzureCloudInstance.AzurePublic,AadAuthorityAudience.PersonalMicrosoftAccount).WithRedirectUri("http://localhost").Build();
