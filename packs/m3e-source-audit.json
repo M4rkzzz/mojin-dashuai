@@ -7,11 +7,13 @@
       "size": 5710137,
       "sha256": "69ecf53ec808c1219fc40b98c2464b4546f035e401591effd0229a2787e10666",
       "sha1": "21db670c715e2a24eda05bd0c1d3b834e3949857",
-      "sources": [],
+      "sources": [
+        "https://cdn.modrinth.com/data/ghjoiQAl/versions/QVfak9aE/%2Bunimixins-all-1.7.10-0.2.1.jar"
+      ],
       "projectId": null,
       "fileId": null,
-      "distributionBasis": null,
-      "status": "needs-source-and-license-review",
+      "distributionBasis": "Download the identical author-published file directly from Modrinth; no rehosting. Project license: LicenseRef-Mixed",
+      "status": "origin-identified-download-verification-pending",
       "embeddedLicenseFiles": [
         "META-INF/licenses/module-common/LICENSE",
         "META-INF/licenses/module-mixin/LICENSE",
@@ -21,19 +23,51 @@
         "META-INF/licenses/module-spongemixins/LICENSE",
         "META-INF/licenses/module-spongemixins/LICENSE.LGPLv3",
         "META-INF/licenses/module-spongemixins/LICENSE.SpongeMixins"
-      ]
+      ],
+      "originEvidence": {
+        "provider": "modrinth",
+        "projectId": "ghjoiQAl",
+        "versionId": "QVfak9aE",
+        "projectUrl": "https://modrinth.com/mod/unimixins",
+        "metadataUrl": "https://api.modrinth.com/v2/version/QVfak9aE",
+        "fileSha1": "21db670c715e2a24eda05bd0c1d3b834e3949857",
+        "fileSha512": "53b5ab9c390744009fabb5e12e4a611ea192dae6b51e4036a08fafa33b0e45b8cc2bd74ce6334bcfd70145caa39fc56830bdd2826d39a0afa9ccfd92dd2c8284",
+        "license": {
+          "id": "LicenseRef-Mixed",
+          "name": "",
+          "url": "https://github.com/LegacyModdingMC/UniMixins/blob/master/LICENSE"
+        },
+        "checkedAt": "2026-09-05T05:34:23.966239+00:00"
+      }
     },
     {
       "path": "mods/1.7.10-ASJCore-1.4.3.0.jar",
       "size": 2484628,
       "sha256": "ac110c7cdf7e3837cd0e0a3ce19e869490aed600418998471fcca67602484cc9",
       "sha1": "11c619aea11ba5001ad39ca83c5fc42fab253dfa",
-      "sources": [],
+      "sources": [
+        "https://cdn.modrinth.com/data/ZOxCC8DJ/versions/H4Sr7CwL/1.7.10-ASJCore-1.4.3.0.jar"
+      ],
       "projectId": null,
       "fileId": null,
-      "distributionBasis": null,
-      "status": "needs-source-and-license-review",
-      "embeddedLicenseFiles": []
+      "distributionBasis": "Download the identical author-published file directly from Modrinth; no rehosting. Project license: LicenseRef-NCCPL-License",
+      "status": "origin-identified-download-verification-pending",
+      "embeddedLicenseFiles": [],
+      "originEvidence": {
+        "provider": "modrinth",
+        "projectId": "ZOxCC8DJ",
+        "versionId": "H4Sr7CwL",
+        "projectUrl": "https://modrinth.com/mod/asjcore",
+        "metadataUrl": "https://api.modrinth.com/v2/version/H4Sr7CwL",
+        "fileSha1": "11c619aea11ba5001ad39ca83c5fc42fab253dfa",
+        "fileSha512": "05edca3514ff6d50665e8032902a62dd6627dead5e69c1346df73628a5a638c228ffe22f4d2d21068fbd764e45c1c2d4a525207258f1aab5291ddfe24cd26843",
+        "license": {
+          "id": "LicenseRef-NCCPL-License",
+          "name": "",
+          "url": "https://gist.github.com/AlexSocol/1a906c6643e1af403e9accc2c30e1aba"
+        },
+        "checkedAt": "2026-09-05T05:34:23.966239+00:00"
+      }
     },
     {
       "path": "mods/Advanced Botany 1.3.1.7.jar",
@@ -102,29 +136,63 @@
       "size": 59589723,
       "sha256": "a382f83444239c552adb862cfdf2b38b831a48afff765c81d3d3b0c5d12cf300",
       "sha1": "b0c8914c6cdef6f5f447cd021b9c4528bd34b9fb",
-      "sources": [],
+      "sources": [
+        "https://cdn.modrinth.com/data/Qta0UW0A/versions/XXg6GJ7o/Alfheim-60.jar"
+      ],
       "projectId": null,
       "fileId": null,
-      "distributionBasis": null,
-      "status": "needs-source-and-license-review",
-      "embeddedLicenseFiles": []
+      "distributionBasis": "Download the identical author-published file directly from Modrinth; no rehosting. Project license: LicenseRef-NCCPL-License",
+      "status": "origin-identified-download-verification-pending",
+      "embeddedLicenseFiles": [],
+      "originEvidence": {
+        "provider": "modrinth",
+        "projectId": "Qta0UW0A",
+        "versionId": "XXg6GJ7o",
+        "projectUrl": "https://modrinth.com/mod/alfheim",
+        "metadataUrl": "https://api.modrinth.com/v2/version/XXg6GJ7o",
+        "fileSha1": "b0c8914c6cdef6f5f447cd021b9c4528bd34b9fb",
+        "fileSha512": "47421963e9639cacaf07fec29b838b5e8943e74d24443b37bab86a1297c90ef4f81f9b988aa774f689cc4cd24604fa405c293731b09555f694527c43d304cc08",
+        "license": {
+          "id": "LicenseRef-NCCPL-License",
+          "name": "",
+          "url": "https://gist.github.com/AlexSocol/1a906c6643e1af403e9accc2c30e1aba"
+        },
+        "checkedAt": "2026-09-05T05:34:23.966239+00:00"
+      }
     },
     {
       "path": "mods/angelica-2.0.0-alpha19.jar",
       "size": 6188289,
       "sha256": "11d32bf5c4beef04f91e86429718eaac1daef91eb7093db87af539846e80f9a8",
       "sha1": "bf435f81aca5dfcabd3b1dce65db4f106e23d1f1",
-      "sources": [],
+      "sources": [
+        "https://cdn.modrinth.com/data/XN5jnYB4/versions/F09ZvaKn/angelica-2.0.0-alpha19.jar"
+      ],
       "projectId": null,
       "fileId": null,
-      "distributionBasis": null,
-      "status": "needs-source-and-license-review",
+      "distributionBasis": "Download the identical author-published file directly from Modrinth; no rehosting. Project license: LicenseRef-Multiple---Primarily-LGPLv3",
+      "status": "origin-identified-download-verification-pending",
       "embeddedLicenseFiles": [
         "COPYING",
         "COPYING.LESSER",
         "LICENSE",
         "META-INF/LICENSE.txt"
-      ]
+      ],
+      "originEvidence": {
+        "provider": "modrinth",
+        "projectId": "XN5jnYB4",
+        "versionId": "F09ZvaKn",
+        "projectUrl": "https://modrinth.com/mod/angelica",
+        "metadataUrl": "https://api.modrinth.com/v2/version/F09ZvaKn",
+        "fileSha1": "bf435f81aca5dfcabd3b1dce65db4f106e23d1f1",
+        "fileSha512": "b8f87c2e3e6a276dae8050e9c059d3836c97b070fb3000f0e6484423dbbea287266818fa6b46ed11e78793d3af70f7f83dc6346f9bcca663a2e105b809d2fd19",
+        "license": {
+          "id": "LicenseRef-Multiple---Primarily-LGPLv3",
+          "name": "",
+          "url": "https://github.com/GTNewHorizons/Angelica?tab=readme-ov-file#credits"
+        },
+        "checkedAt": "2026-09-05T05:34:23.966239+00:00"
+      }
     },
     {
       "path": "mods/appliedenergistics2-rv3-beta-690-GTNH.jar",
@@ -227,12 +295,29 @@
       "size": 84054,
       "sha256": "2f2dce79eb8c46f9344a791eca179ae7b9ee597c6eca911b966feac883bf6371",
       "sha1": "c9d673415deca85afb42e7e698d932691f27d8a8",
-      "sources": [],
+      "sources": [
+        "https://cdn.modrinth.com/data/RC5CQSRD/versions/OAkz4PBP/BetterLoadingScreen-1.3.10.jar"
+      ],
       "projectId": null,
       "fileId": null,
-      "distributionBasis": null,
-      "status": "needs-source-and-license-review",
-      "embeddedLicenseFiles": []
+      "distributionBasis": "Download the identical author-published file directly from Modrinth; no rehosting. Project license: GPL-3.0-only",
+      "status": "origin-identified-download-verification-pending",
+      "embeddedLicenseFiles": [],
+      "originEvidence": {
+        "provider": "modrinth",
+        "projectId": "RC5CQSRD",
+        "versionId": "OAkz4PBP",
+        "projectUrl": "https://modrinth.com/mod/custom-loading-screen",
+        "metadataUrl": "https://api.modrinth.com/v2/version/OAkz4PBP",
+        "fileSha1": "c9d673415deca85afb42e7e698d932691f27d8a8",
+        "fileSha512": "f5e34c5ec7380a442908425dc02cd9a2bba618489ae8a81d869dec1d9467012101069827d176ceda518b02ad54fd76581a2c4c0d36427e1d9467bd54a33c32a5",
+        "license": {
+          "id": "GPL-3.0-only",
+          "name": "GNU General Public License v3.0 only",
+          "url": null
+        },
+        "checkedAt": "2026-09-05T05:34:23.966239+00:00"
+      }
     },
     {
       "path": "mods/BetterQuesting-3.7.14-GTNH.jar",
@@ -251,12 +336,29 @@
       "size": 14362,
       "sha256": "9fd158b30d8efe4ec32563cb7102c864928afcfe7b71ef2a0ce343e4f987cf88",
       "sha1": "c6a07aa19ab08ac226c45449e87612c1aeabbb14",
-      "sources": [],
+      "sources": [
+        "https://cdn.modrinth.com/data/ui5BchwQ/versions/hEte9pKt/BetterTitleScreen-1.7.10-1.1.jar"
+      ],
       "projectId": null,
       "fileId": null,
-      "distributionBasis": null,
-      "status": "needs-source-and-license-review",
-      "embeddedLicenseFiles": []
+      "distributionBasis": "Download the identical author-published file directly from Modrinth; no rehosting. Project license: LicenseRef-All-Rights-Reserved",
+      "status": "origin-identified-download-verification-pending",
+      "embeddedLicenseFiles": [],
+      "originEvidence": {
+        "provider": "modrinth",
+        "projectId": "ui5BchwQ",
+        "versionId": "hEte9pKt",
+        "projectUrl": "https://modrinth.com/mod/bettertitlescreen",
+        "metadataUrl": "https://api.modrinth.com/v2/version/hEte9pKt",
+        "fileSha1": "c6a07aa19ab08ac226c45449e87612c1aeabbb14",
+        "fileSha512": "de2a40f976fdbd1ecbe5c51dae1a54018cb6a052c1516be12814a86081dca20b32d0ee00bb60356d197f2b5ded5277e368e37a458c728f70ff264e5a77ab5634",
+        "license": {
+          "id": "LicenseRef-All-Rights-Reserved",
+          "name": "",
+          "url": null
+        },
+        "checkedAt": "2026-09-05T05:34:23.966239+00:00"
+      }
     },
     {
       "path": "mods/BetterTooltipBox-NO-GIT-TAG-SET.jar",
@@ -289,12 +391,29 @@
       "size": 154985,
       "sha256": "518e5c8b1671a3b0ce281daf505b7f0b90ca845c3e2c95ef74e096b2015d7c1f",
       "sha1": "2c54bfab9b6070ab09466d50806fbb8a34dde2e6",
-      "sources": [],
+      "sources": [
+        "https://cdn.modrinth.com/data/6su8A6OH/versions/6HgNiu8e/bugtorch-1.2.13.jar"
+      ],
       "projectId": null,
       "fileId": null,
-      "distributionBasis": null,
-      "status": "needs-source-and-license-review",
-      "embeddedLicenseFiles": []
+      "distributionBasis": "Download the identical author-published file directly from Modrinth; no rehosting. Project license: MIT",
+      "status": "origin-identified-download-verification-pending",
+      "embeddedLicenseFiles": [],
+      "originEvidence": {
+        "provider": "modrinth",
+        "projectId": "6su8A6OH",
+        "versionId": "6HgNiu8e",
+        "projectUrl": "https://modrinth.com/mod/bugtorch",
+        "metadataUrl": "https://api.modrinth.com/v2/version/6HgNiu8e",
+        "fileSha1": "2c54bfab9b6070ab09466d50806fbb8a34dde2e6",
+        "fileSha512": "72834169b561f722e52825fef5e0f8e6f2852deb2d84341bde904f89f4bf1d2dcc388af261d8d360051dbec7244b1845ceac78a82c4dc6fef4c888d491057bad",
+        "license": {
+          "id": "MIT",
+          "name": "MIT License",
+          "url": "https://github.com/jss2a98aj/BugTorch/blob/master/LICENSE"
+        },
+        "checkedAt": "2026-09-05T05:34:23.966239+00:00"
+      }
     },
     {
       "path": "mods/ChunkPurge-1.7.10-2.1.jar",
@@ -313,12 +432,29 @@
       "size": 451535,
       "sha256": "b90cbe38871564041b336520f186904497a9358b95c94b088070f1ed720fd543",
       "sha1": "70b3bd705287657b68ae36b04cde5cdf182c8e87",
-      "sources": [],
+      "sources": [
+        "https://cdn.modrinth.com/data/qMOdaUOs/versions/Dbl4pDXW/CodeChickenCore-1.4.3.jar"
+      ],
       "projectId": null,
       "fileId": null,
-      "distributionBasis": null,
-      "status": "needs-source-and-license-review",
-      "embeddedLicenseFiles": []
+      "distributionBasis": "Download the identical author-published file directly from Modrinth; no rehosting. Project license: MIT",
+      "status": "origin-identified-download-verification-pending",
+      "embeddedLicenseFiles": [],
+      "originEvidence": {
+        "provider": "modrinth",
+        "projectId": "qMOdaUOs",
+        "versionId": "Dbl4pDXW",
+        "projectUrl": "https://modrinth.com/mod/codechickencore-unofficial",
+        "metadataUrl": "https://api.modrinth.com/v2/version/Dbl4pDXW",
+        "fileSha1": "70b3bd705287657b68ae36b04cde5cdf182c8e87",
+        "fileSha512": "677a80630a8b5df080695be5de1c254b87ede4dd742193f96b2cfb0496ba3cb53a5fb617949e9d28f5e8aa645ef53035bb736e3a788d2593433aa3b4233d7a99",
+        "license": {
+          "id": "MIT",
+          "name": "MIT License",
+          "url": null
+        },
+        "checkedAt": "2026-09-05T05:34:23.966239+00:00"
+      }
     },
     {
       "path": "mods/CoFHCore-[1.7.10]3.1.4-329.jar",
@@ -390,14 +526,31 @@
       "size": 193584,
       "sha256": "cfccfe41a5f015875f80a7c8c095d8c3df3bcc15ff70f0eccb92852563455b39",
       "sha1": "ff76221a18c2fd9768c0888aa3acb74b4a7a933a",
-      "sources": [],
+      "sources": [
+        "https://cdn.modrinth.com/data/idMHQ4n2/versions/C2FVAFqn/CustomSkinLoader_ForgeLegacy-14.17.jar"
+      ],
       "projectId": null,
       "fileId": null,
-      "distributionBasis": null,
-      "status": "needs-source-and-license-review",
+      "distributionBasis": "Download the identical author-published file directly from Modrinth; no rehosting. Project license: GPL-3.0-only",
+      "status": "origin-identified-download-verification-pending",
       "embeddedLicenseFiles": [
         "LICENSE"
-      ]
+      ],
+      "originEvidence": {
+        "provider": "modrinth",
+        "projectId": "idMHQ4n2",
+        "versionId": "C2FVAFqn",
+        "projectUrl": "https://modrinth.com/mod/customskinloader",
+        "metadataUrl": "https://api.modrinth.com/v2/version/C2FVAFqn",
+        "fileSha1": "ff76221a18c2fd9768c0888aa3acb74b4a7a933a",
+        "fileSha512": "e557a2c70bf44a3f5ef9c522594ac3155f4c19283d058d34568e98f06c371928d2bedaf0e2eb7e256d97cb8221e7ab7d89f866276c3b400036bbe2afed2daf8e",
+        "license": {
+          "id": "GPL-3.0-only",
+          "name": "GNU General Public License v3.0 only",
+          "url": null
+        },
+        "checkedAt": "2026-09-05T05:34:23.966239+00:00"
+      }
     },
     {
       "path": "mods/CustomThings-1.7.10-0.0.3-59.jar",
@@ -478,12 +631,29 @@
       "size": 726841,
       "sha256": "fa2f02062b524d25746485679c3acebf8e75efc668ed0da1a44318f66a983866",
       "sha1": "a88fe52fb27babfda343eb0dd03f57c55655901b",
-      "sources": [],
+      "sources": [
+        "https://cdn.modrinth.com/data/4H6sumDB/versions/PZGJtIvC/EuphoriaPatcher-1.5.2-r5.4-forgeVintage.jar"
+      ],
       "projectId": null,
       "fileId": null,
-      "distributionBasis": null,
-      "status": "needs-source-and-license-review",
-      "embeddedLicenseFiles": []
+      "distributionBasis": "Download the identical author-published file directly from Modrinth; no rehosting. Project license: MPL-2.0",
+      "status": "origin-identified-download-verification-pending",
+      "embeddedLicenseFiles": [],
+      "originEvidence": {
+        "provider": "modrinth",
+        "projectId": "4H6sumDB",
+        "versionId": "PZGJtIvC",
+        "projectUrl": "https://modrinth.com/mod/euphoria-patches",
+        "metadataUrl": "https://api.modrinth.com/v2/version/PZGJtIvC",
+        "fileSha1": "a88fe52fb27babfda343eb0dd03f57c55655901b",
+        "fileSha512": "a6f39457ad5acb68928719c1ca3f41123a4c043d281562e7b6a62e31a94cb035137f8dda3bb63de034ac11c0d9bccab43531f67cb22331b3b60327fd71426d6d",
+        "license": {
+          "id": "MPL-2.0",
+          "name": "Mozilla Public License 2.0",
+          "url": null
+        },
+        "checkedAt": "2026-09-05T05:34:23.966239+00:00"
+      }
     },
     {
       "path": "mods/FastLeafDecay-1.7.10-1.4.jar",
@@ -502,15 +672,32 @@
       "size": 312750,
       "sha256": "3c82a60149f024d9a02cd582ffd49aee36dba2394af3065e054d8e6b5364d3c6",
       "sha1": "a32624a456d2fab26241df30c1612558710202f3",
-      "sources": [],
+      "sources": [
+        "https://cdn.modrinth.com/data/jupr7Bf5/versions/H4Y7YwTd/FoamFix-1.7.10-universal-1.0.4.jar"
+      ],
       "projectId": null,
       "fileId": null,
-      "distributionBasis": null,
-      "status": "needs-source-and-license-review",
+      "distributionBasis": "Download the identical author-published file directly from Modrinth; no rehosting. Project license: LicenseRef-Custom",
+      "status": "origin-identified-download-verification-pending",
       "embeddedLicenseFiles": [
         "LICENSE.una",
         "LICENSE"
-      ]
+      ],
+      "originEvidence": {
+        "provider": "modrinth",
+        "projectId": "jupr7Bf5",
+        "versionId": "H4Y7YwTd",
+        "projectUrl": "https://modrinth.com/mod/foamfix",
+        "metadataUrl": "https://api.modrinth.com/v2/version/H4Y7YwTd",
+        "fileSha1": "a32624a456d2fab26241df30c1612558710202f3",
+        "fileSha512": "e8098d58901c4e3ecf1ad3498ce6e8ee3a2bdb948ced5a5889ff0e829c4c4585afe8aabad7c7b05eae61b7f0ef72d5d8712f1f33dccebe5b508240a23b6cb80b",
+        "license": {
+          "id": "LicenseRef-Custom",
+          "name": "",
+          "url": "https://github.com/asiekierka/FoamFix/blob/0.9.x-1.12.2/docs/licenses/COPYING"
+        },
+        "checkedAt": "2026-09-05T05:34:23.966239+00:00"
+      }
     },
     {
       "path": "mods/Forbidden Magic-1.7.10-0.575.jar",
@@ -589,15 +776,32 @@
       "size": 28651619,
       "sha256": "83357d1bbbbb29473e593531aab73d78209bb24d741eb8472e9542de76222717",
       "sha1": "25e877c79cdd26bc55cc43d1842a51b6b142fd54",
-      "sources": [],
+      "sources": [
+        "https://cdn.modrinth.com/data/vTvnv7qp/versions/Z7AJXtd7/gtnhlib-0.9.37.jar"
+      ],
       "projectId": null,
       "fileId": null,
-      "distributionBasis": null,
-      "status": "needs-source-and-license-review",
+      "distributionBasis": "Download the identical author-published file directly from Modrinth; no rehosting. Project license: LGPL-3.0-only",
+      "status": "origin-identified-download-verification-pending",
       "embeddedLicenseFiles": [
         "LICENSE.md",
         "META-INF/versions/17/LICENSE.md"
-      ]
+      ],
+      "originEvidence": {
+        "provider": "modrinth",
+        "projectId": "vTvnv7qp",
+        "versionId": "Z7AJXtd7",
+        "projectUrl": "https://modrinth.com/mod/gtnhlib",
+        "metadataUrl": "https://api.modrinth.com/v2/version/Z7AJXtd7",
+        "fileSha1": "25e877c79cdd26bc55cc43d1842a51b6b142fd54",
+        "fileSha512": "3d0620254e2911544b3c1ba63ed93e36aa146a557bb1cffae7e1ac6e22cde381ad498dd3e43c4e69f311d85be43b8e61f54129bd1e8b4ce06adc0ddd2f09f1fb",
+        "license": {
+          "id": "LGPL-3.0-only",
+          "name": "GNU Lesser General Public License v3.0 only",
+          "url": null
+        },
+        "checkedAt": "2026-09-05T05:34:23.966239+00:00"
+      }
     },
     {
       "path": "mods/HarvestDay-Day-1.jar",
@@ -616,12 +820,29 @@
       "size": 572745,
       "sha256": "97e829b245c74305edd09ff17892a33fd240588923be5eaeddd9768f9bdfa107",
       "sha1": "ee1404c3d961bbc9ff363df45b0f10d494708909",
-      "sources": [],
+      "sources": [
+        "https://cdn.modrinth.com/data/6QQe8Ldy/versions/u5SKSQxu/hodgepodge-2.6.26.jar"
+      ],
       "projectId": null,
       "fileId": null,
-      "distributionBasis": null,
-      "status": "needs-source-and-license-review",
-      "embeddedLicenseFiles": []
+      "distributionBasis": "Download the identical author-published file directly from Modrinth; no rehosting. Project license: LGPL-3.0-only",
+      "status": "origin-identified-download-verification-pending",
+      "embeddedLicenseFiles": [],
+      "originEvidence": {
+        "provider": "modrinth",
+        "projectId": "6QQe8Ldy",
+        "versionId": "u5SKSQxu",
+        "projectUrl": "https://modrinth.com/mod/hodgepodge",
+        "metadataUrl": "https://api.modrinth.com/v2/version/u5SKSQxu",
+        "fileSha1": "ee1404c3d961bbc9ff363df45b0f10d494708909",
+        "fileSha512": "a2952bf6b8317d0295c6501ae5e5bf9f80395b3b063ad19ba1ea181deb1f28f1b938930867aa53f82794941f0e57a965748b0fbfb0ea689352cebf8077b9725d",
+        "license": {
+          "id": "LGPL-3.0-only",
+          "name": "GNU Lesser General Public License v3.0 only",
+          "url": null
+        },
+        "checkedAt": "2026-09-05T05:34:23.966239+00:00"
+      }
     },
     {
       "path": "mods/industrialcraft-2-2.2.827-experimental.jar",
@@ -739,12 +960,29 @@
       "size": 214903175,
       "sha256": "f9d8bba66cca4671da4cdad1397e4b86508ca1f26b3037447e5643c7c7882578",
       "sha1": "e5c745b487e85c85e3fb5c1971f6c4e53b0be3aa",
-      "sources": [],
+      "sources": [
+        "https://cdn.modrinth.com/data/HtxqvxVX/versions/5Lp2qo7Y/manametalmod-8.0.4-2.jar"
+      ],
       "projectId": null,
       "fileId": null,
-      "distributionBasis": null,
-      "status": "needs-source-and-license-review",
-      "embeddedLicenseFiles": []
+      "distributionBasis": "Download the identical author-published file directly from Modrinth; no rehosting. Project license: LicenseRef-All-Rights-Reserved",
+      "status": "origin-identified-download-verification-pending",
+      "embeddedLicenseFiles": [],
+      "originEvidence": {
+        "provider": "modrinth",
+        "projectId": "HtxqvxVX",
+        "versionId": "5Lp2qo7Y",
+        "projectUrl": "https://modrinth.com/mod/manametal",
+        "metadataUrl": "https://api.modrinth.com/v2/version/5Lp2qo7Y",
+        "fileSha1": "e5c745b487e85c85e3fb5c1971f6c4e53b0be3aa",
+        "fileSha512": "07dc7deaf3c1502a0d15b225b4064a1e23bde1580fbc0ed2fa8a4e294a7725cd4eb1bcda001a18b06bcda1c779fd0fa01e09563eba493c25ed38e0112d6298c2",
+        "license": {
+          "id": "LicenseRef-All-Rights-Reserved",
+          "name": "",
+          "url": null
+        },
+        "checkedAt": "2026-09-05T05:34:23.966239+00:00"
+      }
     },
     {
       "path": "mods/Mekanism-Community-Edition-1.7.10-9.10.37-ALL.jar",
@@ -799,12 +1037,29 @@
       "size": 572698,
       "sha256": "dee791c989e12cda1a32cb65081e24d40d727b9b6d99a38750fe6b9478983669",
       "sha1": "4b44a9267050b3a97bc1d9e8f3d060ff217dfd4b",
-      "sources": [],
+      "sources": [
+        "https://cdn.modrinth.com/data/7ZsHKFX3/versions/JCOS1cuU/ModTweaker2-0.9.6.jar"
+      ],
       "projectId": null,
       "fileId": null,
-      "distributionBasis": null,
-      "status": "needs-source-and-license-review",
-      "embeddedLicenseFiles": []
+      "distributionBasis": "Download the identical author-published file directly from Modrinth; no rehosting. Project license: MIT",
+      "status": "origin-identified-download-verification-pending",
+      "embeddedLicenseFiles": [],
+      "originEvidence": {
+        "provider": "modrinth",
+        "projectId": "7ZsHKFX3",
+        "versionId": "JCOS1cuU",
+        "projectUrl": "https://modrinth.com/mod/modtweaker",
+        "metadataUrl": "https://api.modrinth.com/v2/version/JCOS1cuU",
+        "fileSha1": "4b44a9267050b3a97bc1d9e8f3d060ff217dfd4b",
+        "fileSha512": "81bd30cb145bdf5fc94ee1d0234c7fac7bc062eeb5f61af6bf6a5efdc898e7c99621576b451448cb12bfb3e81c5687f11bda9cc65dcef760699fe7eb6e2233d2",
+        "license": {
+          "id": "MIT",
+          "name": "MIT License",
+          "url": null
+        },
+        "checkedAt": "2026-09-05T05:34:23.966239+00:00"
+      }
     },
     {
       "path": "mods/MouseTweaks-2.4.4-mc1.7.10.jar",
@@ -823,24 +1078,58 @@
       "size": 291653,
       "sha256": "68d572005bfd4071992af30e0ba2ca5ae9e3cf51b20865721e798f0a1ad18e89",
       "sha1": "2960667b711bec6563dca33a6445a7e9875fe597",
-      "sources": [],
+      "sources": [
+        "https://cdn.modrinth.com/data/KeklQLwu/versions/8Fq2Pd9F/Muya_1.11.1.jar"
+      ],
       "projectId": null,
       "fileId": null,
-      "distributionBasis": null,
-      "status": "needs-source-and-license-review",
-      "embeddedLicenseFiles": []
+      "distributionBasis": "Download the identical author-published file directly from Modrinth; no rehosting. Project license: LicenseRef-All-Rights-Reserved",
+      "status": "origin-identified-download-verification-pending",
+      "embeddedLicenseFiles": [],
+      "originEvidence": {
+        "provider": "modrinth",
+        "projectId": "KeklQLwu",
+        "versionId": "8Fq2Pd9F",
+        "projectUrl": "https://modrinth.com/mod/muya",
+        "metadataUrl": "https://api.modrinth.com/v2/version/8Fq2Pd9F",
+        "fileSha1": "2960667b711bec6563dca33a6445a7e9875fe597",
+        "fileSha512": "f9304437a63ddfba677c887092e060b617896039b669dbb450e0bd1eed68250f23a6121ac168ba03ca753a23a5cc8095e70844da063c143192494354024259c8",
+        "license": {
+          "id": "LicenseRef-All-Rights-Reserved",
+          "name": "",
+          "url": null
+        },
+        "checkedAt": "2026-09-05T05:34:23.966239+00:00"
+      }
     },
     {
       "path": "mods/NaturesCompass-1.7.10-1.3.1.jar",
       "size": 162515,
       "sha256": "4dab9da15163ea2592f689f32080eac1ce5b3c5ea23c88450b96c1c99b091aeb",
       "sha1": "470b45aa127e3ff619d4ae2d764613f8d7493c8a",
-      "sources": [],
+      "sources": [
+        "https://cdn.modrinth.com/data/fPetb5Kh/versions/Oq29B6p7/NaturesCompass-1.7.10-1.3.1-forge.jar"
+      ],
       "projectId": null,
       "fileId": null,
-      "distributionBasis": null,
-      "status": "needs-source-and-license-review",
-      "embeddedLicenseFiles": []
+      "distributionBasis": "Download the identical author-published file directly from Modrinth; no rehosting. Project license: CC-BY-NC-SA-4.0",
+      "status": "origin-identified-download-verification-pending",
+      "embeddedLicenseFiles": [],
+      "originEvidence": {
+        "provider": "modrinth",
+        "projectId": "fPetb5Kh",
+        "versionId": "Oq29B6p7",
+        "projectUrl": "https://modrinth.com/mod/natures-compass",
+        "metadataUrl": "https://api.modrinth.com/v2/version/Oq29B6p7",
+        "fileSha1": "470b45aa127e3ff619d4ae2d764613f8d7493c8a",
+        "fileSha512": "412662569f20ebd4fcd5ddb8bd15df33e68e3d7d7a1cc5d78872827697917aa022810e4816cab5322f04427b255f65d26510c79b52593b7d9f1cd34c144e24c0",
+        "license": {
+          "id": "CC-BY-NC-SA-4.0",
+          "name": "Creative Commons Attribution Non Commercial Share Alike 4.0 International",
+          "url": null
+        },
+        "checkedAt": "2026-09-05T05:34:23.966239+00:00"
+      }
     },
     {
       "path": "mods/navigator-1.0.16.jar",
@@ -907,14 +1196,31 @@
       "size": 1071992,
       "sha256": "c933386f4c4f8c68e4b36225b219200895615884bdb63bcebbc964182b6de3a3",
       "sha1": "d1de0311b0ed4c29e3ee578c2476511d9c2119de",
-      "sources": [],
+      "sources": [
+        "https://cdn.modrinth.com/data/iNPc3Onu/versions/6efqpIjh/NotEnoughItems-2.7.66-GTNH.jar"
+      ],
       "projectId": null,
       "fileId": null,
-      "distributionBasis": null,
-      "status": "needs-source-and-license-review",
+      "distributionBasis": "Download the identical author-published file directly from Modrinth; no rehosting. Project license: LGPL-3.0-only",
+      "status": "origin-identified-download-verification-pending",
       "embeddedLicenseFiles": [
         "META-INF/LICENSE.txt"
-      ]
+      ],
+      "originEvidence": {
+        "provider": "modrinth",
+        "projectId": "iNPc3Onu",
+        "versionId": "6efqpIjh",
+        "projectUrl": "https://modrinth.com/mod/notenoughitems-unofficial",
+        "metadataUrl": "https://api.modrinth.com/v2/version/6efqpIjh",
+        "fileSha1": "d1de0311b0ed4c29e3ee578c2476511d9c2119de",
+        "fileSha512": "9a0128f0155b6ee3d0993de6028da0e81066eb0f60834b2b30316d415a14b1a00d05306bc2a62827abe93beb7745de83370bf55773575d6fc7d2e6638de9d1be",
+        "license": {
+          "id": "LGPL-3.0-only",
+          "name": "GNU Lesser General Public License v3.0 only",
+          "url": null
+        },
+        "checkedAt": "2026-09-05T05:34:23.966239+00:00"
+      }
     },
     {
       "path": "mods/OreExcavation-1.1.134.jar",
@@ -1193,12 +1499,29 @@
       "size": 2486376,
       "sha256": "1f6821948a271b0a8bde6c767867f4712f927a160e86c3f8ede57865924e821a",
       "sha1": "d53065c9d63cdf668ae1ef575f92e5a223c05e39",
-      "sources": [],
+      "sources": [
+        "https://cdn.modrinth.com/data/1wDWP1tN/versions/xARxatMx/ThaumicHorizons-1.6.3.jar"
+      ],
       "projectId": null,
       "fileId": null,
-      "distributionBasis": null,
-      "status": "needs-source-and-license-review",
-      "embeddedLicenseFiles": []
+      "distributionBasis": "Download the identical author-published file directly from Modrinth; no rehosting. Project license: LGPL-3.0-or-later",
+      "status": "origin-identified-download-verification-pending",
+      "embeddedLicenseFiles": [],
+      "originEvidence": {
+        "provider": "modrinth",
+        "projectId": "1wDWP1tN",
+        "versionId": "xARxatMx",
+        "projectUrl": "https://modrinth.com/mod/thaumic-horizons",
+        "metadataUrl": "https://api.modrinth.com/v2/version/xARxatMx",
+        "fileSha1": "d53065c9d63cdf668ae1ef575f92e5a223c05e39",
+        "fileSha512": "e0f3f4d6f718f8127fa5edca48c7cb868eef8edee33682a6bd5bfa7bcd05d5c4ed3d7eb0a410eac2a3747cc5ec2abbb3a6bfe81f66796d34f7bd829f2fc671e9",
+        "license": {
+          "id": "LGPL-3.0-or-later",
+          "name": "GNU Lesser General Public License v3.0 or later",
+          "url": "https://github.com/GTNewHorizons/ThaumicHorizons/blob/master/LICENSE.txt"
+        },
+        "checkedAt": "2026-09-05T05:34:23.966239+00:00"
+      }
     },
     {
       "path": "mods/ThaumicTinkerer-2.10.1.jar",
@@ -1329,27 +1652,61 @@
       "size": 60225,
       "sha256": "744c6bf8cc340f5b51a7c27ed5bba505a798ede6b9b1cdffb21116d12278705b",
       "sha1": "a1ab13083d28403671501eaf7092021f2f477470",
-      "sources": [],
+      "sources": [
+        "https://cdn.modrinth.com/data/U90pf4L4/versions/t9ypzPpk/WanionLib-1.7.10-1.8.jar"
+      ],
       "projectId": null,
       "fileId": null,
-      "distributionBasis": null,
-      "status": "needs-source-and-license-review",
-      "embeddedLicenseFiles": []
+      "distributionBasis": "Download the identical author-published file directly from Modrinth; no rehosting. Project license: MPL-2.0",
+      "status": "origin-identified-download-verification-pending",
+      "embeddedLicenseFiles": [],
+      "originEvidence": {
+        "provider": "modrinth",
+        "projectId": "U90pf4L4",
+        "versionId": "t9ypzPpk",
+        "projectUrl": "https://modrinth.com/mod/wanionlib",
+        "metadataUrl": "https://api.modrinth.com/v2/version/t9ypzPpk",
+        "fileSha1": "a1ab13083d28403671501eaf7092021f2f477470",
+        "fileSha512": "28cde5908d17460818f3881243e801bcdc8f87ce003a060f2af9e64cc41e83139c4982ebb6d9382a37b522fd21e1a21bec0cd29c8ec685bbbd7cf4e83d486c09",
+        "license": {
+          "id": "MPL-2.0",
+          "name": "Mozilla Public License 2.0",
+          "url": null
+        },
+        "checkedAt": "2026-09-05T05:34:23.966239+00:00"
+      }
     },
     {
       "path": "mods/waystones-1.0.11.jar",
       "size": 1767924,
       "sha256": "619450eca03e9a836d82764581461341d6b06133326b922abf2510c380d7ad46",
       "sha1": "327270b50f172f2015e61ed161028dd258319d76",
-      "sources": [],
+      "sources": [
+        "https://cdn.modrinth.com/data/wRpyARgi/versions/XUX1TwBa/waystones-1.0.11.jar"
+      ],
       "projectId": null,
       "fileId": null,
-      "distributionBasis": null,
-      "status": "needs-source-and-license-review",
+      "distributionBasis": "Download the identical author-published file directly from Modrinth; no rehosting. Project license: LGPL-3.0-only",
+      "status": "origin-identified-download-verification-pending",
       "embeddedLicenseFiles": [
         "LICENSE",
         "LICENSE-MIT"
-      ]
+      ],
+      "originEvidence": {
+        "provider": "modrinth",
+        "projectId": "wRpyARgi",
+        "versionId": "XUX1TwBa",
+        "projectUrl": "https://modrinth.com/mod/waystones-x",
+        "metadataUrl": "https://api.modrinth.com/v2/version/XUX1TwBa",
+        "fileSha1": "327270b50f172f2015e61ed161028dd258319d76",
+        "fileSha512": "3dbc21f9aa540cb8691e99ccacbf179135f589a8c5ff45136b65516af627a90f18dcc4463c15f456fc49dff6ee0d8b0b7947214dda01b1f78f5e774cc5f87697",
+        "license": {
+          "id": "LGPL-3.0-only",
+          "name": "GNU Lesser General Public License v3.0 only",
+          "url": null
+        },
+        "checkedAt": "2026-09-05T05:34:23.966239+00:00"
+      }
     },
     {
       "path": "mods/WirelessCraftingTerminal-1.12.7.jar",
@@ -1392,12 +1749,29 @@
       "size": 754551,
       "sha256": "489691c9535f5f55f2a9f8c0997d2513d44320d67ae230640af2763ce46082ec",
       "sha1": "7eaea1574f98aa3c3e4dfd3414b84e364e359d2a",
-      "sources": [],
+      "sources": [
+        "https://cdn.modrinth.com/data/1bokaNcj/versions/cx33FoE0/Xaeros_Minimap_21.10.41_Forge_1.7.10.jar"
+      ],
       "projectId": null,
       "fileId": null,
-      "distributionBasis": null,
-      "status": "needs-source-and-license-review",
-      "embeddedLicenseFiles": []
+      "distributionBasis": "Download the identical author-published file directly from Modrinth; no rehosting. Project license: LicenseRef-All-Rights-Reserved",
+      "status": "origin-identified-download-verification-pending",
+      "embeddedLicenseFiles": [],
+      "originEvidence": {
+        "provider": "modrinth",
+        "projectId": "1bokaNcj",
+        "versionId": "cx33FoE0",
+        "projectUrl": "https://modrinth.com/mod/xaeros-minimap",
+        "metadataUrl": "https://api.modrinth.com/v2/version/cx33FoE0",
+        "fileSha1": "7eaea1574f98aa3c3e4dfd3414b84e364e359d2a",
+        "fileSha512": "7fa4f0147d0febe058504cda5ee6178d77cc3abf1652679f7278e5de81717782758aca5da5919c3574654c6378dd80c5a1bcd3dbd7c7783f5f8ba9b36b8a0db1",
+        "license": {
+          "id": "LicenseRef-All-Rights-Reserved",
+          "name": "",
+          "url": null
+        },
+        "checkedAt": "2026-09-05T05:34:23.966239+00:00"
+      }
     },
     {
       "path": "mods/XaerosWorldMap_1.14.1.31_Forge_1.7.10.jar",
