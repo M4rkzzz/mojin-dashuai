@@ -102,7 +102,7 @@ function Login({busy,login,recover}:{busy:boolean;login:(command:string,args:unk
 }
 
 function WorldPage({world:w,settings,install,progress,busy,running,downloadOnly,setDownloadOnly,onBack,onRoute,onAction,onError}:{world:World;settings:Settings;install?:Install;progress:TimedProgress|null;busy:boolean;running:boolean;downloadOnly:boolean;setDownloadOnly:(v:boolean)=>void;onBack:()=>void;onRoute:(r:string)=>void;onAction:(s:string)=>void;onError:(s:string)=>void}){
- const {latencies,checking,probe}=useRouteLatencies(w.id,false,onError);
+ const {latencies,checking,probe}=useRouteLatencies(w.id,true,onError);
  const [menu,setMenu]=useState(false);
  useEffect(()=>setMenu(false),[w.id]);
  const route=settings.selectedRoutes[w.id]||'auto';

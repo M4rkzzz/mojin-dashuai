@@ -7,21 +7,25 @@ export function useRouteLatencies(instance:string,autoRefresh=false,onError?:(me
  const [latencies,setLatencies]=useState<Latencies>([null,null]);
  const [checking,setChecking]=useState(false);
  const generation=useRef(0);
+ const inFlight=useRef<number|null>(null);
+ const errorHandler=useRef(onError);
+ useEffect(()=>{errorHandler.current=onError;},[onError]);
  const probe=useCallback(async()=>{
-  const request=++generation.current;setChecking(true);
+  if(inFlight.current!==null)return;
+  const request=++generation.current;inFlight.current=request;setChecking(true);
   try{
    const result=await invoke<unknown>('routes.probe',{instance});
    if(request!==generation.current)return;
    setLatencies([0,1].map(index=>Array.isArray(result)&&typeof result[index]==='number'&&Number.isFinite(result[index])?Math.max(-1,Math.round(result[index])):-1) as Latencies);
-  }catch(error){if(request===generation.current){setLatencies([-1,-1]);onError?.((error as Error).message);}}
-  finally{if(request===generation.current)setChecking(false);}
- },[instance,onError]);
+  }catch(error){if(request===generation.current){setLatencies([-1,-1]);errorHandler.current?.((error as Error).message);}}
+  finally{if(request===generation.current){inFlight.current=null;setChecking(false);}}
+ },[instance]);
  useEffect(()=>{
   setLatencies([null,null]);
   if(!isNative)return;
   void probe();
   const timer=autoRefresh?window.setInterval(()=>{if(document.visibilityState==='visible')void probe();},30000):undefined;
-  return()=>{generation.current++;if(timer)window.clearInterval(timer);};
+  return()=>{generation.current++;inFlight.current=null;if(timer)window.clearInterval(timer);};
  },[instance,autoRefresh,probe]);
  return {latencies,checking,probe};
 }

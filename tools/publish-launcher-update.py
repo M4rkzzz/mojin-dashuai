@@ -1,5 +1,5 @@
 """Publish a legacy ZIP and immutable per-file update objects; activate only with --activate."""
-import argparse,base64,hashlib,json,pathlib,subprocess,sys,time,urllib.error,urllib.parse,urllib.request,uuid
+import argparse,base64,hashlib,json,pathlib,re,subprocess,sys,time,urllib.error,urllib.parse,urllib.request,uuid
 
 ROOT=pathlib.Path(__file__).resolve().parents[1]
 parser=argparse.ArgumentParser(description=__doc__)
@@ -8,7 +8,9 @@ parser.add_argument('--dotnet',default='dotnet')
 parser.add_argument('--publisher',type=pathlib.Path,default=ROOT/'src/Publisher/bin/Release/net10.0/Publisher.dll')
 parser.add_argument('--activate',action='store_true')
 parser.add_argument('--beta',action='store_true',help='Use approved beta acceptance; clean Windows stays unverified')
+parser.add_argument('--revision',default='',help='Immutable subdirectory for a user-requested same-version rebuild')
 args=parser.parse_args()
+if args.revision and not re.fullmatch(r'[a-z0-9][a-z0-9-]{0,39}',args.revision):parser.error('Invalid revision')
 def public_open(request,timeout=25):
     # Match the player's direct route; transient handshakes retry the same URL.
     for attempt in range(3):
@@ -91,7 +93,7 @@ if release.get('differential',False):
      if temporary.exists():temporary.unlink()
    object_count+=1
  if seen!=set(expected):raise ValueError('Launcher ZIP missing signed files')
-download=root/'launcher'/release['version']/'MojinDashuai-windows-x64.zip'
+download=root/'launcher'/release['version']/REVISION/'MojinDashuai-windows-x64.zip'
 if download.is_symlink() or not download.resolve().is_relative_to(root):raise ValueError('Unsafe download alias')
 download.parent.mkdir(parents=True,exist_ok=True)
 if download.exists():
@@ -108,7 +110,7 @@ if ACTIVATE:
  staged=root/('launcher-'+RUN+'.stage');staged.write_text(json.dumps(envelope));staged.chmod(0o644);staged.replace(metadata)
 source.unlink()
 print(json.dumps({'uploaded':True,'activated':ACTIVATE,'sequence':release['sequence'],'fileObjects':object_count}))
-'''.replace('BASE',repr(remote)).replace('HASH',repr(digest)).replace('SIZE',str(archive.stat().st_size)).replace('RUN',repr(run)).replace('ACTIVATE',repr(args.activate)),encoding='utf-8')
+'''.replace('BASE',repr(remote)).replace('HASH',repr(digest)).replace('SIZE',str(archive.stat().st_size)).replace('RUN',repr(run)).replace('ACTIVATE',repr(args.activate)).replace('REVISION',repr(args.revision)),encoding='utf-8')
 ssh('--send',str(script),remote+'.py')
 print(ssh('--sudo','--timeout','120','python3 '+remote+'.py'))
 with public_open(urllib.request.Request(expected,method='HEAD')) as response:
@@ -127,9 +129,9 @@ if release.get('differential',False):
 if args.activate:
     with public_open(config['publicBase'].rstrip('/')+'/v1/launcher') as response:
         if json.load(response)!=envelope:raise ValueError('Public launcher metadata differs')
-download=config['frpBase'].rstrip('/')+'/launcher/'+urllib.parse.quote(release['version'],safe='.-')+'/MojinDashuai-windows-x64.zip'
+download=config['frpBase'].rstrip('/')+'/launcher/'+urllib.parse.quote(release['version'],safe='.-')+('/'+args.revision if args.revision else '')+'/MojinDashuai-windows-x64.zip'
 with public_open(urllib.request.Request(download,method='HEAD')) as response:
     if response.status!=200 or int(response.headers['Content-Length'])!=archive.stat().st_size:raise ValueError('Named download unavailable')
-report={'version':release['version'],'sequence':release['sequence'],'sha256':digest,'bytes':archive.stat().st_size,'downloadUrl':download,'publicDownloadVerified':True,'differential':release.get('differential',False),'fileObjects':len({f['sha256'].lower() for f in release['files']}) if release.get('differential',False) else 0,'activated':args.activate}
+report={'version':release['version'],'sequence':release['sequence'],'sha256':digest,'bytes':archive.stat().st_size,'downloadUrl':download,'publicDownloadVerified':True,'differential':release.get('differential',False),'fileObjects':len({f['sha256'].lower() for f in release['files']}) if release.get('differential',False) else 0,'activated':args.activate,'revision':args.revision}
 (bundle/'publication.json').write_text(json.dumps(report,indent=2)+'\n',encoding='utf-8')
 print(json.dumps(report))

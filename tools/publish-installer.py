@@ -1,10 +1,12 @@
 """Publish a verified, immutable player installer through the existing download service."""
-import argparse,hashlib,json,pathlib,subprocess,sys,urllib.request,uuid
+import argparse,hashlib,json,pathlib,re,subprocess,sys,urllib.request,uuid
 
 ROOT=pathlib.Path(__file__).resolve().parents[1]
 parser=argparse.ArgumentParser(description=__doc__)
 parser.add_argument('directory',type=pathlib.Path)
+parser.add_argument('--revision',default='',help='Immutable subdirectory for a user-requested same-version rebuild')
 args=parser.parse_args();directory=args.directory.resolve()
+if args.revision and not re.fullmatch(r'[a-z0-9][a-z0-9-]{0,39}',args.revision):parser.error('Invalid revision')
 record=json.loads((directory/'installer.json').read_text(encoding='utf-8-sig'))
 version=record['version'];name=record['fileName']
 if record.get('acceptanceFixture') or name!=f'MojinDashuai-Setup-{version}-x64.exe' or any(c not in '0123456789abcdefghijklmnopqrstuvwxyz.-' for c in version):raise ValueError('Invalid public installer')
@@ -22,7 +24,7 @@ source=pathlib.Path(SOURCE);root=pathlib.Path('/vol1/mc-client-hub/public').reso
 with source.open('rb') as stream:digest=hashlib.file_digest(stream,'sha256').hexdigest()
 if digest!=SHA or source.stat().st_size!=SIZE:raise ValueError('Uploaded installer differs')
 target=root/'objects/sha256'/digest
-named=root/'launcher'/VERSION/NAME
+named=root/'launcher'/VERSION/REVISION/NAME
 for path in (target,named):
  if path.is_symlink() or not path.resolve().is_relative_to(root):raise ValueError('Unsafe public path')
  if path.exists():
@@ -34,7 +36,7 @@ if not target.exists():
 named.parent.mkdir(parents=True,exist_ok=True)
 if not named.exists():os.link(target,named)
 source.unlink();print(json.dumps({'published':True,'version':VERSION}))
-'''.replace('SOURCE',repr(remote+'.exe')).replace('SHA',repr(digest)).replace('SIZE',str(record['bytes'])).replace('VERSION',repr(version)).replace('NAME',repr(name)).replace('RUN',repr(run)),encoding='utf-8')
+'''.replace('SOURCE',repr(remote+'.exe')).replace('SHA',repr(digest)).replace('SIZE',str(record['bytes'])).replace('VERSION',repr(version)).replace('REVISION',repr(args.revision)).replace('NAME',repr(name)).replace('RUN',repr(run)),encoding='utf-8')
 def ssh(*parameters):
  result=subprocess.run([sys.executable,str(ROOT.parent/'tools/ssh124.py'),'--user','Agent2',*parameters],capture_output=True,timeout=180)
  if result.returncode:raise RuntimeError('Installer publication failed; credentials were not printed')
@@ -42,12 +44,12 @@ def ssh(*parameters):
 ssh('--send',str(source),remote+'.exe');ssh('--send',str(script),remote+'.py')
 print(ssh('--sudo','--timeout','90','python3 '+remote+'.py'))
 config=json.loads((ROOT/'packs/distributions.json').read_text(encoding='utf-8'))
-url=config['frpBase'].rstrip('/')+'/launcher/'+version+'/'+name
+url=config['frpBase'].rstrip('/')+'/launcher/'+version+('/'+args.revision if args.revision else '')+'/'+name
 # Read the actual player download back, rather than trusting a HEAD response.
 with urllib.request.urlopen(url,timeout=45) as response:
  size=0;actual=hashlib.sha256()
  while block:=response.read(1024*1024):size+=len(block);actual.update(block)
 if actual.hexdigest()!=digest or size!=record['bytes']:raise ValueError('Public installer download differs')
-record.update(downloadUrl=url,publicDownloadVerified=True,publicArchiveRoundTripVerified=True)
+record.update(downloadUrl=url,publicDownloadVerified=True,publicArchiveRoundTripVerified=True,revision=args.revision)
 (directory/'publication.json').write_text(json.dumps(record,indent=2)+'\n',encoding='utf-8')
 print(json.dumps(record))

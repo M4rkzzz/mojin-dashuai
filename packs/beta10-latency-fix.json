@@ -1,0 +1,17 @@
+{
+  "version": "0.1.2-beta.10",
+  "revision": "latency1",
+  "status": "ui-verified-packaging",
+  "requestedSameVersion": true,
+  "changes": [
+    "Stable probe lifecycle independent of changing error callback",
+    "Preserve prior latency and signal during refresh",
+    "At most one probe per instance hook",
+    "30-second visible-page refresh on lobby and details",
+    "Ignore stale results after switching servers"
+  ],
+  "uiSuitePassed": true,
+  "sameVersionAutoUpgradeFromOriginalBeta10": false,
+  "sameVersionInstallerUpgradePending": true,
+  "gameContentChanged": false
+}

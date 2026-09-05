@@ -1,6 +1,7 @@
 param(
     [Parameter(Mandatory=$true)][string]$Source,
     [string]$PreviousSource,
+    [string]$PreviousVersion='0.0.1',
     [string]$Version='0.1.2-beta.7',
     [string]$Compiler
 )
@@ -15,16 +16,16 @@ New-Item -ItemType Directory -Path $testRoot -Force | Out-Null
 $beforeProcesses=@(Get-Process -Name 'MojinDashuai.Launcher','java','javaw' -ErrorAction SilentlyContinue | Select-Object -ExpandProperty Id)
 $oldOutput=Join-Path $testRoot 'old'
 $newOutput=Join-Path $testRoot 'new'
-& (Join-Path $PSScriptRoot 'build-installer.ps1') -Version '0.0.1' -Source $PreviousSource -Output $oldOutput -Compiler $Compiler -AcceptanceFixture | Out-Null
+& (Join-Path $PSScriptRoot 'build-installer.ps1') -Version $PreviousVersion -Source $PreviousSource -Output $oldOutput -Compiler $Compiler -AcceptanceFixture | Out-Null
 & (Join-Path $PSScriptRoot 'build-installer.ps1') -Version $Version -Source $Source -Output $newOutput -Compiler $Compiler -AcceptanceFixture | Out-Null
 function Run-Quiet([string]$File,[string[]]$Extra,[string]$Log) {
     $arguments=@('/VERYSILENT','/SUPPRESSMSGBOXES','/NORESTART','/SP-',('/LOG="'+$Log+'"'))+$Extra
     $process=Start-Process -FilePath $File -ArgumentList $arguments -WindowStyle Hidden -Wait -PassThru
     if ($process.ExitCode -ne 0) { throw "Installer returned $($process.ExitCode); inspect $Log" }
 }
-Run-Quiet (Join-Path $oldOutput 'MojinDashuai-Setup-0.0.1-x64.exe') @('/TASKS=desktopicon',('/DIR="'+$installRoot+'"')) (Join-Path $testRoot 'install.log')
+Run-Quiet (Join-Path $oldOutput "MojinDashuai-Setup-$PreviousVersion-x64.exe") @('/TASKS=desktopicon',('/DIR="'+$installRoot+'"')) (Join-Path $testRoot 'install.log')
 $installed=Join-Path $installRoot 'MojinDashuai.Launcher.exe'
-if (!(Test-Path -LiteralPath $installed) -or (Get-ItemProperty $registryPath).DisplayVersion -ne '0.0.1') { throw 'Initial installation or uninstall registration missing' }
+if (!(Test-Path -LiteralPath $installed) -or (Get-ItemProperty $registryPath).DisplayVersion -ne $PreviousVersion) { throw 'Initial installation or uninstall registration missing' }
 $linkName='魔金大帅 安装测试.lnk'
 $desktopLink=Join-Path ([Environment]::GetFolderPath('Desktop')) $linkName
 $menuLink=Join-Path ([Environment]::GetFolderPath('Programs')) $linkName
