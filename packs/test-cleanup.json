@@ -27,5 +27,37 @@
   "logSummary": "D:\\project\\MCserver\\unified-client\\.local\\acceptance-baselines\\beta7-cleanup\\log-summary.json",
   "beta7PublicUpdateReport": "D:\\project\\MCserver\\unified-client\\.local\\acceptance-baselines\\beta7-cleanup\\public-update-beta7-report.json",
   "detailedDeletionResult": "D:\\project\\MCserver\\unified-client\\.local\\acceptance-baselines\\beta7-cleanup\\cleanup-result.json",
-  "completed": true
+  "completed": true,
+  "originalReportScope": "The original top-level metrics, including labCachePreserved, describe the first 43-directory cleanup only.",
+  "followUpCleanups": [
+    {
+      "requestedAction": "Delete the remaining three-server testing clients; remove the retained Cleanroom lab test copy",
+      "explicitUserRequest": true,
+      "path": "D:\\project\\MCserver\\unified-client\\.local\\lab",
+      "startedUtc": "2026-09-05T11:27:13.8112299Z",
+      "completedUtc": "2026-09-05T11:27:17.7177181Z",
+      "deletedDirectories": 1,
+      "files": 26180,
+      "logicalBytesRemoved": 1503617464,
+      "estimatedUniqueReclaimableBytes": 1503617464,
+      "freeBytesBefore": 1512717185024,
+      "freeBytesAfter": 1514270240768,
+      "observedFreeBytesIncrease": 1553055744,
+      "allProtectedPathsStillExist": true,
+      "missingProtectedPaths": [],
+      "rawLogsOrCredentialsCopied": false,
+      "original43DirectoryReportPreserved": true,
+      "completed": true,
+      "errors": []
+    }
+  ],
+  "currentState": {
+    "totalDeletedDirectories": 44,
+    "totalLogicalBytesRemoved": 31543591916,
+    "totalObservedFreeBytesIncreaseAcrossRuns": 28496564224,
+    "labTestCopyStillPresent": false,
+    "sourceCachesEnginesRuntimesAndReleaseBaselinesPreserved": true,
+    "allProtectedPathsStillExist": true,
+    "additionalGameInstanceAudit": "D:\\project\\MCserver\\unified-client\\.local\\acceptance-baselines\\beta7-cleanup\\remaining-game-instance-audit.json"
+  }
 }
