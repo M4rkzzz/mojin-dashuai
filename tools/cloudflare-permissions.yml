@@ -1,4 +1,4 @@
-name: Check Boshan launcher Cloudflare access
+name: Check Mojin launcher Cloudflare access
 on:
   workflow_dispatch:
 permissions:
@@ -13,13 +13,31 @@ jobs:
           CF_ACCOUNT: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
         run: |
           python3 - <<'PY'
-          import os,json,urllib.request,urllib.error
+          import os,json,re,urllib.request,urllib.error
           def get(path):
               req=urllib.request.Request('https://api.cloudflare.com/client/v4/'+path,headers={'Authorization':'Bearer '+os.environ['CF_TOKEN']})
               try:
-                  with urllib.request.urlopen(req) as r: data=json.load(r)
-                  return {'allowed': bool(data.get('success')), 'count':len(data['result']) if isinstance(data.get('result'),list) else None}
+                  with urllib.request.urlopen(req,timeout=30) as r: data=json.load(r)
+                  return bool(data.get('success')),data.get('result'),r.status
               except urllib.error.HTTPError as e:
-                  return {'allowed':False,'httpStatus':e.code}
-          print(json.dumps({'zone':get('zones?name=boshan.uk'),'tunnels':get('accounts/'+os.environ['CF_ACCOUNT']+'/cfd_tunnel?is_deleted=false')},indent=2))
+                  return False,None,e.code
+          def summary(result):
+              allowed,value,status=result
+              return {'allowed':allowed,'httpStatus':status,'count':len(value) if isinstance(value,list) else None}
+          account='accounts/'+os.environ['CF_ACCOUNT']
+          zones=get('zones?name=boshan.uk')
+          report={'zone':summary(zones),'tunnels':summary(get(account+'/cfd_tunnel?is_deleted=false'))}
+          if zones[0] and zones[1]:
+              report['launcherDns']=summary(get('zones/'+zones[1][0]['id']+'/dns_records?name=launcher.boshan.uk'))
+          # Inspect only this credential's metadata; never list other tokens or output a token value.
+          for label,base in [('userToken','user/tokens'),('accountToken',account+'/tokens')]:
+              verified=get(base+'/verify')
+              entry={'verify':summary(verified)}
+              if verified[0] and isinstance(verified[1],dict) and verified[1].get('id'):
+                  detail=get(base+'/'+verified[1]['id'])
+                  entry['inspect']=summary(detail)
+                  if detail[0] and isinstance(detail[1],dict):
+                      entry['permissions']=sorted({p.get('name','') for policy in detail[1].get('policies',[]) for p in policy.get('permission_groups',[]) if re.fullmatch(r'[A-Za-z0-9 :()/_-]{1,100}',p.get('name',''))})
+              report[label]=entry
+          print(json.dumps(report,indent=2))
           PY

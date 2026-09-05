@@ -2,6 +2,8 @@
 
 配置目录 `/var/apps/mc-client-hub`，持久数据 `/vol1/mc-client-hub`。使用独立 Compose，不操作生产游戏容器。
 
+下载入口的地址、端口与验证方法见 [FRP 配置](FRP.md)。
+
 ## 管理命令
 
 在 124 上进入配置目录后执行：

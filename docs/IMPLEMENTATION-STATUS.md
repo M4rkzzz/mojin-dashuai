@@ -36,6 +36,7 @@
 ## 外部配置及剩余工作
 
 - 原 cloud-mail Token 可读 Zone/Tunnel，新建 Tunnel 返回 HTTP 403。尚未创建 Tunnel 或修改 DNS；新仓库独立 `CLOUDFLARE_API_TOKEN`、`CLOUDFLARE_ACCOUNT_ID` 尚待提供。公网目标保持 `launcher.boshan.uk`。
+- 13:09 的只读权限复核确认现有 Token 有效，账号下仍无 Tunnel，`launcher.boshan.uk` 仍无 DNS 记录；读取该 Token 自身的权限元数据也返回 403，未尝试扩权。下载 FRP 的实际节点地址及分配端口等待填写，配置见 `docs/FRP.md`。
 - 本项目 Microsoft 公共客户端 ID 尚未配置。代码已接 MSAL/Xbox/Minecraft 流程，但真实正版登录和正版皮肤同步尚不能认定通过。
 - 三服内容及运行时仍需逐文件完成自动来源、分发依据与正式签名清单；不能将本地已有文件视为有权公开分发。
 - 群服皮肤的启动器上传/头像链路已实现，游戏内皮肤模组仍待逐服适配和入服验证。
