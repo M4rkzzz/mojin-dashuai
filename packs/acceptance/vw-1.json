@@ -37,12 +37,17 @@
   ],
   "fullArchiveInstallVerified": true,
   "newGameWindowOpened": true,
-  "checkedAt": "2026-09-05T15:43:35.387790+00:00",
+  "checkedAt": "2026-09-05T15:47:22.221849+00:00",
   "localVersionPrepared": true,
   "allFrozenFilesInstalledAndHashVerified": true,
   "normalExitCode": 0,
   "automaticIslandAssigned": true,
   "initialClaimedChunks": 9,
   "inventoryOpened": true,
-  "serverTps": 20
+  "serverTps": 20,
+  "playerVisualConfirmation": true,
+  "islandVisible": true,
+  "normalMovement": true,
+  "inventoryVisualConfirmation": true,
+  "playerFeedback": "都正常"
 }

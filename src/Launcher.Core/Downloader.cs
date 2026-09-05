@@ -194,6 +194,9 @@ public sealed class Downloader : IDisposable
         {
             try{return await ContentSecurity.Matches(path,file,token);}
             catch(Exception ex)when(ex is FileNotFoundException or DirectoryNotFoundException){return false;}
+            // Windows may expose the new name before an atomic move releases its
+            // delete handle. Availability is an estimate; retry on the next read.
+            catch(IOException ex)when((ex.HResult&0xffff) is 32 or 33){return false;}
         }
         if(await Published())return file.Size;
         if(!includePartial)return 0;

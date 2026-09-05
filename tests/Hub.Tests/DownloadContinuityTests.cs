@@ -231,6 +231,18 @@ public sealed class DownloadContinuityTests:IDisposable
         Assert.Equal(FileRecord.Size,await observer.Available(FileRecord));
     }
     [Fact]
+    public async Task AvailabilityToleratesBriefSharingViolationsWithoutTrustingUnverifiedBytes()
+    {
+        if(!OperatingSystem.IsWindows())return;
+        Directory.CreateDirectory(root);
+        var path=Path.Combine(root,FileRecord.Sha256);
+        await File.WriteAllBytesAsync(path,bytes);
+        using var observer=new Downloader(root,new LauncherSettings(),new Handler((request,token)=>throw new InvalidOperationException("Availability must not download.")));
+        using(var publishing=new FileStream(path,FileMode.Open,FileAccess.ReadWrite,FileShare.None))
+            Assert.Equal(0,await observer.Available(FileRecord).WaitAsync(TimeSpan.FromSeconds(1)));
+        Assert.Equal(FileRecord.Size,await observer.Available(FileRecord));
+    }
+    [Fact]
     public async Task AvailabilityCanBeReadWhilePartialObjectsAreAtomicallyPublished()
     {
         Directory.CreateDirectory(root);

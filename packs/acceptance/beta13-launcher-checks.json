@@ -38,6 +38,13 @@
   "sourceAudit": "packs/vw-source-audit.json",
   "artwork": "docs/art/skyblock-v1.png",
   "framebufferScalePatch": "packs/revisions/mb-gui-scale.json",
-  "unitTestsPassed": 212,
-  "apiIsolatedChecksPassed": 47
+  "unitTestsPassed": 213,
+  "apiIsolatedChecksPassed": 47,
+  "ci": "https://github.com/M4rkzzz/mojin-dashuai/actions/runs/33975756826",
+  "pythonDistributionTestsPassed": 44,
+  "launcherDifferentialUpdateVerified": true,
+  "launcherDifferentialDownloadBytes": 1408085,
+  "launcherDifferentialBaseline": "0.1.2-beta.12",
+  "playerConfirmedFourthServer": true,
+  "windowsCachePublicationRaceFixed": true
 }
