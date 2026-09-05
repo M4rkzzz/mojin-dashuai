@@ -74,15 +74,31 @@
       "skinIntegrationGameCheckPending": true
     },
     "mb": {
-      "state": "retesting-delayed-connection-and-skin-integration",
+      "state": "delayed-auto-join-observed-awaiting-user-visual-check",
       "javaMajor": 25,
       "account": "saved-microsoft-session",
       "gameName": "M4rkzzz",
       "joinedServer": true,
       "automaticConnectionAccepted": false,
       "manualRejoinConfirmedByUser": true,
-      "startupSeconds": 267.435,
-      "skinIntegrationGameCheckPending": true
+      "startupSeconds": 221.105,
+      "skinIntegrationGameCheckPending": true,
+      "modsLoaded": 424,
+      "automaticConnection": true,
+      "connectionAfterInitialization": true,
+      "officialSkinLookupPassed": true,
+      "groupSkinApiReached": true,
+      "groupSkinVisualConfirmed": false
     }
+  },
+  "networkCheck": {
+    "state": "running",
+    "initialCacheEmpty": true,
+    "instances": [
+      "dc2",
+      "m3e",
+      "mb"
+    ],
+    "report": ".local/network-install-20260905/network-install-report.json"
   }
 }
