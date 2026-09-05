@@ -136,7 +136,7 @@ def servers_dat(routes):
 
 
 def validate_spec(instance, spec):
-    expected = {'m3e': ('1.7.10', 'forge', 8), 'dc2': ('1.20.1', 'forge', 17), 'mb': ('1.12.2', 'cleanroom', 25)}
+    expected = {'m3e': ('1.7.10', 'forge', 8), 'dc2': ('1.20.1', 'forge', 17), 'mb': ('1.12.2', 'cleanroom', 25), 'vw': ('1.7.10', 'forge', 8)}
     if (spec['minecraft'], spec['loader'], spec['javaMajor']) != expected[instance]:
         raise ValueError('Instance loader/runtime policy violation')
     if instance == 'mb' and spec['format'] != 'multimc-packwiz':
