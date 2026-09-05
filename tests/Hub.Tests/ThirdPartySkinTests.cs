@@ -85,6 +85,34 @@ public sealed class ThirdPartySkinTests:IDisposable
     }
 
     [Fact]
+    public async Task HdSkinSurvivesDownloadCacheAndRefresh()
+    {
+        var cache=new SkinTextureCache(root);
+        using var http=new HttpClient(new Handler(request=>request.RequestUri!.AbsolutePath.EndsWith(".json")?Response("{\"skins\":{\"default\":\""+Hash+"\"}}"):Response(Png(1024,512))));
+        var skins=new ThirdPartySkins(http,cache);
+        var result=await skins.LoadLittleSkin("Steve",refresh:true);
+        Assert.Equal("ready",result.Status);Assert.NotNull(result.Texture);Assert.Null(result.Message);
+        Assert.Equal(1024u,BinaryPrimitives.ReadUInt32BigEndian(Convert.FromBase64String(result.Texture.PngBase64).AsSpan(16)));
+        Assert.Equal(result.Texture,new SkinTextureCache(root).Cached("littleskin:steve"));
+        Assert.Equal(result.Texture,(await skins.LoadLittleSkin("Steve",refresh:true)).Texture);
+    }
+
+    [Fact]
+    public async Task MissingAndFailedRequestsAreVisibleAndNeverUseAccountCache()
+    {
+        var cache=new SkinTextureCache(root);cache.Store("account:microsoft:steve",new(Convert.ToBase64String(Png()),"classic"));
+        using var missing=new HttpClient(new Handler(_=>new HttpResponseMessage(HttpStatusCode.NotFound)));
+        var result=await new ThirdPartySkins(missing,cache).LoadLittleSkin("Steve",refresh:true);
+        Assert.Equal("missing",result.Status);Assert.Null(result.Texture);Assert.Contains("Steve",result.Message);
+        using var offline=new HttpClient(new Handler(_=>throw new HttpRequestException("offline")));
+        result=await new ThirdPartySkins(offline,cache).LoadLittleSkin("Steve",refresh:true);
+        Assert.Equal("error",result.Status);Assert.Null(result.Texture);Assert.NotEmpty(result.Message!);
+        cache.Store("littleskin:steve",new(Convert.ToBase64String(Png(128,64)),"classic"));
+        result=await new ThirdPartySkins(offline,cache).LoadLittleSkin("Steve",refresh:true);
+        Assert.Equal("cached",result.Status);Assert.Equal(cache.Cached("littleskin:steve"),result.Texture);Assert.Contains("此来源",result.Message);
+    }
+
+    [Fact]
     public void InstanceConfigurationPreservesCustomEntriesAndSettingsAndBacksUpChanges()
     {
         var configPath=Path.Combine(root,"CustomSkinLoader","CustomSkinLoader.json");Directory.CreateDirectory(Path.GetDirectoryName(configPath)!);
@@ -121,12 +149,12 @@ public sealed class ThirdPartySkinTests:IDisposable
     {
         protected override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request,CancellationToken token)=>Task.FromResult(respond(request));
     }
-    private static byte[] Png()
+    private static byte[] Png(int width=64,int height=64)
     {
         using var output=new MemoryStream();output.Write(new byte[]{137,80,78,71,13,10,26,10});
-        var header=new byte[13];BinaryPrimitives.WriteUInt32BigEndian(header,64);BinaryPrimitives.WriteInt32BigEndian(header.AsSpan(4),64);header[8]=8;header[9]=6;
+        var header=new byte[13];BinaryPrimitives.WriteInt32BigEndian(header,width);BinaryPrimitives.WriteInt32BigEndian(header.AsSpan(4),height);header[8]=8;header[9]=6;
         WriteChunk(output,"IHDR",header);
-        using var pixels=new MemoryStream();using(var compressor=new ZLibStream(pixels,CompressionLevel.Fastest,true))compressor.Write(new byte[64*257]);
+        using var pixels=new MemoryStream();using(var compressor=new ZLibStream(pixels,CompressionLevel.Fastest,true))compressor.Write(new byte[height*(width*4+1)]);
         WriteChunk(output,"IDAT",pixels.ToArray());WriteChunk(output,"IEND",[]);return output.ToArray();
     }
     private static void WriteChunk(Stream stream,string name,byte[] data)

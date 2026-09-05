@@ -128,10 +128,10 @@ dialog{border-color:#454545;color:#f2f2f2}dialog::backdrop{background:#000b}.ski
 .network-test{margin:16px 0}.network-test>.secondary{display:inline-flex;gap:8px;align-items:center}.network-results{display:grid;gap:12px;margin-top:16px}.network-result{border:1px solid #454545;background:#141414;padding:14px}.network-result>div:first-child{display:flex;justify-content:space-between;gap:16px;margin-bottom:8px}.network-result>span{font-size:13px;color:#ddd;overflow-wrap:anywhere}.network-ok{color:#a3d3a2}.network-failed{color:#efa697}.network-result .network-diagnostic{margin-top:8px}
 .maintenance-row{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:18px;padding:24px 0;border-bottom:1px solid #242424}.maintenance-row>div:first-child{min-width:0}.maintenance-control{display:flex;align-items:center;justify-content:flex-end;gap:12px;flex-wrap:wrap;max-width:100%}.maintenance-control .secondary{display:inline-flex;align-items:center;gap:8px;min-width:104px;justify-content:center}.maintenance-control .secondary:disabled{cursor:not-allowed}.action-reason{color:#bbb;font-size:13px}.content-directory{flex:1}.content-directory input{flex:1;min-width:180px;max-width:520px}.import-scope{display:flex;flex-wrap:wrap;gap:8px 16px;margin-top:13px;color:#d4d4d4;font-size:13px}.maintenance-progress{flex-basis:100%;max-width:620px;padding:18px;border:1px solid #333;background:#111}.maintenance-progress .download-progress{margin-top:0}.maintenance-progress .download-actions{max-width:300px}.maintenance-result,.repair-result{display:flex;align-items:center;gap:9px;color:#d3e8bf;font-size:14px;margin:12px 0 0;line-height:1.6}.repair-result{flex-basis:100%;padding:16px;background:#111;border-left:2px solid #b9d69c}.repair-result svg,.maintenance-result svg{flex-shrink:0}@media(max-width:900px){.maintenance-row{align-items:flex-start}.maintenance-control{justify-content:flex-start}.content-directory{flex-basis:100%}.maintenance-progress{max-width:100%}}
 /* The update action shares the native title bar, including the login screen. */
-.window-chrome .window-update{width:104px;height:26px;margin:5px 6px 5px 0;display:flex;justify-content:center;gap:7px;border:1px solid #404740;border-radius:3px;background:#1a1e1a;font-size:12px;font-weight:500;letter-spacing:0;color:#e3e8e0}
-.window-chrome .window-update:hover{color:#fff;background:#2a302a;border-color:#6b756b}
-.window-chrome .window-update.available{color:#92d6a2;border-color:#56725b;background:#19251c}
-.window-chrome .window-update.available:hover{color:#b7edc3;background:#25392a}
+.window-chrome .window-update{width:auto;height:26px;padding:0 12px;margin:5px 6px 5px 0;display:flex;justify-content:center;border:0;border-radius:0;background:transparent;font-size:12px;font-weight:500;letter-spacing:0;color:#e3e8e0}
+.window-chrome .window-update:hover{color:#fff;background:transparent;text-decoration:underline;text-underline-offset:4px}
+.window-chrome .window-update.available{color:#92d6a2;background:transparent}
+.window-chrome .window-update.available:hover{color:#b7edc3;background:transparent}
 .window-update-panel{position:fixed;top:42px;right:138px;z-index:100;width:360px;max-width:calc(100vw - 32px);padding:22px;background:#141614;border:1px solid #353a35;box-shadow:0 12px 32px #0009;-webkit-app-region:no-drag}
 .window-update-panel:focus{outline:none}
 .window-update-panel .launcher-update{margin:0;border:0}
@@ -153,6 +153,10 @@ dialog{border-color:#454545;color:#f2f2f2}dialog::backdrop{background:#000b}.ski
 .launcher-version b{margin-left:9px;color:#f1f3ef;font-weight:500}
 
 /* Four worlds stay visible as landscape cards at desktop window sizes. */
+.page-lobby .main-top{padding:24px 0 0}
+.page-lobby .lobby-heading{margin:18px 0 22px}
+.page-lobby .lobby-heading h1{margin:0}
+.skin-feedback{font-size:14px;line-height:1.6;color:#ded7b9;margin:14px 0 0}
 .world-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:20px;padding-bottom:28px}
 .world-card{height:clamp(250px,calc((100dvh - 275px)/2),320px);min-height:0}.world-card>img{object-position:65% center}
 .world-card .card-content{left:24px;right:24px}.world-card .card-shade{background:linear-gradient(0deg,#080b0ef0,transparent 85%),linear-gradient(90deg,#080b0e55,transparent)}

@@ -8,23 +8,28 @@ using Boshan.Shared;
 
 namespace Boshan.Launcher;
 
+public sealed record SkinLoadResult(SkinTexture? Texture,string Status,string? Message=null);
+
 /// <summary>Public skin textures only; this transport never receives account credentials.</summary>
 public sealed class ThirdPartySkins(HttpClient http,SkinTextureCache cache)
 {
     public const string LittleSkinRoot="https://littleskin.cn/csl/";
-    public Task<SkinTexture?> LittleSkin(string gameName,bool refresh=false,CancellationToken token=default)
+    public async Task<SkinTexture?> LittleSkin(string gameName,bool refresh=false,CancellationToken token=default)
+        => (await LoadLittleSkin(gameName,refresh,token)).Texture;
+    public async Task<SkinLoadResult> LoadLittleSkin(string gameName,bool refresh=false,CancellationToken token=default)
     {
-        if(!Regex.IsMatch(gameName,"^[A-Za-z0-9_]{1,16}$"))return Task.FromResult<SkinTexture?>(null);
-        return cache.Get("littleskin:"+gameName.ToLowerInvariant(),async cancellation=>
+        if(!Regex.IsMatch(gameName,"^[A-Za-z0-9_]{1,16}$"))return new(null,"missing","游戏名无法用于查询 LittleSkin 角色。");
+        var result=await cache.Load("littleskin:"+gameName.ToLowerInvariant(),async cancellation=>
         {
             var metadata=await Read(new Uri(LittleSkinRoot+Uri.EscapeDataString(gameName)+".json"),32*1024,cancellation);
             if(metadata is null)return null;
             using var document=JsonDocument.Parse(metadata);
             var reference=TextureReference(document.RootElement);
             if(reference is null)return null;
-            var bytes=await Read(reference.Value.Address,SkinImage.MaxBytes,cancellation);
-            return bytes is null?null:new SkinTexture(Convert.ToBase64String(SkinImage.Normalize(bytes)),reference.Value.Model);
+            var bytes=await Read(reference.Value.Address,SkinImage.MaxTextureBytes,cancellation);
+            return bytes is null?null:new SkinTexture(Convert.ToBase64String(SkinImage.NormalizeTexture(bytes)),reference.Value.Model);
         },refresh,token);
+        return result.Status=="missing"?result with {Message=$"未找到 {gameName} 的 LittleSkin 皮肤，请检查同名角色是否已设置皮肤。"}:result;
     }
 
     public static (Uri Address,string Model)? TextureReference(JsonElement profile)
@@ -131,24 +136,30 @@ public sealed class SkinTextureCache(string root)
     private sealed record Entry(SkinTexture Texture,DateTimeOffset UpdatedAt);
     public SkinTexture? Cached(string key)=>Read(key)?.Texture;
     public async Task<SkinTexture?> Get(string key,Func<CancellationToken,Task<SkinTexture?>> fetch,bool refresh=false,CancellationToken token=default)
+        => (await Load(key,fetch,refresh,token)).Texture;
+    public async Task<SkinLoadResult> Load(string key,Func<CancellationToken,Task<SkinTexture?>> fetch,bool refresh=false,CancellationToken token=default)
     {
         var cached=Read(key);
-        if(!refresh&&cached?.UpdatedAt>=DateTimeOffset.UtcNow.AddMinutes(-10))return cached.Texture;
+        if(!refresh&&cached?.UpdatedAt>=DateTimeOffset.UtcNow.AddMinutes(-10))return new(cached.Texture,"ready");
         try
         {
             using var deadline=CancellationTokenSource.CreateLinkedTokenSource(token);
             deadline.CancelAfter(TimeSpan.FromSeconds(5));
             var texture=await fetch(deadline.Token);
-            if(texture is null){Forget(key);return null;}
-            texture=SkinImage.Normalize(texture);Store(key,texture);return texture;
+            if(texture is null){Forget(key);return new(null,"missing","尚未设置皮肤。");}
+            texture=SkinImage.NormalizeTexture(texture);Store(key,texture);return new(texture,"ready");
         }
-        catch(Exception ex)when(NetworkPolicy.IsNetwork(ex)||ex is OperationCanceledException or IOException or InvalidDataException or UnauthorizedAccessException or JsonException or InvalidOperationException or FormatException){return cached?.Texture;}
+        catch(Exception ex)when(NetworkPolicy.IsNetwork(ex)||ex is OperationCanceledException or IOException or InvalidDataException or UnauthorizedAccessException or JsonException or InvalidOperationException or FormatException)
+        {
+            var reason=ex is OperationCanceledException?"皮肤请求超时":NetworkPolicy.IsNetwork(ex)?"皮肤网络请求失败":ex is InvalidDataException or JsonException or FormatException?"皮肤数据格式不受支持":"皮肤读取失败";
+            return new(cached?.Texture,cached is null?"error":"cached",reason+(cached is null?"，请稍后刷新。":"，正在显示此来源上次获取的皮肤。"));
+        }
     }
     public void Store(string key,SkinTexture texture)
     {
         try
         {
-            texture=SkinImage.Normalize(texture);Directory.CreateDirectory(root);var path=PathFor(key);var temporary=path+"."+Guid.NewGuid().ToString("N")+".tmp";
+            texture=SkinImage.NormalizeTexture(texture);Directory.CreateDirectory(root);var path=PathFor(key);var temporary=path+"."+Guid.NewGuid().ToString("N")+".tmp";
             try{File.WriteAllText(temporary,JsonSerializer.Serialize(new Entry(texture,DateTimeOffset.UtcNow),Json.Options));File.Move(temporary,path,true);}
             finally{if(File.Exists(temporary))File.Delete(temporary);}
         }
@@ -163,9 +174,9 @@ public sealed class SkinTextureCache(string root)
     {
         try
         {
-            var path=PathFor(key);if(!File.Exists(path)||new FileInfo(path).Length>SkinImage.MaxBytes*2)return null;
+            var path=PathFor(key);if(!File.Exists(path)||new FileInfo(path).Length>SkinImage.MaxTextureBytes*2)return null;
             var result=JsonSerializer.Deserialize<Entry>(File.ReadAllText(path),Json.Options);
-            return result?.Texture is null?null:result with {Texture=SkinImage.Normalize(result.Texture)};
+            return result?.Texture is null?null:result with {Texture=SkinImage.NormalizeTexture(result.Texture)};
         }
         catch(Exception ex)when(ex is IOException or InvalidDataException or UnauthorizedAccessException or JsonException or FormatException){return null;}
     }

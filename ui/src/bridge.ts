@@ -1,5 +1,6 @@
 export type Profile = { id: string; loginName: string; gameName: string; kind?: 'microsoft' | 'hub' };
 export type SkinTexture = {pngBase64:string;model:'classic'|'slim'};
+export type SkinLoadResult = {texture:SkinTexture|null;status:'ready'|'missing'|'cached'|'error';message?:string|null};
 export type MicrosoftCode = {userCode:string;verificationUrl:string;expiresAt:string};
 export type Progress = { instance: string; phase: string; completed: number; total: number; bytesPerSecond: number; paused?: boolean };
 export type ContentUpdate = {version:string;sequence:number};

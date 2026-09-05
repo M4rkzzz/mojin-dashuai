@@ -39,7 +39,7 @@ try{
   await expect(notice).toHaveCSS('color','rgb(146, 214, 162)');
   await expect(notice).toHaveCSS('-webkit-app-region','no-drag');
   const button=await notice.boundingBox(),minimize=await page.getByRole('button',{name:'最小化',exact:true}).boundingBox();
-  expect(minimize.x-button.x-button.width).toBeGreaterThanOrEqual(0);expect(minimize.x-button.x-button.width).toBeLessThanOrEqual(8);await expect(notice).toHaveCSS('border-top-style','solid');
+  expect(minimize.x-button.x-button.width).toBeGreaterThanOrEqual(0);expect(minimize.x-button.x-button.width).toBeLessThanOrEqual(8);await expect(notice).toHaveCSS('border-top-style','none');
   await notice.click();
   const popover=page.getByRole('dialog',{name:'启动器更新'});
   await expect(popover.getByRole('alert')).toHaveText('下载超时，请重试。');

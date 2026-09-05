@@ -38,13 +38,38 @@ public sealed class SkinTests
     [Fact] public void PreservesSlimModel()=>Assert.Equal("slim",SkinImage.Normalize(new SkinTexture(Convert.ToBase64String(Png(64)),"slim")).Model);
     [Fact] public void RejectsMalformedBase64()=>Assert.Throws<InvalidDataException>(()=>SkinImage.Normalize(new SkinTexture("not base64","classic")));
 
-    private static byte[] Png(int height,int? rawSize=null,byte filter=0,string? metadata=null)
+    [Theory]
+    [InlineData(128,128)]
+    [InlineData(1024,512)]
+    [InlineData(1024,1024)]
+    [InlineData(2048,2048)]
+    public void PublicTexturesPreserveHdPixelsWhileAccountUploadsKeepTheirLimits(int width,int height)
+    {
+        var input=Png(height,width:width);
+        var normalized=SkinImage.NormalizeTexture(input);
+        Assert.Equal((uint)width,BinaryPrimitives.ReadUInt32BigEndian(normalized.AsSpan(16)));
+        Assert.Equal((uint)height,BinaryPrimitives.ReadUInt32BigEndian(normalized.AsSpan(20)));
+        Assert.Equal(normalized,SkinImage.NormalizeTexture(normalized));
+        Assert.Throws<InvalidDataException>(()=>SkinImage.Normalize(input));
+    }
+    [Theory]
+    [InlineData(96,48)]
+    [InlineData(1024,256)]
+    [InlineData(4096,2048)]
+    [InlineData(32,32)]
+    public void PublicTexturesRejectUnsupportedDimensions(int width,int height)
+        => Assert.Throws<InvalidDataException>(()=>SkinImage.NormalizeTexture(Png(height,width:width)));
+
+    [Fact] public void HdTexturesRejectInflationBeyondDeclaredPixels()
+        => Assert.Throws<InvalidDataException>(()=>SkinImage.NormalizeTexture(Png(128,width:128,rawSize:128*513+1)));
+
+    private static byte[] Png(int height,int? rawSize=null,byte filter=0,string? metadata=null,int width=64)
     {
         using var output=new MemoryStream();output.Write(new byte[]{137,80,78,71,13,10,26,10});
-        var header=new byte[13];BinaryPrimitives.WriteUInt32BigEndian(header,64);BinaryPrimitives.WriteInt32BigEndian(header.AsSpan(4),height);header[8]=8;header[9]=6;
+        var header=new byte[13];BinaryPrimitives.WriteInt32BigEndian(header,width);BinaryPrimitives.WriteInt32BigEndian(header.AsSpan(4),height);header[8]=8;header[9]=6;
         WriteChunk(output,"IHDR",header);
         if(metadata is not null)WriteChunk(output,metadata,Encoding.ASCII.GetBytes("private-metadata"));
-        var raw=new byte[rawSize??Math.Min(height,64)*257];raw[0]=filter;
+        var raw=new byte[rawSize??Math.Min(height,2048)*(Math.Min(width,2048)*4+1)];raw[0]=filter;
         using var pixels=new MemoryStream();using(var compressor=new ZLibStream(pixels,CompressionLevel.Fastest,true))compressor.Write(raw);
         WriteChunk(output,"IDAT",pixels.ToArray());WriteChunk(output,"IEND",[]);return output.ToArray();
     }

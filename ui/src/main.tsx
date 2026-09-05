@@ -1,8 +1,9 @@
 import React, {useEffect, useRef, useState} from 'react';
 import {createRoot} from 'react-dom/client';
 import {ArrowUpRight, ArrowLeft, ArrowRight, Check, ChevronRight, UsersRound, Download, FolderOpen, Gamepad2, Globe2, HardDrive, LogOut, Minus, MoreHorizontal, Pause, Play, Radio, RefreshCw, Settings2, ShieldCheck, Square, UserRound, Volume2, Wifi, X, Copy} from 'lucide-react';
-import {defaultSettings, invoke, isNative, subscribe, type Profile, type Progress, type Settings, type SkinTexture, type MicrosoftCode, type NetworkDiagnostic, type BridgeError, type ContentUpdate, type InstanceStatus} from './bridge';
+import {defaultSettings, invoke, isNative, subscribe, type Profile, type Progress, type Settings, type MicrosoftCode, type NetworkDiagnostic, type BridgeError, type ContentUpdate, type InstanceStatus} from './bridge';
 import {SkinAvatar} from './SkinAvatar';
+import {useSkinPreview} from './useSkinPreview';
 import {StorageSetup} from './StorageSetup';
 import {MicrosoftSignIn} from './MicrosoftSignIn';
 import {LauncherUpdatePanel,LauncherUpdateNotice,LauncherUpdateProvider} from './LauncherUpdatePanel';
@@ -40,8 +41,9 @@ function App(){
  const [microsoftPending,setMicrosoftPending]=useState(false),[microsoftCode,setMicrosoftCode]=useState<MicrosoftCode|null>(null);
  const [microsoftMode,setMicrosoftMode]=useState<'window'|'device-code'|null>(null);
  useEffect(()=>subscribe(d=>{if(d.event==='microsoft-code')setMicrosoftCode(d.data);if(d.event==='microsoft-mode')setMicrosoftMode(d.data);}),[]);
- const [skin,setSkin]=useState<SkinTexture|null>(null),[skinOpen,setSkinOpen]=useState(false),[skinModel,setSkinModel]=useState<'classic'|'slim'>('classic');
- useEffect(()=>{let disposed=false;setSkin(null);if(profile&&isNative)invoke<SkinTexture|null>('account.avatar').then(value=>{if(!disposed){setSkin(value);setSkinModel(value?.model||'classic');}}).catch(()=>{});return()=>{disposed=true;};},[profile?.id,profile?.kind,settings.skinSource]);
+ const [skinOpen,setSkinOpen]=useState(false),[skinModel,setSkinModel]=useState<'classic'|'slim'>('classic');
+ const {skin,message:skinMessage,loading:skinLoading,refresh:refreshSkin,setTexture:setSkin}=useSkinPreview(profile,settings.skinSource);
+ useEffect(()=>setSkinModel(skin?.model||'classic'),[skin]);
  function openSkin(){if(!profile){setPage('login');return;}setSkinOpen(true);}
  useEffect(()=>subscribe(d=>{if(d.event==='window-state')setMaximized(d.data.maximized);}),[]);
  function fail(error:unknown){const e=error as BridgeError;setError(e.message||String(error));setDiagnostic(e.diagnostic||null);}
@@ -93,7 +95,16 @@ function App(){
   </main></div>}
   {error&&<ErrorToast message={error} diagnostic={diagnostic} close={()=>setError('')}/>}
   {notice&&<div className="toast" role="status"><Check size={20}/><span>{notice}</span><button aria-label="关闭提示" onClick={()=>setNotice('')}><X size={17}/></button></div>}
-  {skinOpen&&<Modal title="皮肤" close={()=>setSkinOpen(false)}><div className="skin-preview"><SkinAvatar skin={skin} name={profile?.gameName||''} large/></div><label>皮肤来源<select value={settings.skinSource} disabled={busy} onChange={e=>{const source=e.target.value as Settings['skinSource'];act(async()=>{const texture=await invoke<SkinTexture|null>('account.skin.source',{source});setSettings(previous=>({...previous,skinSource:source}));setSkin(texture);});}}><option value="account">账号皮肤</option><option value="littleskin">LittleSkin</option></select></label>{settings.skinSource==='littleskin'&&<button className="secondary wide skin-refresh" onClick={()=>invoke('account.skin.open')}>打开 LittleSkin <ArrowUpRight size={15}/></button>}{settings.skinSource==='account'&&profile?.kind!=='microsoft'&&<label>模型<select value={skinModel} onChange={e=>setSkinModel(e.target.value as 'classic'|'slim')}><option value="classic">标准</option><option value="slim">纤细</option></select></label>}<button className="primary wide skin-refresh" disabled={busy||settings.skinSource!=='account'} onClick={()=>act(async()=>{const result=await invoke('account.skin',{model:skinModel});if(result?.pngBase64){setSkin(result);setNotice('皮肤已更新');}else if(result?.message)setNotice(result.message);})}>{profile?.kind==='microsoft'?'管理正版皮肤':'选择皮肤'}</button>{<button className="secondary wide skin-refresh" disabled={busy} onClick={()=>act(async()=>{setSkin(await invoke('account.avatar',{refresh:true}));})}><RefreshCw size={15}/>刷新皮肤</button>}</Modal>}
+  {skinOpen&&<Modal title="皮肤" close={()=>setSkinOpen(false)}>
+   <div className="skin-preview" aria-busy={skinLoading}><SkinAvatar skin={skin} name={profile?.gameName||''} large/></div>
+   <label>皮肤来源<select value={settings.skinSource} disabled={busy} onChange={e=>{const source=e.target.value as Settings['skinSource'];act(async()=>{await invoke('account.skin.source',{source});setSettings(previous=>({...previous,skinSource:source}));});}}><option value="account">账号皮肤</option><option value="littleskin">LittleSkin</option></select></label>
+   {(skinLoading||skinMessage)&&<p className="skin-feedback" role="status">{skinLoading?'正在加载皮肤':skinMessage}</p>}
+   {settings.skinSource==='littleskin'?<button className="secondary wide skin-refresh" onClick={()=>act(()=>invoke('account.skin.open'))}>打开 LittleSkin <ArrowUpRight size={15}/></button>:<>
+    {profile?.kind!=='microsoft'&&<label>模型<select value={skinModel} onChange={e=>setSkinModel(e.target.value as 'classic'|'slim')}><option value="classic">标准</option><option value="slim">纤细</option></select></label>}
+    <button className="primary wide skin-refresh" disabled={busy||skinLoading} onClick={()=>act(async()=>{const result=await invoke('account.skin',{model:skinModel});if(result?.pngBase64){setSkin(result);setNotice('皮肤已更新');}else if(result?.message)setNotice(result.message);})}>{profile?.kind==='microsoft'?'管理正版皮肤':'选择皮肤'}</button>
+   </>}
+   <button className="secondary wide skin-refresh" disabled={busy||skinLoading} onClick={refreshSkin}><RefreshCw size={15}/>刷新皮肤</button>
+  </Modal>}
   {recovery&&<Modal title="恢复码" close={()=>setRecovery('')}><p>忘记密码时，这是找回账号的凭据。请保存在安全的位置；每个恢复码只能使用一次。</p><code className="recovery-code">{recovery}</code><button className="primary wide" onClick={()=>setRecovery('')}>我已安全保存 <Check size={17}/></button></Modal>}
  </div>;
 }

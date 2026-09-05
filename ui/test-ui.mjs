@@ -21,6 +21,7 @@ try {
   await check('routes-check.mjs');
   await check('tools-check.mjs');
   await check('avatar-check.mjs');
+  await check('skin-source-check.mjs');
   await check('storage-check.mjs');
   await check('microsoft-check.mjs');
   await check('update-check.mjs');

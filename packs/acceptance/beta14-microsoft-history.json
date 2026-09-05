@@ -1,0 +1,15 @@
+{
+  "liveMicrosoftLoginVerified": true,
+  "encryptedSessionRestored": true,
+  "silentAuthenticationPassed": true,
+  "gameSessionVerified": true,
+  "skinDownloaded": true,
+  "interactiveWindowOpened": false,
+  "gameWindowsOpened": 0,
+  "authorization": "existing encrypted Microsoft authorization",
+  "checkedAt": "2026-09-05T16:27:59.281852+00:00",
+  "authFingerprint": "511242f4c9b373af4a8415bcb4db8ae675ae4739ac84b8d8c684caa92ed6c172",
+  "provider": "cmllib-windows",
+  "interactiveAuthorizationReusedFrom": "2026-09-05T06:16:33.700548+00:00",
+  "validation": "Fresh silent authentication, DPAPI restore, ownership and skin checks passed for beta14 authentication dependencies. No window opened."
+}

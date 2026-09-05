@@ -114,16 +114,17 @@ public sealed class Accounts
     private void Store(AccountSession value){vault.Write("account",value with {RecoveryCode=null});Current=value;}
     private readonly SkinTextureCache skinCache=new(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),"Boshan","Launcher","skin-cache"));
     public async Task<SkinTexture?> Skin(string source="account",bool refresh=false)
+        => (await SkinPreview(source,refresh))?.Texture;
+    public async Task<SkinLoadResult?> SkinPreview(string source="account",bool refresh=false)
     {
         var current=Current;if(current is null)return null;
         if(source is not ("account" or "littleskin"))throw new InvalidDataException("皮肤来源无效。");
         if(source=="littleskin")
         {
             using var http=new HttpClient(NetworkPolicy.Handler(allowRedirect:false)){Timeout=TimeSpan.FromSeconds(5)};
-            var texture=await new ThirdPartySkins(http,skinCache).LittleSkin(current.Profile.GameName,refresh);
-            if(texture is not null)return texture;
+            return await new ThirdPartySkins(http,skinCache).LoadLittleSkin(current.Profile.GameName,refresh);
         }
-        return await skinCache.Get("account:"+current.Profile.Kind+":"+current.Profile.Id,token=>AccountSkin(current,token),refresh);
+        return await skinCache.Load("account:"+current.Profile.Kind+":"+current.Profile.Id,token=>AccountSkin(current,token),refresh);
     }
     private async Task<SkinTexture?> AccountSkin(AccountSession current,CancellationToken token)
     {

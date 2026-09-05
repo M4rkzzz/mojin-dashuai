@@ -275,11 +275,12 @@ public partial class MainWindow : Window
             case "account.password":return await AccountDialog(false);
             case "account.recovery":return await AccountDialog(true);
             case "account.avatar":return await accounts.Skin(settings.SkinSource,args.TryGetProperty("refresh",out var refreshSkin)&&refreshSkin.GetBoolean());
+            case "account.skin.preview":return await accounts.SkinPreview(settings.SkinSource,args.TryGetProperty("refresh",out var refreshPreview)&&refreshPreview.GetBoolean());
             case "account.skin.source":
                 var source=args.GetProperty("source").GetString();
                 if(source is not ("account" or "littleskin"))throw new InvalidDataException("不支持的皮肤来源。");
                 settings.SkinSource=source;Json.Write(Path.Combine(appData,"settings.json"),settings);
-                return await accounts.Skin(settings.SkinSource,refresh:true);
+                return null;
             case "account.skin.open":
                 Process.Start(new ProcessStartInfo("https://littleskin.cn/user"){UseShellExecute=true});return null;
             case "account.skin":return await SkinDialog(args);

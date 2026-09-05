@@ -9,23 +9,30 @@ public sealed record SkinTexture(string PngBase64, string Model);
 public static class SkinImage
 {
     public const int MaxBytes = 128 * 1024;
+    public const int MaxTextureBytes = 2 * 1024 * 1024;
+    public const int MaxTextureDimension = 2048;
     private static readonly byte[] Signature = [137,80,78,71,13,10,26,10];
 
-    public static SkinTexture Normalize(SkinTexture texture)
+    public static SkinTexture Normalize(SkinTexture texture) => Normalize(texture, false);
+    // Public skin sites also serve HD textures; account uploads retain their original limits.
+    public static SkinTexture NormalizeTexture(SkinTexture texture) => Normalize(texture, true);
+    private static SkinTexture Normalize(SkinTexture texture, bool hd)
     {
         if (texture.Model is not ("classic" or "slim")) throw new InvalidDataException("请选择标准或纤细模型。");
         if (string.IsNullOrWhiteSpace(texture.PngBase64)) throw new InvalidDataException("皮肤文件无效。");
-        if (texture.PngBase64.Length > (MaxBytes + 2) / 3 * 4) throw new InvalidDataException("皮肤文件过大。");
+        if (texture.PngBase64.Length > ((hd ? MaxTextureBytes : MaxBytes) + 2) / 3 * 4) throw new InvalidDataException("皮肤文件过大。");
         byte[] input;
         try { input = Convert.FromBase64String(texture.PngBase64); }
         catch (FormatException) { throw new InvalidDataException("皮肤文件无效。"); }
-        return new(Convert.ToBase64String(Normalize(input)), texture.Model);
+        return new(Convert.ToBase64String(Normalize(input, hd)), texture.Model);
     }
 
-    public static byte[] Normalize(byte[] input)
+    public static byte[] Normalize(byte[] input) => Normalize(input, false);
+    public static byte[] NormalizeTexture(byte[] input) => Normalize(input, true);
+    private static byte[] Normalize(byte[] input, bool hd)
     {
-        void Invalid() => throw new InvalidDataException("请选择 64×64 或 64×32 的 PNG 皮肤。");
-        if (input.Length < 45 || input.Length > MaxBytes || !input.AsSpan(0,8).SequenceEqual(Signature)) Invalid();
+        void Invalid() => throw new InvalidDataException(hd ? "皮肤 PNG 格式或尺寸不受支持。" : "请选择 64×64 或 64×32 的 PNG 皮肤。");
+        if (input.Length < 45 || input.Length > (hd ? MaxTextureBytes : MaxBytes) || !input.AsSpan(0,8).SequenceEqual(Signature)) Invalid();
         byte[]? header = null;
         using var compressed = new MemoryStream();
         var offset = 8;
@@ -45,7 +52,8 @@ public static class SkinImage
                 header = data.ToArray();
                 var width = BinaryPrimitives.ReadUInt32BigEndian(header);
                 var height = BinaryPrimitives.ReadUInt32BigEndian(header.AsSpan(4));
-                if (width != 64 || height is not (32 or 64) || header[8] != 8 || header[9] is not (2 or 6) || header[10] != 0 || header[11] != 0 || header[12] != 0) Invalid();
+                var validSize = hd ? width >= 64 && width <= MaxTextureDimension && (width & (width - 1)) == 0 && (height == width || height == width / 2) : width == 64 && height is 32 or 64;
+                if (!validSize || header[8] != 8 || header[9] is not (2 or 6) || header[10] != 0 || header[11] != 0 || header[12] != 0) Invalid();
             }
             else if (type == "IDAT") compressed.Write(data);
             else if (type == "IEND")
@@ -57,7 +65,7 @@ public static class SkinImage
             offset += size + 12;
         }
         if (!ended || header is null || compressed.Length == 0) Invalid();
-        var row = 64 * (header![9] == 6 ? 4 : 3) + 1;
+        var row = (int)BinaryPrimitives.ReadUInt32BigEndian(header!) * (header![9] == 6 ? 4 : 3) + 1;
         var raw = new byte[row * (int)BinaryPrimitives.ReadUInt32BigEndian(header.AsSpan(4))];
         compressed.Position = 0;
         try

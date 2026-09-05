@@ -23,14 +23,16 @@ export function SkinAvatar({skin,name,large=false}:{skin:SkinTexture|null;name:s
     if(!skin)return;
     const image=new Image();
     image.onload=()=>{
-      if(cancelled||image.width!==64||![32,64].includes(image.height))return;
+      if(cancelled||image.width<64||image.width>2048||(image.width&(image.width-1))!==0||![image.width/2,image.width].includes(image.height))return;
       context.clearRect(0,0,16,20);
-      const slim=skin.model==='slim'&&image.height===64;
+      const scale=image.width/64;
+      const modern=image.height===image.width;
+      const slim=skin.model==='slim'&&modern;
       const arm=slim?3:4;
-      const draw=(sx:number,sy:number,w:number,h:number,x:number,y:number,dw=w,dh=h)=>context.drawImage(image,sx,sy,w,h,x,y,dw,dh);
+      const draw=(sx:number,sy:number,w:number,h:number,x:number,y:number,dw=w,dh=h)=>context.drawImage(image,sx*scale,sy*scale,w*scale,h*scale,x,y,dw,dh);
       draw(20,20,8,12,4,8);
       draw(44,20,arm,12,4-arm,8);
-      if(image.height===64) {
+      if(modern) {
         draw(36,52,arm,12,12,8);
         draw(20,36,8,12,4,8);
         draw(44,36,arm,12,4-arm,8);

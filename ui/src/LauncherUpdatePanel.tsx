@@ -43,7 +43,7 @@ export function LauncherUpdateNotice(){
   return()=>{document.removeEventListener('keydown',key);document.removeEventListener('pointerdown',outside);};
  },[open]);
  if(!isNative)return null;
- return <><button ref={trigger} className={`window-update${available?' available':''}`} aria-expanded={open} aria-controls="window-update-panel" onClick={()=>{setOpen(value=>!value);if(!open&&!busy&&!available)void check();}}><RefreshCw size={13} className={busy?'spin':''}/>检查更新</button>{open&&createPortal(<div ref={panel} id="window-update-panel" className="window-update-panel" role="dialog" aria-label="启动器更新" tabIndex={-1}><button className="update-dismiss" aria-label="关闭更新面板" onClick={()=>{setOpen(false);trigger.current?.focus();}}><X size={16}/></button><LauncherUpdatePanel/></div>,document.body)}</>;
+ return <><button ref={trigger} className={`window-update${available?' available':''}`} aria-expanded={open} aria-busy={busy} aria-controls="window-update-panel" onClick={()=>{setOpen(value=>!value);if(!open&&!busy&&!available)void check();}}>检查更新</button>{open&&createPortal(<div ref={panel} id="window-update-panel" className="window-update-panel" role="dialog" aria-label="启动器更新" tabIndex={-1}><button className="update-dismiss" aria-label="关闭更新面板" onClick={()=>{setOpen(false);trigger.current?.focus();}}><X size={16}/></button><LauncherUpdatePanel/></div>,document.body)}</>;
 }
 export function LauncherUpdatePanel(){
  const {state,error,restarting,busy,label,check,restart}=useUpdate();
