@@ -1,8 +1,13 @@
 import sharp from 'sharp';
 import fs from 'node:fs/promises';
+import {fileURLToPath} from 'node:url';
 
 const directory = new URL('../src/Launcher.Desktop/Assets/', import.meta.url);
-const source = await fs.readFile(new URL('launcher.svg', directory));
+const source = await fs.readFile(new URL('../assets/brand/square-source.png', import.meta.url));
+const publicDirectory = new URL('./public/brand/', import.meta.url);
+await fs.mkdir(publicDirectory,{recursive:true});
+for(const [name,size] of [['logo.png',256],['favicon.png',32],['server-icon.png',64]])
+  await sharp(source).resize(size,size).removeAlpha().png({compressionLevel:9}).toFile(fileURLToPath(new URL(name,publicDirectory)));
 const sizes = [16,24,32,48,64,128,256];
 const frames = await Promise.all(sizes.map(size => sharp(source).resize(size,size).png().toBuffer()));
 const header = Buffer.alloc(6+16*sizes.length);

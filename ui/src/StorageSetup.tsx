@@ -1,5 +1,6 @@
 import {useState, type FormEvent} from 'react';
 import {ArrowRight, FolderOpen, RefreshCw} from 'lucide-react';
+import {Brand} from './Brand';
 
 type Props = {
  initialRoot:string;
@@ -14,7 +15,7 @@ export function StorageSetup({initialRoot,busy,choose,confirm,logout}:Props){
  async function browse(){const selected=await choose();if(selected)setRoot(selected);}
  function submit(event:FormEvent){event.preventDefault();confirm(root.trim());}
  return <div className="storage-page">
-  <header><div className="brand">魔金大帅</div><button className="text-link" disabled={busy} onClick={logout}>切换账号</button></header>
+  <header><Brand/><button className="text-link" disabled={busy} onClick={logout}>切换账号</button></header>
   <main className="storage-layout">
    <form className="storage-panel" onSubmit={submit} aria-labelledby="storage-title">
     <FolderOpen className="storage-mark" size={36} strokeWidth={1.4} aria-hidden="true"/>

@@ -1,6 +1,6 @@
 # 启动器更新
 
-启动器从 `https://launcher.boshan.uk/v1/launcher` 读取 ECDSA P-256 签名清单。未开放时返回 404；当前已提供 0.1.2-beta.4。ZIP 通过独立下载源读取，不附带账号凭据。
+启动器从 `https://launcher.boshan.uk/v1/launcher` 读取 ECDSA P-256 签名清单。未开放时返回 404；当前已提供 0.1.2-beta.5。ZIP 通过独立下载源读取，不附带账号凭据。
 
 更新暂存至 `%LOCALAPPDATA%/Boshan/Launcher/updates`，核对发布序号、ZIP 大小、SHA256 和每个解压文件。新版位于独立目录，旧程序、账号数据、游戏实例与 Java 均不覆盖。设置中可点击“重启更新”；下次打开旧快捷方式也会尝试准备好的版本。
 
@@ -33,7 +33,9 @@ GitHub Release 工作流生成 ZIP、文件清单和 SHA256，创建草稿；签
 - .NET 测试覆盖无效签名、旧序号、同序号替换、路径穿越、缺失/重复/损坏文件、旧版保留及失败回退。
 - Windows 辅助进程实际启动并完成握手；提前退出的候选被拒绝，旧版仍可启动。没有使用游戏或账号目录。
 - 无窗口浏览器检查进度、就绪、重启阻塞和错误后重试。
-- API 0.1.4 已部署；0.1.2-beta.4 ZIP 已上传，beta 更新接口已激活。哈希及下载结果见 `packs/launcher-update-acceptance.json`。
+- API 0.1.4 已部署；0.1.2-beta.5 ZIP 已上传，beta 更新接口已激活。哈希及下载结果见 `packs/launcher-update-acceptance.json`。
 - 实际 beta.3 → beta.4 WPF 启动接管通过：旧进程 47416 正常退出，新进程 39004 打开窗口并报告就绪，随后正常关闭；原账号及游戏数据保留。此项使用真实发行构建和实际更新目录，不是辅助进程替身。设置中的“重启更新”按钮尚未人工点击，前端状态与命令测试已通过。
 
-2026-09-05 用户明确同意先开放内测。发布命令使用 `--activate --beta`，读取 `packs/beta-authorization.json` 与逐服 beta 验收记录；稳定版默认门槛保持不变。玩家下载使用 `/launcher/0.1.2-beta.4/MojinDashuai-windows-x64.zip` 命名路径，内容与签名清单的哈希对象相同，已验证大小与可用性。
+2026-09-05 用户明确同意先开放内测。发布命令使用 `--activate --beta`，读取 `packs/beta-authorization.json` 与逐服 beta 验收记录；稳定版默认门槛保持不变。玩家下载使用 `/launcher/0.1.2-beta.5/MojinDashuai-windows-x64.zip` 命名路径，内容与签名清单的哈希对象相同，已验证大小与可用性。
+
+0.1.2-beta.5 仅更新品牌图标。发布序号为 5，公网 ZIP 完整下载及 495 个文件校验通过；本机已准备新版并更新桌面快捷方式，没有打开窗口。真实 WPF 接管记录仍对应 beta.3 → beta.4，本次未重复声称通过人工窗口测试。

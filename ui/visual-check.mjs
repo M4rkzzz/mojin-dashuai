@@ -7,7 +7,7 @@ page.on('pageerror',e=>errors.push(e.message));
 await page.goto(process.env.LAUNCHER_UI_URL || 'http://127.0.0.1:18473');
 await page.getByRole('button',{name:'浏览界面预览'}).click();
 await page.screenshot({path:'../.local/lobby.png',animations:'disabled'});
-await page.getByRole('button',{name:/03.*肉丸工艺/}).click();
+await page.locator('.world-card').filter({hasText:'肉丸工艺'}).click();
 await page.screenshot({path:'../.local/detail.png',animations:'disabled'});
 await page.getByRole('button',{name:'宿迁三网',exact:false}).click();
 await page.getByRole('button',{name:'关闭错误'}).click();

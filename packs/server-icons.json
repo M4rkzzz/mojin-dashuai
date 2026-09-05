@@ -1,0 +1,88 @@
+{
+  "installed": [
+    {
+      "instance": "m3e",
+      "path": "/vol1/@appshare/gsmanager/home/steam/games/M3E66/server-icon.png",
+      "sha256": "876e7a8a5c8aa5d2c46572c9d8720c90df00a6eeccd609bf7ed3e2a27563730a",
+      "previousIconExisted": false,
+      "backup": null
+    },
+    {
+      "instance": "dc2",
+      "path": "/vol1/@appshare/gsmanager/home/steam/games/DeceasedCraft-2/server-icon.png",
+      "sha256": "876e7a8a5c8aa5d2c46572c9d8720c90df00a6eeccd609bf7ed3e2a27563730a",
+      "previousIconExisted": false,
+      "backup": null
+    },
+    {
+      "instance": "mb",
+      "path": "/vol1/@appshare/gsmanager/home/steam/games/MeatballCraft-0.18.6.4/server-icon.png",
+      "sha256": "876e7a8a5c8aa5d2c46572c9d8720c90df00a6eeccd609bf7ed3e2a27563730a",
+      "previousIconExisted": false,
+      "backup": null
+    }
+  ],
+  "gameServicesRestarted": false,
+  "checkedAt": "2026-09-05T09:57:59.717372+00:00",
+  "source": "ui/public/brand/server-icon.png",
+  "sha256": "876e7a8a5c8aa5d2c46572c9d8720c90df00a6eeccd609bf7ed3e2a27563730a",
+  "gameMenusChanged": false,
+  "liveStatusIconVerified": false,
+  "liveStatusCheckedAt": "2026-09-05T10:00:25.258942+00:00",
+  "liveStatus": [
+    {
+      "instance": "m3e",
+      "domain": "mc.m3e.boshan.uk",
+      "reachable": true,
+      "onlinePlayers": 0,
+      "hasIcon": false,
+      "sha256": null,
+      "matchesApprovedIcon": false
+    },
+    {
+      "instance": "m3e",
+      "domain": "mc.m3e.bk.boshan.uk",
+      "reachable": true,
+      "onlinePlayers": 0,
+      "hasIcon": false,
+      "sha256": null,
+      "matchesApprovedIcon": false
+    },
+    {
+      "instance": "dc2",
+      "domain": "dc2.mc.boshan.uk",
+      "reachable": true,
+      "onlinePlayers": 0,
+      "hasIcon": false,
+      "sha256": null,
+      "matchesApprovedIcon": false
+    },
+    {
+      "instance": "dc2",
+      "domain": "dc2.bk.mc.boshan.uk",
+      "reachable": true,
+      "onlinePlayers": 0,
+      "hasIcon": false,
+      "sha256": null,
+      "matchesApprovedIcon": false
+    },
+    {
+      "instance": "mb",
+      "domain": "mb.mc.boshan.uk",
+      "reachable": true,
+      "onlinePlayers": 0,
+      "hasIcon": false,
+      "sha256": null,
+      "matchesApprovedIcon": false
+    },
+    {
+      "instance": "mb",
+      "domain": "mb.bk.mc.boshan.uk",
+      "reachable": true,
+      "onlinePlayers": 0,
+      "hasIcon": false,
+      "sha256": null,
+      "matchesApprovedIcon": false
+    }
+  ]
+}

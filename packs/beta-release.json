@@ -1,12 +1,12 @@
 {
-  "version": "0.1.2-beta.4",
+  "version": "0.1.2-beta.5",
   "channel": "beta",
-  "publishedAt": "2026-09-05T09:44:19.984163+00:00",
-  "downloadUrl": "http://103.40.14.100:21708/launcher/0.1.2-beta.4/MojinDashuai-windows-x64.zip",
-  "bytes": 78071559,
-  "sha256": "804922543cbd6748ebf6768f02efc9a16c5c0d9ca0c25b703fca938ebbc14021",
+  "publishedAt": "2026-09-05T10:02:35.514917+00:00",
+  "downloadUrl": "http://103.40.14.100:21708/launcher/0.1.2-beta.5/MojinDashuai-windows-x64.zip",
+  "bytes": 78192763,
+  "sha256": "ffb1bb2a10e09c174229d821f61ec416ba3798f0aea052be0e4509e700a6f194",
   "catalogSequence": 1,
-  "launcherSequence": 4,
+  "launcherSequence": 5,
   "api": "https://launcher.boshan.uk",
   "publicCatalogVerified": true,
   "publicManifestsVerified": [
@@ -23,5 +23,15 @@
   "cleanWindows": false,
   "completeDeliveryClaimed": false,
   "approval": "packs/beta-authorization.json",
-  "playerDataAndProductionServersUnchanged": true
+  "validationBaselineLauncherVersion": "0.1.2-beta.4",
+  "brandingOnly": true,
+  "gamePacksChanged": false,
+  "uiBrandingVerified": true,
+  "publicLauncherArchiveRoundTripVerified": true,
+  "desktopShortcutUpdated": true,
+  "playerDataUnchanged": true,
+  "productionServerProcessesUnchanged": true,
+  "productionServerIconsChanged": true,
+  "liveServerIconsVerified": false,
+  "serverIconReport": "packs/server-icons.json"
 }

@@ -101,3 +101,12 @@ dialog{border-color:#454545;color:#f2f2f2}dialog::backdrop{background:#000b}.ski
 .launcher-update { margin-top: 24px; border-top: 1px solid #303030; }
 .update-state { display: block; margin-top: 6px; color: #d0d0d0; font-size: 14px; }
 .update-error { color: #edb8b8; font-size: 14px; }
+
+/* One approved mark for the launcher and all three server identities. */
+.brand-logo{display:block;flex-shrink:0;width:40px;height:40px;object-fit:contain;user-select:none;border-radius:0}
+.brand{gap:10px}.brand.small .brand-logo{width:30px;height:30px}
+.mini-world>.brand-logo{width:34px;height:34px;object-fit:contain;object-position:center;border-radius:0}
+.card-top{align-items:flex-start}.card-top>.world-mark{width:40px;height:40px}
+.detail-heading{display:flex;align-items:center;gap:14px}.detail-heading .detail-mark{width:52px;height:52px}
+.instance-picker button{display:inline-flex;align-items:center;gap:8px}.instance-picker .instance-mark{width:24px;height:24px}
+@media(max-width:850px){.card-top{justify-content:space-between}.brand.small .brand-logo{width:28px;height:28px}.detail-heading{gap:10px}.detail-heading .detail-mark{width:42px;height:42px}}

@@ -2,7 +2,7 @@
 
 Windows 三服统一客户端。React + TypeScript / WebView2 / .NET 10。自建账号服务使用 ASP.NET Core Identity + PostgreSQL。
 
-**0.1.2-beta.4 已开放内测。** [下载 Windows x64 版](http://103.40.14.100:21708/launcher/0.1.2-beta.4/MojinDashuai-windows-x64.zip) · [使用说明](docs/BETA-0.1.2.md)。干净 Windows 验收按用户决定延后，仍保留未通过记录；本次不认定为完整稳定版交付。
+**0.1.2-beta.5 已开放内测。** [下载 Windows x64 版](http://103.40.14.100:21708/launcher/0.1.2-beta.5/MojinDashuai-windows-x64.zip) · [使用说明](docs/BETA-0.1.2.md)。干净 Windows 验收按用户决定延后，仍保留未通过记录；本次不认定为完整稳定版交付。
 
 ## 启动开发环境
 

@@ -1,6 +1,8 @@
-# 魔金大帅 0.1.2-beta.4
+# 魔金大帅 0.1.2-beta.5
 
-[下载 Windows x64 版](http://103.40.14.100:21708/launcher/0.1.2-beta.4/MojinDashuai-windows-x64.zip)，约 74.5 MiB。
+[下载 Windows x64 版](http://103.40.14.100:21708/launcher/0.1.2-beta.5/MojinDashuai-windows-x64.zip)，约 74.6 MiB。
+
+本版统一为黑白「帅」方块图标：程序、快捷方式及启动器内三服标识同步更新。三个整合包的主菜单保留，游戏内容不需要重新下载。
 
 1. 解压整个 ZIP，运行 `MojinDashuai.Launcher.exe`。
 2. 使用拥有 Minecraft Java 版的微软账号登录，或使用邀请码注册群服账号。
@@ -23,4 +25,4 @@
 
 此版本用于内测。干净 Windows 尚未验收，已经按用户决定延后，未标记为通过。其他待补充的人工观察见 [后续验收](REMAINING-WORK.md)。
 
-SHA256：`804922543cbd6748ebf6768f02efc9a16c5c0d9ca0c25b703fca938ebbc14021`。
+SHA256：`ffb1bb2a10e09c174229d821f61ec416ba3798f0aea052be0e4509e700a6f194`。

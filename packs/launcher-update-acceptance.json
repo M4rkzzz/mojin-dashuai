@@ -1,8 +1,8 @@
 {
-  "version": "0.1.2-beta.4",
-  "sequence": 4,
-  "sha256": "804922543cbd6748ebf6768f02efc9a16c5c0d9ca0c25b703fca938ebbc14021",
-  "bytes": 78071559,
+  "version": "0.1.2-beta.5",
+  "sequence": 5,
+  "sha256": "ffb1bb2a10e09c174229d821f61ec416ba3798f0aea052be0e4509e700a6f194",
+  "bytes": 78192763,
   "publicDownloadVerified": true,
   "activated": true,
   "codeTestsPassed": 115,
@@ -15,11 +15,23 @@
   "prereleaseOrderingVerified": true,
   "identicalVersionSkipped": true,
   "newerBetaDoesNotDowngrade": true,
-  "actualWpfStartupHandoffVerified": true,
-  "oldLauncherExitedNormally": true,
-  "newLauncherOpenedAndClosedNormally": true,
+  "actualWpfStartupHandoffVerified": false,
+  "oldLauncherExitedNormally": false,
+  "newLauncherOpenedAndClosedNormally": false,
   "settingsUpdateButtonManuallyVerified": false,
-  "localCandidateActivated": true,
-  "downloadUrl": "http://103.40.14.100:21708/launcher/0.1.2-beta.4/MojinDashuai-windows-x64.zip",
-  "publicBetaActivated": true
+  "localCandidateActivated": false,
+  "downloadUrl": "http://103.40.14.100:21708/launcher/0.1.2-beta.5/MojinDashuai-windows-x64.zip",
+  "publicBetaActivated": true,
+  "localCandidatePrepared": true,
+  "desktopShortcutUpdated": true,
+  "currentReleaseWindowOpened": false,
+  "previousWpfValidation": {
+    "version": "0.1.2-beta.4",
+    "actualWpfStartupHandoffVerified": true,
+    "oldLauncherExitedNormally": true,
+    "newLauncherOpenedAndClosedNormally": true,
+    "localCandidateActivated": true
+  },
+  "uiBrandingVerified": true,
+  "executableIconVerified": true
 }
