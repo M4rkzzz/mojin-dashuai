@@ -240,8 +240,11 @@ def build(instance, config, destination, draft=False):
             if not draft:
                 continue
             sources = [url]
+        basis = row.get('distributionBasis') or ''
+        if fallback.get('publishedVerified'):
+            basis += ('; ' if basis else '') + 'Self-hosted fallback: ' + fallback['distributionBasis']
         records.append({'path': path, 'size': len(data), **hashes, 'sources': list(dict.fromkeys(sources)),
-                        'policy': 'managed', 'distributionBasis': row.get('distributionBasis'),
+                        'policy': 'managed', 'distributionBasis': basis or None,
                         'projectId': row.get('projectId'), 'fileId': row.get('fileId')})
         if path in overrides:
             # Two copies of a resource pack must not make the portable export large.
