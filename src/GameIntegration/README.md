@@ -7,3 +7,5 @@ Forge 1.7.10 的 `--server` 在启动资源处理完成前开始连接。MSE 首
 构建顺序：准备一服引擎依赖 → `python tools/build-game-integration.py` → `python tools/prepare-native-content.py`。使用已经固定的一服 Forge/Guava 库及 Java 25 编译器生成 Java 8 字节码；玩家端仍只使用其随包 Java 8。产物通过签名原生文件清单自动安装，标准外部启动器导入包保持原样。
 
 源码依据：[Forge 1.7.10 FMLClientHandler](https://github.com/MinecraftForge/FML/blob/1.7.10/src/main/java/cpw/mods/fml/client/FMLClientHandler.java)。本组件调用公开方法，没有复制或修改 Forge 类。
+
+组件另为 Angelica 加入精确的重复日志过滤：只对 `SKIPPING glBindTexture for target 32879` 的 INFO 保留第一次，其他信息及 WARN/ERROR 原样保留。对应 Angelica 2.0.0-alpha19 源码先执行 OpenGL 纹理绑定再打印此提示；过滤不更改渲染。构建时使用实际 Log4j 2.0-beta9 跑 `tests/game-integration/RenderLogFilterCheck.java`，检查重复提示与错误级别。游戏中的日志增量仍要在下一次一服实测核对。

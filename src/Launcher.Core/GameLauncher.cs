@@ -33,6 +33,13 @@ public sealed class GameLauncher
         if(delayedJoin&&(!System.Text.RegularExpressions.Regex.IsMatch(route.Host,"^[A-Za-z0-9.-]+$")||route.Port is <1 or >65535))throw new InvalidDataException("服务器地址无效。");
         var jvm=new List<MArgument>{MArgument.FromCommandLine(settings.Jvm[manifest.Instance])};
         if(delayedJoin)jvm.Add(MArgument.FromCommandLine($"-Dmojin.join.host={route.Host} -Dmojin.join.port={route.Port}"));
+        if(OperatingSystem.IsWindows()&&manifest.Runtime.Major>=16)
+        {
+            // Windows packaged-app temp redirection can break AF_UNIX selector
+            // wakeup sockets. A relative path also avoids the socket path limit.
+            Directory.CreateDirectory(ContentSecurity.SafePath(instance,".hub/socket-temp"));
+            jvm.Add(MArgument.FromCommandLine("-Djdk.net.unixdomain.tmpdir=.hub/socket-temp"));
+        }
         var options=new MLaunchOption {
             Session=session,JavaPath=java,MaximumRamMb=settings.Memory[manifest.Instance],MinimumRamMb=Math.Min(2048,settings.Memory[manifest.Instance]),
             ScreenWidth=settings.Width,ScreenHeight=settings.Height,FullScreen=settings.Fullscreen,ServerIp=delayedJoin?null:route.Host,ServerPort=route.Port,
@@ -41,6 +48,7 @@ public sealed class GameLauncher
         };
         // Installation is performed exclusively from the signed file inventory. CmlLib only builds the launch process.
         var process=await launcher.BuildProcessAsync(manifest.LaunchVersion,options);
+        process.StartInfo.WorkingDirectory=instance;
         process.StartInfo.CreateNoWindow=true; process.StartInfo.UseShellExecute=false;
         return process;
     }

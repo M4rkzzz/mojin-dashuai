@@ -59,4 +59,28 @@ for instance in args.instances:
                                cwd=engine, stdout=log, stderr=subprocess.STDOUT, creationflags=subprocess.CREATE_NO_WINDOW, check=True, timeout=900)
     subprocess.run([str(args.dotnet), str(ROOT / 'src/Publisher/bin/Release/net10.0/Publisher.dll'), 'engine-files',
                     str(engine), version, str(engine / 'required.json')], cwd=ROOT, check=True, creationflags=subprocess.CREATE_NO_WINDOW)
+    if instance == 'dc2':
+        # Forge's Minecraft locator opens these processor outputs directly; they
+        # are not ordinary libraries in the launch profile or CmlLib classpath.
+        import zipfile
+        installer = ROOT / '.local' / tools[instance]['url'].rsplit('/', 1)[-1]
+        with zipfile.ZipFile(installer) as archive:
+            install_profile = json.loads(archive.read('install_profile.json'))
+            data = install_profile['data']
+        references = json.loads((engine / 'required.json').read_text(encoding='utf-8-sig'))
+        runtime_modules = {'fmlcore', 'javafmllanguage', 'lowcodelanguage', 'mclanguage', 'forge'}
+        for library in install_profile['libraries']:
+            coordinate = library['name'].split(':')
+            if coordinate[0] != 'net.minecraftforge' or coordinate[1] not in runtime_modules: continue
+            artifact = library['downloads']['artifact']
+            references['files'].append({'path': 'libraries/' + artifact['path'], 'sha1': artifact['sha1'],
+                                        'size': artifact['size'], 'url': artifact['url'], 'copies': []})
+        for key in ['MC_EXTRA', 'MC_SRG', 'PATCHED']:
+            coordinate = data[key]['client'].strip('[]').split(':')
+            group, artifact, release, classifier = coordinate
+            relative = f'libraries/{group.replace(".", "/")}/{artifact}/{release}/{artifact}-{release}-{classifier}.jar'
+            path = engine / relative
+            with path.open('rb') as stream: sha1 = hashlib.file_digest(stream, 'sha1').hexdigest()
+            references['files'].append({'path': relative, 'sha1': sha1, 'size': path.stat().st_size, 'url': None, 'copies': []})
+        (engine / 'required.json').write_text(json.dumps(references, indent=2) + '\n', encoding='utf-8')
     print(json.dumps({'instance': instance, 'launchVersion': version, 'prepared': True}), flush=True)

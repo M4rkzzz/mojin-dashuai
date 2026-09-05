@@ -11,9 +11,9 @@
       "localVersionPrepared": true,
       "gameStarted": false,
       "joinedServer": false,
-      "elapsedSeconds": 7.6208976,
+      "elapsedSeconds": 8.3696895,
       "files": 4779,
-      "manifestSha256": "93fa3aa8894bcc10541cf52be1973aa40a3c19e97dad605355b078eed59b2d5e",
+      "manifestSha256": "5d42f4c30e7a32833a103c1dffbf911a1abbd28967569a40044e8ba3310429e3",
       "verification": "cached-install-and-process-preparation"
     },
     {
@@ -23,9 +23,9 @@
       "localVersionPrepared": true,
       "gameStarted": false,
       "joinedServer": false,
-      "elapsedSeconds": 129.3022037,
-      "files": 9853,
-      "manifestSha256": "16835e9203750e59b502356b52394827da1eb331f8ff44cbb9dfbeba6e37647f",
+      "elapsedSeconds": 14.0665138,
+      "files": 9861,
+      "manifestSha256": "57a82e0da3b2e7d3df3d8b6bc45d050af8568c0dd6fbb56374bb6218e92567fe",
       "verification": "cached-install-and-process-preparation"
     },
     {
@@ -50,17 +50,32 @@
       "account": "saved-microsoft-session",
       "gameName": "M4rkzzz",
       "existingPlayerDataPresent": true,
-      "oldCharacterConfirmedByUser": false,
+      "oldCharacterConfirmedByUser": true,
       "libraryConflictFixed": true,
       "startupHandshakeFixed": true,
-      "state": "waiting-for-user-to-confirm-original-character",
-      "renderLogFloodObserved": true
+      "state": "automatic-join-and-original-character-confirmed",
+      "renderLogFloodObserved": true,
+      "renderLogFilterVerified": true,
+      "renderLogFilterInGameRecheckPending": true
     },
     "dc2": {
-      "state": "not-started"
+      "state": "automatic-join-and-user-gameplay-confirmed",
+      "javaMajor": 17,
+      "account": "saved-microsoft-session",
+      "gameName": "M4rkzzz",
+      "joinedServer": true,
+      "automaticConnection": true,
+      "movementInventoryMapConfirmedByUser": true,
+      "characterConfirmedByUser": true,
+      "forgeRuntimeFilesFixed": true,
+      "windowsSelectorFixed": true,
+      "normalExitCode": 0
     },
     "mb": {
-      "state": "not-started-from-native-install"
+      "state": "loading-from-native-install",
+      "javaMajor": 25,
+      "account": "saved-microsoft-session",
+      "gameName": "M4rkzzz"
     }
   }
 }

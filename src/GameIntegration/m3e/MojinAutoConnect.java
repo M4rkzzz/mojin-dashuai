@@ -6,6 +6,12 @@ import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.TickEvent;
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.core.LogEvent;
+import org.apache.logging.log4j.core.Logger;
+import org.apache.logging.log4j.core.filter.AbstractFilter;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 /** Starts the selected connection only after Minecraft reaches its normal client tick loop. */
 @Mod(modid = "mojinautoconnect", name = "Mojin Auto Connect", version = "0.1.0",
@@ -19,6 +25,7 @@ public final class MojinAutoConnect {
     @Mod.EventHandler
     public void initialize(FMLInitializationEvent event) {
         if (!FMLCommonHandler.instance().getSide().isClient()) return;
+        ((Logger) LogManager.getLogger("Angelica")).addFilter(new RepeatedRenderLogFilter());
         host = System.getProperty("mojin.join.host", "");
         if (host.isEmpty()) return; // Standard-pack imports retain the ordinary main menu.
         try {
@@ -28,6 +35,17 @@ public final class MojinAutoConnect {
             FMLCommonHandler.instance().bus().register(this);
         } catch (RuntimeException error) {
             throw new IllegalArgumentException("Mojin connection configuration is invalid", error);
+        }
+    }
+
+    public static final class RepeatedRenderLogFilter extends AbstractFilter {
+        private final AtomicBoolean seen = new AtomicBoolean();
+        @Override
+        public Result filter(LogEvent event) {
+            if (event.getLevel() == Level.INFO && "Angelica".equals(event.getLoggerName())
+                && "SKIPPING glBindTexture for target 32879".equals(event.getMessage().getFormattedMessage())
+                && seen.getAndSet(true)) return Result.DENY;
+            return Result.NEUTRAL;
         }
     }
 
