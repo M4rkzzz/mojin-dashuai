@@ -10,12 +10,23 @@ jobs:
       - name: Check zone and tunnel access without exposing credentials
         env:
           CF_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CF_GLOBAL_KEY: ${{ secrets.CLOUDFLARE_GLOBAL_API_KEY }}
+          CF_EMAIL: 1464549052@qq.com
           CF_ACCOUNT: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
         run: |
           python3 - <<'PY'
           import os,json,re,urllib.request,urllib.error
+          # Prefer the user-requested reusable key when configured. Never output either credential.
+          key=os.environ.get('CF_GLOBAL_KEY','').strip()
+          token=os.environ.get('CF_TOKEN','').strip()
+          if key:
+              headers={'X-Auth-Key':key,'X-Auth-Email':os.environ['CF_EMAIL']}
+          elif token:
+              headers={'Authorization':'Bearer '+token}
+          else:
+              raise SystemExit('Missing Cloudflare credential in repository Secrets.')
           def get(path):
-              req=urllib.request.Request('https://api.cloudflare.com/client/v4/'+path,headers={'Authorization':'Bearer '+os.environ['CF_TOKEN']})
+              req=urllib.request.Request('https://api.cloudflare.com/client/v4/'+path,headers=headers)
               try:
                   with urllib.request.urlopen(req,timeout=30) as r: data=json.load(r)
                   return bool(data.get('success')),data.get('result'),r.status
@@ -26,11 +37,11 @@ jobs:
               return {'allowed':allowed,'httpStatus':status,'count':len(value) if isinstance(value,list) else None}
           account='accounts/'+os.environ['CF_ACCOUNT']
           zones=get('zones?name=boshan.uk')
-          report={'zone':summary(zones),'tunnels':summary(get(account+'/cfd_tunnel?is_deleted=false'))}
+          report={'authentication':'global-key' if key else 'api-token','zone':summary(zones),'tunnels':summary(get(account+'/cfd_tunnel?is_deleted=false'))}
           if zones[0] and zones[1]:
               report['launcherDns']=summary(get('zones/'+zones[1][0]['id']+'/dns_records?name=launcher.boshan.uk'))
           # Inspect only this credential's metadata; never list other tokens or output a token value.
-          for label,base in [('userToken','user/tokens'),('accountToken',account+'/tokens')]:
+          for label,base in ([] if key else [('userToken','user/tokens'),('accountToken',account+'/tokens')]):
               verified=get(base+'/verify')
               entry={'verify':summary(verified)}
               if verified[0] and isinstance(verified[1],dict) and verified[1].get('id'):

@@ -29,12 +29,15 @@ public partial class MainWindow : Window
     private CatalogClient catalog=null!;
     private bool initialized;
     private readonly SemaphoreSlim settingsGate=new(1);
+    private CancellationTokenSource? microsoftLogin;
+    private MicrosoftDevicePrompt? microsoftPrompt;
     public MainWindow()
     {
         InitializeComponent();
         Loaded+=async(_,_)=>await Initialize();
         StateChanged+=(_,_)=>{if(initialized)Event("window-state",new {Maximized=WindowState==WindowState.Maximized});};
         Closing+=(_,e)=>{if(games.Count>0){e.Cancel=true;Hide();}};
+        Closed+=(_,_)=>{initialized=false;microsoftLogin?.Cancel();};
     }
     private async Task Initialize()
     {
@@ -43,7 +46,8 @@ public partial class MainWindow : Window
             Directory.CreateDirectory(appData);
             var config=Json.Read<AppConfig>(Path.Combine(AppContext.BaseDirectory,"launcher.json"));
             var settingsPath=Path.Combine(appData,"settings.json");settings=ContentDirectorySetup.LoadSettings(settingsPath);settings.Validate();
-            accounts=new(new Vault(appData),config.Api,config.MicrosoftClientId);
+            var microsoftId=string.IsNullOrWhiteSpace(config.MicrosoftClientId)?Environment.GetEnvironmentVariable("PCL_MS_CLIENT_ID")??"":config.MicrosoftClientId;
+            accounts=new(new Vault(appData),config.Api,microsoftId.Trim());
             catalog=new(config.Api,config.PublicKeys,Path.Combine(appData,"catalog-checkpoint.json"));
             try{CoreWebView2Environment.GetAvailableBrowserVersionString();}
             catch(WebView2RuntimeNotFoundException){await InstallWebView();}
@@ -92,11 +96,12 @@ public partial class MainWindow : Window
             request=JsonSerializer.Deserialize<BridgeRequest>(e.WebMessageAsJson,Json.Options);
             if(request is null||!Guid.TryParse(request.Id,out _))return;
             var result=await Dispatch(request.Command,request.Args);
+            if(!initialized)return;
             Web.CoreWebView2.PostWebMessageAsJson(JsonSerializer.Serialize(new {request.Id,Ok=true,Result=result},Json.Options));
         }
         catch(Exception ex)
         {
-            if(request is not null)Web.CoreWebView2.PostWebMessageAsJson(JsonSerializer.Serialize(new {request.Id,Ok=false,Error=Friendly(ex)},Json.Options));
+            if(initialized&&request is not null)Web.CoreWebView2.PostWebMessageAsJson(JsonSerializer.Serialize(new {request.Id,Ok=false,Error=Friendly(ex)},Json.Options));
             Log(request?.Command??"bridge",ex);
         }
     }
@@ -108,11 +113,14 @@ public partial class MainWindow : Window
         switch(command)
         {
             case "bootstrap": return new {Profile=await accounts.Restore(),Settings=settings,WindowMaximized=WindowState==WindowState.Maximized,Installs=Routes.Domains.Keys.Select(id=>new {Id=id,Pack=new TransactionalInstaller(settings.Root).ReadInstalled(id)}).Where(x=>x.Pack is not null).ToDictionary(x=>x.Id,x=>new {Version=x.Pack!.Manifest.Version,State="installed"})};
-            case "auth.login":return await accounts.Login("login",args);
-            case "auth.register":return await accounts.Login("register",args);
+            case "auth.login":if(microsoftLogin is not null)throw new InvalidDataException("请先取消正在进行的微软登录。");return await accounts.Login("login",args);
+            case "auth.register":if(microsoftLogin is not null)throw new InvalidDataException("请先取消正在进行的微软登录。");return await accounts.Login("register",args);
             case "auth.recover":return await accounts.Recover(args);
-            case "auth.microsoft":return await accounts.MicrosoftLogin();
-            case "auth.logout":await accounts.Logout();return null;
+            case "auth.microsoft":return await MicrosoftSignIn();
+            case "auth.microsoft.cancel":microsoftLogin?.Cancel();return null;
+            case "auth.microsoft.copy":Clipboard.SetText(ActiveMicrosoftPrompt().UserCode);return null;
+            case "auth.microsoft.open":Process.Start(new ProcessStartInfo(ActiveMicrosoftPrompt().VerificationUrl){UseShellExecute=true});return null;
+            case "auth.logout":microsoftLogin?.Cancel();await accounts.Logout();return null;
             case "directory.choose":
             {
                 if(accounts.Current is null)throw new InvalidDataException("请先登录账号。");
@@ -227,7 +235,33 @@ public partial class MainWindow : Window
         await process.WaitForExitAsync();var code=process.ExitCode;
         await Dispatcher.InvokeAsync(()=>{games.Remove(id);gate.Dispose();process.Dispose();Show();if(code!=0)Event("error","游戏已退出。可导出诊断日志帮助定位问题。");});
     }
-    private void Event(string name,object data)=>Dispatcher.Invoke(()=>Web.CoreWebView2.PostWebMessageAsJson(JsonSerializer.Serialize(new {Event=name,Data=data},Json.Options)));
+    private MicrosoftDevicePrompt ActiveMicrosoftPrompt()
+    {
+        if(microsoftLogin is null||microsoftLogin.IsCancellationRequested||microsoftPrompt is null||microsoftPrompt.ExpiresAt<=DateTimeOffset.UtcNow)
+            throw new InvalidDataException("登录码已失效，请重新登录。");
+        return microsoftPrompt;
+    }
+    private async Task<object> MicrosoftSignIn()
+    {
+        if(microsoftLogin is not null)throw new InvalidDataException("微软登录正在进行中。");
+        using var cancellation=new CancellationTokenSource(TimeSpan.FromMinutes(16));
+        microsoftLogin=cancellation;
+        try
+        {
+            return await accounts.MicrosoftLogin(true,prompt=>Dispatcher.InvokeAsync(()=>
+            {
+                cancellation.Token.ThrowIfCancellationRequested();
+                microsoftPrompt=prompt;Event("microsoft-code",prompt);
+            }).Task,cancellation.Token);
+        }
+        catch(OperationCanceledException) when(cancellation.IsCancellationRequested){return new {Cancelled=true};}
+        finally{microsoftPrompt=null;microsoftLogin=null;Event("microsoft-code",null);}
+    }
+    private void Event(string name,object? data)=>Dispatcher.Invoke(()=>
+    {
+        if(initialized&&!Dispatcher.HasShutdownStarted&&Web.CoreWebView2 is not null)
+            Web.CoreWebView2.PostWebMessageAsJson(JsonSerializer.Serialize(new {Event=name,Data=data},Json.Options));
+    });
     private void OpenFolder(string path){Directory.CreateDirectory(path);Process.Start(new ProcessStartInfo(path){UseShellExecute=true});}
     private async Task<object> Import(string id)
     {

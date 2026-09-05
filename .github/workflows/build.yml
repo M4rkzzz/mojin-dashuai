@@ -47,6 +47,7 @@ jobs:
       - run: npm run build
         working-directory: ui
       - run: dotnet test tests/Hub.Tests/Hub.Tests.csproj -c Release --logger trx
+      - run: dotnet build tests/NativeAccountSmoke/NativeAccountSmoke.csproj -c Release
       - run: dotnet publish src/Launcher.Desktop/Launcher.Desktop.csproj -c Release -r win-x64 --self-contained true -o artifacts/MojinDashuai
       - uses: actions/upload-artifact@v4
         with:

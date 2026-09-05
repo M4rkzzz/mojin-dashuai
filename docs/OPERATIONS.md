@@ -26,12 +26,12 @@ docker compose exec hub-api dotnet Hub.Api.dll admin reset LoginName
 
 ## Cloudflare
 
-新项目仓库：https://github.com/M4rkzzz/mojin-dashuai 。在其 Actions Secrets 保存独立最小权限 Token 和 Account ID。原仓库的现有 Token 已验证缺少创建 Tunnel 的权限，不能通过重复调用绕过该限制。
+按用户最新要求，Cloudflare Global API Key 明文保存在本机 `D:/project/cfapi/credentials.json`，不依赖 GitHub Secrets。通过 `python tools/cloudflare-local.py inspect` 验证，`provision-launcher` 配置专用 Tunnel/DNS。主密钥不上传服务器；仅将单独生成的 Tunnel 凭据安装至 `secrets/tunnel-token`。完整说明见 [共用凭据](CLOUDFLARE-CREDENTIALS.md)。
 
-`tools/cloudflare-provision.yml` 为手动运维工作流模板，只处理 `boshan-client-hub` Tunnel 与 `launcher.boshan.uk`。Tunnel 凭据仅以本机 RSA 公钥加密的密文交付，私钥保持本机私有目录；解密后将 Tunnel 凭据安装至 `secrets/tunnel-token`。
+当前入口 `https://launcher.boshan.uk` 已接通；cloudflared 固定使用 HTTP/2，因为 124 的出站 UDP 不通。API 主机的 Browser Integrity Check 单独关闭，账号限流与验证由 API 执行。
 
 ```sh
-docker compose --profile tunnel up -d cloudflared
+docker compose --profile tunnel up -d --no-deps cloudflared
 ```
 
 账号 API 的直接端口仅绑定主机回环地址。`TrustCloudflareTunnel=true` 只允许在此独立 Tunnel 网络结构使用，不要把 API 端口直接映射到公网。

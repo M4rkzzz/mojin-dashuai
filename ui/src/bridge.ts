@@ -1,5 +1,6 @@
 export type Profile = { id: string; loginName: string; gameName: string; kind?: 'microsoft' | 'hub' };
 export type SkinTexture = {pngBase64:string;model:'classic'|'slim'};
+export type MicrosoftCode = {userCode:string;verificationUrl:string;expiresAt:string};
 export type Progress = { instance: string; phase: string; completed: number; total: number; bytesPerSecond: number; paused?: boolean };
 export type Settings = { root: string; contentDirectoryConfigured: boolean; memory: Record<string, number>; java: Record<string, string>; jvm: Record<string, string>; width: number; height: number; fullscreen: boolean; windowBehavior: string; concurrency: number; limitMiB: number; proxy: string; reducedMotion: boolean; theme: string; selectedRoutes: Record<string, string> };
 declare global { interface Window { chrome?: { webview?: { postMessage: (value: unknown) => void; addEventListener: (name: string, cb: (event: {data: any}) => void) => void } } } }

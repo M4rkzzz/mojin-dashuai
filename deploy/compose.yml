@@ -56,7 +56,7 @@ services:
   cloudflared:
     image: cloudflare/cloudflared:2026.8.3
     restart: unless-stopped
-    command: tunnel --no-autoupdate run --token-file /run/secrets/tunnel_token
+    command: tunnel --no-autoupdate --protocol http2 run --token-file /run/secrets/tunnel_token
     secrets: [tunnel_token]
     depends_on: [hub-api]
     networks: [edge]

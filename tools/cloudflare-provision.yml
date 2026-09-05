@@ -14,16 +14,27 @@ jobs:
       - name: Create the dedicated tunnel and hostname
         env:
           CF_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CF_GLOBAL_KEY: ${{ secrets.CLOUDFLARE_GLOBAL_API_KEY }}
+          CF_EMAIL: 1464549052@qq.com
           CF_ACCOUNT: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           SEALING_KEY: ${{ inputs.sealing_public_key }}
         run: |
           python3 - <<'PY'
           import os,json,base64,urllib.request,urllib.error,pathlib,subprocess
+          # Prefer the user-requested reusable key when configured. Never output either credential.
+          key=os.environ.get('CF_GLOBAL_KEY','').strip()
+          token=os.environ.get('CF_TOKEN','').strip()
+          if key:
+              headers={'X-Auth-Key':key,'X-Auth-Email':os.environ['CF_EMAIL']}
+          elif token:
+              headers={'Authorization':'Bearer '+token}
+          else:
+              raise SystemExit('Missing Cloudflare credential in repository Secrets.')
           def api(method,path,body=None):
               data=None if body is None else json.dumps(body).encode()
-              request=urllib.request.Request('https://api.cloudflare.com/client/v4/'+path,data=data,method=method,headers={'Authorization':'Bearer '+os.environ['CF_TOKEN'],'Content-Type':'application/json'})
+              request=urllib.request.Request('https://api.cloudflare.com/client/v4/'+path,data=data,method=method,headers={**headers,'Content-Type':'application/json'})
               try:
-                  with urllib.request.urlopen(request) as response: result=json.load(response)
+                  with urllib.request.urlopen(request,timeout=30) as response: result=json.load(response)
               except urllib.error.HTTPError as e:
                   raise SystemExit('Cloudflare operation failed: HTTP '+str(e.code)) from None
               if not result.get('success'): raise SystemExit('Cloudflare operation failed')

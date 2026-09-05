@@ -12,6 +12,10 @@ jobs:
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.11'}
+      - name: Require configured login and complete game sources
+        run: python tools/check-client-release.py
       - uses: actions/setup-dotnet@v4
         with: {dotnet-version: '10.0.x'}
       - uses: actions/setup-node@v4

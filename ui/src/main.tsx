@@ -1,9 +1,10 @@
 import React, {useEffect, useRef, useState} from 'react';
 import {createRoot} from 'react-dom/client';
 import {ArrowUpRight, ArrowLeft, ArrowRight, Check, ChevronRight, CircleHelp, Download, FolderOpen, Gamepad2, Globe2, HardDrive, LogOut, Minus, MoreHorizontal, Pause, Play, Radio, RefreshCw, Settings2, ShieldCheck, Square, UserRound, Volume2, Wifi, X, Copy} from 'lucide-react';
-import {defaultSettings, invoke, isNative, subscribe, type Profile, type Progress, type Settings, type SkinTexture} from './bridge';
+import {defaultSettings, invoke, isNative, subscribe, type Profile, type Progress, type Settings, type SkinTexture, type MicrosoftCode} from './bridge';
 import {SkinAvatar} from './SkinAvatar';
 import {StorageSetup} from './StorageSetup';
+import {MicrosoftSignIn} from './MicrosoftSignIn';
 import './style.css';
 
 const worlds = [
@@ -22,6 +23,8 @@ function App(){
  const [error,setError]=useState(''), [notice,setNotice]=useState(''), [busy,setBusy]=useState(false), [recovery,setRecovery]=useState('');
  const [installs,setInstalls]=useState<Record<string,Install>>({}), [ready,setReady]=useState(false);
  const [maximized,setMaximized]=useState(false);
+ const [microsoftPending,setMicrosoftPending]=useState(false),[microsoftCode,setMicrosoftCode]=useState<MicrosoftCode|null>(null);
+ useEffect(()=>subscribe(d=>{if(d.event==='microsoft-code')setMicrosoftCode(d.data);}),[]);
  const [skin,setSkin]=useState<SkinTexture|null>(null),[skinOpen,setSkinOpen]=useState(false),[skinModel,setSkinModel]=useState<'classic'|'slim'>('classic');
  useEffect(()=>{let disposed=false;setSkin(null);if(profile&&isNative)invoke<SkinTexture|null>('account.avatar').then(value=>{if(!disposed){setSkin(value);setSkinModel(value?.model||'classic');}}).catch(()=>{});return()=>{disposed=true;};},[profile?.id,profile?.kind]);
  function openSkin(){if(!profile){setPage('login');return;}setSkinOpen(true);}
@@ -30,12 +33,19 @@ function App(){
  useEffect(()=>{ if(isNative)refresh(true).catch(e=>setError(e.message)).finally(()=>setReady(true)); else setReady(true); return subscribe(d=>{if(d.event==='progress')setProgress(d.data); if(d.event==='installed'){setProgress(null);refresh().catch(()=>{});} if(d.event==='error')setError(d.data);});},[]);
  useEffect(()=>{document.documentElement.dataset.motion=settings.reducedMotion?'reduced':'full';},[settings.reducedMotion]);
  async function act<T,>(fn:()=>Promise<T>){setError('');setBusy(true);try{return await fn();}catch(e){setError((e as Error).message);}finally{setBusy(false);}}
- async function login(command:string,args:unknown){await act(async()=>{const result=await invoke(command,args);setProfile(result.profile); if(result.recoveryCode)setRecovery(result.recoveryCode);setPage(settings.contentDirectoryConfigured?'lobby':'storage');});}
+ async function login(command:string,args:unknown){
+  const microsoft=command==='auth.microsoft';
+  if(microsoft){setMicrosoftCode(null);setMicrosoftPending(true);}
+  try{await act(async()=>{const result=await invoke(command,args);if(result.cancelled)return;setProfile(result.profile);if(result.recoveryCode)setRecovery(result.recoveryCode);setPage(settings.contentDirectoryConfigured?'lobby':'storage');});}
+  finally{if(microsoft){setMicrosoftPending(false);setMicrosoftCode(null);}}
+ }
+ async function cancelMicrosoft(){await invoke('auth.microsoft.cancel');}
+ function expireMicrosoft(){setError('登录码已过期，请重新登录。');cancelMicrosoft().catch(e=>setError(e.message));}
  function select(w:World){setWorld(w);setPage('world');setError('');}
  async function save(next:Settings){setSettings(next);await act(async()=>{await invoke('settings.save',next);setNotice('设置已保存');});}
  return <div className={`app-shell page-${page}`}>
   <div className="window-chrome"><span aria-hidden="true"/><div className="window-controls">{isNative&&<><button aria-label="最小化" onClick={()=>invoke('window.minimize')}><Minus size={14}/></button><button aria-label={maximized?'还原':'最大化'} onClick={()=>invoke('window.maximize')}>{maximized?<Copy size={12}/>:<Square size={12}/>}</button><button aria-label="关闭" onClick={()=>invoke('window.close')}><X size={16}/></button></>}</div></div>
-  {page==='login'? <div className="login-scene"><header><Brand/></header><div className="login-layout"><Login busy={busy||!ready} login={login} recover={async(args)=>{await act(async()=>{const r=await invoke('auth.recover',args);setRecovery(r.recoveryCode);setNotice('密码已重置，请重新登录。');});}}/></div><footer>{!isNative&&<button onClick={()=>setPage('lobby')}>浏览界面预览 <ArrowRight size={13}/></button>}</footer></div>:
+  {page==='login'? <div className="login-scene"><header><Brand/></header><div className="login-layout">{microsoftPending?<MicrosoftSignIn code={microsoftCode} copy={()=>invoke('auth.microsoft.copy')} open={()=>invoke('auth.microsoft.open')} cancel={cancelMicrosoft} expired={expireMicrosoft}/>:<Login busy={busy||!ready} login={login} recover={async(args)=>{await act(async()=>{const r=await invoke('auth.recover',args);setRecovery(r.recoveryCode);setNotice('密码已重置，请重新登录。');});}}/>}</div><footer>{!isNative&&<button onClick={()=>setPage('lobby')}>浏览界面预览 <ArrowRight size={13}/></button>}</footer></div>:
   page==='storage'?<StorageSetup initialRoot={settings.root} busy={busy} choose={()=>act(()=>invoke<string|null>('directory.choose'))} confirm={root=>act(async()=>{const saved=await invoke<Settings>('directory.initialize',{root});setSettings(saved);setPage('lobby');})} logout={()=>act(async()=>{await invoke('auth.logout');setProfile(null);setPage('login');})}/>:
   <div className="workspace"><aside className="sidebar"><Brand small/><div className="nav-label">探索</div><button className={page==='lobby'||page==='world'?'nav-item active':'nav-item'} onClick={()=>setPage('lobby')}><Gamepad2 size={19}/>游戏大厅<span>03</span></button><div className="nav-label worlds-label">我的世界</div>{worlds.map(w=><button key={w.id} className={`mini-world ${page==='world'&&world.id===w.id?'selected':''}`} onClick={()=>select(w)}><img src={`./scenes/${w.image}`} alt=""/><span>{w.name}<small>{installs[w.id]?'已安装':'按需安装'}</small></span></button>)}<div className="sidebar-bottom"><button className={`nav-item ${page==='settings'?'active':''}`} onClick={()=>setPage('settings')}><Settings2 size={18}/>启动器设置</button><button className="nav-item" onClick={()=>setNotice('登录问题请联系群服管理员；下载失败可在详情页重新尝试。诊断日志可从设置导出。')}><CircleHelp size={18}/>帮助与反馈</button><div className="account"><button className="avatar-button" aria-label="头像与皮肤" onClick={openSkin}><SkinAvatar skin={skin} name={profile?.gameName||''}/></button><span>{profile?.gameName||'界面预览'}<small>{profile?.kind==='microsoft'?'微软正版账号':profile?'群服账号':'尚未登录'}</small></span><button aria-label="退出账号" onClick={()=>act(async()=>{if(profile)await invoke('auth.logout');setProfile(null);setPage('login');})}><LogOut size={15}/></button></div></div></aside>
   <main>{page==='lobby'?<><div className="main-top"><span className="breadcrumb">探索 / <b>游戏大厅</b></span></div><section className="lobby-heading"><div><h1>选择服务器</h1></div></section><div className="world-grid">{worlds.map((w,i)=><button key={w.id} className="world-card" onClick={()=>select(w)} style={{'--accent':w.color} as React.CSSProperties}><img src={`./scenes/${w.image}`} alt={`${w.name}场景`}/><div className="card-shade"/><div className="card-top"><span>0{i+1}</span><span className="card-circle"><ArrowUpRight size={17}/></span></div><div className="card-content"><h2>{w.name}</h2><div className="tags">{w.tags.map(t=><span key={t}>{t}</span>)}</div><div className="card-bottom"><span>{w.mc} <i/> {installs[w.id]?'已安装':'尚未安装'}</span><ArrowRight size={19}/></div></div></button>)}</div></>:

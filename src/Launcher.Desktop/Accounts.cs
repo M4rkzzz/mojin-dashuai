@@ -12,7 +12,7 @@ using Boshan.Shared;
 namespace Boshan.Desktop;
 
 public sealed record PlayerProfile(string Id,string LoginName,string GameName,string Kind="hub");
-public sealed record AccountSession(PlayerProfile Profile,string AccessToken,DateTimeOffset AccessExpiresAt,string RefreshToken,DateTimeOffset RefreshExpiresAt,string? RecoveryCode=null,string? MicrosoftAccountId=null,string? SkinUrl=null,string SkinModel="classic");
+public sealed record AccountSession(PlayerProfile Profile,string AccessToken,DateTimeOffset AccessExpiresAt,string RefreshToken,DateTimeOffset RefreshExpiresAt,string? RecoveryCode=null,string? MicrosoftAccountId=null,string? SkinUrl=null,string SkinModel="classic",string? MicrosoftClientId=null);
 public sealed class Accounts
 {
     private readonly Vault vault;
@@ -25,6 +25,7 @@ public sealed class Accounts
         this.vault=vault;this.microsoftId=microsoftId;
         var uri=new Uri(apiUrl);if(uri.Scheme!="https")throw new InvalidDataException("账号服务必须使用 HTTPS。");
         api=new HttpClient(new HttpClientHandler {UseCookies=false,AllowAutoRedirect=false}){BaseAddress=uri,Timeout=TimeSpan.FromSeconds(20)};
+        api.DefaultRequestHeaders.UserAgent.ParseAdd("MojinDashuai/"+typeof(Accounts).Assembly.GetName().Version);
         Current=vault.Read<AccountSession>("account");
     }
     public async Task<object> Login(string action,JsonElement args)
@@ -77,7 +78,7 @@ public sealed class Accounts
     {
         try{if(Current?.Profile.Kind=="hub")await Authorized("/v1/auth/logout",new{});}
         catch(HttpRequestException){}catch(TaskCanceledException){}
-        finally {Current=null;vault.Delete("account");vault.Delete("msal");}
+        finally {Current=null;vault.Delete("account");vault.Delete("msal");if(Guid.TryParse(microsoftId,out var appId))vault.Delete("msal-"+appId.ToString("N"));}
     }
     public async Task<JsonElement?> Authorized(string path,object args)
     {
@@ -100,7 +101,7 @@ public sealed class Accounts
         catch(JsonException){}
         throw new HttpRequestException("账号服务暂时不可用，请稍后重试。",null,response.StatusCode);
     }
-    private void Store(AccountSession value){Current=value;vault.Write("account",value with {RecoveryCode=null});}
+    private void Store(AccountSession value){vault.Write("account",value with {RecoveryCode=null});Current=value;}
     public async Task<SkinTexture?> Skin()
     {
         var current=Current;
@@ -117,7 +118,7 @@ public sealed class Accounts
             if(profileResponse.IsSuccessStatusCode)
             {
                 var profile=await profileResponse.Content.ReadFromJsonAsync<JsonElement>();
-                var active=ActiveSkin(profile);
+                var active=MinecraftAuthentication.ActiveSkin(profile);
                 Store(current with {SkinUrl=active.Url,SkinModel=active.Model});current=Current!;model=current.SkinModel;
             }
             if(string.IsNullOrEmpty(current.SkinUrl))return null;
@@ -145,55 +146,52 @@ public sealed class Accounts
         var result=await Authorized("/v1/account/skin",texture);
         return result!.Value.Deserialize<SkinTexture>(Json.Options)!;
     }
-    public async Task<object> MicrosoftLogin(bool interactive=true)
+    public async Task<object> MicrosoftLogin(bool interactive=true,Func<MicrosoftDevicePrompt,Task>? showCode=null,CancellationToken token=default)
     {
-        if(!Guid.TryParse(microsoftId,out _))throw new InvalidDataException("微软正版登录的项目应用尚未配置。请等待管理员完成应用注册。");
+        if(!Guid.TryParse(microsoftId,out var appId)||appId==Guid.Empty)throw new InvalidDataException("正版登录暂未开放，请等待管理员完成登录应用配置。");
+        if(!interactive&&Current?.MicrosoftClientId!=microsoftId)throw new InvalidDataException("正版登录配置已更新，请重新登录。");
         var application=PublicClientApplicationBuilder.Create(microsoftId).WithAuthority(AzureCloudInstance.AzurePublic,AadAuthorityAudience.PersonalMicrosoftAccount).WithRedirectUri("http://localhost").Build();
-        application.UserTokenCache.SetBeforeAccess(a=>{var bytes=vault.ReadBytes("msal");if(bytes is not null)a.TokenCache.DeserializeMsalV3(bytes);});
-        application.UserTokenCache.SetAfterAccess(a=>{if(a.HasStateChanged)vault.WriteBytes("msal",a.TokenCache.SerializeMsalV3());});
+        var cacheKey="msal-"+appId.ToString("N");
+        application.UserTokenCache.SetBeforeAccess(a=>{var bytes=vault.ReadBytes(cacheKey);if(bytes is not null)a.TokenCache.DeserializeMsalV3(bytes);});
+        application.UserTokenCache.SetAfterAccess(a=>{if(a.HasStateChanged&&!token.IsCancellationRequested)vault.WriteBytes(cacheKey,a.TokenCache.SerializeMsalV3());});
         AuthenticationResult oauth;
-        if(interactive)oauth=await application.AcquireTokenInteractive(["XboxLive.signin"]).WithPrompt(Prompt.SelectAccount).WithUseEmbeddedWebView(false).ExecuteAsync();
-        else
+        try
         {
-            var known=(await application.GetAccountsAsync()).SingleOrDefault(x=>x.HomeAccountId.Identifier==Current?.MicrosoftAccountId);
-            if(known is null)throw new InvalidDataException("微软账号需要重新登录。");
-            oauth=await application.AcquireTokenSilent(["XboxLive.signin"],known).ExecuteAsync();
-        }
-        using var http=new HttpClient(new HttpClientHandler{UseCookies=false,AllowAutoRedirect=false}){Timeout=TimeSpan.FromSeconds(30)};
-        async Task<JsonElement> Exchange(string url,object payload)
-        {
-            using var response=await http.PostAsJsonAsync(url,payload);
-            if(!response.IsSuccessStatusCode)throw new InvalidDataException("微软游戏账号验证未通过。请确认已拥有 Minecraft Java 版并完成 Xbox 资料设置。");
-            return await response.Content.ReadFromJsonAsync<JsonElement>();
-        }
-        var xbox=await Exchange("https://user.auth.xboxlive.com/user/authenticate",new {Properties=new {AuthMethod="RPS",SiteName="user.auth.xboxlive.com",RpsTicket="d="+oauth.AccessToken},RelyingParty="http://auth.xboxlive.com",TokenType="JWT"});
-        var xsts=await Exchange("https://xsts.auth.xboxlive.com/xsts/authorize",new {Properties=new {SandboxId="RETAIL",UserTokens=new[]{xbox.GetProperty("Token").GetString()}},RelyingParty="rp://api.minecraftservices.com/",TokenType="JWT"});
-        var uhs=xsts.GetProperty("DisplayClaims").GetProperty("xui")[0].GetProperty("uhs").GetString();
-        var minecraft=await Exchange("https://api.minecraftservices.com/authentication/login_with_xbox",new {identityToken="XBL3.0 x="+uhs+";"+xsts.GetProperty("Token").GetString()});
-        var access=minecraft.GetProperty("access_token").GetString()!;
-        http.DefaultRequestHeaders.Authorization=new AuthenticationHeaderValue("Bearer",access);
-        using var entitlements=await http.GetAsync("https://api.minecraftservices.com/entitlements/mcstore");
-        if(!entitlements.IsSuccessStatusCode)throw new InvalidDataException("无法核对 Minecraft Java 版所有权。");
-        var ent=await entitlements.Content.ReadFromJsonAsync<JsonElement>();
-        if(!ent.TryGetProperty("items",out var items)||items.GetArrayLength()==0)throw new InvalidDataException("此微软账号未拥有 Minecraft Java 版。");
-        var profile=await http.GetFromJsonAsync<JsonElement>("https://api.minecraftservices.com/minecraft/profile");
-        var player=new PlayerProfile(profile.GetProperty("id").GetString()!,oauth.Account.Username,profile.GetProperty("name").GetString()!,"microsoft");
-        var until=DateTimeOffset.UtcNow.AddSeconds(minecraft.GetProperty("expires_in").GetInt32());
-        var activeSkin=ActiveSkin(profile);
-        Store(new(player,access,until,"",until,MicrosoftAccountId:oauth.Account.HomeAccountId.Identifier,SkinUrl:activeSkin.Url,SkinModel:activeSkin.Model));
-        return new {Profile=player};
-    }
-    private static (string? Url,string Model) ActiveSkin(JsonElement profile)
-    {
-        string? skinUrl=null;var skinModel="classic";
-        if(profile.TryGetProperty("skins",out var skins))
-        {
-            foreach(var skin in skins.EnumerateArray())if(skin.TryGetProperty("state",out var state)&&state.GetString()=="ACTIVE")
+            if(interactive)
             {
-                skinUrl=skin.GetProperty("url").GetString();
-                skinModel=skin.TryGetProperty("variant",out var variant)&&variant.GetString()=="SLIM"?"slim":"classic";break;
+                if(showCode is null)throw new InvalidOperationException("Device-code presentation is required.");
+                oauth=await application.AcquireTokenWithDeviceCode(["XboxLive.signin"],result=>
+                {
+                    token.ThrowIfCancellationRequested();
+                    return showCode(MicrosoftDevicePrompt.Create(result.UserCode,result.VerificationUrl,result.ExpiresOn));
+                }).WithExtraQueryParameters(new Dictionary<string,(string value,bool includeInCacheKey)>{{"mkt",("zh-CN",false)}}).ExecuteAsync(token);
+            }
+            else
+            {
+                var known=(await application.GetAccountsAsync()).SingleOrDefault(x=>x.HomeAccountId.Identifier==Current?.MicrosoftAccountId);
+                if(known is null)throw new InvalidDataException("微软账号需要重新登录。");
+                oauth=await application.AcquireTokenSilent(["XboxLive.signin"],known).ExecuteAsync(token);
             }
         }
-        return (skinUrl,skinModel);
+        catch(MsalUiRequiredException){throw new InvalidDataException("微软账号需要重新登录。");}
+        catch(MsalException ex)
+        {
+            token.ThrowIfCancellationRequested();
+            throw new InvalidDataException(ex.ErrorCode switch
+            {
+                "authorization_declined" or "access_denied"=>"已取消微软授权，可重新登录。",
+                "expired_token" or "code_expired" or "verification_code_expired"=>"登录码已过期，请重新登录。",
+                "invalid_client" or "unauthorized_client" or "invalid_scope"=>"正版登录应用配置未通过验证，请联系管理员。",
+                "authentication_canceled"=>"已取消微软登录。",
+                _=>"微软登录暂时不可用，请稍后重试。"
+            });
+        }
+        token.ThrowIfCancellationRequested();
+        using var http=new HttpClient(new HttpClientHandler{UseCookies=false,AllowAutoRedirect=false}){Timeout=TimeSpan.FromSeconds(30),MaxResponseContentBufferSize=2*1024*1024};
+        var identity=await new MinecraftAuthentication(http).Login(oauth.AccessToken,token);
+        var player=new PlayerProfile(identity.Id,oauth.Account.Username,identity.Name,"microsoft");
+        token.ThrowIfCancellationRequested();
+        Store(new(player,identity.AccessToken,identity.ExpiresAt,"",identity.ExpiresAt,MicrosoftAccountId:oauth.Account.HomeAccountId.Identifier,SkinUrl:identity.SkinUrl,SkinModel:identity.SkinModel,MicrosoftClientId:microsoftId));
+        return new {Profile=player};
     }
 }
