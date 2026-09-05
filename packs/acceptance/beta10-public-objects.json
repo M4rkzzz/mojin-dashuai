@@ -1,0 +1,7 @@
+{
+  "version": "0.1.2-beta.10",
+  "completedAt": "2026-09-05T13:07:36.6616241+00:00",
+  "uniqueObjects": 496,
+  "client": "direct .NET HttpClient",
+  "passed": true
+}

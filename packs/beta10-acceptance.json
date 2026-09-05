@@ -113,7 +113,8 @@
     "expectedDifferentialDownloadBytes": 1152003,
     "differentialEvidence": "packs/acceptance/beta10-differential-update.json",
     "publicArchiveRoundTripVerified": true,
-    "publicActivationEvidence": "packs/acceptance/beta10-public-activation.json"
+    "publicActivationEvidence": "packs/acceptance/beta10-public-activation.json",
+    "postActivationPublicObjectsEvidence": "packs/acceptance/beta10-public-objects.json"
   },
   "installer": {
     "version": "0.1.2-beta.10",
@@ -142,7 +143,8 @@
     "Prior clean-cache installs and real game joins remain historical evidence and do not replace beta.8 single-origin installation checks.",
     "LittleSkin protocol/cache/configuration checks do not establish the new provider's appearance in a real game window.",
     "Windows per-Java high-performance preference is enabled by default and reversible; actual dual-GPU renderer and frame-rate have not been verified.",
-    "Python urllib intermittently reported TLS EOF during a supplementary probe; the same catalog and all manifests succeeded through direct .NET HttpClient, and full downloads were verified. This local network is not a clean mainland-network acceptance environment."
+    "Python urllib intermittently reported TLS EOF during a supplementary probe; the same catalog and all manifests succeeded through direct .NET HttpClient, and full downloads were verified. This local network is not a clean mainland-network acceptance environment.",
+    "Activation succeeded before the publishing script repeated its public HEAD sweep and encountered Python TLS EOF. Direct .NET HttpClient subsequently verified all 496 unique public objects, and both old/new API endpoints returned the exact signed candidate."
   ],
   "baseline": "packs/beta9-acceptance.json",
   "cleanup": {
