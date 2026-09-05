@@ -1,0 +1,15 @@
+**/bin/
+**/obj/
+**/node_modules/
+ui/dist/
+.tools/
+.local/
+artifacts/
+*.user
+.env
+*.pfx
+*.key
+*-private.pem
+TestResults/
+*.log
+*.tsbuildinfo

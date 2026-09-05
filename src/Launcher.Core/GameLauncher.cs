@@ -1,0 +1,70 @@
+using System.Diagnostics;
+using System.Text.Json;
+using CmlLib.Core;
+using CmlLib.Core.Auth;
+using CmlLib.Core.ProcessBuilder;
+
+namespace Boshan.Launcher;
+
+public sealed class GameLauncher
+{
+    public async Task<Process> Launch(PackManifest manifest,LauncherSettings settings,MSession session,RouteEndpoint route,CancellationToken token=default)
+    {
+        ContentSecurity.Validate(manifest);settings.Validate();
+        var installer=new TransactionalInstaller(settings.Root);var instance=installer.InstancePath(manifest.Instance);
+        var java=string.IsNullOrEmpty(settings.Java[manifest.Instance])?ContentSecurity.SafePath(RuntimeManager.RuntimeRoot(settings.Root,manifest.Runtime),manifest.Runtime.JavaPath):settings.Java[manifest.Instance];
+        await RuntimeManager.Validate(java,manifest.Runtime.Major,token);
+        if(manifest.Instance=="mb")CleanroomAdapter.ValidatePrepared(instance,manifest);
+        var launcher=new MinecraftLauncher(new MinecraftPath(instance));
+        var options=new MLaunchOption {
+            Session=session,JavaPath=java,MaximumRamMb=settings.Memory[manifest.Instance],MinimumRamMb=Math.Min(2048,settings.Memory[manifest.Instance]),
+            ScreenWidth=settings.Width,ScreenHeight=settings.Height,FullScreen=settings.Fullscreen,ServerIp=route.Host,ServerPort=route.Port,
+            GameLauncherName="MojinDashuai",GameLauncherVersion="0.1.0",
+            ExtraJvmArguments=[MArgument.FromCommandLine(settings.Jvm[manifest.Instance])]
+        };
+        // Installation is performed exclusively from the signed file inventory. CmlLib only builds the launch process.
+        var process=await launcher.BuildProcessAsync(manifest.LaunchVersion,options);
+        process.StartInfo.CreateNoWindow=true; process.StartInfo.UseShellExecute=false;
+        process.Start();return process;
+    }
+}
+public static class CleanroomAdapter
+{
+    public static async Task CompletePrepared(string instance,string launchVersion)
+    {
+        var jsonPath=ContentSecurity.SafePath(instance,$"versions/{launchVersion}/{launchVersion}.json");
+        using var document=JsonDocument.Parse(File.ReadAllText(jsonPath));
+        foreach(var library in document.RootElement.GetProperty("libraries").EnumerateArray())
+        {
+            if(!library.TryGetProperty("downloads",out var downloads)||!downloads.TryGetProperty("artifact",out var artifact)||!artifact.TryGetProperty("path",out var downloadPath))continue;
+            var destination=ContentSecurity.SafePath(instance,"libraries/"+downloadPath.GetString());
+            if(File.Exists(destination))continue;
+            var coordinate=library.GetProperty("name").GetString()!.Split(':');
+            if(coordinate.Length<3)throw new InvalidDataException("Cleanroom 依赖坐标无效。");
+            var filename=coordinate[1]+"-"+coordinate[2]+(coordinate.Length>3?"-"+coordinate[3]:"")+".jar";
+            var relative="libraries/"+coordinate[0].Replace('.','/')+"/"+coordinate[1]+"/"+coordinate[2]+"/"+filename;
+            var source=ContentSecurity.SafePath(instance,relative);
+            if(!File.Exists(source))continue;
+            await using var stream=File.OpenRead(source);var hash=Convert.ToHexString(await System.Security.Cryptography.SHA1.HashDataAsync(stream));
+            if(!hash.Equals(artifact.GetProperty("sha1").GetString(),StringComparison.OrdinalIgnoreCase))throw new InvalidDataException("Cleanroom 依赖校验失败。");
+            TransactionalInstaller.AtomicCopy(source,destination);
+        }
+        var vanilla=ContentSecurity.SafePath(instance,"versions/1.12.2/1.12.2.jar");
+        var client=ContentSecurity.SafePath(instance,$"versions/{launchVersion}/{launchVersion}.jar");
+        if(!File.Exists(client))
+        {
+            await using var stream=File.OpenRead(vanilla);var hash=Convert.ToHexString(await System.Security.Cryptography.SHA1.HashDataAsync(stream));
+            if(!hash.Equals(document.RootElement.GetProperty("downloads").GetProperty("client").GetProperty("sha1").GetString(),StringComparison.OrdinalIgnoreCase))throw new InvalidDataException("Minecraft 原版文件校验失败。");
+            TransactionalInstaller.AtomicCopy(vanilla,client);
+        }
+    }
+    public static void ValidatePrepared(string instance,PackManifest manifest)
+    {
+        if(manifest.Loader!="cleanroom"||manifest.Runtime.Major!=25)throw new InvalidDataException("肉丸工艺仅支持 Cleanroom + Java 25。");
+        var versionFile=ContentSecurity.SafePath(instance,$"versions/{manifest.LaunchVersion}/{manifest.LaunchVersion}.json");
+        using var version=JsonDocument.Parse(File.ReadAllText(versionFile));
+        var text=version.RootElement.GetRawText();
+        if(!text.Contains("cleanroom",StringComparison.OrdinalIgnoreCase))throw new InvalidDataException("三服启动配置缺少 Cleanroom 加载器。");
+        if(!manifest.Files.Any(x=>x.Path.Contains("cleanroom",StringComparison.OrdinalIgnoreCase)&&x.Path.EndsWith(".jar",StringComparison.OrdinalIgnoreCase)))throw new InvalidDataException("三服 Cleanroom 文件尚未准备完成。");
+    }
+}

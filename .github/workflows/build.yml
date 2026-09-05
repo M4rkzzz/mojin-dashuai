@@ -1,0 +1,49 @@
+name: Build and verify Mojin Dashuai
+on:
+  push:
+    paths-ignore: ['docs/**']
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  windows:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: ui/package-lock.json
+      - run: npm ci
+        working-directory: ui
+      - run: npm run build
+        working-directory: ui
+      - run: dotnet test tests/Hub.Tests/Hub.Tests.csproj -c Release --logger trx
+      - run: dotnet publish src/Launcher.Desktop/Launcher.Desktop.csproj -c Release -r win-x64 --self-contained true -o artifacts/MojinDashuai
+      - uses: actions/upload-artifact@v4
+        with:
+          name: MojinDashuai-windows-x64-preview
+          path: artifacts/MojinDashuai/
+          retention-days: 14
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: test-results
+          path: tests/Hub.Tests/TestResults/
+  api:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+      - run: dotnet publish src/Hub.Api/Hub.Api.csproj -c Release -o artifacts/api
+      - uses: actions/upload-artifact@v4
+        with:
+          name: hub-api
+          path: artifacts/api/

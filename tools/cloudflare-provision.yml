@@ -1,0 +1,55 @@
+name: Provision Boshan launcher tunnel
+on:
+  workflow_dispatch:
+    inputs:
+      sealing_public_key:
+        description: Base64 encoded RSA public PEM for encrypted tunnel credential delivery
+        required: true
+permissions:
+  contents: read
+jobs:
+  provision:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Create the dedicated tunnel and hostname
+        env:
+          CF_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CF_ACCOUNT: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          SEALING_KEY: ${{ inputs.sealing_public_key }}
+        run: |
+          python3 - <<'PY'
+          import os,json,base64,urllib.request,urllib.error,pathlib,subprocess
+          def api(method,path,body=None):
+              data=None if body is None else json.dumps(body).encode()
+              request=urllib.request.Request('https://api.cloudflare.com/client/v4/'+path,data=data,method=method,headers={'Authorization':'Bearer '+os.environ['CF_TOKEN'],'Content-Type':'application/json'})
+              try:
+                  with urllib.request.urlopen(request) as response: result=json.load(response)
+              except urllib.error.HTTPError as e:
+                  raise SystemExit('Cloudflare operation failed: HTTP '+str(e.code)) from None
+              if not result.get('success'): raise SystemExit('Cloudflare operation failed')
+              return result['result']
+          account=os.environ['CF_ACCOUNT']; base='accounts/'+account+'/cfd_tunnel'
+          tunnels=api('GET',base+'?is_deleted=false&name=boshan-client-hub')
+          exact=[t for t in tunnels if t['name']=='boshan-client-hub']
+          tunnel=exact[0] if exact else api('POST',base,{'name':'boshan-client-hub','config_src':'cloudflare','tunnel_secret':base64.b64encode(os.urandom(32)).decode()})
+          tid=tunnel['id']
+          api('PUT',base+'/'+tid+'/configurations',{'config':{'ingress':[{'hostname':'launcher.boshan.uk','service':'http://hub-api:8080'},{'service':'http_status:404'}]}})
+          zone=api('GET','zones?name=boshan.uk')[0]['id']; dns='zones/'+zone+'/dns_records'
+          records=api('GET',dns+'?name=launcher.boshan.uk')
+          desired={'type':'CNAME','name':'launcher.boshan.uk','content':tid+'.cfargotunnel.com','proxied':True,'ttl':1,'comment':'Boshan unified launcher account API'}
+          if records:
+              if len(records)!=1 or records[0]['type']!='CNAME' or records[0]['content']!=desired['content']: raise SystemExit('Hostname already exists with a different target; no DNS records changed.')
+          else: api('POST',dns,desired)
+          token=api('GET',base+'/'+tid+'/token')
+          os.makedirs('sealed',exist_ok=True)
+          pathlib.Path('public.pem').write_bytes(base64.b64decode(os.environ['SEALING_KEY']))
+          result=subprocess.run(['openssl','pkeyutl','-encrypt','-pubin','-inkey','public.pem','-pkeyopt','rsa_padding_mode:oaep','-pkeyopt','rsa_oaep_md:sha256','-out','sealed/tunnel-token.sealed'],input=token.encode(),capture_output=True)
+          if result.returncode: raise SystemExit('Credential sealing failed')
+          pathlib.Path('sealed/tunnel.json').write_text(json.dumps({'tunnelId':tid,'hostname':'launcher.boshan.uk'}))
+          print('Dedicated tunnel and DNS configured. Credential encrypted to the supplied public key.')
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: boshan-tunnel-sealed
+          path: sealed/
+          retention-days: 1

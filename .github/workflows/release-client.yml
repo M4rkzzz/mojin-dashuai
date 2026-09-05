@@ -1,0 +1,32 @@
+name: Create launcher draft release
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        required: true
+        description: Launcher version, for example 0.1.0
+permissions:
+  contents: write
+jobs:
+  package:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with: {dotnet-version: '10.0.x'}
+      - uses: actions/setup-node@v4
+        with: {node-version: '22'}
+      - run: npm ci && npm run build
+        working-directory: ui
+      - run: dotnet test tests/Hub.Tests/Hub.Tests.csproj -c Release
+      - run: dotnet publish src/Launcher.Desktop/Launcher.Desktop.csproj -c Release -r win-x64 --self-contained true -o artifacts/MojinDashuai
+      - name: Package and create draft
+        env:
+          VERSION: ${{ inputs.version }}
+          GH_TOKEN: ${{ github.token }}
+        shell: pwsh
+        run: |
+          if ($env:VERSION -notmatch '^\d+\.\d+\.\d+(-[a-z0-9.]+)?$') { throw 'Invalid version' }
+          Compress-Archive -Path artifacts/MojinDashuai/* -DestinationPath artifacts/MojinDashuai-windows-x64.zip
+          (Get-FileHash artifacts/MojinDashuai-windows-x64.zip).Hash | Set-Content artifacts/SHA256.txt
+          gh release create "launcher-v$env:VERSION" artifacts/MojinDashuai-windows-x64.zip artifacts/SHA256.txt --draft --title "魔金大帅 $env:VERSION" --notes 'Windows x64 启动器。游戏内容通过独立签名目录发布。'

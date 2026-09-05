@@ -1,0 +1,71 @@
+name: mc-client-hub
+services:
+  postgres:
+    image: postgres:17-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: hub
+      POSTGRES_USER: hub
+      POSTGRES_PASSWORD_FILE: /run/secrets/db_password
+    secrets: [db_password]
+    volumes:
+      - /vol1/mc-client-hub/postgres:/var/lib/postgresql/data
+    healthcheck:
+      test: [CMD-SHELL, 'pg_isready -U hub -d hub']
+      interval: 10s
+      timeout: 5s
+      retries: 10
+    networks: [database]
+    logging: &logging
+      driver: json-file
+      options: {max-size: 10m, max-file: '3'}
+  hub-api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: boshan/hub-api:0.1.0
+    restart: unless-stopped
+    env_file: secrets/api.env
+    environment:
+      ASPNETCORE_URLS: http://+:8080
+      InitializeDatabase: 'true'
+      TrustCloudflareTunnel: 'true'
+      DataProtectionPath: /data/keys
+      PublicPath: /public
+    ports: ['127.0.0.1:18081:8080']
+    volumes:
+      - /vol1/mc-client-hub/api:/data
+      - /vol1/mc-client-hub/public:/public:ro
+    depends_on:
+      postgres: {condition: service_healthy}
+    networks: [database, edge]
+    security_opt: ['no-new-privileges:true']
+    cap_drop: [ALL]
+    logging: *logging
+  downloads:
+    image: nginx:1.28-alpine
+    restart: unless-stopped
+    ports: ['192.168.5.124:18080:8080']
+    volumes:
+      - /vol1/mc-client-hub/public:/usr/share/nginx/html:ro
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf:ro
+    networks: [edge]
+    security_opt: ['no-new-privileges:true']
+    logging: *logging
+  cloudflared:
+    image: cloudflare/cloudflared:2026.8.3
+    restart: unless-stopped
+    command: tunnel --no-autoupdate run --token-file /run/secrets/tunnel_token
+    secrets: [tunnel_token]
+    depends_on: [hub-api]
+    networks: [edge]
+    security_opt: ['no-new-privileges:true']
+    cap_drop: [ALL]
+    logging: *logging
+    profiles: [tunnel]
+networks:
+  database: {internal: true}
+  edge: {}
+secrets:
+  db_password: {file: ./secrets/db-password}
+  tunnel_token: {file: ./secrets/tunnel-token}

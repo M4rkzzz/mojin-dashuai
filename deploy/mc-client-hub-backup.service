@@ -1,0 +1,7 @@
+[Unit]
+Description=Back up Boshan launcher account database
+Requires=docker.service
+After=docker.service
+[Service]
+Type=oneshot
+ExecStart=/bin/sh /var/apps/mc-client-hub/backup.sh
