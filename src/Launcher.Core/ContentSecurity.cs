@@ -9,11 +9,15 @@ public static partial class ContentSecurity
 {
     [GeneratedRegex("^[a-fA-F0-9]{64}$")] public static partial Regex HashPattern();
     [GeneratedRegex("^(CON|PRN|AUX|NUL|COM[0-9]|LPT[0-9])($|\\.)", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant)] private static partial Regex DeviceName();
-    public static string SafePath(string root, string relative)
+    public static void ValidateRelativePath(string relative)
     {
         if (string.IsNullOrWhiteSpace(relative) || relative.Contains('\\') || relative.Contains(':') || relative.StartsWith('/') || relative.Any(char.IsControl)) throw new InvalidDataException("清单路径不安全。");
         var pieces = relative.Split('/');
         if (pieces.Any(s => s.Length == 0 || s is "." or ".." || s.EndsWith('.') || s.EndsWith(' ') || s.IndexOfAny(['*','?','"','<','>','|']) >= 0 || DeviceName().IsMatch(s))) throw new InvalidDataException("清单包含无效文件名。");
+    }
+    public static string SafePath(string root, string relative)
+    {
+        ValidateRelativePath(relative);
         var fullRoot = Path.GetFullPath(root).TrimEnd(Path.DirectorySeparatorChar) + Path.DirectorySeparatorChar;
         var path = Path.GetFullPath(Path.Combine(root, relative.Replace('/', Path.DirectorySeparatorChar)));
         if (!path.StartsWith(fullRoot, StringComparison.OrdinalIgnoreCase)) throw new InvalidDataException("文件超出实例目录。");
@@ -32,14 +36,20 @@ public static partial class ContentSecurity
         if (manifest.Files.Select(f => f.Path).Distinct(StringComparer.OrdinalIgnoreCase).Count() != manifest.Files.Length) throw new InvalidDataException("清单有重复文件路径。");
         foreach (var file in manifest.Files)
         {
-            SafePath(Path.GetTempPath(), file.Path); ValidateFile(file);
+            ValidateRelativePath(file.Path); ValidateFile(file);
             var prefix = file.Path.Split('/')[0];
             if (new[] { ".hub", "saves", "screenshots", "logs", "crash-reports", "backups", "journeymap", "XaeroWaypoints", "XaeroWorldMap" }.Contains(prefix, StringComparer.OrdinalIgnoreCase)) throw new InvalidDataException("发布清单不能管理玩家数据。");
             if (file.Path.Equals("options.txt", StringComparison.OrdinalIgnoreCase) && file.Policy == FilePolicy.Managed) throw new InvalidDataException("玩家设置不能强制覆盖。");
         }
         ValidateFile(manifest.Runtime.Archive);
-        SafePath(Path.GetTempPath(), manifest.Runtime.JavaPath);
-        SafePath(Path.GetTempPath(), manifest.Runtime.Id);
+        foreach(var bundle in manifest.Bundles??[])
+        {
+            ValidateFile(bundle.Archive);
+            if(bundle.Prefix.Length>0)ValidateRelativePath(bundle.Prefix.TrimEnd('/'));
+            if(bundle.Prefix.Length>0&&!bundle.Prefix.EndsWith('/'))throw new InvalidDataException("内容包目录前缀无效。");
+        }
+        ValidateRelativePath(manifest.Runtime.JavaPath);
+        ValidateRelativePath(manifest.Runtime.Id);
         if (manifest.Runtime.ExpandedSize <= 0) throw new InvalidDataException("Java 解压大小无效。");
     }
     public static void ValidateFile(ContentFile file)
@@ -68,7 +78,7 @@ public static partial class ContentSecurity
     }
     public static SignedEnvelope Sign<T>(T value, string keyId, string privateKey)
     {
-        var bytes = JsonSerializer.SerializeToUtf8Bytes(value, Json.Options);
+        var bytes = JsonSerializer.SerializeToUtf8Bytes(value, new JsonSerializerOptions(Json.Options){WriteIndented=false});
         using var key = ECDsa.Create(); key.ImportFromPem(privateKey);
         if (key.KeySize != 256) throw new InvalidDataException("只接受 ECDSA P-256。");
         return new(keyId, Convert.ToBase64String(bytes), Convert.ToBase64String(key.SignData(bytes, HashAlgorithmName.SHA256, DSASignatureFormat.IeeeP1363FixedFieldConcatenation)));

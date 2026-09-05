@@ -1,0 +1,29 @@
+{
+  "publications": [
+    {
+      "publishedFiles": 35719,
+      "publicSampleChecks": 6,
+      "standard": true,
+      "native": false,
+      "catalogChanged": false
+    },
+    {
+      "publishedFiles": 266,
+      "publicSampleChecks": 3,
+      "standard": false,
+      "native": true,
+      "catalogChanged": false
+    },
+    {
+      "publishedFiles": 1,
+      "publicSampleChecks": 1,
+      "standard": false,
+      "native": true,
+      "partial": true,
+      "catalogChanged": false
+    }
+  ],
+  "standardPublished": true,
+  "nativeDependenciesPublished": true,
+  "catalogChanged": false
+}

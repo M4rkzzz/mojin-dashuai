@@ -65,6 +65,9 @@ public sealed class TransactionalInstaller(string root)
         var changed = new List<ContentFile>();
         foreach (var file in manifest.Files)
         {
+            // Manifest paths were validated above. Missing files require no ancestor scan until they are written.
+            var candidate=Path.Combine(instance,file.Path.Replace('/',Path.DirectorySeparatorChar));
+            if(!File.Exists(candidate)){changed.Add(file);continue;}
             var path = ContentSecurity.SafePath(instance, file.Path);
             if (File.Exists(path) && file.Policy is FilePolicy.Seed or FilePolicy.Preserve) continue;
             if (!await ContentSecurity.Matches(path, file, token)) changed.Add(file);
@@ -73,6 +76,14 @@ public sealed class TransactionalInstaller(string root)
         var required = total * 2 + manifest.Runtime.Archive.Size + manifest.Runtime.ExpandedSize + 256L * 1024 * 1024;
         var drive = new DriveInfo(Path.GetPathRoot(Path.GetFullPath(root))!);
         if (drive.AvailableFreeSpace < required) throw new IOException($"磁盘空间不足，需要至少 {required / (1024.0*1024*1024):F1} GiB 可用空间。");
+        // A first install can fetch compressed overrides once; later updates retain per-file differences.
+        if(previous is null&&changed.Count>0)foreach(var bundle in manifest.Bundles??[])
+        {
+            long bundleDone=0;
+            progress?.Report(new(manifest.Instance,"下载世界配置",0,bundle.Archive.Size,0));
+            await downloader.PrimeBundle(bundle,changed.ToDictionary(f=>f.Path,StringComparer.OrdinalIgnoreCase),
+                count=>{bundleDone+=count;progress?.Report(new(manifest.Instance,"下载世界配置",bundleDone,bundle.Archive.Size,bundleDone/Math.Max(1,clock.Elapsed.TotalSeconds)));},token);
+        }
         var downloaded = new System.Collections.Concurrent.ConcurrentDictionary<string, string>(StringComparer.OrdinalIgnoreCase);
         await Parallel.ForEachAsync(changed, new ParallelOptions { MaxDegreeOfParallelism = concurrency, CancellationToken = token }, async (file, ct) => {
             var path = await downloader.Get(file, count => { var done = Interlocked.Add(ref completed, count); progress?.Report(new(manifest.Instance, "正在下载世界内容", Math.Min(total,done), total, done / Math.Max(1,clock.Elapsed.TotalSeconds))); }, ct);

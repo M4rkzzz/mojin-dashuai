@@ -1,0 +1,59 @@
+{
+  "date": "2026-09-05",
+  "cleanWindows": false,
+  "cleanNetworkDownload": false,
+  "releaseReady": false,
+  "installChecks": [
+    {
+      "instance": "m3e",
+      "installed": true,
+      "javaMajor": 8,
+      "localVersionPrepared": true,
+      "gameStarted": false,
+      "joinedServer": false,
+      "elapsedSeconds": 8.1865245,
+      "files": 4778,
+      "manifestSha256": "2cf8b6298ab4cdae2446636b9fcc3311b63c67e8b130533fc4367d70612431dd",
+      "verification": "cached-install-and-process-preparation"
+    },
+    {
+      "instance": "dc2",
+      "installed": true,
+      "javaMajor": 17,
+      "localVersionPrepared": true,
+      "gameStarted": false,
+      "joinedServer": false,
+      "elapsedSeconds": 129.3022037,
+      "files": 9853,
+      "manifestSha256": "16835e9203750e59b502356b52394827da1eb331f8ff44cbb9dfbeba6e37647f",
+      "verification": "cached-install-and-process-preparation"
+    },
+    {
+      "instance": "mb",
+      "installed": true,
+      "javaMajor": 25,
+      "localVersionPrepared": true,
+      "gameStarted": false,
+      "joinedServer": false,
+      "elapsedSeconds": 170.954188,
+      "files": 26886,
+      "manifestSha256": "c417193d8f122bf0d29c7b1530d307098b5b4b4bba71f3f50492782fb2d1114e",
+      "verification": "cached-install-and-process-preparation"
+    }
+  ],
+  "playChecks": {
+    "m3e": {
+      "javaMajor": 8,
+      "modsLoaded": 148,
+      "joinedServer": false,
+      "state": "initial-auto-connect-handshake-timeout; awaiting manual reconnect",
+      "libraryConflictFixed": true
+    },
+    "dc2": {
+      "state": "not-started"
+    },
+    "mb": {
+      "state": "not-started-from-native-install"
+    }
+  }
+}

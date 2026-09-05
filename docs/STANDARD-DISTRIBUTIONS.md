@@ -24,7 +24,7 @@
 
 三服采用 [Cleanroom 官方实例](https://cleanroommc.com/wiki/end-user-guide/installation/install-client) 的补丁和 [packwiz 官方推荐的 MultiMC 分发方式](https://packwiz.infra.link/tutorials/installing/packwiz-installer/)。保留补丁，Java 兼容范围收紧为 25，固定 bootstrap 0.0.3 和 installer 0.5.14，关闭安装工具自动升级和图形弹窗。PCL 不属于该包支持的导入器。
 
-所有服同时生成 packwiz 源目录和独立的 `*-content.json` 供发布过程读取。这个文件是构建输入，**不是可直接签名发布的 Launcher.Core PackManifest**：原版资源、加载器库、启动配置、运行时展开路径、配置管理策略和验收记录仍须由原生发布流程补全。标准包不会绕过现有签名发布门槛。
+所有服同时生成 packwiz 源目录和独立的 `*-content.json` 供发布过程读取。这个文件是构建输入，**不是可直接签名发布的 Launcher.Core PackManifest**。原生准备工具现已合并原版资源、加载器库、启动配置、运行时展开路径和配置策略，输出到 `artifacts/native/`；仍须完成真实游戏验收才能签名发布。
 
 Java 清单与内容关联但不嵌入标准压缩包。魔金大帅负责按所选服务器自动安装固定 Java；通过外部启动器导入标准包时，Java 配置能力取决于外部启动器。三服没有 Java 8 启动器、Relauncher 或回退入口。
 
@@ -45,7 +45,18 @@ python tools/prepare-format-tools.py
 python tools/build-standard-packs.py --publish-missing
 ```
 
-输入配置为 `packs/distributions.json`，输入文件清单为三个 `*-source-audit.json`。命令先补齐单文件自建源，再生成标准压缩包、内容清单、报告及 public/distributions 目录，写入忽略目录 `artifacts/distributions/`。该步骤只发布缺少来源的单文件；整包和 packwiz 目录仍待发布，不会切换正式 catalog。每次构建自动刷新 `packs/standard-distribution-status.json`，避免已补齐的文件仍显示缺失。
+输入配置为 `packs/distributions.json`，输入文件清单为三个 `*-source-audit.json`。命令先补齐单文件自建源，再生成标准压缩包、内容清单、报告及 public/distributions 目录，写入忽略目录 `artifacts/distributions/`。该步骤只发布缺少来源的单文件；整包和 packwiz 目录通过下列独立发布命令上传，不会切换正式 catalog。每次构建自动刷新 `packs/standard-distribution-status.json`，避免已补齐的文件仍显示缺失。
+
+```powershell
+python tools/prepare-engine-profiles.py
+python tools/prepare-native-content.py
+python tools/publish-content-files.py --standard --native
+python tools/check-native-install.py
+```
+
+原生依赖来自 CmlLib 实际文件提取器；一服的合并 MSE 配置消除被后续 Forge 依赖覆盖的同名旧库。Java 下载与发布单独固定版本，玩家安装时由原生运行时管理器自动解压。首次安装使用压缩 overrides 批量填充校验缓存，后续更新继续按变化文件下载。发布路径不可变，已有同路径不同内容会失败；改变标准包内容时递增版本。2026-09-05 已成功公开 35,719 个标准分发文件和 266 个原生依赖文件，见 `packs/content-publication.json`；正式 catalog 尚未切换。
+
+安装检查使用隔离 `.local` 目录和已校验源缓存，实际执行原生安装器与启动参数构造，但不冒充干净网络下载、干净 Windows 或真实入服验收。`Publisher play-check MANIFEST ROOT ROUTE_DOMAIN` 可使用独立测试名启动游戏，输出进程记录和日志；用户观察游戏界面，工具不执行电脑 UI 操作。
 
 不带 `--publish-missing` 可仅做本地构建，缺少可用地址时会提示补传。`--draft` 保留给本地审查，不作为玩家包。实际缺少原文件或文件损坏才需要补齐，缺少发布出处不会卡住流程。
 
@@ -61,4 +72,4 @@ python tools/build-standard-packs.py --publish-missing
 
 一服 117 个文件已具备下载源，其中 99 个原站、18 个自建；二服 317 个、三服 377 个都有可用原站。三服另有一个已验证的自建备用文件。三个标准包均已生成，当前没有缺少下载地址的模组。
 
-构建报告的 releaseReady 仍为 false，原因是原生完整安装清单和实际入服验收未完成，与发布出处无关。
+构建报告的 releaseReady 仍为 false，原因是实际游戏和干净环境验收未完成，与发布出处无关。

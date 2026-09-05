@@ -2,11 +2,37 @@ using System.Collections.Concurrent;
 using System.Diagnostics;
 using System.Net;
 using System.Net.Http.Headers;
+using System.IO.Compression;
 
 namespace Boshan.Launcher;
 
 public sealed class Downloader : IDisposable
 {
+    public async Task PrimeBundle(ContentBundle bundle,IReadOnlyDictionary<string,ContentFile> files,Action<long>? onBytes,CancellationToken token)
+    {
+        var archive=await Get(bundle.Archive,onBytes,token);
+        using var zip=ZipFile.OpenRead(archive);
+        var seen=new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+        foreach(var entry in zip.Entries)
+        {
+            token.ThrowIfCancellationRequested();
+            if(entry.FullName.EndsWith('/')||!entry.FullName.StartsWith(bundle.Prefix,StringComparison.Ordinal))continue;
+            var relative=entry.FullName[bundle.Prefix.Length..];ContentSecurity.ValidateRelativePath(relative);
+            if(!seen.Add(relative)||((entry.ExternalAttributes>>16)&0xF000)==0xA000)throw new InvalidDataException("内容包包含重复路径或链接。");
+            if(!files.TryGetValue(relative,out var file))continue;
+            if(entry.Length!=file.Size)throw new InvalidDataException("内容包中的文件大小不符。");
+            var target=ContentSecurity.SafePath(cache,file.Sha256.ToLowerInvariant());
+            if(await ContentSecurity.Matches(target,file,token))continue;
+            var temp=target+".extract-"+Guid.NewGuid().ToString("N");
+            try
+            {
+                await using(var input=entry.Open())await using(var output=File.Create(temp))await input.CopyToAsync(output,token);
+                if(!await ContentSecurity.Matches(temp,file,token))throw new InvalidDataException("内容包中的文件校验失败。");
+                File.Move(temp,target,true);
+            }
+            finally{if(File.Exists(temp))File.Delete(temp);}
+        }
+    }
     private readonly HttpClient client;
     private readonly string cache;
     private readonly long limit;

@@ -6,8 +6,11 @@ using CmlLib.Core;
 using CmlLib.Core.Auth;
 using CmlLib.Core.ProcessBuilder;
 using CmlLib.Core.CommandParser;
+using CmlLib.Core.FileExtractors;
+using CmlLib.Core.Version;
+using CmlLib.Core.Tasks;
 
-if(args.Length==0){Console.WriteLine("keygen PRIVATE PUBLIC | verify MANIFEST | sign MANIFEST PRIVATE OUTPUT | sign-catalog CATALOG PRIVATE OUTPUT | diff OLD NEW | probe INSTANCE | fetch CONTENT_FILE CACHE | lab-launch INSTANCE_DIR VERSION JAVA [SERVER_DOMAIN]");return;}
+if(args.Length==0){Console.WriteLine("keygen PRIVATE PUBLIC | verify MANIFEST | sign MANIFEST PRIVATE OUTPUT | sign-catalog CATALOG PRIVATE OUTPUT | diff OLD NEW | probe INSTANCE | fetch CONTENT_FILE CACHE | engine-files INSTANCE_DIR VERSION OUTPUT | lab-launch INSTANCE_DIR VERSION JAVA [SERVER_DOMAIN]");return;}
 try
 {
     switch(args[0])
@@ -82,6 +85,60 @@ try
             async Task Drain(StreamReader reader){string? line;while((line=await reader.ReadLineAsync())is not null){await logGate.WaitAsync();try{await writer.WriteLineAsync(line);await writer.FlushAsync();}finally{logGate.Release();}}}
             Console.WriteLine($"Started isolated client PID {process.Id}; logs are stored in the test directory.");
             await Task.WhenAll(Drain(process.StandardOutput),Drain(process.StandardError));await process.WaitForExitAsync();Console.WriteLine("Client exit code: "+process.ExitCode);Environment.ExitCode=process.ExitCode;break;
+        }
+        case "engine-files":
+        {
+            var directory=Path.GetFullPath(args[1]);
+            if(!directory.Contains(Path.DirectorySeparatorChar+".local"+Path.DirectorySeparatorChar,StringComparison.OrdinalIgnoreCase))throw new InvalidDataException("Engine preparation requires an isolated .local directory.");
+            var launcher=GameLauncher.FromInstalledFiles(directory);
+            foreach(var extractor in launcher.FileExtractors.OfType<JavaFileExtractor>().ToArray())launcher.FileExtractors.Remove(extractor);
+            var version=await launcher.GetVersionAsync(args[2]);
+            var files=new List<object>();
+            foreach(var parent in version.EnumerateToParent())foreach(var file in await launcher.ExtractFiles(parent))
+            {
+                if(file.Path is null)continue;
+                var relative=Path.GetRelativePath(directory,file.Path).Replace('\\','/');ContentSecurity.SafePath(directory,relative);
+                var copies=file.UpdateTask.OfType<FileCopyTask>().Select(t=>Path.GetRelativePath(directory,t.DestinationPath).Replace('\\','/')).ToArray();
+                foreach(var copy in copies)ContentSecurity.SafePath(directory,copy);
+                files.Add(new{Path=relative,Sha1=file.Hash,file.Size,file.Url,Copies=copies});
+            }
+            Json.Write(args[3],new{LaunchVersion=args[2],Files=files});Console.WriteLine($"Extracted {files.Count} engine file references; bundled Java remains separate.");break;
+        }
+        case "check-install":
+        {
+            var manifest=Json.Read<PackManifest>(args[1]);var root=Path.GetFullPath(args[2]);
+            if(!root.Contains(Path.DirectorySeparatorChar+".local"+Path.DirectorySeparatorChar,StringComparison.OrdinalIgnoreCase))throw new InvalidDataException("Installation checks require an isolated .local directory.");
+            var settings=new LauncherSettings{Root=root,Concurrency=4,LimitMiB=2};
+            using var downloader=new Downloader(Path.Combine(root,"cache"),settings);
+            var installer=new TransactionalInstaller(root);
+            var watch=Stopwatch.StartNew();string phase="";
+            var progress=new Progress<TransferProgress>(p=>{if(p.Phase!=phase){phase=p.Phase;Console.WriteLine(phase);}});
+            await installer.Install(manifest,downloader,4,progress);
+            using var process=await new GameLauncher().Prepare(manifest,settings,MSession.CreateOfflineSession("Mojin_QA"),new RouteEndpoint("offline-check","127.0.0.1",25565,0));
+            var command=process.StartInfo.Arguments;
+            var match=System.Text.RegularExpressions.Regex.Match(command,"(?:-cp|-classpath)\\s+\"([^\"]+)\"");
+            if(match.Success&&match.Groups[1].Value.Split(Path.PathSeparator).Any(p=>!File.Exists(p)))throw new InvalidDataException("Generated classpath contains missing files.");
+            var report=new{manifest.Instance,Installed=true,JavaMajor=manifest.Runtime.Major,LocalVersionPrepared=true,GameStarted=false,JoinedServer=false,ElapsedSeconds=watch.Elapsed.TotalSeconds,Files=manifest.Files.Length};
+            Json.Write(Path.Combine(root,manifest.Instance+"-install-check.json"),report);Console.WriteLine(JsonSerializer.Serialize(report,Json.Options));break;
+        }
+        case "play-check":
+        {
+            var manifest=Json.Read<PackManifest>(args[1]);var root=Path.GetFullPath(args[2]);
+            if(!root.Contains(Path.DirectorySeparatorChar+".local"+Path.DirectorySeparatorChar,StringComparison.OrdinalIgnoreCase))throw new InvalidDataException("Play checks require an isolated .local directory.");
+            if(!Routes.Domains[manifest.Instance].Contains(args[3]))throw new InvalidDataException("Unknown test route.");
+            var settings=new LauncherSettings{Root=root};var installer=new TransactionalInstaller(root);using var gate=installer.Acquire(manifest.Instance);
+            var route=await Routes.Resolve(args[3]);
+            using var process=await new GameLauncher().Prepare(manifest,settings,MSession.CreateOfflineSession("Mojin_QA"),route);
+            process.StartInfo.RedirectStandardOutput=true;process.StartInfo.RedirectStandardError=true;
+            var instance=installer.InstancePath(manifest.Instance);var log=Path.Combine(root,manifest.Instance+"-play-check.log");
+            process.Start();
+            Json.Write(Path.Combine(instance,".hub","active-game.json"),new ActiveGame(process.Id,process.StartTime.ToUniversalTime()));
+            Json.Write(Path.Combine(root,manifest.Instance+"-play-process.json"),new{process.Id,StartedAt=process.StartTime.ToUniversalTime(),Route=args[3],JavaMajor=manifest.Runtime.Major});
+            Console.WriteLine($"Started {manifest.Instance} on {args[3]}; PID {process.Id}.");
+            using var writer=new StreamWriter(log,false);using var logGate=new SemaphoreSlim(1);
+            async Task Drain(StreamReader reader){string? line;while((line=await reader.ReadLineAsync())is not null){await logGate.WaitAsync();try{await writer.WriteLineAsync(line);await writer.FlushAsync();}finally{logGate.Release();}}}
+            await Task.WhenAll(Drain(process.StandardOutput),Drain(process.StandardError));await process.WaitForExitAsync();
+            Console.WriteLine($"Client exited: {process.ExitCode}");Environment.ExitCode=process.ExitCode;break;
         }
         default:throw new ArgumentException("Unknown command.");
     }

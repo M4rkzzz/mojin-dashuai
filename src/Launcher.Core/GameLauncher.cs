@@ -3,19 +3,31 @@ using System.Text.Json;
 using CmlLib.Core;
 using CmlLib.Core.Auth;
 using CmlLib.Core.ProcessBuilder;
+using CmlLib.Core.VersionLoader;
 
 namespace Boshan.Launcher;
 
 public sealed class GameLauncher
 {
+    public static MinecraftLauncher FromInstalledFiles(string instance)
+    {
+        var path=new MinecraftPath(instance);
+        var parameters=MinecraftLauncherParameters.CreateDefault(path);
+        parameters.VersionLoader=new LocalJsonVersionLoader(path);
+        return new MinecraftLauncher(parameters);
+    }
     public async Task<Process> Launch(PackManifest manifest,LauncherSettings settings,MSession session,RouteEndpoint route,CancellationToken token=default)
+    {
+        var process=await Prepare(manifest,settings,session,route,token);process.Start();return process;
+    }
+    public async Task<Process> Prepare(PackManifest manifest,LauncherSettings settings,MSession session,RouteEndpoint route,CancellationToken token=default)
     {
         ContentSecurity.Validate(manifest);settings.Validate();
         var installer=new TransactionalInstaller(settings.Root);var instance=installer.InstancePath(manifest.Instance);
         var java=string.IsNullOrEmpty(settings.Java[manifest.Instance])?ContentSecurity.SafePath(RuntimeManager.RuntimeRoot(settings.Root,manifest.Runtime),manifest.Runtime.JavaPath):settings.Java[manifest.Instance];
         await RuntimeManager.Validate(java,manifest.Runtime.Major,token);
         if(manifest.Instance=="mb")CleanroomAdapter.ValidatePrepared(instance,manifest);
-        var launcher=new MinecraftLauncher(new MinecraftPath(instance));
+        var launcher=FromInstalledFiles(instance);
         var options=new MLaunchOption {
             Session=session,JavaPath=java,MaximumRamMb=settings.Memory[manifest.Instance],MinimumRamMb=Math.Min(2048,settings.Memory[manifest.Instance]),
             ScreenWidth=settings.Width,ScreenHeight=settings.Height,FullScreen=settings.Fullscreen,ServerIp=route.Host,ServerPort=route.Port,
@@ -25,7 +37,7 @@ public sealed class GameLauncher
         // Installation is performed exclusively from the signed file inventory. CmlLib only builds the launch process.
         var process=await launcher.BuildProcessAsync(manifest.LaunchVersion,options);
         process.StartInfo.CreateNoWindow=true; process.StartInfo.UseShellExecute=false;
-        process.Start();return process;
+        return process;
     }
 }
 public static class CleanroomAdapter

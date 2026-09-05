@@ -19,7 +19,8 @@ public static class Json
 public enum FilePolicy { Managed, Seed, Preserve }
 public sealed record ContentFile(string Path, long Size, string Sha256, string[] Sources, FilePolicy Policy, string DistributionBasis);
 public sealed record RuntimeSpec(string Id, int Major, string Version, string Platform, ContentFile Archive, string JavaPath, long ExpandedSize);
-public sealed record PackManifest(string Instance, string Version, long Sequence, string Minecraft, string Loader, string LoaderVersion, string LaunchVersion, RuntimeSpec Runtime, int MemoryMiB, string Compatibility, ContentFile[] Files, string[] ValidationEvidence);
+public sealed record ContentBundle(ContentFile Archive, string Prefix);
+public sealed record PackManifest(string Instance, string Version, long Sequence, string Minecraft, string Loader, string LoaderVersion, string LaunchVersion, RuntimeSpec Runtime, int MemoryMiB, string Compatibility, ContentFile[] Files, string[] ValidationEvidence, ContentBundle[]? Bundles = null);
 public sealed record SignedEnvelope(string KeyId, string Payload, string Signature);
 public sealed record ReleaseRef(string Version, long Sequence, string ManifestUrl, string Sha256, string Compatibility);
 public sealed record ServerCatalog(string Id, string Name, string[] Routes, ReleaseRef? Release, ReleaseRef[] Rollbacks);
@@ -49,5 +50,6 @@ public sealed class LauncherSettings
         if (Proxy.Length > 0 && (!Uri.TryCreate(Proxy, UriKind.Absolute, out var proxy) || proxy.Scheme is not ("http" or "https" or "socks5") || proxy.UserInfo.Length != 0)) throw new InvalidDataException("代理地址无效，请勿在代理地址中保存账号凭据。");
         foreach (var id in new[] { "m3e", "dc2", "mb" }) if (!Memory.ContainsKey(id) || !Java.ContainsKey(id) || !Jvm.ContainsKey(id) || !SelectedRoutes.ContainsKey(id) || SelectedRoutes[id] is not ("auto" or "0" or "1")) throw new InvalidDataException("实例设置不完整。");
         if (WindowBehavior is not ("keep" or "minimize" or "hide")) throw new InvalidDataException("窗口设置无效。");
+        if (Theme is not ("dark" or "magic" or "waste" or "industry")) throw new InvalidDataException("主题设置无效。");
     }
 }
