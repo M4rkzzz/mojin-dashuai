@@ -1,0 +1,11 @@
+{
+  "sourceSha256": "91eab825f0730d412a05a40136e9f0755b9a2b9483fc92255cba08e282a1e146",
+  "sourcePath": "mods/TipTheScales-1.12.2-1.0.4.jar",
+  "path": "mods/TipTheScales-1.12.2-1.0.4-mojin.1.jar",
+  "size": 11792,
+  "sha256": "694dcd9c2518621bac67968d2707bf265038f4e89553d3c179883b8b7b9e3898",
+  "patchedClass": "com/blamejared/tipthescales/client/GuiNewOptionsRowList.class",
+  "headlessActualClassCasesPassed": 6,
+  "liveHighDpiPlayerConfirmation": false,
+  "gameplayClassesChanged": false
+}

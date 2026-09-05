@@ -32,7 +32,7 @@ public sealed class GameLauncher
         ThirdPartySkins.ConfigureInstance(instance,settings.SkinSource);
         if(manifest.Instance=="mb")CleanroomAdapter.ValidatePrepared(instance,manifest);
         var launcher=FromInstalledFiles(instance);
-        var adapter=manifest.Instance switch {"m3e"=>"mods/mojin-autoconnect-1.7.10-0.1.0.jar","mb"=>"mods/mojin-autoconnect-cleanroom-0.1.0.jar",_=>null};
+        var adapter=manifest.Instance switch {"m3e" or "vw"=>"mods/mojin-autoconnect-1.7.10-0.1.0.jar","mb"=>"mods/mojin-autoconnect-cleanroom-0.1.0.jar",_=>null};
         var delayedJoin=adapter is not null;
         if(delayedJoin&&!manifest.Files.Any(f=>f.Path==adapter))throw new InvalidDataException("服务器连接组件尚未安装，请先更新客户端。");
         if(delayedJoin&&(!System.Text.RegularExpressions.Regex.IsMatch(route.Host,"^[A-Za-z0-9.-]+$")||route.Port is <1 or >65535))throw new InvalidDataException("服务器地址无效。");

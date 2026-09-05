@@ -6,8 +6,8 @@ const errors=[];page.on('pageerror',error=>errors.push(error.message));
 await page.clock.install();
 await page.addInitScript(()=>{
  const listeners=[];
- window.routeCalls=[];window.routeReplies={m3e:[42,138],dc2:[256,-1],mb:[99,200]};window.holdRoutes=true;window.pendingRoutes=[];
- const settings={root:'C:\\Games\\魔金大帅',contentDirectoryConfigured:true,memory:{m3e:8192,dc2:8192,mb:8736},java:{m3e:'',dc2:'',mb:''},jvm:{m3e:'',dc2:'',mb:''},width:1280,height:720,fullscreen:false,windowBehavior:'keep',concurrency:4,limitMiB:0,proxy:'',reducedMotion:true,theme:'dark',selectedRoutes:{m3e:'auto',dc2:'auto',mb:'auto'}};
+ window.routeCalls=[];window.routeReplies={m3e:[42,138],dc2:[256,-1],mb:[99,200],vw:[31,62]};window.holdRoutes=true;window.pendingRoutes=[];
+ const settings={root:'C:\\Games\\魔金大帅',contentDirectoryConfigured:true,memory:{m3e:8192,dc2:8192,mb:8736,vw:4096},java:{m3e:'',dc2:'',mb:'',vw:''},jvm:{m3e:'',dc2:'',mb:'',vw:''},width:1280,height:720,fullscreen:false,windowBehavior:'keep',concurrency:4,limitMiB:0,proxy:'',reducedMotion:true,theme:'dark',selectedRoutes:{m3e:'auto',dc2:'auto',mb:'auto',vw:'auto'}};
  const emit=data=>listeners.forEach(callback=>callback({data}));
  window.chrome={webview:{addEventListener:(_,callback)=>listeners.push(callback),postMessage:request=>queueMicrotask(()=>{
   let result=null;
@@ -25,16 +25,16 @@ await page.addInitScript(()=>{
 try{
  await page.goto(process.env.LAUNCHER_UI_URL||'http://127.0.0.1:18475');
  const cards=page.locator('.world-card');
- await expect(cards).toHaveCount(3);
- await expect(page.locator('.card-routes .latency-pending')).toHaveCount(6);
- await expect.poll(()=>page.evaluate(()=>window.routeCalls.length)).toBe(3);
+ await expect(cards).toHaveCount(4);
+ await expect(page.locator('.card-routes .latency-pending')).toHaveCount(8);
+ await expect.poll(()=>page.evaluate(()=>window.routeCalls.length)).toBe(4);
  await page.evaluate(()=>{window.holdRoutes=false;window.pendingRoutes.splice(0).forEach(reply=>reply());});
- for(const [name,values] of [['魔法金属',['42 ms','138 ms']],['亡者世界',['256 ms','不可达']],['肉丸工艺',['99 ms','200 ms']]]){
+ for(const [name,values] of [['魔法金属',['42 ms','138 ms']],['亡者世界',['256 ms','不可达']],['肉丸工艺',['99 ms','200 ms']],['虚空行者',['31 ms','62 ms']]]){
   const card=cards.filter({hasText:name});
   await expect(card.locator('.card-route').nth(0)).toHaveText('河北阿里云'+values[0]);
   await expect(card.locator('.card-route').nth(1)).toHaveText('宿迁三网'+values[1]);
  }
- await expect(page.locator('.card-routes .latency-good')).toHaveCount(2);
+ await expect(page.locator('.card-routes .latency-good')).toHaveCount(4);
  await expect(page.locator('.card-routes .latency-fair')).toHaveCount(1);
  await expect(page.locator('.card-routes .latency-poor')).toHaveCount(2);
  await expect(page.locator('.card-routes .latency-offline')).toHaveCount(1);
@@ -42,7 +42,7 @@ try{
  await page.screenshot({path:'../.local/lobby-routes.png',animations:'disabled'});
  await page.evaluate(()=>{window.routeReplies.m3e=[80,220];});
  await page.clock.fastForward(300000);
- expect(await page.evaluate(()=>window.routeCalls.length)).toBe(3);
+ expect(await page.evaluate(()=>window.routeCalls.length)).toBe(4);
  await expect(cards.filter({hasText:'魔法金属'}).locator('.card-route').nth(0)).toContainText('42 ms');
  await cards.filter({hasText:'肉丸工艺'}).click();
  await expect(page.locator('.routes .latency-good')).toHaveCount(1);
@@ -78,5 +78,5 @@ try{
  await expect(page.locator('.routes .latency-good')).toContainText('80 ms');
  await expect(page.locator('.routes .latency-poor')).toContainText('220 ms');
  expect(errors).toEqual([]);
- console.log('Server selection latency passed: no automatic polling after five minutes; manual refresh preserves results, rerenders do not restart probes, slow probes do not overlap, server changes reject stale results, six routes and signal colors.');
+ console.log('Server selection latency passed: no automatic polling after five minutes; manual refresh preserves results, rerenders do not restart probes, slow probes do not overlap, server changes reject stale results, eight routes and signal colors.');
 }finally{await browser.close();}

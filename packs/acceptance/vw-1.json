@@ -1,0 +1,48 @@
+{
+  "passed": true,
+  "channel": "beta",
+  "manifestSha256": "103b2f26393ecd561069e8681397a2d3d40f43ca21da909f38251f1d88cc8018",
+  "cleanWindows": false,
+  "joinedServer": true,
+  "allSourcesAutomated": true,
+  "javaMajor": 8,
+  "loader": "forge",
+  "map": false,
+  "quests": false,
+  "machines": false,
+  "scope": "Unified launcher and fixed Temurin8u504 started the freshly installed complete client. M4rkzzz completed Forge handshake, joined the server, received an independent island and nine persisted claims, opened inventory, and exited normally. Frozen source gameplay acceptance is retained; skin, quest and machine visuals were not separately confirmed in this launch.",
+  "frozenSourceJoinedServer": true,
+  "frozenSourceRuntime": "Java8u292 x64 / 3584 MiB",
+  "unifiedRuntime": "Temurin8u504 x64 / 4096 MiB",
+  "frozenFilesUnchanged": 984,
+  "unifiedAdapterFiles": [
+    "mods/mojin-autoconnect-1.7.10-0.1.0.jar",
+    "mods/CustomSkinLoader_ForgeLegacy-14.17.jar",
+    "mods/CompatibilityLayerForCustomSkinLoader-ALPHA-11.jar",
+    "CustomSkinLoader/CustomSkinLoader.json"
+  ],
+  "evidence": [
+    "../docs/handoff/四服虚空行者部署-2026-09-05.md",
+    "artifacts/complete-client-staged/vw-r1-sequence-1/report.json",
+    ".local/complete-publication/24e41ebfb1c94f50977d5adecef31b9e/receipt.txt",
+    ".local/vw-r1-install-qa/vw-install-check.json",
+    ".local/vw-r1-install-qa/vw-saved-play.log",
+    "../docs/handoff/四服虚空行者部署-2026-09-05.md"
+  ],
+  "deferredChecks": [
+    "cleanWindows",
+    "skinVisualCheck",
+    "questUi",
+    "machineUi"
+  ],
+  "fullArchiveInstallVerified": true,
+  "newGameWindowOpened": true,
+  "checkedAt": "2026-09-05T15:43:35.387790+00:00",
+  "localVersionPrepared": true,
+  "allFrozenFilesInstalledAndHashVerified": true,
+  "normalExitCode": 0,
+  "automaticIslandAssigned": true,
+  "initialClaimedChunks": 9,
+  "inventoryOpened": true,
+  "serverTps": 20
+}

@@ -28,11 +28,11 @@ public static class PersonalDataImport
             ContentSecurity.SafePath(root,Path.GetFileName(child));
             Minecraft(Path.Combine(child,".minecraft"));Minecraft(Path.Combine(child,"minecraft"));
         }
-        var expected=id switch{"m3e"=>"1.7.10","dc2"=>"1.20.1",_=>"1.12.2"};
+        var expected=id switch{"m3e" or "vw"=>"1.7.10","dc2"=>"1.20.1",_=>"1.12.2"};
         int Score(string path)
         {
             var name=Path.GetFileName(path).ToLowerInvariant();
-            var score=id switch{"m3e" when name.Contains("mse")||name.Contains("魔金")=>20,"dc2" when name.Contains("deceased")||name.Contains("亡者")=>20,"mb" when name.Contains("meatball")||name.Contains("肉丸")=>20,_=>0};
+            var score=id switch{"m3e" when name.Contains("mse")||name.Contains("魔金")=>20,"dc2" when name.Contains("deceased")||name.Contains("亡者")=>20,"mb" when name.Contains("meatball")||name.Contains("肉丸")=>20,"vw" when name.Contains("void")||name.Contains("虚空")=>20,_=>0};
             var metadata=Path.Combine(path,Path.GetFileName(path)+".json");
             if(File.Exists(metadata))
             {

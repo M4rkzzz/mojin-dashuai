@@ -1,19 +1,14 @@
-# 四服接入预留（未上线）
+# 四服虚空行者接入交接
 
-实例 ID 预留为 `vw`，整合包 Void Wayfarer 1.1.9.1。四服生产部署由独立任务维护，客户端目录由统一客户端任务维护。beta.13 仍仅展示已上线三服；本记录不代表四服已通过验收或可以发布。
+四服已完成服务端验收和统一客户端真实入服，随 beta13 发布。详细内容来源见 [VW-DISTRIBUTION.md](VW-DISTRIBUTION.md)。
 
-- Minecraft 1.7.10 / Forge 10.13.4.1614，独立 Temurin 8u504 x64，预计内网端口 25504。
-- 用户选择全新世界：flat，generatorOptions `2;0;1;`，使用 FTBI 建岛。
-- 客户端以最终服务端实际配方覆盖为准；源包存在四个脚本差异、GTNHLib 和 NEIIntegration 版本差异，待服务端任务交付完整匹配目录。
-- 平级线路拟用 `gt.mc.boshan.uk` 与 `gt.bk.mc.boshan.uk`（用户最终更正）。已配置河北 `47.92.219.134:51458`、宿迁 `103.40.14.100:58378` 的 A/SRV；两线 priority 0 / weight 1，DNS only。稳定实例 ID 仍为 `vw`。
-- 待交接：客户端文件路径与 SHA256、精确 Java/加载器版本、匹配覆盖目录、建议内存、实际入服和核心界面结果、冻结客户端验收报告。
+- 固定实例 `vw`，Void Wayfarer 1.1.9.1-boshan-r1，Minecraft 1.7.10 / Forge 10.13.4.1614 / Temurin 8u504 x64，默认 4096 MiB。
+- 河北阿里云 `gt.mc.boshan.uk` 与宿迁三网 `gt.bk.mc.boshan.uk` 平级，按 Minecraft SRV 解析。
+- 最终源客户端 984 文件 / 121432215 字节，源 ZIP SHA256：`26bccd5a5dac7040df5aa75bc25e81b36c935bbdb00601280f71a3394cadd81e`。完整保留 falsepattern 的 5 个 JAR 与 4 个校验旁文件。
+- 额外接入与一服相同的自动入服和皮肤适配，共 4 文件；服务端 boshan-islands、mcqq-capture 不进入客户端。
+- 首次完整下载含固定 Java，283043676 字节；文件更新继续使用同一 FRP 下载服务。
+- 空缓存首次安装通过，984 份冻结内容逐文件一致；统一端真实登录、自动建岛、初始 9 区块认领和正常退出已通过。实际打开了物品栏，任务/机器/皮肤未单独进行本次视觉确认。
+- 四服服务器任务只读确认了岛屿与领地持久化，TPS 20；已产生真实玩家岛，禁止当成测试世界清理。
+- 大厅新增格雷科技空岛美术，原整合包主菜单保留。
 
-接入时沿用签名清单、完整客户端 ZIP 与固定 Java、文件差异更新、个人地图/设置保护及平级线路显示。只在验收交接完成后启用玩家选项。
-
-## 岛屿功能交接更新（仍在验收）
-
-所有玩家使用同一个虚空主世界，首次加入分配独立岛屿。服务端 `boshan-islands` 辅助模组提供 2000 格间距、持久化分配、FTB 队伍、3×3 初始领地与邀请共岛；该模组为 server-only，不直接加入客户端发行文件。
-
-原包的 ServerUtilities 2.2.34（FTB Utilities / Library / Aurora 移植）和 BetterQuesting 保留。测试覆盖目录为 `D:/project/MCserver/_voidwayfarer4-deploy/client-overrides`，等待冻结文件清单与哈希后再采集；不采集测试日志、存档或玩家数据。
-
-用户已收到为 127.0.0.1:25504 创建河北/宿迁两条 TCP 隧道的通知，两条公网入口已由用户提供并完成 DNS/SRV 配置，1.1.1.1 公共 DNS 解析一致，见 `packs/routes/vw-dns.json`。beta.13 已按用户要求暂停发布，将与四服一起交付；现有三服版开发安装包带 HOLD 标记，必须重建后才能发布。
+验收记录：[vw-1.json](../packs/acceptance/vw-1.json)。干净 Windows 首装仍按已批准的内测范围保留未验收记录。

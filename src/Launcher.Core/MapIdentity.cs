@@ -9,7 +9,7 @@ public static class MapIdentity
     public const string SharedFolder="Multiplayer_Any Address";
     public static void Prepare(string instance,string id)
     {
-        if(id=="mb")return;
+        if(id is "mb" or "vw")return;
         if(id is not ("m3e" or "dc2"))throw new InvalidDataException("未知地图实例。");
         var folders=id=="m3e"?new[]{"XaeroWorldMap","XaeroWaypoints"}:new[]{"xaero/world-map","xaero/minimap"};
         foreach(var folder in folders)SeedMaps(instance,id,folder);

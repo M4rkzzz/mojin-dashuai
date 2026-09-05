@@ -12,7 +12,7 @@ public sealed record RouteEndpoint(string Domain,string Host,int Port,int Latenc
 public static class Routes
 {
     public static readonly IReadOnlyDictionary<string,string[]> Domains = new Dictionary<string,string[]> {
-        ["m3e"]=["mc.m3e.boshan.uk","mc.m3e.bk.boshan.uk"], ["dc2"]=["dc2.mc.boshan.uk","dc2.bk.mc.boshan.uk"], ["mb"]=["mb.mc.boshan.uk","mb.bk.mc.boshan.uk"]
+        ["m3e"]=["mc.m3e.boshan.uk","mc.m3e.bk.boshan.uk"], ["dc2"]=["dc2.mc.boshan.uk","dc2.bk.mc.boshan.uk"], ["mb"]=["mb.mc.boshan.uk","mb.bk.mc.boshan.uk"], ["vw"]=["gt.mc.boshan.uk","gt.bk.mc.boshan.uk"]
     };
     public static async Task<RouteEndpoint> Resolve(string domain, CancellationToken token = default)
     {

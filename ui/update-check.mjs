@@ -11,7 +11,7 @@ try{
   window.emitUpdate=data=>emit({event:'launcher-update',data});
   window.chrome={webview:{addEventListener:(_,callback)=>listeners.push(callback),postMessage:r=>queueMicrotask(()=>{
    window.updateCommands.push(r.command);let result=null;
-   if(r.command==='bootstrap')result={launcherVersion:'0.1.2-beta.13',profile:{id:'fixture',gameName:'Player',loginName:'Player',kind:'hub'},installs:{},settings:{root:'C:\\Games',contentDirectoryConfigured:true,memory:{m3e:8192,dc2:8192,mb:8736},java:{},jvm:{},width:1280,height:720,concurrency:4,limitMiB:0,selectedRoutes:{},reducedMotion:true,theme:'dark'}};
+   if(r.command==='bootstrap')result={launcherVersion:'0.1.2-beta.13',profile:{id:'fixture',gameName:'Player',loginName:'Player',kind:'hub'},installs:{},settings:{root:'C:\\Games',contentDirectoryConfigured:true,memory:{m3e:8192,dc2:8192,mb:8736,vw:4096},java:{},jvm:{},width:1280,height:720,concurrency:4,limitMiB:0,selectedRoutes:{},reducedMotion:true,theme:'dark'}};
    if(r.command==='bootstrap'&&location.search.includes('signedOut'))result.profile=null;
    if(r.command==='launcher.update.status'&&location.search.includes('signedOut')){window.updateStatusReplies.push(()=>emit({id:r.id,ok:true,result:{phase:'current'}}));return;}
    if(r.command==='launcher.update.status')result={phase:'current'};

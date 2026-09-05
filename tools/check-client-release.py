@@ -32,7 +32,7 @@ if endpoint.scheme!='https' or not endpoint.hostname or endpoint.username or end
     errors.append('The account API must have a configured HTTPS endpoint.')
 if not config.get('publicKeys'):
     errors.append('No release-signing public keys are embedded.')
-for instance in ['m3e','dc2','mb']:
+for instance in json.loads((root/'packs/distributions.json').read_text(encoding='utf-8'))['instances']:
     audit=json.loads((root/f'packs/{instance}-source-audit.json').read_text(encoding='utf-8-sig'))
     missing=[row['path'] for row in audit['files'] if not (row.get('fallback',{}).get('publishedVerified') or
              (row.get('downloadVerification',{}).get('verified') and (row.get('verifiedSources') or row.get('sources'))))]
@@ -46,7 +46,7 @@ for instance in ['m3e','dc2','mb']:
         evidence=json.loads((root/f'packs/acceptance/{instance}-{sequence}.json').read_text(encoding='utf-8'))
         if evidence.get('manifestSha256')!=audit.get('betaManifestSha256'):
             errors.append(instance+': beta acceptance does not match its content audit.')
-        if audit.get('betaReady') is not True or evidence.get('channel')!='beta' or not all(evidence.get(k) is True for k in ['passed','joinedServer','allSourcesAutomated']) or evidence.get('javaMajor')!={'m3e':8,'dc2':17,'mb':25}[instance]:
+        if audit.get('betaReady') is not True or evidence.get('channel')!='beta' or not all(evidence.get(k) is True for k in ['passed','joinedServer','allSourcesAutomated']) or evidence.get('javaMajor')!={'m3e':8,'dc2':17,'mb':25,'vw':8}[instance]:
             errors.append(instance+': beta acceptance is not complete.')
         if instance=='mb' and (evidence.get('loader')!='cleanroom' or not all(evidence.get(k) is True for k in ['map','quests','machines'])):
             errors.append('MeatballCraft game acceptance is not complete.')

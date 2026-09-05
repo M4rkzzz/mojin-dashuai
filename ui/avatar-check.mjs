@@ -17,7 +17,7 @@ try {
       ctx.fillStyle='#252a35';ctx.fillRect(10,12,1,1);ctx.fillRect(13,12,1,1);
       ctx.fillStyle='#335d93';ctx.fillRect(20,20,8,12);ctx.fillRect(44,20,4,4);if(height===64)ctx.fillRect(36,52,4,4);
       const skin={pngBase64:fixture.toDataURL().split(',')[1],model};
-      const settings={root:'',contentDirectoryConfigured:true,memory:{m3e:8192,dc2:8192,mb:8736},java:{m3e:'',dc2:'',mb:''},jvm:{m3e:'',dc2:'',mb:''},width:1280,height:720,fullscreen:false,windowBehavior:'keep',concurrency:4,limitMiB:0,proxy:'',reducedMotion:true,theme:'dark',selectedRoutes:{m3e:'auto',dc2:'auto',mb:'auto'}};
+      const settings={root:'',contentDirectoryConfigured:true,memory:{m3e:8192,dc2:8192,mb:8736,vw:4096},java:{m3e:'',dc2:'',mb:'',vw:''},jvm:{m3e:'',dc2:'',mb:'',vw:''},width:1280,height:720,fullscreen:false,windowBehavior:'keep',concurrency:4,limitMiB:0,proxy:'',reducedMotion:true,theme:'dark',selectedRoutes:{m3e:'auto',dc2:'auto',mb:'auto',vw:'auto'}};
       window.chrome={webview:{addEventListener:(_,fn)=>listeners.push(fn),postMessage:request=>queueMicrotask(()=>{
         const result=request.command==='bootstrap'?{profile:{id:'skin-test',gameName:'Mojin_QA',loginName:'skin-test',kind:'hub'},settings,installs:{}}:request.command==='account.avatar'?skin:request.command==='account.skin'?{...skin,model:request.args.model}:null;
         listeners.forEach(fn=>fn({data:{id:request.id,ok:true,result}}));

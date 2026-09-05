@@ -8,7 +8,7 @@ async function fixture({restored=false,configured=false}={}){
  const page=await browser.newPage({viewport:{width:1280,height:820},deviceScaleFactor:1.25,reducedMotion:'reduce'});
  page.on('pageerror',error=>errors.push(error.message));
  await page.addInitScript(({restored,configured})=>{
-  const initial={profile:restored?{id:'test',loginName:'Player',gameName:'Player',kind:'hub'}:null,settings:{root:'C:\\Games\\魔金大帅',contentDirectoryConfigured:configured,memory:{m3e:8192,dc2:8192,mb:8736},java:{m3e:'',dc2:'',mb:''},jvm:{m3e:'',dc2:'',mb:''},width:1280,height:720,fullscreen:false,windowBehavior:'keep',concurrency:4,limitMiB:0,proxy:'',reducedMotion:true,theme:'dark',selectedRoutes:{m3e:'auto',dc2:'auto',mb:'auto'}}};
+  const initial={profile:restored?{id:'test',loginName:'Player',gameName:'Player',kind:'hub'}:null,settings:{root:'C:\\Games\\魔金大帅',contentDirectoryConfigured:configured,memory:{m3e:8192,dc2:8192,mb:8736,vw:4096},java:{m3e:'',dc2:'',mb:'',vw:''},jvm:{m3e:'',dc2:'',mb:'',vw:''},width:1280,height:720,fullscreen:false,windowBehavior:'keep',concurrency:4,limitMiB:0,proxy:'',reducedMotion:true,theme:'dark',selectedRoutes:{m3e:'auto',dc2:'auto',mb:'auto',vw:'auto'}}};
   // Test-only state contains settings and a synthetic profile, never credentials.
   const state=JSON.parse(sessionStorage.getItem('storage-check')||JSON.stringify(initial));
   const listeners=[];

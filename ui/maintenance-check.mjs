@@ -5,7 +5,7 @@ const page=await browser.newPage({viewport:{width:1280,height:820},reducedMotion
 const errors=[];page.on('pageerror',error=>errors.push(error.message));
 await page.addInitScript(()=>{
  const listeners=[];let repair=null;window.importCalls=[];window.failSettings=false;
- const settings={root:'D:\\魔金大帅\\content',contentDirectoryConfigured:true,memory:{m3e:8192,dc2:8192,mb:8736},java:{m3e:'',dc2:'',mb:''},jvm:{m3e:'',dc2:'',mb:''},width:1280,height:720,fullscreen:false,windowBehavior:'keep',concurrency:4,limitMiB:0,proxy:'',proxyMode:'direct',skinSource:'account',preferDedicatedGpu:true,reducedMotion:true,theme:'dark',selectedRoutes:{m3e:'auto',dc2:'auto',mb:'auto'}};
+ const settings={root:'D:\\魔金大帅\\content',contentDirectoryConfigured:true,memory:{m3e:8192,dc2:8192,mb:8736,vw:4096},java:{m3e:'',dc2:'',mb:'',vw:''},jvm:{m3e:'',dc2:'',mb:'',vw:''},width:1280,height:720,fullscreen:false,windowBehavior:'keep',concurrency:4,limitMiB:0,proxy:'',proxyMode:'direct',skinSource:'account',preferDedicatedGpu:true,reducedMotion:true,theme:'dark',selectedRoutes:{m3e:'auto',dc2:'auto',mb:'auto',vw:'auto'}};
  const installs={m3e:{version:'fixture',state:'installed'},dc2:{version:'fixture',state:'running'}},states={m3e:'installed',dc2:'running',mb:'not-installed'},progress={};
  const emit=data=>listeners.forEach(callback=>callback({data}));
  const respond=(r,result)=>emit({id:r.id,ok:true,result});

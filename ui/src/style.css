@@ -151,3 +151,13 @@ dialog{border-color:#454545;color:#f2f2f2}dialog::backdrop{background:#000b}.ski
 .settings-heading{display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap}
 .launcher-version{color:#cbd1c8;font-size:13px;white-space:nowrap}
 .launcher-version b{margin-left:9px;color:#f1f3ef;font-weight:500}
+
+/* Four worlds stay visible as landscape cards at desktop window sizes. */
+.world-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:20px;padding-bottom:28px}
+.world-card{height:clamp(250px,calc((100dvh - 275px)/2),320px);min-height:0}.world-card>img{object-position:65% center}
+.world-card .card-content{left:24px;right:24px}.world-card .card-shade{background:linear-gradient(0deg,#080b0ef0,transparent 85%),linear-gradient(90deg,#080b0e55,transparent)}
+.world-card .card-content h2{font-size:26px;margin:6px 0}.world-card .tags{margin-top:10px}
+.world-card .card-routes{margin:12px 0;gap:6px;padding-top:10px}.world-card .card-bottom{margin-top:12px;padding:14px 0}
+.instance-picker,.tools-servers{flex-wrap:wrap}
+@media(max-height:780px) and (min-width:851px){.world-card{height:clamp(250px,calc((100dvh - 230px)/2),255px)}.world-grid{gap:16px}}
+@media(max-width:850px){.world-grid{grid-template-columns:1fr}.world-card{height:250px}}

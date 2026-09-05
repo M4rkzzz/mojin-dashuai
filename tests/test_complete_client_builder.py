@@ -121,6 +121,23 @@ class CompleteClientBuilderTests(unittest.TestCase):
         (self.cache / self.manifest['files'][0]['sha256']).unlink()
         self.fail('Required object unavailable')
 
+    def test_initial_release_requires_explicit_unpublished_sequence_one(self):
+        self.manifest['bundles'] = []
+        self.manifest['validationEvidence'] = []
+        self.save()
+        report = builder.build(self.manifest_path, self.root / 'initial', 'baseline', 1,
+                               object_roots=[self.cache], public_base=self.url, initial_release=True)
+        self.assertTrue(report['initialRelease'])
+        self.assertEqual(report['sequence'], 1)
+        for i, change in enumerate([{'sequence': 2}, {'bundles': [{'complete': True}]},
+                                    {'validationEvidence': ['previous-acceptance.json']} ]):
+            candidate = {**self.manifest, **change}
+            with self.subTest(change=change), self.assertRaises(builder.BuildError):
+                builder.validate_manifest(candidate, 'baseline', 1, initial_release=True)
+        for version, sequence in [('different', 1), ('baseline', 2), ('baseline', True)]:
+            with self.subTest(version=version, sequence=sequence), self.assertRaises(builder.BuildError):
+                builder.validate_manifest(self.manifest, version, sequence, initial_release=True)
+
     def test_missing_runtime_fails_without_candidate(self):
         (self.cache / self.manifest['runtime']['archive']['sha256']).unlink()
         self.fail('Required object unavailable')

@@ -4,7 +4,7 @@ const page=await browser.newPage({viewport:{width:1280,height:820}});
 const errors=[];page.on('pageerror',e=>errors.push(e.message));
 await page.addInitScript(()=>{
  const listeners=[];window.importRequests=[];window.importCancel=false;
- const settings={root:'D:\\魔金大帅\\content',contentDirectoryConfigured:true,memory:{m3e:8192,dc2:8192,mb:8736},java:{m3e:'',dc2:'',mb:''},jvm:{m3e:'',dc2:'',mb:''},width:1280,height:720,fullscreen:false,windowBehavior:'keep',concurrency:4,limitMiB:0,proxy:'',reducedMotion:true,theme:'dark',selectedRoutes:{m3e:'auto',dc2:'auto',mb:'auto'}};
+ const settings={root:'D:\\魔金大帅\\content',contentDirectoryConfigured:true,memory:{m3e:8192,dc2:8192,mb:8736,vw:4096},java:{m3e:'',dc2:'',mb:'',vw:''},jvm:{m3e:'',dc2:'',mb:'',vw:''},width:1280,height:720,fullscreen:false,windowBehavior:'keep',concurrency:4,limitMiB:0,proxy:'',reducedMotion:true,theme:'dark',selectedRoutes:{m3e:'auto',dc2:'auto',mb:'auto',vw:'auto'}};
  window.chrome={webview:{addEventListener:(_,cb)=>listeners.push(cb),postMessage:r=>queueMicrotask(()=>{
   let result=null;
   if(r.command==='bootstrap')result={profile:{id:'test',gameName:'Player',kind:'hub'},settings,installs:location.search.includes('empty')?{}:{m3e:{version:'test',state:'installed'},mb:{version:'test',state:'installed'}}};
@@ -36,7 +36,7 @@ try{
  expect(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth)).toBe(false);
  await page.goto((process.env.LAUNCHER_UI_URL||'http://127.0.0.1:18475')+'?empty');
  await page.getByRole('button',{name:'工具',exact:true}).click();
- await expect(page.locator('.tools-servers button:disabled')).toHaveCount(3);
+ await expect(page.locator('.tools-servers button:disabled')).toHaveCount(4);
  await expect(page.getByRole('button',{name:'下载后才可以导入',exact:true})).toBeDisabled();
  expect(errors).toEqual([]);console.log('Personal import tool passed: server, categories, result, cancellation and layout.');
 }finally{await browser.close();}

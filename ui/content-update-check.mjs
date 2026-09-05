@@ -12,7 +12,7 @@ try{
  const errors=[];page.on('pageerror',error=>errors.push(error.message));await page.clock.install();
  await page.addInitScript(()=>{
   const listeners=[],pending={};window.contentUpdateRequests=[];window.catalogOffline=false;
-  const settings={root:'D:\\isolated-fixture\\content',contentDirectoryConfigured:true,memory:{m3e:8192,dc2:8192,mb:8736},java:{m3e:'',dc2:'',mb:''},jvm:{m3e:'',dc2:'',mb:''},width:1280,height:720,fullscreen:false,windowBehavior:'keep',concurrency:4,limitMiB:0,proxy:'',proxyMode:'direct',skinSource:'account',reducedMotion:true,theme:'dark',selectedRoutes:{m3e:'auto',dc2:'auto',mb:'auto'}};
+  const settings={root:'D:\\isolated-fixture\\content',contentDirectoryConfigured:true,memory:{m3e:8192,dc2:8192,mb:8736,vw:4096},java:{m3e:'',dc2:'',mb:'',vw:''},jvm:{m3e:'',dc2:'',mb:'',vw:''},width:1280,height:720,fullscreen:false,windowBehavior:'keep',concurrency:4,limitMiB:0,proxy:'',proxyMode:'direct',skinSource:'account',reducedMotion:true,theme:'dark',selectedRoutes:{m3e:'auto',dc2:'auto',mb:'auto',vw:'auto'}};
   const installs={m3e:{version:'m3e-1',sequence:1,state:'installed'},dc2:{version:'中文 r3',sequence:3,state:'installed'},mb:{version:'mb-1',sequence:1,state:'installed'}};
   const states={m3e:'installed',dc2:'installed',mb:'installed'},progress={},availableUpdates={};
   const emit=data=>listeners.forEach(callback=>callback({data}));

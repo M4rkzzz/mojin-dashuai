@@ -1,0 +1,33 @@
+{
+  "passed": true,
+  "channel": "beta",
+  "manifestSha256": "65f08784d2bb646f6c176fa51b5058e2ec027c987f102b04688900de180e066a",
+  "cleanWindows": false,
+  "joinedServer": true,
+  "allSourcesAutomated": true,
+  "javaMajor": 17,
+  "loader": "forge",
+  "map": false,
+  "quests": false,
+  "machines": false,
+  "deferredChecks": [
+    "cleanWindows"
+  ],
+  "approvedDeferral": "packs/beta-authorization.json",
+  "scope": "Distribution-only revision: every file and Java byte matches accepted dc2 sequence 2; complete archive now includes both former author-only exceptions. No new game behavior.",
+  "evidence": [
+    "packs/acceptance/dc2-2.json",
+    "packs/revisions/dc2-unified-downloads.json"
+  ],
+  "checkedAt": "2026-09-05T15:21:04.822415+00:00",
+  "liveJoinAt": "2026-09-05T22:13:13+08:00",
+  "mapAndSettingsFilesPreserved": true,
+  "freshVisualObservationPending": true,
+  "finalScriptReloadAt": "2026-09-05T22:21:03+08:00",
+  "finalScriptServerKubeJsErrors": false,
+  "onlyFileChangedSinceActualInstallAndJoin": "kubejs/server_scripts/dc2_maid_broom_recipe.js",
+  "finalScriptSha256": "c313960ce864b17c41721fd56311d1e3aef16807fca0450504e6327b474968f9",
+  "fullArchiveInventoryVerified": true,
+  "fileBytesUnchanged": true,
+  "singleOrigin": true
+}

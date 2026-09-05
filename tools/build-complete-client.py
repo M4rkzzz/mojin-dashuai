@@ -116,15 +116,22 @@ def validate_record(row):
             raise BuildError('officialOnly requires one fixed supported official CDN URL')
 
 
-def validate_manifest(manifest, version, sequence):
+def validate_manifest(manifest, version, sequence, *, initial_release=False):
     if not isinstance(manifest, dict) or any(k in manifest for k in ('signature', 'payload', 'keyId')):
         raise BuildError('Supply a native manifest JSON, not a signed envelope')
     for key in ('instance', 'version', 'minecraft', 'loader', 'loaderVersion', 'launchVersion', 'compatibility'):
         if not isinstance(manifest.get(key), str) or not manifest[key]:
             raise BuildError('Native manifest identity is incomplete')
-    if not isinstance(version, str) or not version or version == manifest['version'] or any(ord(c) < 32 for c in version):
+    if not isinstance(version, str) or not version or any(ord(c) < 32 for c in version):
         raise BuildError('An explicit new candidate version is required')
-    if type(manifest.get('sequence')) is not int or manifest['sequence'] < 1 or type(sequence) is not int or sequence <= manifest['sequence']:
+    if initial_release:
+        if (type(sequence) is not int or type(manifest.get('sequence')) is not int
+                or sequence != 1 or manifest['sequence'] != 1 or version != manifest['version']
+                or manifest.get('bundles') or manifest.get('validationEvidence')):
+            raise BuildError('Initial release requires matching version and sequence 1, without bundles or acceptance evidence')
+    elif version == manifest['version']:
+        raise BuildError('An explicit new candidate version is required')
+    elif type(manifest.get('sequence')) is not int or manifest['sequence'] < 1 or type(sequence) is not int or sequence <= manifest['sequence']:
         raise BuildError('Candidate sequence must be greater than the input sequence')
     if not isinstance(manifest.get('files'), list) or not manifest['files']:
         raise BuildError('Native manifest must declare every required file')
@@ -337,19 +344,20 @@ def verify_bundle(path, manifest):
 
 
 def build(manifest_path, output, version, sequence, *, object_roots=(), inventory=None,
-          download_base=None, public_base=None, redistribution_policy=None, denied=()):
+          download_base=None, public_base=None, redistribution_policy=None, denied=(), initial_release=False):
     manifest_path, output = plain_path(manifest_path), plain_path(output)
     if output == manifest_path or output.exists():
         raise BuildError('Output must be a new directory; existing files are never overwritten')
     # Exclusive creation reserves the destination; failures retain only report.json.
     output.mkdir(parents=True, exist_ok=False)
     report = {'schema': 1, 'candidate': False, 'signed': False, 'uploaded': False, 'activated': False,
-              'gameAcceptance': False, 'inputSignatureVerified': False, 'blockers': [], 'verifiedFiles': 0}
+              'gameAcceptance': False, 'inputSignatureVerified': False, 'blockers': [], 'verifiedFiles': 0,
+              'initialRelease': initial_release}
     linked = []
     try:
         manifest = read_json(manifest_path)
         report['inputManifestSha256'] = sha256(manifest_path)
-        required = validate_manifest(manifest, version, sequence)
+        required = validate_manifest(manifest, version, sequence, initial_release=initial_release)
         if not public_base:
             raise BuildError('An explicit anonymous --public-object-base is required for candidate bundle metadata')
         public_base = anonymous_url(public_base).rstrip('/')
@@ -424,6 +432,7 @@ def main(argv=None):
     parser.add_argument('--output', required=True, type=Path, help='NEW directory; never overwrite a manifest or previous build')
     parser.add_argument('--version', required=True, help='New candidate version')
     parser.add_argument('--sequence', required=True, type=int, help='Greater than the input manifest sequence')
+    parser.add_argument('--initial-release', action='store_true', help='Explicit first release: matching version and sequence 1, no input bundles or acceptance evidence')
     parser.add_argument('--object-root', action='append', type=Path, default=[], help='Explicit allowed object/source root; repeatable, never recursively scanned')
     parser.add_argument('--inventory', type=Path, help='Optional audit-single-origin inventory; only matching hashes under allowed roots are used')
     parser.add_argument('--download-object-base', help='Opt in to missing downloads from HTTPS base/{sha256}; no original-source fallback')
@@ -434,7 +443,8 @@ def main(argv=None):
     try:
         report = build(args.manifest, args.output, args.version, args.sequence, object_roots=args.object_root,
                        inventory=args.inventory, download_base=args.download_object_base, public_base=args.public_object_base,
-                       redistribution_policy=args.redistribution_policy, denied=args.deny_redistribution)
+                       redistribution_policy=args.redistribution_policy, denied=args.deny_redistribution,
+                       initial_release=args.initial_release)
     except (BuildError, OSError) as error:
         message = str(error) if isinstance(error, BuildError) else type(error).__name__
         print(json.dumps({'candidate': False, 'error': message}, ensure_ascii=True))

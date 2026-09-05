@@ -19,7 +19,7 @@ public sealed class TransactionalInstaller(string root)
     }
     public string InstancePath(string id)
     {
-        if (id is not ("m3e" or "dc2" or "mb")) throw new InvalidDataException("未知服务器。");
+        if (!Routes.Domains.ContainsKey(id)) throw new InvalidDataException("未知服务器。");
         return ContentSecurity.SafePath(root, "instances/" + id);
     }
     public FileStream Acquire(string id)

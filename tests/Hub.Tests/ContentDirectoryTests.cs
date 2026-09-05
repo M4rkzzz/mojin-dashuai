@@ -45,6 +45,19 @@ public sealed class ContentDirectoryTests : IDisposable
     }
 
     [Fact]
+    public void ThreeServerSettingsGainFourthWithoutLosingCustomSettings()
+    {
+        var old=new LauncherSettings{Root=Path.Combine(root,"old-games"),ContentDirectoryConfigured=true};
+        old.Memory["m3e"]=6144;old.SelectedRoutes["mb"]="1";
+        old.Memory.Remove("vw");old.Java.Remove("vw");old.Jvm.Remove("vw");old.SelectedRoutes.Remove("vw");
+        Json.Write(SettingsPath,old);
+        var loaded=ContentDirectorySetup.LoadSettings(SettingsPath);
+        Assert.Equal(4096,loaded.Memory["vw"]);Assert.Equal("auto",loaded.SelectedRoutes["vw"]);
+        Assert.Equal(6144,loaded.Memory["m3e"]);Assert.Equal("1",loaded.SelectedRoutes["mb"]);
+        Assert.Equal(old.Root,loaded.Root);Assert.True(loaded.ContentDirectoryConfigured);
+    }
+
+    [Fact]
     public void IncompleteSavedSettingsStillRequireSelection()
     {
         Json.Write(SettingsPath, new LauncherSettings { Root = Path.Combine(root, "games") });

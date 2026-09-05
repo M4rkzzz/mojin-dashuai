@@ -23,7 +23,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    image: boshan/hub-api:0.1.5
+    image: boshan/hub-api:0.1.6
     restart: unless-stopped
     env_file: secrets/api.env
     environment:

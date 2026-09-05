@@ -1,0 +1,46 @@
+{
+  "instance": "dc2",
+  "baseVersion": "5.10.17-zh-cn-r4-mojin.1",
+  "baseSequence": 2,
+  "baseManifestSha256": "4fdb2424700401290178bf48a8d4c54c500cf4714797a4d462221a142405eb01",
+  "changedDownloadRoutes": [
+    {
+      "path": "mods/ftb-chunks-forge-2001.3.7.jar",
+      "sha256": "63515959a2413ad20320f04cdc780148fed7ce97dc7ec271e2cf03f9c88d2323",
+      "size": 1159090,
+      "authorSources": [
+        "https://mediafilez.forgecdn.net/files/7880/858/ftb-chunks-forge-2001.3.7.jar"
+      ]
+    },
+    {
+      "path": "mods/tombstone-1.20.1-9.1.4.jar",
+      "sha256": "6f818d334d847f60e98b49822fa3e1e258f698d3c60ff6bacbc79b0701127151",
+      "size": 2565441,
+      "authorSources": [
+        "https://cdn.modrinth.com/data/YT5K34AB/versions/53ABlBFY/tombstone-1.20.1-9.1.4.jar"
+      ]
+    }
+  ],
+  "fileBytesUnchanged": true,
+  "runtimeUnchanged": true,
+  "request": "Bundle required mods in the complete client and serve differential files from the same FRP origin",
+  "authorSourcesAreProvenanceOnly": true,
+  "version": "5.10.17-zh-cn-r4-mojin.2",
+  "sequence": 3,
+  "manifestSha256": "65f08784d2bb646f6c176fa51b5058e2ec027c987f102b04688900de180e066a",
+  "completeArchive": {
+    "path": "complete-client.zip",
+    "size": 1449105143,
+    "sha256": "60495db98286419e416b6729f4b9da11a87bee19e1dfca05e779872ff0785e7b",
+    "sources": [
+      "https://launcher-direct.boshan.uk:21708/objects/sha256/60495db98286419e416b6729f4b9da11a87bee19e1dfca05e779872ff0785e7b"
+    ],
+    "policy": "managed",
+    "distributionBasis": "Complete native client assembled from pinned manifest objects"
+  },
+  "contentBytesChanged": false,
+  "published": true,
+  "catalogSequence": 3,
+  "publicObjectsDownloadedAndHashVerified": true,
+  "publishedAt": "2026-09-05T15:39:16.242803+00:00"
+}

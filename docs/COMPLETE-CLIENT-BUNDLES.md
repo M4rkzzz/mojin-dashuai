@@ -31,6 +31,8 @@ ZIP 条目必须恰好为所有非 `officialOnly` 文件的原始相对路径，
 
 输出必须为尚不存在的新目录；版本必须不同于输入版本，序号必须严格高于输入序号。下面仅示范一服候选，值应由维护者明确指定：
 
+新实例首次发行可显式传 `--initial-release`：输入和输出必须同版本、同为序号 1，输入不能带旧 bundle 或验收引用。此入口用于已经准备好内容的首次候选，不会绕过 ZIP、对象、路径或隐私校验；后续升级继续要求增加版本与序号。
+
 ```powershell
 python -X utf8 tools/build-complete-client.py `
   --manifest artifacts/native/m3e-manifest.json `

@@ -1,0 +1,32 @@
+{
+  "passed": true,
+  "channel": "beta",
+  "manifestSha256": "a2c8c2263d2845e879f40a054e09810dab1757524311977bdd4ea33ac23b1bfd",
+  "cleanWindows": false,
+  "joinedServer": true,
+  "allSourcesAutomated": true,
+  "javaMajor": 25,
+  "loader": "cleanroom",
+  "map": true,
+  "quests": true,
+  "machines": true,
+  "deferredChecks": [
+    "cleanWindows",
+    "highDpiPlayerVisualConfirmation"
+  ],
+  "scope": "Accepted Cleanroom + Java25 gameplay baseline; only TipTheScales GUI class patched to use actual render dimensions and correct maximum scale. Six headless tests execute the patched class; actual differential installation succeeds. High-DPI player visual confirmation is still pending.",
+  "evidence": [
+    "packs/acceptance/mb-2.json",
+    "packs/revisions/mb-gui-scale.json",
+    ".local/mb-gui-update-check.json",
+    "artifacts/complete-client-staged/mb-gui-sequence-3/report.json"
+  ],
+  "approvedDeferral": "packs/beta-authorization.json",
+  "checkedAt": "2026-09-05T15:43:35.387790+00:00",
+  "inheritedGameAcceptance": "packs/acceptance/mb-2.json",
+  "newGameWindowOpened": false,
+  "fullArchiveInstallVerified": false,
+  "liveHighDpiPlayerConfirmation": false,
+  "patchedClassCasesPassed": 6,
+  "differentialInstallVerified": true
+}

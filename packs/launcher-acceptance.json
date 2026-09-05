@@ -7,9 +7,9 @@
   "interactiveWindowOpened": false,
   "gameWindowsOpened": 0,
   "authorization": "existing encrypted Microsoft authorization",
-  "checkedAt": "2026-09-05T14:21:42.457735+00:00",
-  "authFingerprint": "b8067d17fd6e953a5a8646564d2fd9afa7a9dd784da8eb3ad70e6421cc7456e9",
+  "checkedAt": "2026-09-05T15:44:39.354906+00:00",
+  "authFingerprint": "da935ff82eec36f5e1f146b8d0bba734089a6bb525ee98c65201b9440f585525",
   "provider": "cmllib-windows",
   "interactiveAuthorizationReusedFrom": "2026-09-05T06:16:33.700548+00:00",
-  "validation": "Fresh silent Microsoft authentication, DPAPI restore, ownership and skin validation using saved authorization; no window opened"
+  "validation": "Fresh silent Microsoft authentication, DPAPI restore, ownership and skin verification succeeded with the beta13 build. No window opened."
 }

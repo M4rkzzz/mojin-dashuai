@@ -193,7 +193,7 @@ public partial class MainWindow : Window
                     var next=args.Deserialize<LauncherSettings>(Json.Options)!;next.Validate();
                     next.ContentDirectoryConfigured=settings.ContentDirectoryConfigured;
                     if(!Path.GetFullPath(next.Root).Equals(Path.GetFullPath(settings.Root),StringComparison.OrdinalIgnoreCase))throw new InvalidDataException("请通过目录迁移功能更换内容目录。");
-                    foreach(var id in Routes.Domains.Keys)if(next.Java[id]!=settings.Java[id]&&!string.IsNullOrEmpty(next.Java[id]))await RuntimeManager.Validate(next.Java[id],id=="m3e"?8:id=="dc2"?17:25);
+                    foreach(var id in Routes.Domains.Keys)if(next.Java[id]!=settings.Java[id]&&!string.IsNullOrEmpty(next.Java[id]))await RuntimeManager.Validate(next.Java[id],id is "m3e" or "vw"?8:id=="dc2"?17:25);
                     var restoreGraphics=settings.PreferDedicatedGpu&&!next.PreferDedicatedGpu;
                     Json.Write(Path.Combine(appData,"settings.json"),next);settings=next;NetworkPolicy.Configure(settings);accounts.ReconfigureNetwork();
                     if(restoreGraphics)foreach(var graphics in await Task.Run(()=>GraphicsPreference.RestoreAll(appData)))LogGraphics(graphics.Status,graphics.Success,graphics.Message);
@@ -450,7 +450,7 @@ public partial class MainWindow : Window
         if(summary.RestoredFiles>0)changes.Add($"补齐 {summary.RestoredFiles} 个文件");
         if(summary.RepairedFiles>0)changes.Add($"修复 {summary.RepairedFiles} 个文件");
         if(summary.RemovedFiles>0)changes.Add($"移除 {summary.RemovedFiles} 个旧版文件");
-        if(summary.RuntimePrepared)changes.Add($"补齐 Java {(id=="m3e"?8:id=="dc2"?17:25)}");
+        if(summary.RuntimePrepared)changes.Add($"补齐 Java {(id is "m3e" or "vw"?8:id=="dc2"?17:25)}");
         return changes.Count==0?$"检查完成，{summary.CheckedFiles} 个文件完整。":$"已检查 {summary.CheckedFiles} 个文件，{string.Join("，",changes)}。";
     }
     private void PauseProgress(PackManifest pack,string phase)

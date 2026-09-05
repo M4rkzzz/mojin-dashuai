@@ -10,7 +10,7 @@ page.on('pageerror', error => errors.push(error.message));
 await page.addInitScript(() => {
   const subscribers = [];
   let maximized = false;
-  const settings = {root:'',memory:{m3e:8192,dc2:8192,mb:8736},java:{m3e:'',dc2:'',mb:''},jvm:{m3e:'',dc2:'',mb:''},width:1280,height:720,fullscreen:false,windowBehavior:'keep',concurrency:4,limitMiB:0,proxy:'',reducedMotion:true,theme:'dark',selectedRoutes:{m3e:'auto',dc2:'auto',mb:'auto'}};
+  const settings = {root:'',memory:{m3e:8192,dc2:8192,mb:8736,vw:4096},java:{m3e:'',dc2:'',mb:'',vw:''},jvm:{m3e:'',dc2:'',mb:'',vw:''},width:1280,height:720,fullscreen:false,windowBehavior:'keep',concurrency:4,limitMiB:0,proxy:'',reducedMotion:true,theme:'dark',selectedRoutes:{m3e:'auto',dc2:'auto',mb:'auto',vw:'auto'}};
   const emit = data => subscribers.forEach(callback => callback({data}));
   window.chrome = {webview:{
     addEventListener: (_, callback) => subscribers.push(callback),

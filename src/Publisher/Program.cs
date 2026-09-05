@@ -69,7 +69,7 @@ try
         case "sign-catalog":
         {
             var directory=Json.Read<Catalog>(args[1]);
-            if(directory.Sequence<=0||directory.ExpiresAt<=DateTimeOffset.UtcNow||directory.Servers.Select(s=>s.Id).Distinct().Count()!=3)throw new InvalidDataException("Invalid catalog.");
+            if(directory.Sequence<=0||directory.ExpiresAt<=DateTimeOffset.UtcNow||directory.Servers.Length!=Routes.Domains.Count||directory.Servers.Select(s=>s.Id).Distinct().Count()!=Routes.Domains.Count)throw new InvalidDataException("Invalid catalog.");
             foreach(var server in directory.Servers)
             {
                 if(!Routes.Domains.TryGetValue(server.Id,out var expected)||!server.Routes.SequenceEqual(expected))throw new InvalidDataException("Catalog routes do not match the agreed server domains.");
@@ -85,7 +85,7 @@ try
             var keys=config.GetProperty("publicKeys").Deserialize<Dictionary<string,string>>(Json.Options)!;
             var client=new CatalogClient(config.GetProperty("api").GetString()!,keys,Path.Combine(root,"checkpoint.json"));
             var directory=await client.Fetch();
-            if(directory.Servers.Length!=3)throw new InvalidDataException("Expected all three servers.");
+            if(directory.Servers.Length!=Routes.Domains.Count)throw new InvalidDataException("Expected all configured servers.");
             foreach(var server in directory.Servers)
             {
                 if(!Routes.Domains.TryGetValue(server.Id,out var domains)||!server.Routes.SequenceEqual(domains)||server.Release is null)throw new InvalidDataException("Incomplete server catalog.");
@@ -99,7 +99,7 @@ try
         {
             var keys=JsonDocument.Parse(File.ReadAllText(args[2])).RootElement.GetProperty("publicKeys").Deserialize<Dictionary<string,string>>(Json.Options)!;
             var catalog=ContentSecurity.Verify<Catalog>(Json.Read<SignedEnvelope>(args[1]),keys);
-            if(catalog.Sequence<=0||catalog.Servers.Length!=3)throw new InvalidDataException("Invalid previous catalog.");
+            if(catalog.Sequence<=0||catalog.Servers.Length is <3 or >4||catalog.Servers.Select(s=>s.Id).Distinct().Count()!=catalog.Servers.Length)throw new InvalidDataException("Invalid previous catalog.");
             foreach(var server in catalog.Servers)
                 if(!Routes.Domains.TryGetValue(server.Id,out var expected)||!server.Routes.SequenceEqual(expected))throw new InvalidDataException("Catalog routes differ.");
             Json.Write(args[3],catalog);Console.WriteLine("Catalog signature verified.");break;

@@ -28,10 +28,11 @@ public static partial class ContentSecurity
     }
     public static void Validate(PackManifest manifest)
     {
-        var expected = manifest.Instance switch { "m3e" => 8, "dc2" => 17, "mb" => 25, _ => throw new InvalidDataException("未知实例。") };
+        var expected = manifest.Instance switch { "m3e" or "vw" => 8, "dc2" => 17, "mb" => 25, _ => throw new InvalidDataException("未知实例。") };
         if (manifest.Runtime.Major != expected || manifest.Runtime.Platform != "windows-x64") throw new InvalidDataException("运行环境不符合此服务器的要求。");
         if (manifest.Instance == "mb" && (manifest.Loader != "cleanroom" || manifest.Minecraft != "1.12.2")) throw new InvalidDataException("肉丸工艺只支持 Cleanroom + Java 25。");
         if (manifest.Instance != "mb" && manifest.Loader != "forge") throw new InvalidDataException("服务器加载器不匹配。");
+        if (manifest.Instance == "vw" && (manifest.Minecraft != "1.7.10" || manifest.LoaderVersion != "10.13.4.1614")) throw new InvalidDataException("虚空行者的 Minecraft 或 Forge 版本不匹配。");
         if (manifest.Sequence <= 0 || string.IsNullOrWhiteSpace(manifest.Compatibility) || manifest.ValidationEvidence.Length == 0) throw new InvalidDataException("此版本尚未完成发布验收。");
         if (manifest.Files.Select(f => f.Path).Distinct(StringComparer.OrdinalIgnoreCase).Count() != manifest.Files.Length) throw new InvalidDataException("清单有重复文件路径。");
         var officialHashes=manifest.Files.Where(file=>file.OfficialOnly).Select(file=>file.Sha256).ToHashSet(StringComparer.OrdinalIgnoreCase);

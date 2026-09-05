@@ -6565,7 +6565,7 @@
       "projectId": 314906,
       "fileId": 7880858,
       "modrinthVersion": null,
-      "officialOnly": true,
+      "officialOnly": false,
       "distributionBasis": "Official fixed download; do not redistribute",
       "status": "official-download-and-installed-hash-verified",
       "verifiedSources": [
@@ -6574,6 +6574,11 @@
       "downloadVerification": {
         "verified": true,
         "evidence": "packs/acceptance/beta12-complete-client-checks.json"
+      },
+      "fallback": {
+        "publishedVerified": true,
+        "url": "https://launcher-direct.boshan.uk:21708/objects/sha256/63515959a2413ad20320f04cdc780148fed7ce97dc7ec271e2cf03f9c88d2323",
+        "sha256": "63515959a2413ad20320f04cdc780148fed7ce97dc7ec271e2cf03f9c88d2323"
       }
     },
     {
@@ -9870,7 +9875,7 @@
       "projectId": null,
       "fileId": null,
       "modrinthVersion": "53ABlBFY",
-      "officialOnly": true,
+      "officialOnly": false,
       "distributionBasis": "Official fixed download; do not redistribute",
       "status": "official-download-and-installed-hash-verified",
       "verifiedSources": [
@@ -9879,6 +9884,11 @@
       "downloadVerification": {
         "verified": true,
         "evidence": "packs/acceptance/beta12-complete-client-checks.json"
+      },
+      "fallback": {
+        "publishedVerified": true,
+        "url": "https://launcher-direct.boshan.uk:21708/objects/sha256/6f818d334d847f60e98b49822fa3e1e258f698d3c60ff6bacbc79b0701127151",
+        "sha256": "6f818d334d847f60e98b49822fa3e1e258f698d3c60ff6bacbc79b0701127151"
       }
     },
     {
@@ -10869,7 +10879,7 @@
     }
   ],
   "betaReady": true,
-  "betaSequence": 2,
-  "betaManifestSha256": "4fdb2424700401290178bf48a8d4c54c500cf4714797a4d462221a142405eb01",
+  "betaSequence": 3,
+  "betaManifestSha256": "65f08784d2bb646f6c176fa51b5058e2ec027c987f102b04688900de180e066a",
   "betaPublished": true
 }

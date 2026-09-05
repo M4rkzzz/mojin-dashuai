@@ -9,7 +9,7 @@ public static class PublicMetadata
     public static byte[]? Launcher(string root)=>Read(root,["launcher.signed.json"]);
     public static byte[]? Manifest(string root,string instance,long sequence)
     {
-        if(instance is not ("m3e" or "dc2" or "mb")||sequence<=0)return null;
+        if(instance is not ("m3e" or "dc2" or "mb" or "vw")||sequence<=0)return null;
         return Read(root,["manifests",instance,sequence.ToString(System.Globalization.CultureInfo.InvariantCulture)+".signed.json"]);
     }
     private static byte[]? Read(string root,string[] components)
