@@ -1,0 +1,10 @@
+Shots Fired 0.2.4.1 by MelodicCougar7
+Apache License 2.0. Unmodified official JAR.
+https://www.curseforge.com/minecraft/mc-mods/shots-fired/files/8041230
+
+Touhou Little Maid 1.5.3 by TartaricAcid and contributors
+Code: MIT. Art assets: CC BY-NC-SA 4.0. Original JAR and embedded credits retained.
+https://github.com/TartaricAcid/TouhouLittleMaid/tree/1.20
+https://www.curseforge.com/minecraft/mc-mods/touhou-little-maid/files/8061847
+This pack is distributed noncommercially.
+Pack configuration replaces two unavailable Curios slots (scroll/spellbook); other slots retained.

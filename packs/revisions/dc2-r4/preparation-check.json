@@ -1,0 +1,13 @@
+{
+  "passed": true,
+  "stage": "preparation-only",
+  "standardReferences": 319,
+  "noBundledModJars": true,
+  "oldCorpseReferencesRemoved": true,
+  "modsPinned": true,
+  "runtimeAndLoaderUnchanged": true,
+  "modernFixDependenciesAndXaeroUnchanged": true,
+  "maidAiExplicitlyDisabled": true,
+  "noServerOperations": true,
+  "notSignedOrPublished": true
+}

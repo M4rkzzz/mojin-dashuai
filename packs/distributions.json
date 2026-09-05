@@ -4,37 +4,110 @@
   "frpBase": "https://launcher-direct.boshan.uk:21708",
   "instances": {
     "m3e": {
-      "name": "魔法金属", "version": "8.0.4-2-mojin.1", "minecraft": "1.7.10",
-      "loader": "forge", "loaderVersion": "10.13.4.1614", "javaMajor": 8, "memoryMiB": 8192,
-      "format": "modrinth", "source": "D:/Desktop/魔金大帅/.minecraft/versions/MSE",
-      "include": ["config", "scripts", "resourcepacks", "shaderpacks", "structures", "ManaMetalModData/CustomDungeon"],
+      "name": "魔法金属",
+      "version": "8.0.4-2-mojin.2",
+      "minecraft": "1.7.10",
+      "loader": "forge",
+      "loaderVersion": "10.13.4.1614",
+      "javaMajor": 8,
+      "memoryMiB": 8192,
+      "format": "modrinth",
+      "source": "D:/Desktop/魔金大帅/.minecraft/versions/MSE",
+      "include": [
+        "config",
+        "scripts",
+        "resourcepacks",
+        "shaderpacks",
+        "structures",
+        "ManaMetalModData/CustomDungeon"
+      ],
       "exclude": [],
       "routes": [
-        {"name": "河北阿里云", "host": "mc.m3e.boshan.uk"},
-        {"name": "宿迁三网", "host": "mc.m3e.bk.boshan.uk"}
+        {
+          "name": "河北阿里云",
+          "host": "mc.m3e.boshan.uk"
+        },
+        {
+          "name": "宿迁三网",
+          "host": "mc.m3e.bk.boshan.uk"
+        }
       ]
     },
     "dc2": {
-      "name": "亡者世界", "version": "5.10.17-zh-cn-r3-mojin.1", "minecraft": "1.20.1",
-      "loader": "forge", "loaderVersion": "47.4.0", "javaMajor": 17, "memoryMiB": 8192,
-      "format": "modrinth", "source": "../DeceasedCraft-2-client-zh-5.10.17/overrides",
-      "include": ["config", "customnpcs", "defaultconfigs", "kubejs", "resourcepacks", "shaderpacks", "tacz"],
+      "name": "亡者世界",
+      "version": "5.10.17-zh-cn-r4-mojin.1",
+      "minecraft": "1.20.1",
+      "loader": "forge",
+      "loaderVersion": "47.4.0",
+      "javaMajor": 17,
+      "memoryMiB": 8192,
+      "format": "modrinth",
+      "source": "../DeceasedCraft-2-client-zh-5.10.17/overrides",
+      "include": [
+        "config",
+        "customnpcs",
+        "defaultconfigs",
+        "kubejs",
+        "resourcepacks",
+        "shaderpacks",
+        "tacz"
+      ],
       "exclude": [],
       "routes": [
-        {"name": "河北阿里云", "host": "dc2.mc.boshan.uk"},
-        {"name": "宿迁三网", "host": "dc2.bk.mc.boshan.uk"}
-      ]
+        {
+          "name": "河北阿里云",
+          "host": "dc2.mc.boshan.uk"
+        },
+        {
+          "name": "宿迁三网",
+          "host": "dc2.bk.mc.boshan.uk"
+        }
+      ],
+      "revisionRecipe": "packs/revisions/dc2-r4/revision.json"
     },
     "mb": {
-      "name": "肉丸工艺", "version": "0.18.6.4-cleanroom.0.5.17-alpha-mojin.1", "minecraft": "1.12.2",
-      "loader": "cleanroom", "loaderVersion": "0.5.17-alpha", "javaMajor": 25, "memoryMiB": 8736,
-      "format": "multimc-packwiz", "source": "D:/Desktop/【三服】肉丸工艺/dmeatball/.minecraft/versions/Meatballcraft",
-      "modCacheExcludes": ["mods/memory_repo/**", "mods/1.12.2/**"],
-      "include": ["config", "scripts", "resources", "resourcepacks", "structures", "patchouli_books", "oresources", "pillar"],
-      "exclude": ["config/modularmachinery/machinery/induction_electrolyzer.json", "config/ItemFavorites/**", "config/brandon3055/ResourceCache/**", "config/rc_cache/**", "config/serializationisbad-remotecache.json", "config/tconstruct_oredictcache.dat", "config/tinkersoredictcache.cfg", "config/tinker_ore_dict_melting_cache.dat"],
+      "name": "肉丸工艺",
+      "version": "0.18.6.4-cleanroom.0.5.17-alpha-mojin.2",
+      "minecraft": "1.12.2",
+      "loader": "cleanroom",
+      "loaderVersion": "0.5.17-alpha",
+      "javaMajor": 25,
+      "memoryMiB": 8736,
+      "format": "multimc-packwiz",
+      "source": "D:/Desktop/【三服】肉丸工艺/dmeatball/.minecraft/versions/Meatballcraft",
+      "modCacheExcludes": [
+        "mods/memory_repo/**",
+        "mods/1.12.2/**"
+      ],
+      "include": [
+        "config",
+        "scripts",
+        "resources",
+        "resourcepacks",
+        "structures",
+        "patchouli_books",
+        "oresources",
+        "pillar"
+      ],
+      "exclude": [
+        "config/modularmachinery/machinery/induction_electrolyzer.json",
+        "config/ItemFavorites/**",
+        "config/brandon3055/ResourceCache/**",
+        "config/rc_cache/**",
+        "config/serializationisbad-remotecache.json",
+        "config/tconstruct_oredictcache.dat",
+        "config/tinkersoredictcache.cfg",
+        "config/tinker_ore_dict_melting_cache.dat"
+      ],
       "routes": [
-        {"name": "河北阿里云", "host": "mb.mc.boshan.uk"},
-        {"name": "宿迁三网", "host": "mb.bk.mc.boshan.uk"}
+        {
+          "name": "河北阿里云",
+          "host": "mb.mc.boshan.uk"
+        },
+        {
+          "name": "宿迁三网",
+          "host": "mb.bk.mc.boshan.uk"
+        }
       ]
     }
   }

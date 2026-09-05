@@ -1,0 +1,184 @@
+{
+  "checkedAt": "2026-09-05T14:15:37.050537+00:00",
+  "launcherVersion": "0.1.2-beta.12",
+  "launcherAssemblyVersion": "0.1.2.12",
+  "hubTests": 204,
+  "graphicsPreferenceTests": 14,
+  "pythonTests": 43,
+  "uiChecksPassed": true,
+  "dispatcherFullArchiveTestPassed": true,
+  "publishedCatalogChanged": true,
+  "firstInstall": {
+    "m3e": {
+      "archiveBytes": 727816371,
+      "archiveSha256": "2ddcc6670225aa14b63854cef5b3e17f904ec1b637882d62531f6ad44642ac79",
+      "allArchiveEntriesVerified": true,
+      "officialOnlyBytes": 0,
+      "officialOnlyFiles": [],
+      "installation": {
+        "instance": "m3e",
+        "version": "8.0.4-2-mojin.2",
+        "sequence": 2,
+        "manifestSha256": "afce74b75a58a61a501d0253e4d0cc62cd8ee4822413ad01e5420f7866598ef0",
+        "installed": true,
+        "javaMajor": 8,
+        "localVersionPrepared": true,
+        "gameStarted": false,
+        "joinedServer": false,
+        "elapsedSeconds": 200.2660777,
+        "files": 4780,
+        "singleOrigin": true,
+        "origin": "https://launcher-direct.boshan.uk:21708",
+        "officialOnlyFiles": [],
+        "completeClientArchive": "2ddcc6670225aa14b63854cef5b3e17f904ec1b637882d62531f6ad44642ac79",
+        "completeClientArchiveBytes": 727816371
+      }
+    },
+    "dc2": {
+      "archiveBytes": 1445763436,
+      "archiveSha256": "b0f37ac200d4bd894729caff1226058155868e18edac5436ceeda2d8b90d55f2",
+      "allArchiveEntriesVerified": true,
+      "officialOnlyBytes": 3724531,
+      "officialOnlyFiles": [
+        {
+          "path": "mods/ftb-chunks-forge-2001.3.7.jar",
+          "sha256": "63515959a2413ad20320f04cdc780148fed7ce97dc7ec271e2cf03f9c88d2323",
+          "size": 1159090,
+          "source": "https://mediafilez.forgecdn.net/files/7880/858/ftb-chunks-forge-2001.3.7.jar"
+        },
+        {
+          "path": "mods/tombstone-1.20.1-9.1.4.jar",
+          "sha256": "6f818d334d847f60e98b49822fa3e1e258f698d3c60ff6bacbc79b0701127151",
+          "size": 2565441,
+          "source": "https://cdn.modrinth.com/data/YT5K34AB/versions/53ABlBFY/tombstone-1.20.1-9.1.4.jar"
+        }
+      ],
+      "installation": {
+        "instance": "dc2",
+        "version": "5.10.17-zh-cn-r4-mojin.1",
+        "sequence": 2,
+        "manifestSha256": "1bbff744915f127ff3a3c05cb0940d218381f9466c7b04740dd647de56a18c02",
+        "installed": true,
+        "javaMajor": 17,
+        "localVersionPrepared": true,
+        "gameStarted": false,
+        "joinedServer": false,
+        "elapsedSeconds": 454.7229974,
+        "files": 9872,
+        "singleOrigin": false,
+        "origin": "https://launcher-direct.boshan.uk:21708",
+        "officialOnlyFiles": [
+          "mods/ftb-chunks-forge-2001.3.7.jar",
+          "mods/tombstone-1.20.1-9.1.4.jar"
+        ],
+        "completeClientArchive": "b0f37ac200d4bd894729caff1226058155868e18edac5436ceeda2d8b90d55f2",
+        "completeClientArchiveBytes": 1445763436
+      }
+    },
+    "mb": {
+      "archiveBytes": 1275725146,
+      "archiveSha256": "777fe33df7d3c7d23e2a6dd9d4651bd32fb3bfa0190dc64bb06049aad9fad695",
+      "allArchiveEntriesVerified": true,
+      "officialOnlyBytes": 0,
+      "officialOnlyFiles": [],
+      "installation": {
+        "instance": "mb",
+        "version": "0.18.6.4-cleanroom.0.5.17-alpha-mojin.2",
+        "sequence": 2,
+        "manifestSha256": "249f4ebd02c214cd13d11c293b5479c4a6be6791befa82f68d0a530bfc0b7a6e",
+        "installed": true,
+        "javaMajor": 25,
+        "localVersionPrepared": true,
+        "gameStarted": false,
+        "joinedServer": false,
+        "elapsedSeconds": 566.2816715,
+        "files": 26889,
+        "singleOrigin": true,
+        "origin": "https://launcher-direct.boshan.uk:21708",
+        "officialOnlyFiles": [],
+        "completeClientArchive": "777fe33df7d3c7d23e2a6dd9d4651bd32fb3bfa0190dc64bb06049aad9fad695",
+        "completeClientArchiveBytes": 1275725146
+      }
+    }
+  },
+  "dc2Differential": {
+    "passed": true,
+    "baseline": "5.10.17-zh-cn-r3-mojin.1",
+    "target": "5.10.17-zh-cn-r4-mojin.1",
+    "source": "read-only copy of installed r3 manifest files and bundled runtime",
+    "downloadedObjects": 15,
+    "downloadedBytes": 29332966,
+    "fullClientArchiveDownloaded": false,
+    "runtimeDownloaded": false,
+    "allFourNewModsVerified": true,
+    "retiredJarsAbsent": [
+      "mods/corpse-forge-1.20.1-1.0.21.jar",
+      "mods/corpsecurioscompat-1.20.1-Forge-3.1.2.jar",
+      "mods/shotsfired-1.20.1-0.2.2.jar"
+    ],
+    "seedFilesPreserved": 658,
+    "mapWaypointsSaveScreenshotMarkersPreserved": true,
+    "existingOptionsLinesUnchanged": true,
+    "addedUnassignedFtbKeys": 3,
+    "gameStarted": false,
+    "joinedServer": false,
+    "originalPlayerDirectoryModified": false
+  },
+  "cleanWindows": false,
+  "realDc2R4JoinPending": false,
+  "allThreeFirstInstallsPassed": true,
+  "publicObjectHashesReverified": true,
+  "realDc2R4JoinLogged": true,
+  "realDc2R4VisualConfirmationPending": true,
+  "dc2ServerReadyConfirmedByOperator": true,
+  "contentUpdateStateChecksPassed": true,
+  "contentUpdateButtonDoesNotLaunch": true,
+  "contentUpdateTargetedTests": 10,
+  "realDc2R4Join": {
+    "verified": true,
+    "joinedAt": "2026-09-05T22:13:13+08:00",
+    "account": "M4rkzzz",
+    "source": "client log and independent server operator confirmation",
+    "visualConfirmationPending": true
+  },
+  "launcherDeltaFromBeta11": {
+    "version": "0.1.2-beta.12",
+    "files": 498,
+    "size": 78354106,
+    "downloadedAndVerified": true,
+    "expectedDownloadBytes": 1179118,
+    "actualDownloadBytes": 1179118,
+    "singleOrigin": true,
+    "gameStarted": false,
+    "activated": false
+  },
+  "finalDc2Revision": {
+    "manifestSha256": "4fdb2424700401290178bf48a8d4c54c500cf4714797a4d462221a142405eb01",
+    "archiveSha256": "37f2a534712ce01975d0cc9607861258f3fdb108bd1c2c58b88997c08d4400d1",
+    "archiveBytes": 1445764307,
+    "newScript": {
+      "distributionBasis": "Operator defaults / attributed CFPA translation under CC BY-NC-SA 4.0",
+      "path": "kubejs/server_scripts/dc2_maid_broom_recipe.js",
+      "policy": "managed",
+      "sha256": "c313960ce864b17c41721fd56311d1e3aef16807fca0450504e6327b474968f9",
+      "size": 1386,
+      "sources": [
+        "https://launcher-direct.boshan.uk:21708/objects/sha256/c313960ce864b17c41721fd56311d1e3aef16807fca0450504e6327b474968f9"
+      ]
+    },
+    "fullInstallAndJoinBaseline": "firstInstall.dc2 and realDc2R4Join",
+    "onlyChangedFileSinceActualInstall": "kubejs/server_scripts/dc2_maid_broom_recipe.js",
+    "serverReloadPassed": true,
+    "fullArchiveInventoryAndPublicHashVerified": true,
+    "freshFirstInstallNotRepeatedAfterScriptOnlyChange": true
+  },
+  "finalManifests": {
+    "m3e": "673cb7044e0a80e63031236ac14b444812a5635f904d21f81692da7c32128b66",
+    "dc2": "4fdb2424700401290178bf48a8d4c54c500cf4714797a4d462221a142405eb01",
+    "mb": "cb5642901f635b0b22f3abc38ae60de99e8e77d21107e06f7c4162b9b6220f63"
+  },
+  "publishedCatalogSequence": 2,
+  "publicManifestsVerified": true,
+  "installerPublicReadBackVerified": true,
+  "launcherUpdatePublishedSequence": 14
+}

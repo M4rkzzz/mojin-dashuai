@@ -1,0 +1,92 @@
+{
+  "instance": "dc2",
+  "version": "5.10.17-zh-cn-r4-mojin.1",
+  "sequence": 2,
+  "baseVersion": "5.10.17-zh-cn-r3-mojin.1",
+  "baseSequence": 1,
+  "baseEnvelopeSha256": "5e0687836af950468283fb8171f8bead065ebb28322dcaf7056bdbe4a269e263",
+  "remove": [
+    "mods/corpse-forge-1.20.1-1.0.21.jar",
+    "mods/corpsecurioscompat-1.20.1-Forge-3.1.2.jar",
+    "defaultconfigs/corpse-server.toml",
+    "config/corpsecurioscompat-common.toml",
+    "mods/shotsfired-1.20.1-0.2.2.jar"
+  ],
+  "add": [
+    {
+      "path": "mods/ftb-chunks-forge-2001.3.7.jar",
+      "size": 1159090,
+      "sha1": "ad905a6efcd0569bd8f4cc8e38889671b4bfc6a9",
+      "sha256": "63515959a2413ad20320f04cdc780148fed7ce97dc7ec271e2cf03f9c88d2323",
+      "sha512": "e50ef327d8b466f439996ceffe7b435e5d8689bc4bde81b7e9c45069ca48926ac1e66fa9c892316870e04c9a49f8e3e66ab7642588764a51c2f2a7cda0f8a7b0",
+      "sources": [
+        "https://mediafilez.forgecdn.net/files/7880/858/ftb-chunks-forge-2001.3.7.jar"
+      ],
+      "projectId": 314906,
+      "fileId": 7880858,
+      "modrinthVersion": null,
+      "officialOnly": true,
+      "distributionBasis": "Official fixed download; do not redistribute"
+    },
+    {
+      "path": "mods/tombstone-1.20.1-9.1.4.jar",
+      "size": 2565441,
+      "sha1": "5ac5e96948dcf6c6acbe92ec358ee51ce88aafb9",
+      "sha256": "6f818d334d847f60e98b49822fa3e1e258f698d3c60ff6bacbc79b0701127151",
+      "sha512": "0f5f3e4b5abd30d08620698657d1f43347a7867d935290980f35e78b91bfd9079e73b1727376be90f2593d0fa4a373fb769e43a69a14b7842e529385d0edeb17",
+      "sources": [
+        "https://cdn.modrinth.com/data/YT5K34AB/versions/53ABlBFY/tombstone-1.20.1-9.1.4.jar"
+      ],
+      "projectId": null,
+      "fileId": null,
+      "modrinthVersion": "53ABlBFY",
+      "officialOnly": true,
+      "distributionBasis": "Official fixed download; do not redistribute"
+    },
+    {
+      "path": "mods/touhoulittlemaid-1.5.3-forge+mc1.20.1.jar",
+      "size": 24413134,
+      "sha1": "9097a2a57e7ed639bca072dd62e4a9257e86db89",
+      "sha256": "8c341567e57aa3c006f9fa85c7a5e3bc36a53b1cca4e3538c3db705eeeea1bbc",
+      "sha512": "12f29c14e806bf3aeb4f8399ac02199b419426905a27c3b9c7e019ef9daace09bc40d9b2c5c41ee730ce4b67eda5d0e93e8a8f32879b96b70e6003952c651716",
+      "sources": [
+        "https://mediafilez.forgecdn.net/files/8061/847/touhoulittlemaid-1.5.3-forge%2Bmc1.20.1.jar"
+      ],
+      "projectId": 355044,
+      "fileId": 8061847,
+      "modrinthVersion": null,
+      "officialOnly": false,
+      "distributionBasis": "Touhou Little Maid MIT code / CC BY-NC-SA 4.0 resources; noncommercial pack, attribution retained"
+    },
+    {
+      "path": "mods/shotsfired-1.20.1-0.2.4.1.jar",
+      "size": 1040536,
+      "sha1": "9131c2f2a48e13f0452b6dcaeca99f5e32029f05",
+      "sha256": "6ee9ba8ae63c36fee0b16f52b7207fccd98c24cd1ffe351768df87202771219b",
+      "sha512": "4c830b6735ae4bea6776e3f092a410f00b9449d097b1ab04198bdc145551ccd72e90ac999f864c497913e9b80b3dc9997e02032f60b6a9834168c339a2d30826",
+      "sources": [
+        "https://mediafilez.forgecdn.net/files/8041/230/shotsfired-1.20.1-0.2.4.1.jar"
+      ],
+      "projectId": 1185268,
+      "fileId": 8041230,
+      "modrinthVersion": null,
+      "officialOnly": false,
+      "distributionBasis": "Shots Fired Apache-2.0, unmodified official JAR with license retained"
+    }
+  ],
+  "firstInstallConfigPolicy": "seed",
+  "releaseState": "published-beta",
+  "minimumLauncherNumericVersion": "0.1.2.12",
+  "serverAcceptanceReceived": true,
+  "publishAllowed": true,
+  "compatibility": "dc2-1.20.1-forge-r4",
+  "broomRecipe": {
+    "path": "kubejs/server_scripts/dc2_maid_broom_recipe.js",
+    "sha256": "c313960ce864b17c41721fd56311d1e3aef16807fca0450504e6327b474968f9",
+    "reloadVerified": true,
+    "enderEyeBanUnchanged": true
+  },
+  "catalogSequence": 2,
+  "publicManifestUrl": "https://launcher-direct.boshan.uk:21708/v1/manifests/dc2/2",
+  "standardPackageSha256": "3ea309658522606a18a4adfc1fe3996141d81fab47f1b551d754c57b0d121e27"
+}

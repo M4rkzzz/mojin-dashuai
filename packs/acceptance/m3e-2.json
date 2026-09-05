@@ -1,0 +1,27 @@
+{
+  "passed": true,
+  "channel": "beta",
+  "manifestSha256": "673cb7044e0a80e63031236ac14b444812a5635f904d21f81692da7c32128b66",
+  "cleanWindows": false,
+  "joinedServer": true,
+  "allSourcesAutomated": true,
+  "javaMajor": 8,
+  "loader": "forge",
+  "map": true,
+  "quests": false,
+  "machines": false,
+  "deferredChecks": [
+    "cleanWindows"
+  ],
+  "scope": "Unchanged accepted game files and fixed runtime, repackaged as one full-client archive; real empty-cache install verified.",
+  "evidence": [
+    "packs/acceptance/beta12-complete-client-checks.json",
+    "packs/acceptance/m3e-1.json"
+  ],
+  "approvedDeferral": "packs/beta-authorization.json",
+  "checkedAt": "2026-09-05T14:22:20.664552+00:00",
+  "inheritedGameAcceptance": "packs/acceptance/m3e-1.json",
+  "filesAndRuntimeIdenticalToAcceptedSequence": 1,
+  "newGameWindowOpened": false,
+  "fullArchiveInstallVerified": true
+}

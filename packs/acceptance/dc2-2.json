@@ -1,0 +1,31 @@
+{
+  "passed": true,
+  "channel": "beta",
+  "manifestSha256": "4fdb2424700401290178bf48a8d4c54c500cf4714797a4d462221a142405eb01",
+  "cleanWindows": false,
+  "joinedServer": true,
+  "allSourcesAutomated": true,
+  "javaMajor": 17,
+  "loader": "forge",
+  "map": false,
+  "quests": false,
+  "machines": false,
+  "deferredChecks": [
+    "cleanWindows"
+  ],
+  "approvedDeferral": "packs/beta-authorization.json",
+  "scope": "r3 to r4 actual differential installation and server join; final addition is the server-validated broom recipe script. Exhaustive new-mod UI testing is not claimed.",
+  "evidence": [
+    "packs/acceptance/beta12-complete-client-checks.json",
+    "packs/revisions/dc2-r4/revision.json"
+  ],
+  "checkedAt": "2026-09-05T14:26:41.185105+00:00",
+  "liveJoinAt": "2026-09-05T22:13:13+08:00",
+  "mapAndSettingsFilesPreserved": true,
+  "freshVisualObservationPending": true,
+  "finalScriptReloadAt": "2026-09-05T22:21:03+08:00",
+  "finalScriptServerKubeJsErrors": false,
+  "onlyFileChangedSinceActualInstallAndJoin": "kubejs/server_scripts/dc2_maid_broom_recipe.js",
+  "finalScriptSha256": "c313960ce864b17c41721fd56311d1e3aef16807fca0450504e6327b474968f9",
+  "fullArchiveInventoryVerified": true
+}

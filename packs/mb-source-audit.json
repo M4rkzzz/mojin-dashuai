@@ -14967,7 +14967,7 @@
     }
   ],
   "betaReady": true,
-  "betaSequence": 1,
-  "betaManifestSha256": "69045648c0e2010e692ce365d6c2b3544f9a507e816e7f4b4abcd39d8057cfce",
+  "betaSequence": 2,
+  "betaManifestSha256": "cb5642901f635b0b22f3abc38ae60de99e8e77d21107e06f7c4162b9b6220f63",
   "betaPublished": true
 }

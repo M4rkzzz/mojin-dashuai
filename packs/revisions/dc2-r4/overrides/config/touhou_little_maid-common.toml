@@ -1,0 +1,8 @@
+[ai]
+LLMEnabled = false
+AutoGenSettingEnabled = false
+TTSEnabled = false
+STTEnabled = false
+
+[maid]
+OwnerMaxMaidNum = 4

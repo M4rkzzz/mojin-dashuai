@@ -35,7 +35,11 @@ for instance,spec in config['instances'].items():
     signed=stage/(instance+'.signed.json')
     if not signed.exists():publish('sign-beta' if args.beta else 'sign',source,args.key,signed)
     envelope=json.loads(signed.read_text(encoding='utf-8-sig'))
-    if json.loads(base64.b64decode(envelope['payload']))!=manifest:raise ValueError('Staged signed manifest differs from accepted content')
+    # The typed signer emits optional ContentFile defaults for older file records.
+    expected=json.loads(json.dumps(manifest))
+    for item in expected['files']+[expected['runtime']['archive']]+[bundle['archive'] for bundle in expected.get('bundles',[])]:
+        item.setdefault('officialOnly',False)
+    if json.loads(base64.b64decode(envelope['payload']))!=expected:raise ValueError('Staged signed manifest differs from accepted content')
     files[relative]=signed
     old=previous.get(instance,{})
     rollback_candidates=([old['release']] if old.get('release') else [])+old.get('rollbacks',[])

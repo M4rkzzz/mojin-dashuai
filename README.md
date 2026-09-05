@@ -2,7 +2,7 @@
 
 Windows 三服统一客户端。React + TypeScript / WebView2 / .NET 10。自建账号服务使用 ASP.NET Core Identity + PostgreSQL。
 
-**0.1.2-beta.11 已开放内测。** [下载 Windows 安装包](https://launcher-direct.boshan.uk:21708/launcher/0.1.2-beta.11/MojinDashuai-Setup-0.1.2-beta.11-x64.exe) · [使用说明](docs/BETA-0.1.2.md)。干净 Windows 验收按用户决定延后，仍保留未通过记录；本次不认定为完整稳定版交付。
+**0.1.2-beta.12 已开放内测。** [下载 Windows 安装包](https://launcher-direct.boshan.uk:21708/launcher/0.1.2-beta.12/MojinDashuai-Setup-0.1.2-beta.12-x64.exe) · [使用说明](docs/BETA-0.1.2.md)。干净 Windows 验收按用户决定延后，仍保留未通过记录；本次不认定为完整稳定版交付。
 
 ## 启动开发环境
 
@@ -41,4 +41,6 @@ dotnet publish src/Launcher.Desktop/Launcher.Desktop.csproj -c Release -r win-x6
 
 管理和部署步骤见 [运维文档](docs/OPERATIONS.md)。
 
-beta.10 玩家重新打开启动器即可在登录前自动升级到 beta.11。差异更新只下载变化文件；发现新版时，最小化按钮左侧显示绿色“更新”。测速保持进入页面一次，保留手动重测。
+beta.10 / beta.11 玩家重新打开启动器即可在登录前自动升级到 beta.12。差异更新只下载变化文件；发现新版时，最小化按钮左侧显示绿色“更新”。测速保持进入页面一次，保留手动重测。
+
+本次游戏内容更新：二服升级到中文 r4，已有 r3 只下载约 28 MiB 的差异；左侧出现橙色“需更新”，详情页点击“更新”，完成后再进入游戏。新安装从统一下载服务获取含配套 Java 的完整客户端 ZIP，一、三服游戏文件不变。二服两项不允许转发的模组仍自动从官方固定地址下载。
