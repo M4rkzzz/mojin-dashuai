@@ -8,6 +8,10 @@ using System.Windows;
 using Boshan.Launcher;
 using Microsoft.Web.WebView2.Core;
 using Microsoft.Win32;
+using Boshan.Shared;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
+using System.Buffers.Binary;
 
 namespace Boshan.Desktop;
 
@@ -29,6 +33,7 @@ public partial class MainWindow : Window
     {
         InitializeComponent();
         Loaded+=async(_,_)=>await Initialize();
+        StateChanged+=(_,_)=>{if(initialized)Event("window-state",new {Maximized=WindowState==WindowState.Maximized});};
         Closing+=(_,e)=>{if(games.Count>0){e.Cancel=true;Hide();}};
     }
     private async Task Initialize()
@@ -53,13 +58,14 @@ public partial class MainWindow : Window
             var core=Web.CoreWebView2;
             core.Settings.AreDevToolsEnabled=false;core.Settings.AreDefaultContextMenusEnabled=false;core.Settings.AreHostObjectsAllowed=false;
             core.Settings.IsPasswordAutosaveEnabled=false;core.Settings.IsGeneralAutofillEnabled=false;
+            core.Settings.IsNonClientRegionSupportEnabled=true;
             core.SetVirtualHostNameToFolderMapping("app.boshan.local",Path.Combine(AppContext.BaseDirectory,"web"),CoreWebView2HostResourceAccessKind.DenyCors);
             core.NavigationStarting+=(_,e)=>{if(!Uri.TryCreate(e.Uri,UriKind.Absolute,out var uri)||uri.Scheme!="https"||uri.Host!="app.boshan.local")e.Cancel=true;};
             core.NewWindowRequested+=(_,e)=>e.Handled=true;
             core.PermissionRequested+=(_,e)=>e.State=CoreWebView2PermissionState.Deny;
             core.DownloadStarting+=(_,e)=>e.Cancel=true;
             core.WebMessageReceived+=HandleMessage;
-            core.NavigationCompleted+=(_,_)=>Loading.Visibility=Visibility.Collapsed;
+            core.NavigationCompleted+=(_,_)=>{Loading.Visibility=Visibility.Collapsed;Event("window-state",new {Maximized=WindowState==WindowState.Maximized});};
             initialized=true;core.Navigate("https://app.boshan.local/index.html");
         }
         catch(Exception ex){Loading.Text="启动器准备失败："+Friendly(ex);File.WriteAllText(Path.Combine(appData,"startup-diagnostic.txt"),ex.GetType().FullName+"\n"+ex.HResult+"\n"+ex.StackTrace);}
@@ -99,7 +105,7 @@ public partial class MainWindow : Window
         string Id(){var id=args.GetProperty("instance").GetString()!;if(!Routes.Domains.ContainsKey(id))throw new InvalidDataException("未知服务器。");return id;}
         switch(command)
         {
-            case "bootstrap": return new {Profile=await accounts.Restore(),Settings=settings,Installs=Routes.Domains.Keys.Select(id=>new {Id=id,Pack=new TransactionalInstaller(settings.Root).ReadInstalled(id)}).Where(x=>x.Pack is not null).ToDictionary(x=>x.Id,x=>new {Version=x.Pack!.Manifest.Version,State="installed"})};
+            case "bootstrap": return new {Profile=await accounts.Restore(),Settings=settings,WindowMaximized=WindowState==WindowState.Maximized,Installs=Routes.Domains.Keys.Select(id=>new {Id=id,Pack=new TransactionalInstaller(settings.Root).ReadInstalled(id)}).Where(x=>x.Pack is not null).ToDictionary(x=>x.Id,x=>new {Version=x.Pack!.Manifest.Version,State="installed"})};
             case "auth.login":return await accounts.Login("login",args);
             case "auth.register":return await accounts.Login("register",args);
             case "auth.recover":return await accounts.Recover(args);
@@ -139,7 +145,8 @@ public partial class MainWindow : Window
             case "diagnostics.export":return ExportDiagnostics();
             case "account.password":return await AccountDialog(false);
             case "account.recovery":return await AccountDialog(true);
-            case "account.skin":return SkinDialog();
+            case "account.avatar":return await accounts.Skin();
+            case "account.skin":return await SkinDialog(args);
             case "window.minimize":WindowState=WindowState.Minimized;return null;
             case "window.maximize":WindowState=WindowState==WindowState.Maximized?WindowState.Normal:WindowState.Maximized;return null;
             case "window.close":Close();return null;
@@ -266,10 +273,21 @@ public partial class MainWindow : Window
         }
         await accounts.Authorized("/v1/account/password",new {CurrentPassword=dialog.CurrentPassword,NewPassword=dialog.NewPassword});await accounts.Logout();return new {Message="密码已修改，请退出当前界面后重新登录。"};
     }
-    private object SkinDialog()
+    private async Task<object> SkinDialog(JsonElement args)
     {
         if(accounts.Current?.Profile.Kind=="microsoft"){Process.Start(new ProcessStartInfo("https://www.minecraft.net/msaprofile/mygames/editskin"){UseShellExecute=true});return new{Message="已打开微软账号皮肤管理页面"};}
-        throw new InvalidDataException("群服皮肤功能正在逐服验证客户端模组，验证完成后开放。");
+        if(accounts.Current is null)throw new InvalidDataException("请先登录账号。");
+        var picker=new OpenFileDialog{Title="选择皮肤",Filter="PNG 皮肤|*.png",Multiselect=false};
+        if(picker.ShowDialog(this)!=true)return new{Cancelled=true};
+        if(new FileInfo(picker.FileName).Length>SkinImage.MaxBytes)throw new InvalidDataException("皮肤文件不能超过 128 KiB。");
+        var bytes=await File.ReadAllBytesAsync(picker.FileName);
+        if(bytes.Length<33||!bytes.AsSpan(0,8).SequenceEqual(new byte[]{137,80,78,71,13,10,26,10})||BinaryPrimitives.ReadUInt32BigEndian(bytes.AsSpan(16,4))!=64||BinaryPrimitives.ReadUInt32BigEndian(bytes.AsSpan(20,4)) is not (32 or 64))throw new InvalidDataException("请选择 64×64 或 64×32 的 PNG 皮肤。");
+        using var input=new MemoryStream(bytes);
+        var bitmap=BitmapDecoder.Create(input,BitmapCreateOptions.PreservePixelFormat,BitmapCacheOption.OnLoad).Frames[0];
+        var encoder=new PngBitmapEncoder();encoder.Frames.Add(BitmapFrame.Create(new FormatConvertedBitmap(bitmap,PixelFormats.Bgra32,null,0)));
+        using var output=new MemoryStream();encoder.Save(output);
+        var model=args.TryGetProperty("model",out var value)?value.GetString()??"classic":"classic";
+        return await accounts.SaveSkin(new(Convert.ToBase64String(output.ToArray()),model));
     }
     private object ExportDiagnostics()
     {
@@ -278,7 +296,7 @@ public partial class MainWindow : Window
         using var zip=ZipFile.Open(dialog.FileName,ZipArchiveMode.Create);
         var logs=Path.Combine(appData,"diagnostic.log");
         if(File.Exists(logs)){var entry=zip.CreateEntry("launcher.log");using var writer=new StreamWriter(entry.Open());writer.Write(File.ReadAllText(logs));}
-        var info=zip.CreateEntry("environment.json");using(var writer=new StreamWriter(info.Open()))writer.Write(JsonSerializer.Serialize(new{Launcher="0.1.0",OS=Environment.OSVersion.VersionString,X64=Environment.Is64BitOperatingSystem,settings.Memory,settings.Width,settings.Height,settings.Concurrency},Json.Options));
+        var info=zip.CreateEntry("environment.json");using(var writer=new StreamWriter(info.Open()))writer.Write(JsonSerializer.Serialize(new{Launcher=typeof(MainWindow).Assembly.GetName().Version?.ToString(),OS=Environment.OSVersion.VersionString,X64=Environment.Is64BitOperatingSystem,settings.Memory,settings.Width,settings.Height,settings.Concurrency},Json.Options));
         return new {Message="诊断日志已导出"};
     }
     private void Log(string command,Exception ex)

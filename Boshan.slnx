@@ -3,6 +3,7 @@
     <Project Path="src/Hub.Api/Hub.Api.csproj" />
     <Project Path="src/Launcher.Core/Launcher.Core.csproj" />
     <Project Path="src/Launcher.Desktop/Launcher.Desktop.csproj" />
+    <Project Path="src/Launcher.Shared/Launcher.Shared.csproj" />
     <Project Path="src/Publisher/Publisher.csproj" />
   </Folder>
   <Folder Name="/tests/">

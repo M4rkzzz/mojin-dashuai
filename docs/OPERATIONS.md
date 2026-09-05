@@ -13,6 +13,7 @@ docker compose exec hub-api dotnet Hub.Api.dll admin invite-revoke INVITATION_ID
 docker compose exec hub-api dotnet Hub.Api.dll admin invite-list
 docker compose exec hub-api dotnet Hub.Api.dll admin invite-uses INVITATION_ID
 docker compose exec hub-api dotnet Hub.Api.dll admin protect OldPlayer
+docker compose exec hub-api dotnet Hub.Api.dll admin protect-conflict CaseName casename
 docker compose exec hub-api dotnet Hub.Api.dll admin disable LoginName
 docker compose exec hub-api dotnet Hub.Api.dll admin reset LoginName
 ```
@@ -48,3 +49,12 @@ docker compose --profile tunnel up -d cloudflared
 `Publisher sign-catalog CATALOG PRIVATE OUTPUT` 签名目录。目录序号只能递增，授权回退放在新目录的 `rollbacks` 中。不要通过降低目录序号回滚。三服回退目标始终是已验证的 Cleanroom + Java 25。
 
 上传文件时不附带账号令牌。发布大文件前逐项完成 `packs/*-source-audit.json` 的来源和分发依据审计；“本地已有”不构成再分发依据。
+
+
+## 皮肤与 API 升级
+
+`SkinPath=/data/skins` 对应 `/vol1/mc-client-hub/api/skins`，由 API 容器用户 1654 写入。`POST /v1/account/skin` 需要账号会话；`GET /v1/skins/{gameName}` 公开返回 PNG 和 `X-Skin-Model`，下载请求不需要令牌。皮肤资源接口不等于游戏内皮肤模组已经验收。
+
+`protect-conflict` 将大小写冲突组整体保留，数据库中以空 `ExactName` 标记未核实身份。该组不能生成绑定邀请码，既有绑定码也无法认领；普通 `protect` 不会自动解除冲突。管理员需要先核实历史角色，不能自动选择拼写或合并角色。
+
+先在隔离容器执行 `tests/api-acceptance.py`，通过后可在 124 执行 `python3 upgrade-api.py 0.1.1`。脚本检查发行目录和镜像，额外备份数据库，更新本项目 API，并验证健康状态；失败时恢复原镜像配置。只重建 `hub-api`，不操作其他服务。皮肤备份与数据库备份分别保留七份。

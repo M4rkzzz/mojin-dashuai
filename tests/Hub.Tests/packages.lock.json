@@ -349,6 +349,7 @@
       "hub.api": {
         "type": "Project",
         "dependencies": {
+          "Launcher.Shared": "[1.0.0, )",
           "Microsoft.AspNetCore.Identity.EntityFrameworkCore": "[10.0.11, )",
           "Npgsql.EntityFrameworkCore.PostgreSQL": "[10.0.3, )"
         }
@@ -360,6 +361,9 @@
           "CmlLib.Core.Installer.Forge": "[1.1.1, )",
           "DnsClient": "[1.8.0, )"
         }
+      },
+      "launcher.shared": {
+        "type": "Project"
       }
     }
   }

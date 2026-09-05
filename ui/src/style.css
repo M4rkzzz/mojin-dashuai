@@ -3,3 +3,80 @@
 .card-top{position:absolute;left:24px;right:24px;top:22px}.sidebar .nav-label{color:#73806d}.main-footer{color:#718068}.login-scene footer{color:#9aaa8f}
 /* Flat interface: clear planes, quiet borders and restrained motion. */
 .brand{font-size:24px;letter-spacing:2px}.brand.small{font-size:19px;letter-spacing:1px}.brand span,.brand.small span{font-size:8px;letter-spacing:2px}.brand-mark,.brand.small .brand-mark{border:0;background:none;border-radius:0;transform:none;width:29px}.sidebar .brand{margin-left:9px;margin-right:0;gap:9px}.brand-mark svg{stroke-width:1.4}.primary,.secondary,.microsoft-button,input,select{border-radius:3px}.primary:hover{transform:none}.nav-item,.mini-world{border-radius:2px}.mini-world img{border-radius:2px}.world-card{border-radius:3px;box-shadow:none;border:0}.world-card:hover{transform:none}.world-card:hover>img{transform:scale(1.015)}.card-circle{border:0;border-radius:0}.outline-badge{border-radius:3px}.card-content .tags span{border:0;background:transparent;padding-left:0;padding-right:9px}.card-bottom{color:#a4afa0}.lobby-foot{border-top:1px solid var(--line);margin-top:28px;padding:22px 0}.bulletin-icon{background:none;border:0;border-radius:0;width:30px}.launch-panel{border-radius:3px;background:#171b17;border:0;border-top:2px solid var(--accent)}.route,.auto-route,.runtime-note,.instance-menu{border-radius:3px}.route-icon{color:#98a88d}.routes .route{background:transparent}.routes .route.selected,.auto-route.selected{background:#c5ddb006}.route b{font-size:13px}.route small{color:#91a082}.auto-route>span>span{color:#829175}.sidebar .nav-item.active{background:#d5e7be08}.avatar,.theme-preview,.settings-tabs,.instance-picker button{border-radius:3px}.toast,dialog{border-radius:4px;box-shadow:0 8px 28px #0004}.settings-fields{background:transparent}.automatic-note{color:#95a586}.automatic-note p,.bulletin p{color:#8b9880}.outline-badge{color:#b5c1a9}.lobby-heading p,.world-intro p{color:#9ba591}.main-footer{color:#7f8b74}.back-link{color:#c9d1c0}
+@media(max-height:780px){.login-scene header{padding:18px 40px}.login-layout{padding:12px 7vw 22px}.login-panel h1{font-size:29px;margin:5px 0 18px}.microsoft-button{padding:12px}.divider{margin:18px 0}.login-panel label{margin-bottom:13px}.login-panel label input{height:38px;margin-top:7px}.login-panel .primary{padding:12px 18px}.login-switch{margin-top:16px}.login-scene footer{padding:10px 40px}.login-scene .brand-mark{height:35px}.sidebar{min-height:560px}.sidebar .brand{margin-bottom:26px}.sidebar{padding-top:24px}.sidebar-bottom{padding-top:12px}.account{padding:18px 1px}.world-card{height:370px}.main-top{padding:24px 0 12px}.lobby-heading{margin:12px 0 22px}}
+
+/* The WebView owns the title bar; scrolling stays inside the current page. */
+html,body,#root{width:100%;height:100%;overflow:hidden}
+.app-shell{height:100dvh;min-height:0;display:flex;flex-direction:column;isolation:isolate}
+.app-shell.page-login{background:url('/scenes/magic.webp') center/cover no-repeat}
+.app-shell.page-login:before{content:'';position:absolute;inset:0;background:linear-gradient(90deg,#0d1513ed 0%,#0d1513b5 31%,#10161322 71%),linear-gradient(0deg,#0b1315a6,transparent 25%);z-index:-1}
+.window-chrome{height:36px;flex:0 0 36px;background:#101313;border:0;position:relative;z-index:20;padding-left:20px;font-size:11px;letter-spacing:.5px;user-select:none;app-region:drag;-webkit-app-region:drag}
+.page-login .window-chrome{background:transparent}
+.window-chrome>span{pointer-events:none}
+.window-controls{app-region:no-drag;-webkit-app-region:no-drag}
+.window-chrome button{width:46px;display:grid;place-items:center;app-region:no-drag;-webkit-app-region:no-drag;color:#b6bbb5}
+.window-chrome button:hover{color:#fff;background:#ffffff10}
+.window-chrome button:last-child:hover{background:#c42b1c}
+.window-chrome svg{stroke-width:1.5;pointer-events:none}
+.login-scene{flex:1;min-height:0;background:none;overflow-y:auto;overflow-x:hidden;scrollbar-width:thin;scrollbar-color:#58635c transparent}
+.login-scene:before{display:none}
+.login-scene header{flex-shrink:0;padding:26px 48px}
+.login-layout{min-height:min-content;padding:20px 7vw 30px;gap:0}
+.login-scene footer:empty{display:none}
+.brand,.brand.small{font-weight:600;letter-spacing:1px}
+.workspace{flex:1;min-height:0;overflow:hidden}
+.sidebar{height:100%;min-height:0;position:static;overflow-y:auto;scrollbar-width:thin}
+.workspace>main{min-width:0;min-height:0;overflow-y:auto;overflow-x:hidden;scrollbar-width:thin;scrollbar-color:#58635c transparent}
+@media(max-height:780px){.login-scene header{padding:18px 40px}.login-layout{padding:8px 7vw 24px;align-items:center}.login-panel h1{margin:0 0 18px}.login-scene footer{padding:8px 40px}.sidebar .brand{margin-bottom:26px}}
+@media(max-height:680px){.login-scene header{padding:12px 40px}.login-panel h1{font-size:27px;margin-bottom:14px}.login-layout{padding-top:10px}.login-panel label{margin-bottom:12px}.login-switch{margin-top:14px}}
+
+.password-field{margin-bottom:18px}.field-label{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}.login-panel .field-label label{margin:0}.password-field>input{width:100%;height:42px}
+@media(max-height:780px){.password-field{margin-bottom:13px}.password-field>input{height:38px}}
+
+/* Text remains readable over the scene and on dark surfaces. */
+:root{color:#f0f2ee;--muted:#b9c2bc}
+label,.field-row b{color:#f0f2ee;font-weight:500}
+input,select{color:#f5f6f2;background:#111b16d9;border-color:#6f80715c}
+input::placeholder{color:#afbab1;opacity:1}
+.divider{color:#c2cbc4;font-size:12px}
+.text-link,.login-switch button,.back-link{color:#dce8d4}
+.primary{color:#142017;font-weight:600}
+.secondary{color:#e0e7db}
+.sidebar .nav-label{color:#abb7ac;font-size:11px}
+.nav-item,.settings-tabs button,.instance-picker button{color:#c3cdc1;font-size:13px}
+.nav-item:hover{color:#f0f4ec}
+.nav-item.active,.settings-tabs button.active,.instance-picker button.active{color:#e6f1da}
+.mini-world small,.account small{color:#b5c0b2;font-size:11px}
+.account button,.install-heading button,.route-icon{color:#c1cebb}
+.breadcrumb{color:#b4bfb1}.breadcrumb b{color:#e0e7da}
+.tags span{font-size:11px;color:#dce3d4}
+.card-bottom{color:#d1dbca;font-size:11px}
+.route b{color:#f0f3e9}.route small{color:#bfcbb5;font-size:11px}
+.auto-route,.install-heading{color:#d8e3cc;font-size:12px}
+.auto-route>span>span,dt{color:#bccab1}
+dd{color:#ecf0e5}
+.runtime-note{color:#d9d4f5}
+.download-progress p,.download-progress small{color:#c6d2ba;font-size:11px}
+.field-row p,.unit-input,.resolution,.settings-save>span{color:#b3c1a8;font-size:12px}
+
+:root{background:#090909;--line:rgba(235,235,235,.13);--muted:#bdbdbd}
+.app-shell,.window-chrome{background-color:#090909}
+.sidebar{background:#0c0c0c;border-color:#252525}
+.app-shell.page-login:before{background:linear-gradient(90deg,#080808ee 0%,#080808bb 31%,#08080824 71%),linear-gradient(0deg,#060606aa,transparent 25%)}
+input,select{background:#111111ed;border-color:#515151;color:#f4f4f4}
+input::placeholder{color:#b8b8b8}
+.launch-panel,.instance-menu,dialog{background:#141414}
+.toast{background:#1b1b1b;border-color:#565656}
+.nav-item,.mini-world,.sidebar .nav-label,.account small,.mini-world small,.breadcrumb,.field-row p,.field-row b,.settings-tabs button,.instance-picker button,.unit-input,.resolution,dt,dd,.route small{color:#c9c9c9}
+.nav-item.active,.settings-tabs button.active,.instance-picker button.active,.breadcrumb b,.route b{color:#f2f2f2}
+.skin-avatar{display:block;width:48px;height:60px;image-rendering:pixelated;flex-shrink:0}
+.skin-avatar.large{width:144px;height:180px}
+.account{gap:10px;padding:16px 0;min-height:94px}
+.account>.avatar-button{padding:0;margin:0;flex:0 0 48px;background:none;align-self:center}
+.account>span{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.account>button:last-child{flex:0 0 22px;padding:3px;margin-left:0}
+.skin-preview{display:flex;justify-content:center;padding:12px 0 24px}
+dialog label select{display:block;width:100%;margin-top:8px}
+@media(max-width:850px){.account{gap:6px;flex-wrap:wrap}.account>.avatar-button{flex-basis:36px}.account .skin-avatar{width:36px;height:45px}.account>span{font-size:11px}.account small{font-size:10px}}
+
+dialog{border-color:#454545;color:#f2f2f2}dialog::backdrop{background:#000b}.skin-refresh{margin-top:12px}

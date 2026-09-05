@@ -33,6 +33,7 @@ public sealed class InviteUse
 public sealed class ProtectedName
 {
     public string Key { get; set; } = "";
+    // Empty reserves every case variant until the legacy identity conflict is reviewed.
     public string ExactName { get; set; } = "";
 }
 public sealed class HubSession

@@ -7,11 +7,12 @@ using System.Text.Json;
 using Boshan.Launcher;
 using CmlLib.Core.Auth;
 using Microsoft.Identity.Client;
+using Boshan.Shared;
 
 namespace Boshan.Desktop;
 
 public sealed record PlayerProfile(string Id,string LoginName,string GameName,string Kind="hub");
-public sealed record AccountSession(PlayerProfile Profile,string AccessToken,DateTimeOffset AccessExpiresAt,string RefreshToken,DateTimeOffset RefreshExpiresAt,string? RecoveryCode=null,string? MicrosoftAccountId=null);
+public sealed record AccountSession(PlayerProfile Profile,string AccessToken,DateTimeOffset AccessExpiresAt,string RefreshToken,DateTimeOffset RefreshExpiresAt,string? RecoveryCode=null,string? MicrosoftAccountId=null,string? SkinUrl=null,string SkinModel="classic");
 public sealed class Accounts
 {
     private readonly Vault vault;
@@ -100,6 +101,50 @@ public sealed class Accounts
         throw new HttpRequestException("账号服务暂时不可用，请稍后重试。",null,response.StatusCode);
     }
     private void Store(AccountSession value){Current=value;vault.Write("account",value with {RecoveryCode=null});}
+    public async Task<SkinTexture?> Skin()
+    {
+        var current=Current;
+        if(current is null)return null;
+        using var http=new HttpClient(new HttpClientHandler{UseCookies=false,AllowAutoRedirect=false}){Timeout=TimeSpan.FromSeconds(15)};
+        Uri address;
+        var model=current.SkinModel;
+        if(current.Profile.Kind=="microsoft")
+        {
+            await Ensure();current=Current!;
+            using var profileRequest=new HttpRequestMessage(HttpMethod.Get,"https://api.minecraftservices.com/minecraft/profile");
+            profileRequest.Headers.Authorization=new AuthenticationHeaderValue("Bearer",current.AccessToken);
+            using var profileResponse=await http.SendAsync(profileRequest);
+            if(profileResponse.IsSuccessStatusCode)
+            {
+                var profile=await profileResponse.Content.ReadFromJsonAsync<JsonElement>();
+                var active=ActiveSkin(profile);
+                Store(current with {SkinUrl=active.Url,SkinModel=active.Model});current=Current!;model=current.SkinModel;
+            }
+            if(string.IsNullOrEmpty(current.SkinUrl))return null;
+            if(!Uri.TryCreate(current.SkinUrl,UriKind.Absolute,out var uri)||uri.Host!="textures.minecraft.net"||!uri.IsDefaultPort||!string.IsNullOrEmpty(uri.UserInfo)||uri.Scheme is not ("http" or "https")||!System.Text.RegularExpressions.Regex.IsMatch(uri.AbsolutePath,"^/texture/[a-fA-F0-9]{32,64}$"))throw new InvalidDataException("皮肤资源地址无效。");
+            address=new UriBuilder(uri){Scheme="https",Port=-1,Query="",Fragment=""}.Uri;
+        }
+        else address=new Uri(api.BaseAddress!,"/v1/skins/"+Uri.EscapeDataString(current.Profile.GameName));
+        // Texture requests use a separate client without account credentials or cookies.
+        using var response=await http.GetAsync(address,HttpCompletionOption.ResponseHeadersRead);
+        if(response.StatusCode==HttpStatusCode.NotFound)return null;
+        await Check(response);
+        if(response.Content.Headers.ContentLength>SkinImage.MaxBytes)throw new InvalidDataException("皮肤文件过大。");
+        if(current.Profile.Kind=="hub")model=response.Headers.TryGetValues("X-Skin-Model",out var values)&&values.FirstOrDefault()=="slim"?"slim":"classic";
+        await using var stream=await response.Content.ReadAsStreamAsync();
+        using var bytes=new MemoryStream();
+        var buffer=new byte[8192];int count;
+        while((count=await stream.ReadAsync(buffer))>0){if(bytes.Length+count>SkinImage.MaxBytes)throw new InvalidDataException("皮肤文件过大。");bytes.Write(buffer,0,count);}
+        return new(Convert.ToBase64String(SkinImage.Normalize(bytes.ToArray())),model);
+    }
+    public async Task<SkinTexture> SaveSkin(SkinTexture texture)
+    {
+        await Ensure();
+        if(Current?.Profile.Kind!="hub")throw new InvalidDataException("请在微软账号页面更换正版皮肤。");
+        texture=SkinImage.Normalize(texture);
+        var result=await Authorized("/v1/account/skin",texture);
+        return result!.Value.Deserialize<SkinTexture>(Json.Options)!;
+    }
     public async Task<object> MicrosoftLogin(bool interactive=true)
     {
         if(!Guid.TryParse(microsoftId,out _))throw new InvalidDataException("微软正版登录的项目应用尚未配置。请等待管理员完成应用注册。");
@@ -134,7 +179,21 @@ public sealed class Accounts
         var profile=await http.GetFromJsonAsync<JsonElement>("https://api.minecraftservices.com/minecraft/profile");
         var player=new PlayerProfile(profile.GetProperty("id").GetString()!,oauth.Account.Username,profile.GetProperty("name").GetString()!,"microsoft");
         var until=DateTimeOffset.UtcNow.AddSeconds(minecraft.GetProperty("expires_in").GetInt32());
-        Store(new(player,access,until,"",until,MicrosoftAccountId:oauth.Account.HomeAccountId.Identifier));
+        var activeSkin=ActiveSkin(profile);
+        Store(new(player,access,until,"",until,MicrosoftAccountId:oauth.Account.HomeAccountId.Identifier,SkinUrl:activeSkin.Url,SkinModel:activeSkin.Model));
         return new {Profile=player};
+    }
+    private static (string? Url,string Model) ActiveSkin(JsonElement profile)
+    {
+        string? skinUrl=null;var skinModel="classic";
+        if(profile.TryGetProperty("skins",out var skins))
+        {
+            foreach(var skin in skins.EnumerateArray())if(skin.TryGetProperty("state",out var state)&&state.GetString()=="ACTIVE")
+            {
+                skinUrl=skin.GetProperty("url").GetString();
+                skinModel=skin.TryGetProperty("variant",out var variant)&&variant.GetString()=="SLIM"?"slim":"classic";break;
+            }
+        }
+        return (skinUrl,skinModel);
     }
 }

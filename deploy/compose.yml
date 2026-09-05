@@ -23,7 +23,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    image: boshan/hub-api:0.1.0
+    image: boshan/hub-api:0.1.1
     restart: unless-stopped
     env_file: secrets/api.env
     environment:
@@ -31,6 +31,7 @@ services:
       InitializeDatabase: 'true'
       TrustCloudflareTunnel: 'true'
       DataProtectionPath: /data/keys
+      SkinPath: /data/skins
       PublicPath: /public
     ports: ['127.0.0.1:18081:8080']
     volumes:

@@ -42,6 +42,7 @@ public sealed class AccountService(HubDb db, UserManager<HubUser> users)
             throw new HubError("此邀请码只能认领绑定的原游戏名，请保留大小写。");
         var nameKey = Secret.NameKey(request.GameName);
         var reserved = await db.ProtectedNames.FindAsync(nameKey);
+        if (reserved?.ExactName == "") throw new HubError("此游戏名需要管理员核实，请联系群服管理员。");
         if (reserved is not null && (invite.Reusable || invite.BoundGameName != reserved.ExactName || request.GameName != reserved.ExactName))
             throw new HubError("此游戏名已受保护，请使用绑定原名的单次邀请码。");
         if (await users.FindByNameAsync(request.LoginName) is not null || await db.Users.AnyAsync(x => x.GameNameKey == nameKey))

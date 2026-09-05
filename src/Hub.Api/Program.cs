@@ -6,6 +6,9 @@ using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Npgsql;
+using Boshan.Shared;
+using Microsoft.AspNetCore.Http.Features;
+using Secret = Boshan.Hub.Secret;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.WebHost.ConfigureKestrel(k => k.Limits.MaxRequestBodySize = 16 * 1024);
@@ -18,6 +21,7 @@ builder.Services.AddIdentityCore<HubUser>(o => {
 var keyPath = builder.Configuration["DataProtectionPath"];
 if (!string.IsNullOrEmpty(keyPath)) builder.Services.AddDataProtection().SetApplicationName("Boshan.Hub").PersistKeysToFileSystem(new DirectoryInfo(keyPath));
 builder.Services.AddScoped<AccountService>();
+builder.Services.AddSingleton<SkinService>();
 builder.Services.AddAuthentication("session").AddScheme<AuthenticationSchemeOptions, SessionAuthentication>("session", _ => {});
 builder.Services.AddAuthorization();
 builder.Services.AddRateLimiter(o => {
@@ -39,6 +43,7 @@ if (builder.Configuration.GetValue<bool>("InitializeDatabase")) {
     await scope.ServiceProvider.GetRequiredService<HubDb>().Database.EnsureCreatedAsync();
 }
 app.Use(async (context, next) => {
+    if (context.Request.Path == "/v1/account/skin" && context.Features.Get<IHttpMaxRequestBodySizeFeature>() is {IsReadOnly:false} limit) limit.MaxRequestBodySize = 192 * 1024;
     context.Response.Headers.CacheControl = "no-store";
     context.Response.Headers.XContentTypeOptions = "nosniff";
     try { await next(); }
@@ -59,6 +64,17 @@ var account = app.MapGroup("/v1/account").RequireAuthorization().RequireRateLimi
 account.MapGet("/me", async (ClaimsPrincipal p, HubDb db) => { var user = await db.Users.FindAsync(Guid.Parse(p.FindFirstValue(ClaimTypes.NameIdentifier)!)); return new Profile(user!.Id, user.UserName!, user.GameName); });
 account.MapPost("/password", async (ClaimsPrincipal p, PasswordRequest r, AccountService service) => { await service.ChangePassword(Guid.Parse(p.FindFirstValue(ClaimTypes.NameIdentifier)!), r); return Results.NoContent(); });
 account.MapPost("/recovery-code", async (ClaimsPrincipal p, LoginRequest r, AccountService service) => new { recoveryCode = await service.RotateRecovery(Guid.Parse(p.FindFirstValue(ClaimTypes.NameIdentifier)!), r.Password) });
+account.MapPost("/skin", (ClaimsPrincipal p, SkinTexture texture, SkinService skins) => skins.Save(Guid.Parse(p.FindFirstValue(ClaimTypes.NameIdentifier)!),texture));
+app.MapGet("/v1/skins/{gameName}", async (string gameName, HubDb db, SkinService skins, HttpContext context) => {
+    if (!Secret.GameNamePattern().IsMatch(gameName)) return Results.NotFound();
+    var key = Secret.NameKey(gameName);
+    var user = await db.Users.AsNoTracking().SingleOrDefaultAsync(x=>x.GameNameKey==key && !x.Disabled);
+    var skin = user is null ? null : await skins.Read(user.Id);
+    if (skin is null) return Results.NotFound();
+    context.Response.Headers["X-Skin-Model"] = skin.Model;
+    context.Response.Headers.CacheControl = "public, max-age=300";
+    return Results.File(Convert.FromBase64String(skin.PngBase64),"image/png");
+});
 app.MapGet("/v1/catalog", () => {
     var path = Path.Combine(builder.Configuration["PublicPath"] ?? "public", "catalog.signed.json");
     return File.Exists(path) ? Results.File(path, "application/json") : Results.Json(new { error = "正式内容正在验收，目录尚未发布。" }, statusCode: 503);

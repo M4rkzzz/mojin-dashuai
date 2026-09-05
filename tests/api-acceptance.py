@@ -1,5 +1,6 @@
 """Run on 124 against a disposable database and isolated API container. Never print credentials."""
 import concurrent.futures, json, os, pathlib, re, secrets, subprocess, time, urllib.request, urllib.error
+import base64, struct, zlib
 
 def run(*args):
     result=subprocess.run(args,check=True,capture_output=True,text=True)
@@ -8,10 +9,11 @@ def run(*args):
 stamp=secrets.token_hex(4)
 database='hub_acceptance_'+stamp
 container='boshan-acceptance-'+stamp
+image=os.environ.get('HUB_API_TEST_IMAGE','boshan/hub-api:0.1.1')
 assert re.fullmatch(r'hub_acceptance_[a-f0-9]{8}',database)
 password=pathlib.Path('/var/apps/mc-client-hub/secrets/db-password').read_text().strip()
 env_file=pathlib.Path('/var/apps/mc-client-hub/secrets/acceptance.env')
-env_file.write_text('ConnectionStrings__Hub=Host=mc-client-hub-postgres-1;Database='+database+';Username=hub;Password='+password+'\nInitializeDatabase=true\nASPNETCORE_URLS=http://+:8080\nTrustCloudflareTunnel=true\n')
+env_file.write_text('ConnectionStrings__Hub=Host=mc-client-hub-postgres-1;Database='+database+';Username=hub;Password='+password+'\nInitializeDatabase=true\nASPNETCORE_URLS=http://+:8080\nTrustCloudflareTunnel=true\nSkinPath=/tmp/acceptance-skins\n')
 env_file.chmod(0o600)
 run('docker','exec','mc-client-hub-postgres-1','createdb','-U','hub',database)
 checks=[]
@@ -33,8 +35,19 @@ def invite(kind,*args):
     return re.search(r'Invitation ID: ([a-f0-9-]+)',output)[1],re.search(r'Code \(shown once\): ([a-f0-9]+)',output)[1]
 def register(login,game,code,ip='198.51.100.12'):
     return api('/v1/auth/register',{'loginName':login,'gameName':game,'password':'acceptance-pass-'+stamp,'invitation':code},ip=ip)
+
+def skin_png(height=64):
+    def chunk(name,data):
+        return struct.pack('>I',len(data))+name+data+struct.pack('>I',zlib.crc32(name+data))
+    return b'\x89PNG\r\n\x1a\n'+chunk(b'IHDR',struct.pack('>IIBBBBB',64,height,8,6,0,0,0))+chunk(b'IDAT',zlib.compress(bytes(257*min(height,64))))+chunk(b'IEND',b'')
+
+def public_skin(name):
+    try:
+        with urllib.request.urlopen('http://127.0.0.1:18082/v1/skins/'+name,timeout=10) as response:
+            return response.status,response.read(),response.headers
+    except urllib.error.HTTPError as error: return error.code,error.read(),error.headers
 try:
-    run('docker','create','--name',container,'--network','mc-client-hub_database','--env-file',str(env_file),'-p','127.0.0.1:18082:8080','boshan/hub-api:0.1.0')
+    run('docker','create','--name',container,'--network','mc-client-hub_database','--env-file',str(env_file),'-p','127.0.0.1:18082:8080',image)
     run('docker','network','connect','mc-client-hub_edge',container)
     run('docker','start',container)
     for _ in range(50):
@@ -48,11 +61,34 @@ try:
     code,bob=register('bobby','Bobby',super_code);check(code==200,'super invite reusable registration')
     check(alice['profile']['gameName']=='Alice','game name retains exact case')
     check('password' not in alice and 'invitation' not in alice,'secrets absent from profile response')
+    skin={'pngBase64':base64.b64encode(skin_png()).decode(),'model':'slim'}
+    check(api('/v1/account/skin',skin,ip='198.51.100.70')[0]==401,'skin upload requires a valid account')
+    code,saved=api('/v1/account/skin',skin,token=alice['accessToken'],ip='198.51.100.70')
+    check(code==200 and saved['model']=='slim','skin upload stores validated skin and model')
+    code,png,headers=public_skin('Alice')
+    check(code==200 and png.startswith(b'\x89PNG') and headers['Content-Type']=='image/png','public skin downloads work without account credentials')
+    check(headers['X-Skin-Model']=='slim' and headers['X-Content-Type-Options']=='nosniff','skin response has model and explicit image type')
+    check(public_skin('Bobby')[0]==404,'skin upload cannot change another account skin')
+    invalid={'pngBase64':base64.b64encode(skin_png(8192)).decode(),'model':'classic'}
+    check(api('/v1/account/skin',invalid,token=alice['accessToken'],ip='198.51.100.70')[0]==400,'oversized skin dimensions rejected')
+    check(public_skin('Alice')[1]==png,'failed skin update preserves previous skin')
     admin('protect','OldPlayer')
     check(register('hijack','OldPlayer',super_code)[0]==400,'super invite cannot claim protected name')
     _,bound=invite('single','OldPlayer')
     check(register('oldplayer','oldplayer',bound)[0]==400,'bound invite enforces exact case')
     check(register('oldplayer','OldPlayer',bound)[0]==200,'bound invite claims protected original name')
+    _,conflict_bound=invite('single','CaseHero')
+    admin('protect-conflict','CaseHero','casehero')
+    check(register('conflict1','CaseHero',super_code,ip='198.51.100.60')[0]==400,'super invite rejects first conflicting case variant')
+    check(register('conflict2','casehero',super_code,ip='198.51.100.60')[0]==400,'super invite rejects second conflicting case variant')
+    check(register('conflict3','CaseHero',conflict_bound,ip='198.51.100.60')[0]==400,'old bound invite cannot bypass unresolved name conflict')
+    admin('protect','CaseHero')
+    check(register('conflict4','CaseHero',super_code,ip='198.51.100.60')[0]==400,'ordinary protection command does not resolve a case conflict')
+    try:
+        invite('single','CaseHero')
+        raise AssertionError('bound invite must not be created for unresolved conflict')
+    except subprocess.CalledProcessError:
+        checks.append('new bound invite rejected for unresolved name conflict')
     _,single=invite('single')
     with concurrent.futures.ThreadPoolExecutor(2) as pool:
         outcomes=list(pool.map(lambda i:register('race'+str(i),'Race'+str(i),single,ip='198.51.100.'+str(20+i))[0],[1,2]))

@@ -8,9 +8,15 @@ target=/vol1/mc-client-hub/backups/hub-$stamp.dump
 docker compose exec -T postgres pg_dump -U hub -d hub -Fc > "$target.tmp"
 test -s "$target.tmp"
 mv "$target.tmp" "$target"
+if [ -d /vol1/mc-client-hub/api/skins ]; then
+    tar -czf "/vol1/mc-client-hub/backups/skins-$stamp.tar.gz.tmp" -C /vol1/mc-client-hub/api skins
+    mv "/vol1/mc-client-hub/backups/skins-$stamp.tar.gz.tmp" "/vol1/mc-client-hub/backups/skins-$stamp.tar.gz"
+fi
 python3 - <<'PY'
 from pathlib import Path
 root=Path('/vol1/mc-client-hub/backups').resolve()
 for path in sorted(root.glob('hub-*.dump'),reverse=True)[7:]:
+    if path.resolve().parent==root: path.unlink()
+for path in sorted(root.glob('skins-*.tar.gz'),reverse=True)[7:]:
     if path.resolve().parent==root: path.unlink()
 PY

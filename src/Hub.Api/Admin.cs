@@ -8,13 +8,14 @@ public static class Admin
     {
         using var scope = services.CreateScope();
         var db = scope.ServiceProvider.GetRequiredService<HubDb>();
-        if (args.Length == 0) throw new ArgumentException("admin init | invite-create single|super [exactGameName|-] [days] | invite-revoke id | invite-list | invite-uses id | protect gameName | disable loginName | reset loginName");
+        if (args.Length == 0) throw new ArgumentException("admin init | invite-create single|super [exactGameName|-] [days] | invite-revoke id | invite-list | invite-uses id | protect gameName | protect-conflict variant1 variant2 | disable loginName | reset loginName");
         switch (args[0]) {
             case "init": await db.Database.EnsureCreatedAsync(); Console.WriteLine("Database ready."); break;
             case "invite-create": {
                 if (args.Length < 2 || args[1] is not ("single" or "super")) throw new ArgumentException("single or super required");
                 var bound = args.Length > 2 && args[2] != "-" ? args[2] : null;
                 if (bound is not null && (!Secret.GameNamePattern().IsMatch(bound) || args[1] == "super")) throw new ArgumentException("Only single invites may bind a valid exact game name");
+                if (bound is not null && (await db.ProtectedNames.FindAsync(Secret.NameKey(bound)))?.ExactName == "") throw new ArgumentException("This name has an unresolved case conflict and cannot be claimed.");
                 var code = Secret.New();
                 var invite = new Invitation { CodeHash = Secret.Hash(code), Reusable = args[1] == "super", BoundGameName = bound, ExpiresAt = args.Length > 3 ? DateTimeOffset.UtcNow.AddDays(int.Parse(args[3])) : null };
                 db.Invitations.Add(invite); await db.SaveChangesAsync();
@@ -35,6 +36,18 @@ public static class Admin
                 var key = Secret.NameKey(args[1]);
                 if (await db.ProtectedNames.FindAsync(key) is null) { db.ProtectedNames.Add(new() { Key = key, ExactName = args[1] }); await db.SaveChangesAsync(); }
                 Console.WriteLine("Protected."); break;
+            }
+            case "protect-conflict": {
+                var variants = args.Skip(1).Distinct(StringComparer.Ordinal).ToArray();
+                if (variants.Length < 2 || variants.Any(x => !Secret.GameNamePattern().IsMatch(x)) || variants.Select(Secret.NameKey).Distinct().Count() != 1)
+                    throw new ArgumentException("Provide at least two valid case variants of the same game name.");
+                var key = Secret.NameKey(variants[0]);
+                if (await db.Users.AnyAsync(x => x.GameNameKey == key)) throw new ArgumentException("Name already claimed; existing account requires manual review.");
+                var reserved = await db.ProtectedNames.FindAsync(key);
+                if (reserved is null) db.ProtectedNames.Add(new() {Key=key,ExactName=""});
+                else reserved.ExactName = "";
+                await db.SaveChangesAsync();
+                Console.WriteLine("Case-conflicting name reserved. No game profile was selected or changed."); break;
             }
             case "disable": case "reset": {
                 var key = args[1].ToUpperInvariant(); var user = await db.Users.SingleAsync(x => x.NormalizedUserName == key);
