@@ -1,6 +1,6 @@
 {
   "version": "0.1.2-beta.13",
-  "scope": "launcher-only",
+  "scope": "three-server launcher candidate only; fourth-server integration still pending",
   "checkedAt": "2026-09-05T14:43:37.142200+00:00",
   "ui": {
     "passed": true,
@@ -26,11 +26,17 @@
   "packCatalogChanged": false,
   "catalogSequence": 2,
   "cleanWindows": false,
-  "ciPending": true,
+  "ciPending": false,
   "ci": "https://github.com/M4rkzzz/mojin-dashuai/actions/runs/33972617083",
   "releaseOnHold": true,
   "reason": "User requested installer release together with fourth server",
   "publicLauncherVersion": "0.1.2-beta.12",
   "published": false,
-  "activationAllowed": false
+  "activationAllowed": false,
+  "ciPassed": true,
+  "ciJobs": {
+    "ui": "success",
+    "api": "success",
+    "windows": "success"
+  }
 }

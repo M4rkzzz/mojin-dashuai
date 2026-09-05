@@ -1,5 +1,5 @@
 {
-  "version": "0.1.2-beta.12",
+  "version": "0.1.2-beta.13",
   "passed": true,
   "realInstallerExecuted": true,
   "separateTestAppId": true,
@@ -12,5 +12,8 @@
   "uninstallVerified": true,
   "playerFilesPreservedInsideAndOutsideInstall": true,
   "gameOrLauncherStarted": false,
-  "cleanWindows": false
+  "cleanWindows": false,
+  "evidenceSource": "GitHub Actions Windows installer fixture",
+  "ci": "https://github.com/M4rkzzz/mojin-dashuai/actions/runs/33972617083",
+  "scope": "three-server beta13 candidate; release remains held for fourth server"
 }

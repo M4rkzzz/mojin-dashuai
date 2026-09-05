@@ -1,0 +1,52 @@
+{
+  "instance": "vw",
+  "configuredAt": "2026-09-05T14:51:36.418964+00:00",
+  "domainsCorrectedByUser": true,
+  "records": [
+    {
+      "type": "A",
+      "name": "gt.mc.boshan.uk",
+      "content": "47.92.219.134",
+      "ttl": 120,
+      "proxied": false
+    },
+    {
+      "type": "SRV",
+      "name": "_minecraft._tcp.gt.mc.boshan.uk",
+      "content": "1 51458 gt.mc.boshan.uk",
+      "ttl": 120,
+      "proxied": false,
+      "data": {
+        "port": 51458,
+        "priority": 0,
+        "target": "gt.mc.boshan.uk",
+        "weight": 1
+      }
+    },
+    {
+      "type": "A",
+      "name": "gt.bk.mc.boshan.uk",
+      "content": "103.40.14.100",
+      "ttl": 120,
+      "proxied": false
+    },
+    {
+      "type": "SRV",
+      "name": "_minecraft._tcp.gt.bk.mc.boshan.uk",
+      "content": "1 58378 gt.bk.mc.boshan.uk",
+      "ttl": 120,
+      "proxied": false,
+      "data": {
+        "port": 58378,
+        "priority": 0,
+        "target": "gt.bk.mc.boshan.uk",
+        "weight": 1
+      }
+    }
+  ],
+  "apiReadBackVerified": true,
+  "launcherCatalogChanged": false,
+  "oldSuggestedVwDomainsCreated": false,
+  "publicSrvResolutionVerified": true,
+  "publicResolver": "1.1.1.1"
+}
