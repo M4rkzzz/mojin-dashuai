@@ -21,6 +21,11 @@ builder.Services.AddIdentityCore<HubUser>(o => {
 var keyPath = builder.Configuration["DataProtectionPath"];
 if (!string.IsNullOrEmpty(keyPath)) builder.Services.AddDataProtection().SetApplicationName("Boshan.Hub").PersistKeysToFileSystem(new DirectoryInfo(keyPath));
 builder.Services.AddScoped<AccountService>();
+builder.Services.AddScoped<JoinService>();
+builder.Services.AddSingleton<JoinRequestLimits>();
+builder.Services.AddHttpClient<MinecraftJoinVerifier>(client => client.Timeout = TimeSpan.FromSeconds(12))
+    .ConfigurePrimaryHttpMessageHandler(() => new SocketsHttpHandler { AllowAutoRedirect = false, UseCookies = false, ConnectTimeout = TimeSpan.FromSeconds(5) });
+builder.Services.AddHostedService<JoinCleanup>();
 builder.Services.AddSingleton<SkinService>();
 builder.Services.AddAuthentication("session").AddScheme<AuthenticationSchemeOptions, SessionAuthentication>("session", _ => {});
 builder.Services.AddAuthorization();
@@ -42,11 +47,21 @@ if (builder.Configuration.GetValue<bool>("InitializeDatabase")) {
     using var scope = app.Services.CreateScope();
     await scope.ServiceProvider.GetRequiredService<HubDb>().Database.EnsureCreatedAsync();
 }
+// Additive, idempotent migration for databases created before join authentication existed.
+{
+    using var scope = app.Services.CreateScope();
+    await JoinData.Initialize(scope.ServiceProvider.GetRequiredService<HubDb>());
+}
 app.Use(async (context, next) => {
     if (context.Request.Path == "/v1/account/skin" && context.Features.Get<IHttpMaxRequestBodySizeFeature>() is {IsReadOnly:false} limit) limit.MaxRequestBodySize = 192 * 1024;
     context.Response.Headers.CacheControl = "no-store";
     context.Response.Headers.XContentTypeOptions = "nosniff";
-    try { await next(); }
+    try {
+        // Reject untrusted internal traffic before authentication or JSON body binding touches the database.
+        if (context.Request.Path.StartsWithSegments("/internal") && !JoinInternalAccess.IsAllowed(context.Connection.RemoteIpAddress, builder.Configuration["JoinAuth:InternalNetworks"]))
+            throw new HubError("无效的内部请求来源。", 403);
+        await next();
+    }
     catch (HubError ex) { context.Response.StatusCode = ex.Status; await context.Response.WriteAsJsonAsync(new { error = ex.Message }); }
     catch (DbUpdateException) { context.Response.StatusCode = 409; await context.Response.WriteAsJsonAsync(new { error = "账号或游戏名已被使用，请检查后重试。" }); }
     catch (PostgresException ex) when (ex.SqlState == "40001") { context.Response.StatusCode = 409; await context.Response.WriteAsJsonAsync(new { error = "操作冲突，请重试。" }); }
@@ -59,6 +74,21 @@ auth.MapPost("/register", (RegisterRequest r, AccountService service) => service
 auth.MapPost("/login", (LoginRequest r, AccountService service) => service.Login(r));
 auth.MapPost("/refresh", (RefreshRequest r, AccountService service) => service.Refresh(r.RefreshToken));
 auth.MapPost("/recover", async (RecoverRequest r, AccountService service) => new { recoveryCode = await service.Recover(r) });
+auth.MapPost("/minecraft/exchange", (MinecraftExchangeRequest r, JoinService service, HttpContext context) => {
+    if (!builder.Configuration.GetValue<bool>("JoinAuth:Enabled")) throw new HubError("入服认证尚未开放。", 503);
+    return service.Exchange(r.AccessToken, context.RequestAborted);
+});
+app.MapPost("/v1/join/tickets", (JoinTicketRequest r, JoinService service, HttpContext context) => {
+    if (!builder.Configuration.GetValue<bool>("JoinAuth:Enabled")) throw new HubError("入服认证尚未开放。", 503);
+    var header = context.Request.Headers.Authorization.ToString();
+    return service.Issue(header.StartsWith("Bearer ", StringComparison.Ordinal) ? header[7..] : "", r.Instance, context.RequestAborted);
+});
+app.MapPost("/internal/v1/join/redeem", (JoinRedeemRequest r, JoinService service, HttpContext context) => {
+    if (!JoinInternalAccess.IsAllowed(context.Connection.RemoteIpAddress, builder.Configuration["JoinAuth:InternalNetworks"])) throw new HubError("无效的内部请求来源。", 403);
+    if (!builder.Configuration.GetValue<bool>("JoinAuth:Enabled")) throw new HubError("入服认证尚未开放。", 503);
+    var header = context.Request.Headers.Authorization.ToString();
+    return service.Redeem(header.StartsWith("Bearer ", StringComparison.Ordinal) ? header[7..] : "", r, context.RequestAborted);
+});
 auth.MapPost("/logout", async (ClaimsPrincipal p, HubDb db) => { var id = Guid.Parse(p.FindFirstValue("session")!); await db.Sessions.Where(x => x.Id == id).ExecuteUpdateAsync(s => s.SetProperty(x => x.RevokedAt, DateTimeOffset.UtcNow)); return Results.NoContent(); }).RequireAuthorization();
 var account = app.MapGroup("/v1/account").RequireAuthorization().RequireRateLimiting("auth");
 account.MapGet("/me", async (ClaimsPrincipal p, HubDb db) => { var user = await db.Users.FindAsync(Guid.Parse(p.FindFirstValue(ClaimTypes.NameIdentifier)!)); return new Profile(user!.Id, user.UserName!, user.GameName); });

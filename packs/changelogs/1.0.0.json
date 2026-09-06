@@ -1,0 +1,16 @@
+{
+  "brand": "魔金大帅",
+  "version": "1.0.0",
+  "date": "2026.09.06",
+  "accent": "#d7ebbd",
+  "background": "ui/public/scenes/magic.webp",
+  "logo": "ui/public/brand/logo.png",
+  "changes": [
+    "四个服务器增加统一加载界面，显示总加载进度。",
+    "修复连接服务器时界面长时间未响应的问题。",
+    "加入统一客户端入服认证。",
+    "四服更新渲染组件，领地地图增加缩放、拖动和键位提示。"
+  ],
+  "title": "1.0 更新日志",
+  "community": "QQ群 1105114550"
+}

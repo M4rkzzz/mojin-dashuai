@@ -14,6 +14,8 @@ namespace Boshan.Desktop;
 
 public sealed record PlayerProfile(string Id,string LoginName,string GameName,string Kind="hub");
 public sealed record AccountSession(PlayerProfile Profile,string AccessToken,DateTimeOffset AccessExpiresAt,string RefreshToken,DateTimeOffset RefreshExpiresAt,string? RecoveryCode=null,string? MicrosoftAccountId=null,string? SkinUrl=null,string SkinModel="classic",string? MicrosoftClientId=null,string? MicrosoftXuid=null);
+public sealed record JoinTicket(string Ticket,DateTimeOffset ExpiresAt,string GameName,string GameUuid);
+internal sealed record JoinGrant(string AccessToken,DateTimeOffset ExpiresAt,string GameName,string GameUuid);
 public sealed class Accounts
 {
     private readonly Vault vault;
@@ -23,6 +25,9 @@ public sealed class Accounts
     public string MicrosoftLoginMode=>string.IsNullOrWhiteSpace(microsoftId)?"window":"device-code";
     private readonly SemaphoreSlim gate=new(1);
     public AccountSession? Current {get;private set;}
+    private JoinGrant? joinGrant;
+    private string? joinGrantIdentity;
+    private readonly SemaphoreSlim joinGate=new(1);
     public void ReconfigureNetwork()
     {
         var old=api;
@@ -84,11 +89,51 @@ public sealed class Accounts
         }
         finally{gate.Release();}
     }
+    public async Task<JoinTicket> CreateJoinTicket(string instance,PlayerProfile identity,CancellationToken cancellation=default)
+    {
+        if(instance is not ("m3e" or "dc2" or "mb" or "vw"))throw new InvalidDataException("服务器无效。");
+        await joinGate.WaitAsync(cancellation);
+        try
+        {
+            await Ensure();
+            var current=Current??throw new InvalidDataException("请重新登录统一客户端。");
+            void CheckIdentity()
+            {
+                if(Current?.Profile is not {} profile||profile.Id!=identity.Id||profile.Kind!=identity.Kind||profile.GameName!=identity.GameName)
+                    throw new InvalidDataException("启动账号已切换，请从统一客户端重新启动游戏。");
+            }
+            CheckIdentity();
+            var bearer=current.AccessToken;
+            if(identity.Kind=="microsoft")
+            {
+                var key=identity.Kind+":"+identity.Id+":"+identity.GameName;
+                if(joinGrant is null||joinGrantIdentity!=key||joinGrant.ExpiresAt<=DateTimeOffset.UtcNow.AddSeconds(30))
+                {
+                    using var exchange=await api.PostAsJsonAsync("/v1/auth/minecraft/exchange",new{accessToken=current.AccessToken},cancellation);
+                    await Check(exchange);
+                    var next=await exchange.Content.ReadFromJsonAsync<JoinGrant>(Json.Options,cancellation)??throw new InvalidDataException("入服授权响应无效。");
+                    CheckIdentity();
+                    if(next.GameName!=identity.GameName||next.ExpiresAt<=DateTimeOffset.UtcNow)throw new InvalidDataException("入服角色与启动账号不一致。");
+                    joinGrant=next;joinGrantIdentity=key;
+                }
+                bearer=joinGrant.AccessToken;
+            }
+            using var request=new HttpRequestMessage(HttpMethod.Post,"/v1/join/tickets"){Content=JsonContent.Create(new{instance})};
+            request.Headers.Authorization=new AuthenticationHeaderValue("Bearer",bearer);
+            using var response=await api.SendAsync(request,cancellation);await Check(response);
+            var ticket=await response.Content.ReadFromJsonAsync<JoinTicket>(Json.Options,cancellation)??throw new InvalidDataException("入服凭据响应无效。");
+            CheckIdentity();
+            if(ticket.GameName!=identity.GameName||ticket.ExpiresAt<=DateTimeOffset.UtcNow||!System.Text.RegularExpressions.Regex.IsMatch(ticket.Ticket,"^[A-Za-z0-9_-]{43}$"))
+                throw new InvalidDataException("入服凭据校验失败。");
+            return ticket;
+        }
+        finally{joinGate.Release();}
+    }
     public async Task Logout()
     {
         try{if(Current?.Profile.Kind=="hub")await Authorized("/v1/auth/logout",new{});}
         catch(Exception ex) when(NetworkPolicy.IsNetwork(ex)){}
-        finally {Current=null;vault.Delete("account");vault.Delete("msal");vault.Delete(MicrosoftAccountStorage.Key);if(Guid.TryParse(microsoftId,out var appId))vault.Delete("msal-"+appId.ToString("N"));}
+        finally {Current=null;joinGrant=null;joinGrantIdentity=null;vault.Delete("account");vault.Delete("msal");vault.Delete(MicrosoftAccountStorage.Key);if(Guid.TryParse(microsoftId,out var appId))vault.Delete("msal-"+appId.ToString("N"));}
     }
     public async Task<JsonElement?> Authorized(string path,object args)
     {

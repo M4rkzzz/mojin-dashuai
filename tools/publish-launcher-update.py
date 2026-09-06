@@ -31,7 +31,10 @@ archive=bundle/'MojinDashuai-windows-x64.zip'
 with archive.open('rb') as f:digest=hashlib.file_digest(f,'sha256').hexdigest()
 if digest!=release['archive']['sha256'].lower() or archive.stat().st_size!=release['archive']['size']:raise ValueError('Archive does not match signed launcher release')
 if release['archive']['path']!='objects/sha256/'+digest:raise ValueError('Launcher object path must use its SHA256')
-if args.beta and '-beta.' not in release['version']:raise ValueError('Beta publication requires a beta launcher version')
+if args.beta and '-beta.' not in release['version']:
+    authorization=json.loads((ROOT/'packs/beta-authorization.json').read_text(encoding='utf-8'))
+    if release['version'] not in authorization.get('approvedVersionLabels',[]):
+        raise ValueError('This version label has not been approved with the retained beta acceptance scope')
 if args.activate:subprocess.run([sys.executable,str(ROOT/'tools/check-client-release.py'),*(['--beta'] if args.beta else [])],check=True,cwd=ROOT)
 config=json.loads((ROOT/'packs/distributions.json').read_text(encoding='utf-8'))
 expected=config['frpBase'].rstrip('/')+'/objects/sha256/'+digest

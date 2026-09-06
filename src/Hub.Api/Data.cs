@@ -65,6 +65,7 @@ public sealed class HubDb(DbContextOptions<HubDb> options) : IdentityDbContext<H
     protected override void OnModelCreating(ModelBuilder builder)
     {
         base.OnModelCreating(builder);
+        JoinData.Configure(builder);
         builder.Entity<HubUser>().HasIndex(x => x.GameNameKey).IsUnique();
         builder.Entity<HubUser>().Property(x => x.GameName).HasMaxLength(16);
         builder.Entity<HubUser>().Property(x => x.GameNameKey).HasMaxLength(16);

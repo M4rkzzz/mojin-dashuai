@@ -547,25 +547,33 @@ public partial class MainWindow : Window
         }
         // Installation can outlive an access token; obtain a current session just before launching.
         var session=await accounts.GameSession();var gate=installer.Acquire(id);
+        GameLoadingSession? loading=null;
+        GameJoinSession? join=null;
         try
         {
             var pack=await Task.Run(()=>{installer.Recover(id);return installer.ReadInstalled(id)??throw new InvalidDataException("请先安装这个世界。");});
             var route=await Routes.Select(id,settings.SelectedRoutes[id]);
-            var process=await new GameLauncher().Prepare(pack.Manifest,settings,session,route);
+            loading=new GameLoadingSession(installer.InstancePath(id),id,settings.ReducedMotion);
+            loading.GameRevealed+=()=>{if(settings.WindowBehavior=="hide")Hide();};
+            loading.Show();
+            var identity=accounts.Current?.Profile??throw new InvalidDataException("请先登录账号。");
+            join=new GameJoinSession(installer.InstancePath(id),id,token=>Dispatcher.InvokeAsync(()=>accounts.CreateJoinTicket(id,identity,token)).Task.Unwrap());
+            var process=await new GameLauncher().Prepare(pack.Manifest,settings,session,route,loading:loading.Options,join:join.Options);
             var graphics=await Task.Run(()=>GraphicsPreference.Apply(process.StartInfo.FileName,settings.PreferDedicatedGpu,appData));LogGraphics(graphics.Status,graphics.Success,graphics.Message);
-            process.Start();
+            loading.Configure(process);process.Start();join.Attach(process);loading.Attach(process);
             games[id]=process;Json.Write(Path.Combine(installer.InstancePath(id),".hub","active-game.json"),new ActiveGame(process.Id,process.StartTime.ToUniversalTime()));
             Event("instance-state",new{Instance=id,State="running"});
-            _=ObserveGame(id,process,gate);
-            if(settings.WindowBehavior=="minimize")WindowState=WindowState.Minimized;
-            if(settings.WindowBehavior=="hide")Hide();
+            _=ObserveGame(id,process,gate,loading,join);
+            // Keep one launcher taskbar entry while its loading window has no separate entry.
+            if(settings.WindowBehavior is "minimize" or "hide")WindowState=WindowState.Minimized;
+            if(settings.WindowBehavior=="hide"&&loading.GameWindowVisible)Hide();
         }
-        catch{gate.Dispose();throw;}
+        catch{join?.Dispose();loading?.Dispose();gate.Dispose();throw;}
     }
-    private async Task ObserveGame(string id,Process process,FileStream gate)
+    private async Task ObserveGame(string id,Process process,FileStream gate,GameLoadingSession loading,GameJoinSession join)
     {
         await process.WaitForExitAsync();var code=process.ExitCode;
-        await Dispatcher.InvokeAsync(()=>{games.Remove(id);gate.Dispose();process.Dispose();Event("instance-state",new{Instance=id,State=InstanceState(id)});Show();if(code!=0)Event("error","游戏已退出。可导出诊断日志帮助定位问题。");});
+        await Dispatcher.InvokeAsync(()=>{join.Dispose();loading.Dispose();games.Remove(id);gate.Dispose();process.Dispose();Event("instance-state",new{Instance=id,State=InstanceState(id)});Show();if(code!=0)Event("error","游戏已退出。可导出诊断日志帮助定位问题。");});
     }
     private MicrosoftDevicePrompt ActiveMicrosoftPrompt()
     {

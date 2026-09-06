@@ -1,0 +1,3 @@
+# Fixtures represent published hash-pinned bytes; do not normalize their newlines.
+*.cfg -text
+*.json -text

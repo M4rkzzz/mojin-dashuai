@@ -7,5 +7,9 @@
   "deferredChecks": [
     "cleanWindows"
   ],
-  "completeDeliveryClaimed": false
+  "completeDeliveryClaimed": false,
+  "approvedVersionLabels": [
+    "1.0.0"
+  ],
+  "versionLabelAuthorization": "2026-09-06 user requested version 1.0.0 directly; previously approved clean-Windows deferral remains unverified, not treated as passed."
 }

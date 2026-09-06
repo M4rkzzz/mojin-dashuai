@@ -1,3 +1,8 @@
 <Project Sdk="Microsoft.NET.Sdk"><PropertyGroup><Product>魔金大帅</Product><OutputType>WinExe</OutputType><TargetFramework>net10.0-windows</TargetFramework><UseWPF>true</UseWPF><ApplicationIcon>Assets/launcher.ico</ApplicationIcon><ApplicationManifest>app.manifest</ApplicationManifest><AssemblyName>MojinDashuai.Launcher</AssemblyName></PropertyGroup><ItemGroup><PackageReference Include="CmlLib.Core.Auth.Microsoft" Version="3.3.0" /><PackageReference Include="Microsoft.Identity.Client" Version="4.88.0" /><ProjectReference Include="../Launcher.Core/Launcher.Core.csproj" /><PackageReference Include="Microsoft.Web.WebView2" Version="1.0.4191.47" /><Content Include="../../ui/dist/**/*" Link="web/%(RecursiveDir)%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest" /><Content Include="launcher.json" CopyToOutputDirectory="PreserveNewest" /></ItemGroup><ItemGroup>
   <ProjectReference Include="..\Launcher.Shared\Launcher.Shared.csproj" />
+</ItemGroup><ItemGroup>
+  <Resource Include="Assets/GameLoading/*.jpg" />
+  <EmbeddedResource Include="../../ui/public/brand/server-icon.png" LogicalName="Mojin.LauncherIcon" />
+  <EmbeddedResource Include="Assets/GameLoading/mojin-loading-agent.jar" LogicalName="Mojin.LoadingAgent" />
+  <EmbeddedResource Include="../GameIntegration/join/mojin-join-agent.jar" LogicalName="Mojin.JoinAgent" />
 </ItemGroup></Project>

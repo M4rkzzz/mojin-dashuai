@@ -13,3 +13,9 @@ Forge 1.7.10 的 `--server` 在启动资源处理完成前开始连接。MSE 首
 三服首次自动连接的实测现象是世界已加载，但 `GuiConnecting` 的“登入中”界面仍盖在画面上，点取消会退出连接；回主菜单重进正常。`mb/MojinAutoConnect.java` 使用 Cleanroom 的客户端 tick 事件推迟首次连接，原生层不再传入 `--server`，而是传入同样的主机和端口属性。组件使用固定 Cleanroom 0.5.17-alpha 库编译为 Java 25 字节码，不增加其他运行时或服务端组件。修正后的首次自动连接仍需游戏画面验证。
 
 对应公开 API：[Cleanroom 0.5.17-alpha FMLClientHandler](https://github.com/CleanroomMC/Cleanroom/blob/0.5.17-alpha/src/main/java/net/minecraftforge/fml/client/FMLClientHandler.java)。只调用连接方法，不复制 Cleanroom 源码。
+
+## 1.0 连接界面响应修复
+
+旧自动连接组件在客户端 tick 调用 `connectToServerAtStartup`，该方法先查询状态并同步等待最多 30 秒，导致渲染线程无法绘制连接界面。启动器注入的 `join/JoinStartupConnection.java` 仅替换 Forge 1.7.10 与 Cleanroom 对应方法的入口：初始化服务器列表数据后，直接调用原有 `connectToServer`，由原生连接界面及其连接线程处理 DNS 和网络。保留正常登录握手、取消连接和返回菜单行为，不再在 tick 线程等待状态查询。二服 Forge 1.20.1 不匹配此补丁。
+
+补丁随统一客户端认证代理交付，旧自动连接内容文件无需重新分发。`tests/game-integration/join/StartupConnectionCheck.java` 校验替换后的方法不执行原阻塞方法，并覆盖两种 ServerData 构造器；真实游戏验证见发布准备记录。

@@ -2,6 +2,13 @@ using System.Text.Json;
 using Boshan.Desktop;
 using Boshan.Launcher;
 
+if(args is ["--loading-smoke",var loadingOutput]){GameLoadingSmoke.Run(Path.GetFullPath(loadingOutput));return;}
+if(args is ["--loading-window-fixture"]){GameLoadingSmoke.Fixture();return;}
+if(args is ["--loading-live",var loadingRoot,var loadingInstance]){GameLoadingLive.Run(loadingRoot,loadingInstance);return;}
+if(args is ["--join-ipc-smoke",var joinRoot]){await GameJoinSmoke.Run(joinRoot);return;}
+if(args is ["--join-server-live",var joinServerInstance,var joinLiveRoot]){await GameJoinLive.Run(joinServerInstance,joinLiveRoot);return;}
+if(args is ["--join-api-live",var joinInstance]){await JoinApiLive.Run(joinInstance);return;}
+if(args is ["--join-api-identity"]){await JoinApiLive.Run(null);return;}
 if(args is ["--window-viewport-smoke"]){WindowViewportSmoke.Run();return;}
 if(args is ["--launcher-update-smoke",var fixture]){await LauncherUpdateSmoke.Run(fixture);return;}
 if(args is ["--instance-state-smoke"]){InstanceStateSmoke.Run();return;}

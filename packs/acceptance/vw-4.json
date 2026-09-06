@@ -1,0 +1,36 @@
+{
+  "passed": true,
+  "channel": "beta",
+  "manifestSha256": "5788cc44482a92298893f60db540df3bd16fd069893a22b5f27e3a81b64f89f7",
+  "cleanWindows": false,
+  "joinedServer": true,
+  "allSourcesAutomated": true,
+  "javaMajor": 8,
+  "loader": "forge",
+  "map": true,
+  "quests": false,
+  "machines": false,
+  "checkedAt": "2026-09-06T06:55:15.654746+00:00",
+  "scope": "Actual r3-to-r4 TransactionalInstaller upgrade of the existing isolated r3 game copy, one-time rendering seed migration and production multiplayer connection via NAS LAN 192.168.5.124:25504. Server RCON confirmed M4rkzzz online; client completed Forge handshake and rendered multiplayer chat. The public domain attempt did not finish on this host, which uses a fake-IP DNS/TUN route; public SRV and raw endpoint status matched the same server. This report does not claim that attempt passed or repeat the separate local GUI acceptance.",
+  "configurationMigrationVerified": true,
+  "playerOptionsPreserved": true,
+  "serverListPreserved": true,
+  "actualConnectionRoute": "NAS LAN",
+  "publicDomainConnectionVerified": false,
+  "fullArchiveHashInventoryVerified": true,
+  "baseAcceptance": "packs/acceptance/vw-3.json",
+  "evidence": [
+    "artifacts/complete-client-staged/vw-r4-sequence-4/acceptance.local.json",
+    "artifacts/complete-client-staged/vw-r4-sequence-4/public-object-check.json",
+    "artifacts/complete-client-staged/vw-r4-sequence-4/report.json",
+    ".local/release-live/vw-update.json",
+    ".local/release-live/vw-game.log"
+  ],
+  "deferredChecks": [
+    "cleanWindows",
+    "otherGpuVendors",
+    "shaders",
+    "longRunningMachineScenes",
+    "publicDomainConnectionOnThisHost"
+  ]
+}

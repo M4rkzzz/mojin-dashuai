@@ -45,11 +45,12 @@ public sealed class AccountService(HubDb db, UserManager<HubUser> users)
         if (!invite.Reusable && reserved?.ExactName == "") throw new HubError("此游戏名需要管理员核实，请联系群服管理员。");
         if (!invite.Reusable && reserved is not null && (invite.BoundGameName != reserved.ExactName || request.GameName != reserved.ExactName))
             throw new HubError("此游戏名已受保护，请使用绑定原名的单次邀请码。");
-        if (await users.FindByNameAsync(request.LoginName) is not null || await db.Users.AnyAsync(x => x.GameNameKey == nameKey))
+        if (await users.FindByNameAsync(request.LoginName) is not null || await db.Users.AnyAsync(x => x.GameNameKey == nameKey) || await db.Set<JoinIdentity>().AnyAsync(x => x.GameNameKey == nameKey))
             throw new HubError("登录名或游戏名已被使用。");
         var recovery = Secret.New();
         var user = new HubUser { Id = Guid.NewGuid(), UserName = request.LoginName, GameName = request.GameName, GameNameKey = nameKey, RecoveryHash = Secret.Hash(recovery) };
         Ensure(await users.CreateAsync(user, request.Password));
+        db.Set<JoinIdentity>().Add(JoinSecurity.ForHubUser(user));
         invite.UseCount++;
         db.InviteUses.Add(new InviteUse { InvitationId = invite.Id, UserId = user.Id });
         var result = NewSession(user, recoveryCode: recovery);

@@ -7,6 +7,7 @@ parser.add_argument('--sequence',type=int,required=True)
 parser.add_argument('--minimum-launcher',default='0.1.2')
 parser.add_argument('--previous-catalog',type=pathlib.Path,help='Verified signed catalog whose compatible releases remain available for rollback')
 parser.add_argument('--beta',action='store_true')
+parser.add_argument('--prepare-only',action='store_true',help='Prepare and verify signed metadata locally without uploading or activating it')
 parser.add_argument('--dotnet',default='dotnet')
 parser.add_argument('--publisher',type=pathlib.Path,default=ROOT/'src/Publisher/bin/Release/net10.0/Publisher.dll')
 parser.add_argument('--key',type=pathlib.Path,required=True)
@@ -33,6 +34,15 @@ for instance,spec in config['instances'].items():
         raise ValueError('Complete archives and official-only files require launcher 0.1.2.12 or newer')
     relative=f'manifests/{instance}/{manifest["sequence"]}.signed.json'
     signed=stage/(instance+'.signed.json')
+    old=previous.get(instance,{})
+    if args.previous_catalog and old.get('release',{}).get('sequence')==manifest['sequence']:
+        # Signatures are randomized. Preserve the already-published envelope bytes
+        # for unchanged immutable releases instead of signing their payload again.
+        accepted=args.previous_catalog.parent/(instance+'.signed.json')
+        data=accepted.read_bytes()
+        if hashlib.sha256(data).hexdigest()!=old['release']['sha256']:
+            raise ValueError('Previous signed manifest does not match the accepted catalog')
+        signed.write_bytes(data)
     if not signed.exists():publish('sign-beta' if args.beta else 'sign',source,args.key,signed)
     envelope=json.loads(signed.read_text(encoding='utf-8-sig'))
     # The typed signer emits optional ContentFile defaults for older file records.
@@ -57,6 +67,9 @@ publish('verify-catalog',signed_catalog,ROOT/'src/Launcher.Desktop/launcher.json
 if json.loads(base64.b64decode(json.loads(signed_catalog.read_text(encoding='utf-8-sig'))['payload']))!=json.loads(catalog.read_text(encoding='utf-8')):
     raise ValueError('Staged signed catalog differs from the current candidate')
 files['catalog.signed.json']=signed_catalog
+if args.prepare_only:
+    print(json.dumps({'prepared':True,'activated':False,'sequence':args.sequence,'directory':str(stage),'catalogSha256':hashlib.sha256(signed_catalog.read_bytes()).hexdigest()}))
+    raise SystemExit(0)
 run=uuid.uuid4().hex;archive=stage/(run+'.tar');inventory=stage/(run+'.json')
 with tarfile.open(archive,'w') as tar:
     for relative,path in files.items():tar.add(path,arcname=relative,recursive=False)

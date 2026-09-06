@@ -3,18 +3,13 @@
   "encryptedSessionRestored": true,
   "silentAuthenticationPassed": true,
   "gameSessionVerified": true,
-  "checkedAt": "2026-09-05T18:38:57.460032+00:00",
-  "authFingerprint": "be02c0a3635e8f9c76d34ab04cdf6e44e4f478b31035a6358e7a7af471ef03f8",
+  "checkedAt": "2026-09-06T07:28:16.701369+00:00",
+  "authFingerprint": "977b935a5f0be740950c93a9ce0f1083d01089a4efce098922db24ccefe0cd7f",
   "provider": "cmllib-windows",
   "interactiveWindowOpened": false,
   "gameWindowsOpened": 0,
   "authorization": "existing encrypted Microsoft authorization",
   "interactiveAuthorizationReusedFrom": "2026-09-05T06:16:33.700548+00:00",
-  "validation": "beta16 authentication source, configuration and external dependency versions match the beta15 live acceptance. Only internal project version and equivalent win-x64 lock metadata changed; existing interactive/silent acceptance is reused, not repeated.",
-  "previousAcceptance": "packs/acceptance/beta15-microsoft-history.json",
-  "equivalenceCheckedAt": "2026-09-06T02:24:46.805909+00:00",
-  "equivalenceBaseline": "9ab5167fe354470a9d8e3c254ba8fe8ba235ae69",
-  "equivalenceChanges": [
-    "Internal Launcher.Shared version 15 -> 16; win-x64 WebView2 record duplicates the same locked dependency."
-  ]
+  "validation": "Final 1.0.0 source: NativeAccountSmoke --microsoft-resume restored the existing encrypted Microsoft authorization, silently authenticated, restored it through a new Accounts instance and verified the matching game session. No interactive authorization or game window was opened. --join-api-identity also verified official profile and entitlement; production join exchange is separate.",
+  "previousAcceptance": "packs\\acceptance\\beta16-microsoft-history.json"
 }

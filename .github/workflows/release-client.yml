@@ -23,7 +23,8 @@ jobs:
       - name: Require configured login and complete game sources
         shell: pwsh
         run: |
-          if ($env:VERSION -match '-beta\.') { python tools/check-client-release.py --beta }
+          $authorization = Get-Content packs/beta-authorization.json -Raw | ConvertFrom-Json
+          if ($env:VERSION -match '-beta\.' -or $env:VERSION -in @($authorization.approvedVersionLabels)) { python tools/check-client-release.py --beta }
           else { python tools/check-client-release.py }
       - uses: actions/setup-dotnet@v4
         with: {dotnet-version: '10.0.x'}

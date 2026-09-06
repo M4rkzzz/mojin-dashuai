@@ -20,7 +20,7 @@ public sealed class GameLauncher
     {
         var process=await Prepare(manifest,settings,session,route,token).ConfigureAwait(false);process.Start();return process;
     }
-    public async Task<Process> Prepare(PackManifest manifest,LauncherSettings settings,MSession session,RouteEndpoint route,CancellationToken token=default)
+    public async Task<Process> Prepare(PackManifest manifest,LauncherSettings settings,MSession session,RouteEndpoint route,CancellationToken token=default,GameLoadingOptions? loading=null,GameJoinOptions? join=null)
     {
         await Task.Run(()=>{ContentSecurity.Validate(manifest);settings.Validate();},token).ConfigureAwait(false);
         var installer=new TransactionalInstaller(settings.Root);var instance=installer.InstancePath(manifest.Instance);
@@ -29,6 +29,11 @@ public sealed class GameLauncher
         await Task.Run(()=>MapIdentity.Prepare(instance,manifest.Instance),token).ConfigureAwait(false);
         await Task.Run(()=>NewModDefaults.Prepare(instance,manifest),token).ConfigureAwait(false);
         await Task.Run(()=>LegacySplashCompatibility.Prepare(instance,manifest),token).ConfigureAwait(false);
+        if(manifest.Instance=="vw"&&manifest.Sequence>=4)
+        {
+            using var migrationDownloads=new Downloader(Path.Combine(settings.Root,"cache"),settings,origin:NetworkPolicy.DirectApi);
+            await VwR4ConfigurationMigration.PrepareAsync(instance,manifest,migrationDownloads,token).ConfigureAwait(false);
+        }
         // Skin services are optional. Their availability never gates game startup.
         ThirdPartySkins.ConfigureInstance(instance,settings.SkinSource);
         if(manifest.Instance=="mb")CleanroomAdapter.ValidatePrepared(instance,manifest);
@@ -38,6 +43,8 @@ public sealed class GameLauncher
         if(delayedJoin&&!manifest.Files.Any(f=>f.Path==adapter))throw new InvalidDataException("服务器连接组件尚未安装，请先更新客户端。");
         if(delayedJoin&&(!System.Text.RegularExpressions.Regex.IsMatch(route.Host,"^[A-Za-z0-9.-]+$")||route.Port is <1 or >65535))throw new InvalidDataException("服务器地址无效。");
         var jvm=new List<MArgument>{MArgument.FromCommandLine(JavaLaunchArguments.ForInstance(manifest.Instance,manifest.Runtime.Major,settings.Jvm[manifest.Instance],Environment.ProcessorCount))};
+        if(loading is not null)jvm.Add(MArgument.FromCommandLine(loading.Arguments()));
+        if(join is not null)jvm.Add(MArgument.FromCommandLine(join.Arguments()));
         if(delayedJoin)jvm.Add(MArgument.FromCommandLine($"-Dmojin.join.host={route.Host} -Dmojin.join.port={route.Port}"));
         if(OperatingSystem.IsWindows()&&manifest.Runtime.Major>=16)
         {

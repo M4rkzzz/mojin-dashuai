@@ -1,5 +1,5 @@
 {
-  "version": "0.1.2-beta.16",
+  "version": "1.0.0",
   "passed": true,
   "realInstallerExecuted": true,
   "separateTestAppId": true,
@@ -12,10 +12,5 @@
   "uninstallVerified": true,
   "playerFilesPreservedInsideAndOutsideInstall": true,
   "gameOrLauncherStarted": false,
-  "cleanWindows": false,
-  "evidenceSource": "GitHub Actions Windows installer fixture",
-  "ci": "https://github.com/M4rkzzz/mojin-dashuai/actions/runs/34006345935",
-  "sourceCommit": "68313cafe6cc198cb54399480b39949805829b3f",
-  "scope": "beta16: isolated installer lifecycle with Unicode and space path; current package installed, upgraded and uninstalled; player files preserved.",
-  "localPublicInstallerSha256": "a5bc36351206e2788d1c94761f718ce3bbf5929674f90ecc53065ad3983c93f0"
+  "cleanWindows": false
 }

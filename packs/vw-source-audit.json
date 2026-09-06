@@ -32,19 +32,19 @@
     },
     {
       "path": "README-四服.txt",
-      "size": 1314,
-      "sha256": "5c2a492921a4c50c29929b1655ca59333f2843af303179ddfbc0f201b8341dcb",
+      "size": 1225,
+      "sha256": "3f63d501f49fdfce93eea83e26f23c421f646882539268ddfab6a560890a7e5a",
       "policy": "managed",
       "sources": [
-        "https://launcher-direct.boshan.uk:21708/objects/sha256/5c2a492921a4c50c29929b1655ca59333f2843af303179ddfbc0f201b8341dcb"
+        "https://launcher-direct.boshan.uk:21708/objects/sha256/3f63d501f49fdfce93eea83e26f23c421f646882539268ddfab6a560890a7e5a"
       ],
-      "distributionBasis": "Frozen Void Wayfarer boshan-r2 operator distribution; original license and embedded notices retained",
+      "distributionBasis": "Boshan r4 operator configuration; tested Angelica 2.2.11 defaults, original notices retained",
       "status": "unified-origin-object-verified",
       "publishedVerified": true,
       "downloadVerification": {
         "verified": true,
-        "at": "2026-09-05T18:48:29.645857+00:00",
-        "evidence": "artifacts/vw-r2-final-input/publication-receipt.txt"
+        "at": "2026-09-06T06:55:15.654746+00:00",
+        "evidence": "artifacts/complete-client-staged/vw-r4-sequence-4/public-object-check.json"
       }
     },
     {
@@ -13665,23 +13665,6 @@
       }
     },
     {
-      "path": "config/UnicodeFontFixer.cfg",
-      "size": 574,
-      "sha256": "a7660156cd72a0cfa69e2f54c930d6683995eaa6fac0336b4431a32580c51526",
-      "policy": "seed",
-      "sources": [
-        "https://launcher-direct.boshan.uk:21708/objects/sha256/a7660156cd72a0cfa69e2f54c930d6683995eaa6fac0336b4431a32580c51526"
-      ],
-      "distributionBasis": "Frozen Void Wayfarer boshan-r2 operator distribution; original license and embedded notices retained",
-      "status": "unified-origin-object-verified",
-      "publishedVerified": true,
-      "downloadVerification": {
-        "verified": true,
-        "at": "2026-09-05T18:48:29.645857+00:00",
-        "evidence": "artifacts/vw-r2-final-input/publication-receipt.txt"
-      }
-    },
-    {
       "path": "config/Waila.cfg",
       "size": 4214,
       "sha256": "c10393cca63be21fcc5f77dcd63c7de9476fcaf5f783a6ed26379650c2e5038e",
@@ -13768,53 +13751,53 @@
     },
     {
       "path": "config/angelica-modules.cfg",
-      "size": 10757,
-      "sha256": "03541e00eebb596b4b6e904ac2501920645fac8648b3bbd1abc8d7c357d4ab55",
+      "size": 18609,
+      "sha256": "e975c39ff180e7afdafac85f7a759d57199cb6f11a52bf3e4d27c7f0b86c3bc0",
       "policy": "seed",
       "sources": [
-        "https://launcher-direct.boshan.uk:21708/objects/sha256/03541e00eebb596b4b6e904ac2501920645fac8648b3bbd1abc8d7c357d4ab55"
+        "https://launcher-direct.boshan.uk:21708/objects/sha256/e975c39ff180e7afdafac85f7a759d57199cb6f11a52bf3e4d27c7f0b86c3bc0"
       ],
-      "distributionBasis": "Frozen Void Wayfarer boshan-r2 operator distribution; original license and embedded notices retained",
+      "distributionBasis": "Boshan r4 operator configuration; tested Angelica 2.2.11 defaults, original notices retained",
       "status": "unified-origin-object-verified",
       "publishedVerified": true,
       "downloadVerification": {
         "verified": true,
-        "at": "2026-09-05T18:48:29.645857+00:00",
-        "evidence": "artifacts/vw-r2-final-input/publication-receipt.txt"
+        "at": "2026-09-06T06:55:15.654746+00:00",
+        "evidence": "artifacts/complete-client-staged/vw-r4-sequence-4/public-object-check.json"
       }
     },
     {
       "path": "config/angelica-options.json",
-      "size": 924,
-      "sha256": "f681d2aa859e755b2954fa05863aa947c1a57001591509d3939f610bdabb586f",
+      "size": 1000,
+      "sha256": "f01e1e143832b252c30fdb52afe70b8ac175771e2c9c96304d1609c1ecde4182",
       "policy": "seed",
       "sources": [
-        "https://launcher-direct.boshan.uk:21708/objects/sha256/f681d2aa859e755b2954fa05863aa947c1a57001591509d3939f610bdabb586f"
+        "https://launcher-direct.boshan.uk:21708/objects/sha256/f01e1e143832b252c30fdb52afe70b8ac175771e2c9c96304d1609c1ecde4182"
       ],
-      "distributionBasis": "Frozen Void Wayfarer boshan-r2 operator distribution; original license and embedded notices retained",
+      "distributionBasis": "Boshan r4 operator configuration; tested Angelica 2.2.11 defaults, original notices retained",
       "status": "unified-origin-object-verified",
       "publishedVerified": true,
       "downloadVerification": {
         "verified": true,
-        "at": "2026-09-05T18:48:29.645857+00:00",
-        "evidence": "artifacts/vw-r2-final-input/publication-receipt.txt"
+        "at": "2026-09-06T06:55:15.654746+00:00",
+        "evidence": "artifacts/complete-client-staged/vw-r4-sequence-4/public-object-check.json"
       }
     },
     {
       "path": "config/angelica.cfg",
-      "size": 2331,
-      "sha256": "43cbb36936de119851dd49bdf7cc9e4fff6f8ceea041d776c45556c05999ebc5",
+      "size": 2385,
+      "sha256": "a4fa455132daa599ba57d3246649e343e85a9c66b8611be545d2cbe2e28ff4ef",
       "policy": "seed",
       "sources": [
-        "https://launcher-direct.boshan.uk:21708/objects/sha256/43cbb36936de119851dd49bdf7cc9e4fff6f8ceea041d776c45556c05999ebc5"
+        "https://launcher-direct.boshan.uk:21708/objects/sha256/a4fa455132daa599ba57d3246649e343e85a9c66b8611be545d2cbe2e28ff4ef"
       ],
-      "distributionBasis": "Frozen Void Wayfarer boshan-r2 operator distribution; original license and embedded notices retained",
+      "distributionBasis": "Boshan r4 operator configuration; tested Angelica 2.2.11 defaults, original notices retained",
       "status": "unified-origin-object-verified",
       "publishedVerified": true,
       "downloadVerification": {
         "verified": true,
-        "at": "2026-09-05T18:48:29.645857+00:00",
-        "evidence": "artifacts/vw-r2-final-input/publication-receipt.txt"
+        "at": "2026-09-06T06:55:15.654746+00:00",
+        "evidence": "artifacts/complete-client-staged/vw-r4-sequence-4/public-object-check.json"
       }
     },
     {
@@ -26857,23 +26840,6 @@
       }
     },
     {
-      "path": "config/smoothfont/smoothfont.cfg",
-      "size": 8431,
-      "sha256": "d0d6b571c1dd06b5f50a12d820ef67a6e2ee979ec247d62372b02e6153b89b26",
-      "policy": "seed",
-      "sources": [
-        "https://launcher-direct.boshan.uk:21708/objects/sha256/d0d6b571c1dd06b5f50a12d820ef67a6e2ee979ec247d62372b02e6153b89b26"
-      ],
-      "distributionBasis": "Frozen Void Wayfarer boshan-r2 operator distribution; original license and embedded notices retained",
-      "status": "unified-origin-object-verified",
-      "publishedVerified": true,
-      "downloadVerification": {
-        "verified": true,
-        "at": "2026-09-05T18:48:29.645857+00:00",
-        "evidence": "artifacts/vw-r2-final-input/publication-receipt.txt"
-      }
-    },
-    {
       "path": "config/splash.properties",
       "size": 339,
       "sha256": "c3fd7a3a4e5ff302da38dd0f58279e4f5cb0987d2d41a5f1351bd23ed5d99d46",
@@ -28524,36 +28490,19 @@
     },
     {
       "path": "mods/ServerUtilities-2.2.34.jar",
-      "size": 1895275,
-      "sha256": "c93954aa937525e6ad6f56286cf15b36687b4651cfede3af4b035d82fb524650",
+      "size": 1884921,
+      "sha256": "31a34158e12a36ee42d84cd60ad7afb6fa9c0b3068378566e49d81764b50ec06",
       "policy": "managed",
       "sources": [
-        "https://launcher-direct.boshan.uk:21708/objects/sha256/c93954aa937525e6ad6f56286cf15b36687b4651cfede3af4b035d82fb524650"
+        "https://launcher-direct.boshan.uk:21708/objects/sha256/31a34158e12a36ee42d84cd60ad7afb6fa9c0b3068378566e49d81764b50ec06"
       ],
-      "distributionBasis": "Frozen Void Wayfarer boshan-r2 operator distribution; original license and embedded notices retained",
+      "distributionBasis": "ServerUtilities 2.2.34 LGPL-3.0; modified 2026-09-06; complete upstream and modified source in licenses/ServerUtilities-2.2.34-boshan-r4-sources.zip",
       "status": "unified-origin-object-verified",
       "publishedVerified": true,
       "downloadVerification": {
         "verified": true,
-        "at": "2026-09-05T18:48:29.645857+00:00",
-        "evidence": "artifacts/vw-r2-final-input/publication-receipt.txt"
-      }
-    },
-    {
-      "path": "mods/SmoothFont-1.7.10-1.15.3.jar",
-      "size": 222713,
-      "sha256": "535bb759b7d0fcd321e083043a8945b0dc60a111caa2e0978c753cded44dd5ac",
-      "policy": "managed",
-      "sources": [
-        "https://launcher-direct.boshan.uk:21708/objects/sha256/535bb759b7d0fcd321e083043a8945b0dc60a111caa2e0978c753cded44dd5ac"
-      ],
-      "distributionBasis": "Frozen Void Wayfarer boshan-r2 operator distribution; original license and embedded notices retained",
-      "status": "unified-origin-object-verified",
-      "publishedVerified": true,
-      "downloadVerification": {
-        "verified": true,
-        "at": "2026-09-05T18:48:29.645857+00:00",
-        "evidence": "artifacts/vw-r2-final-input/publication-receipt.txt"
+        "at": "2026-09-06T06:55:15.654746+00:00",
+        "evidence": "artifacts/complete-client-staged/vw-r4-sequence-4/public-object-check.json"
       }
     },
     {
@@ -28563,23 +28512,6 @@
       "policy": "managed",
       "sources": [
         "https://launcher-direct.boshan.uk:21708/objects/sha256/4d47d3c67af22d7b436a4c5b11f7cb9302d34a0840249adcf66ec7e907f6b8a7"
-      ],
-      "distributionBasis": "Frozen Void Wayfarer boshan-r2 operator distribution; original license and embedded notices retained",
-      "status": "unified-origin-object-verified",
-      "publishedVerified": true,
-      "downloadVerification": {
-        "verified": true,
-        "at": "2026-09-05T18:48:29.645857+00:00",
-        "evidence": "artifacts/vw-r2-final-input/publication-receipt.txt"
-      }
-    },
-    {
-      "path": "mods/UnicodeFontFixer-1.1.12-mc1.7.10.jar",
-      "size": 59151,
-      "sha256": "470e4e89fa86c76ce4235ec1cbadbd15842c9b9359f2e10a1b91c1f43ef1d325",
-      "policy": "managed",
-      "sources": [
-        "https://launcher-direct.boshan.uk:21708/objects/sha256/470e4e89fa86c76ce4235ec1cbadbd15842c9b9359f2e10a1b91c1f43ef1d325"
       ],
       "distributionBasis": "Frozen Void Wayfarer boshan-r2 operator distribution; original license and embedded notices retained",
       "status": "unified-origin-object-verified",
@@ -28761,23 +28693,6 @@
       }
     },
     {
-      "path": "mods/boshan-ftb-map-1.0.0.jar",
-      "size": 10137,
-      "sha256": "40220a5756e1cd935b8edd4f72652c09a548e7921642853963292529216642b3",
-      "policy": "managed",
-      "sources": [
-        "https://launcher-direct.boshan.uk:21708/objects/sha256/40220a5756e1cd935b8edd4f72652c09a548e7921642853963292529216642b3"
-      ],
-      "distributionBasis": "Frozen Void Wayfarer boshan-r2 operator distribution; original license and embedded notices retained",
-      "status": "unified-origin-object-verified",
-      "publishedVerified": true,
-      "downloadVerification": {
-        "verified": true,
-        "at": "2026-09-05T18:48:29.645857+00:00",
-        "evidence": "artifacts/vw-r2-final-input/publication-receipt.txt"
-      }
-    },
-    {
       "path": "mods/buildcraft-7.1.27-core.jar",
       "size": 993523,
       "sha256": "a9cbe47e93166e67570b9bf2de2bc34ae2dfdb1c6a2577f70ee9da2781df7ec3",
@@ -28852,23 +28767,6 @@
       "policy": "managed",
       "sources": [
         "https://launcher-direct.boshan.uk:21708/objects/sha256/ce8a7b7d8cf0c2cf889ac11f5e9df641bab1c51e6d6022d6d2f5a8e6f3ced020"
-      ],
-      "distributionBasis": "Frozen Void Wayfarer boshan-r2 operator distribution; original license and embedded notices retained",
-      "status": "unified-origin-object-verified",
-      "publishedVerified": true,
-      "downloadVerification": {
-        "verified": true,
-        "at": "2026-09-05T18:48:29.645857+00:00",
-        "evidence": "artifacts/vw-r2-final-input/publication-receipt.txt"
-      }
-    },
-    {
-      "path": "mods/gtnhlib-0.11.16.jar",
-      "size": 1279320,
-      "sha256": "a4350118668640f45afbf809fec23964215e36be95a56c284c633f455369233a",
-      "policy": "managed",
-      "sources": [
-        "https://launcher-direct.boshan.uk:21708/objects/sha256/a4350118668640f45afbf809fec23964215e36be95a56c284c633f455369233a"
       ],
       "distributionBasis": "Frozen Void Wayfarer boshan-r2 operator distribution; original license and embedded notices retained",
       "status": "unified-origin-object-verified",
@@ -29354,6 +29252,74 @@
         "at": "2026-09-05T18:48:29.645857+00:00",
         "evidence": "artifacts/vw-r2-final-input/publication-receipt.txt"
       }
+    },
+    {
+      "path": "licenses/ServerUtilities-2.2.34-boshan-r4-NOTICE.txt",
+      "size": 1372,
+      "sha256": "9e168a2bd16bb493546e3408249b0ad9d04b061b45d708c3443aa1b84f1e8a2b",
+      "policy": "managed",
+      "sources": [
+        "https://launcher-direct.boshan.uk:21708/objects/sha256/9e168a2bd16bb493546e3408249b0ad9d04b061b45d708c3443aa1b84f1e8a2b"
+      ],
+      "distributionBasis": "ServerUtilities 2.2.34 LGPL-3.0; modified 2026-09-06; complete upstream and modified source in licenses/ServerUtilities-2.2.34-boshan-r4-sources.zip",
+      "status": "unified-origin-object-verified",
+      "publishedVerified": true,
+      "downloadVerification": {
+        "verified": true,
+        "at": "2026-09-06T06:55:15.654746+00:00",
+        "evidence": "artifacts/complete-client-staged/vw-r4-sequence-4/public-object-check.json"
+      }
+    },
+    {
+      "path": "licenses/ServerUtilities-2.2.34-boshan-r4-sources.zip",
+      "size": 1505984,
+      "sha256": "8681a76f9b05c3b2c2e66f3edd26ce5265142ac97e879ea5d5931ae3a4782437",
+      "policy": "managed",
+      "sources": [
+        "https://launcher-direct.boshan.uk:21708/objects/sha256/8681a76f9b05c3b2c2e66f3edd26ce5265142ac97e879ea5d5931ae3a4782437"
+      ],
+      "distributionBasis": "ServerUtilities 2.2.34 LGPL-3.0; modified 2026-09-06; complete upstream and modified source in licenses/ServerUtilities-2.2.34-boshan-r4-sources.zip",
+      "status": "unified-origin-object-verified",
+      "publishedVerified": true,
+      "downloadVerification": {
+        "verified": true,
+        "at": "2026-09-06T06:55:15.654746+00:00",
+        "evidence": "artifacts/complete-client-staged/vw-r4-sequence-4/public-object-check.json"
+      }
+    },
+    {
+      "path": "mods/angelica-2.2.11.jar",
+      "size": 9883686,
+      "sha256": "85f7955eed1d1f07d9c0da4b09101b793ef5d7db779541067c8542c77bb35b70",
+      "policy": "managed",
+      "sources": [
+        "https://launcher-direct.boshan.uk:21708/objects/sha256/85f7955eed1d1f07d9c0da4b09101b793ef5d7db779541067c8542c77bb35b70"
+      ],
+      "distributionBasis": "GTNewHorizons Angelica 2.2.11 official release, LGPL-3.0; embedded notices retained",
+      "status": "unified-origin-object-verified",
+      "publishedVerified": true,
+      "downloadVerification": {
+        "verified": true,
+        "at": "2026-09-06T06:55:15.654746+00:00",
+        "evidence": "artifacts/complete-client-staged/vw-r4-sequence-4/public-object-check.json"
+      }
+    },
+    {
+      "path": "mods/gtnhlib-0.11.46.jar",
+      "size": 1407400,
+      "sha256": "967a19a6c58cdef80e363b161f3ac0ce762196d6c83da2cf3607b575c4676e92",
+      "policy": "managed",
+      "sources": [
+        "https://launcher-direct.boshan.uk:21708/objects/sha256/967a19a6c58cdef80e363b161f3ac0ce762196d6c83da2cf3607b575c4676e92"
+      ],
+      "distributionBasis": "GTNewHorizons GTNHLib 0.11.46 official release, LGPL-3.0; embedded notices retained",
+      "status": "unified-origin-object-verified",
+      "publishedVerified": true,
+      "downloadVerification": {
+        "verified": true,
+        "at": "2026-09-06T06:55:15.654746+00:00",
+        "evidence": "artifacts/complete-client-staged/vw-r4-sequence-4/public-object-check.json"
+      }
     }
   ],
   "frozenBytes": 116117452,
@@ -29376,18 +29342,14 @@
     "mods/mojin-autoconnect-1.7.10-0.1.0.jar"
   ],
   "immutableObjectsPublished": true,
-  "publicationReceipt": "artifacts/complete-client-staged/vw-r3-sequence-3/publication.json",
-  "verifiedAt": "2026-09-05T19:13:58.572523+00:00",
+  "publicationReceipt": "artifacts/complete-client-staged/vw-r4-sequence-4/publication.json",
+  "verifiedAt": "2026-09-06T06:55:15.654746+00:00",
   "betaReady": true,
-  "betaSequence": 3,
-  "betaManifestSha256": "a9920ca802e5ee01cb7cc64ab9952c3c9b36f07dc4660944b9ca3ada3d0a7d20",
-  "betaPublished": true,
+  "betaSequence": 4,
+  "betaManifestSha256": "5788cc44482a92298893f60db540df3bd16fd069893a22b5f27e3a81b64f89f7",
+  "betaPublished": false,
   "contentHotfix": {
-    "baseVersion": "1.1.9.1-boshan-r2",
-    "baseFrozenFilesUnchanged": 995,
-    "addedFiles": [
-      "mods/mojin-forge-splash-text-1.0.0.jar"
-    ],
-    "reason": "Chinese installation path in GregAPI loading bar crashes native Forge splash"
+    "baseVersion": "1.1.9.1-boshan-r3",
+    "reason": "Angelica rendering components and native land-map GUI, plus one-time rendering configuration migration"
   }
 }

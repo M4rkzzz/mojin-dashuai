@@ -10,7 +10,39 @@ public static class Admin
         var db = scope.ServiceProvider.GetRequiredService<HubDb>();
         if (args.Length == 0) throw new ArgumentException("admin init | invite-create single|super [exactGameName|-] [days] | invite-revoke id | invite-list | invite-uses id | protect gameName | protect-conflict variant1 variant2 | disable loginName | reset loginName");
         switch (args[0]) {
-            case "init": await db.Database.EnsureCreatedAsync(); Console.WriteLine("Database ready."); break;
+            case "init": await db.Database.EnsureCreatedAsync(); await JoinData.Initialize(db); Console.WriteLine("Database ready."); break;
+            case "join-init": await JoinData.Initialize(db); Console.WriteLine("Join schema ready; existing Hub identities retained."); break;
+            case "join-list":
+                foreach (var i in await db.Set<JoinIdentity>().AsNoTracking().OrderBy(x => x.GameNameKey).ToListAsync())
+                    Console.WriteLine($"{i.GameName} hub={i.HubUserId is not null} minecraft={i.MinecraftProfileId is not null} disabled={i.Disabled} uuid={i.GameUuid}");
+                break;
+            case "join-protected":
+                foreach (var n in await db.ProtectedNames.AsNoTracking().Where(n => !db.Set<JoinIdentity>().Any(i => i.GameNameKey == n.Key && i.MinecraftProfileId != null)).OrderBy(n => n.Key).ToListAsync())
+                    Console.WriteLine($"{(n.ExactName.Length == 0 ? n.Key + " [case conflict]" : n.ExactName)} minecraft-unlinked");
+                break;
+            case "join-bind-minecraft": {
+                if (args.Length is < 3 or > 4 || !Guid.TryParse(args[1], out var profileId) || profileId == Guid.Empty || !Secret.GameNamePattern().IsMatch(args[2]))
+                    throw new ArgumentException("join-bind-minecraft official-profile-uuid exactGameName [--link-existing-hub]; verify official identity and legacy ownership first");
+                var exactName = args[2]; var key = Secret.NameKey(exactName); var minecraftId = profileId.ToString("N");
+                await using var tx = await db.Database.BeginTransactionAsync(System.Data.IsolationLevel.Serializable);
+                var identities = db.Set<JoinIdentity>();
+                var byProvider = await identities.SingleOrDefaultAsync(i => i.MinecraftProfileId == minecraftId);
+                if (byProvider is not null && byProvider.GameName != exactName) throw new ArgumentException("Official identity is already bound to another exact name. No automatic rename.");
+                var identity = await identities.SingleOrDefaultAsync(i => i.GameNameKey == key);
+                if (identity is not null && (identity.GameName != exactName || (identity.MinecraftProfileId is not null && identity.MinecraftProfileId != minecraftId)))
+                    throw new ArgumentException("Existing exact-name/provider conflict; no binding changed.");
+                if (identity?.HubUserId is not null && identity.MinecraftProfileId != minecraftId && (args.Length != 4 || args[3] != "--link-existing-hub"))
+                    throw new ArgumentException("This name belongs to a Hub account. Independently confirm same owner before --link-existing-hub.");
+                if (identity is null)
+                {
+                    if (await db.Users.AnyAsync(u => u.GameNameKey == key)) throw new ArgumentException("Run join-init first; existing Hub account must be explicitly linked.");
+                    identity = new() { GameName = exactName, GameNameKey = key, GameUuid = JoinSecurity.OfflineUuid(exactName) };
+                    identities.Add(identity);
+                }
+                identity.MinecraftProfileId = minecraftId;
+                await db.SaveChangesAsync(); await tx.CommitAsync();
+                Console.WriteLine($"Minecraft identity bound: {identity.GameName}; existing offline UUID retained: {identity.GameUuid}"); break;
+            }
             case "invite-create": {
                 if (args.Length < 2 || args[1] is not ("single" or "super")) throw new ArgumentException("single or super required");
                 var bound = args.Length > 2 && args[2] != "-" ? args[2] : null;
