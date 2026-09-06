@@ -2,9 +2,9 @@
 
 Windows 四服统一客户端。React + TypeScript / WebView2 / .NET 10。自建账号服务使用 ASP.NET Core Identity + PostgreSQL。
 
-**1.0.1 已发布。** [下载 Windows 安装包](https://launcher-direct.boshan.uk:21708/launcher/1.0.1/MojinDashuai-Setup-1.0.1-x64.exe) · [本版更新](docs/1.0.1.md) · [使用说明](docs/BETA-0.1.2.md)。干净 Windows 首次安装验收按用户决定延后，保留未验收记录。
+**1.0.2 已发布。** [下载 Windows 安装包](https://launcher-direct.boshan.uk:21708/launcher/1.0.2/MojinDashuai-Setup-1.0.2-x64.exe) · [本版更新](docs/1.0.2.md) · [使用说明](docs/BETA-0.1.2.md)。干净 Windows 首次安装验收按用户决定延后，保留未验收记录。
 
-四服现为 **r4**：更新渲染组件，领地地图增加缩放、拖动和键位提示。先将启动器更新至 1.0，再点击四服“更新”；内容按差异下载，保留玩家设置和地图数据。
+四服现为 **r5**：增加 TCP 连接优化，已安装 r4 的玩家仅下载约 1.9 KiB。先将启动器更新至 1.0，再点击四服“更新”；内容按差异下载，保留玩家设置和地图数据。
 
 本版增加当前加载内容与各服在线人数显示，完善入服认证中文提示，修复部分旧 Windows 双击启动器无反应的问题。
 
@@ -45,7 +45,7 @@ dotnet publish src/Launcher.Desktop/Launcher.Desktop.csproj -c Release -r win-x6
 
 管理和部署步骤见 [运维文档](docs/OPERATIONS.md)。
 
-beta10 及之后能正常启动的玩家，重新打开启动器即可在登录前自动检测升级到 1.0.1。启动器按文件差异更新；最小化按钮左侧常驻“检查更新”文字，有新版时变绿。设置页显示当前版本。QQ群 1105114550：[点击加入](https://qm.qq.com/q/Bfat8qcPvO)。
+beta10 及之后能正常启动的玩家，重新打开启动器即可在登录前自动检测升级到 1.0.2。启动器按文件差异更新；最小化按钮左侧常驻“检查更新”文字，有新版时变绿。设置页显示当前版本。QQ群 1105114550：[点击加入](https://qm.qq.com/q/Bfat8qcPvO)。
 
 新增四服「虚空行者」格雷科技空岛，已通过统一端真实入服与自动分岛。大厅采用四张场景卡片；每服两条平级线路各自显示延迟，卡片显示在线人数；仅进入页面查询一次，详情页也可手动重测。
 

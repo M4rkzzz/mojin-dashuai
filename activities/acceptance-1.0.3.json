@@ -27,22 +27,30 @@
   "differentialUpdate": {
     "version": "1.0.3",
     "files": 530,
-    "size": 81255594,
+    "size": 81268632,
     "downloadedAndVerified": true,
-    "expectedDownloadBytes": 3971053,
-    "actualDownloadBytes": 3971053,
+    "expectedDownloadBytes": 3996327,
+    "actualDownloadBytes": 3996327,
     "singleOrigin": true,
     "gameStarted": false,
     "activated": false
   },
   "serverAdaptersReady": [
     "m3e",
+    "dc2",
     "mb",
     "vw"
   ],
-  "pendingEmptyServer": "dc2",
-  "publicActivitiesEnabled": false,
-  "automaticUpdateActivated": false,
+  "pendingEmptyServer": null,
+  "publicActivitiesEnabled": true,
+  "automaticUpdateActivated": true,
   "realTenMinuteDailyPathsVerified": false,
-  "notes": "Online play-duration validation remains distinct from simulated event acceptance. No raw player data or credentials in this record."
+  "notes": "Online play-duration validation remains distinct from simulated event acceptance. No raw player data or credentials in this record.",
+  "publishedAt": "2026-09-06T16:42:54.346578+00:00",
+  "releaseSequence": 22,
+  "revision": "final",
+  "preservedNetworkRelease": "91b9bae",
+  "nativeActivityAuthenticationWorlds": 4,
+  "combinedActivityAndNetworkTests": 21,
+  "installerUrl": "https://launcher-direct.boshan.uk:21708/launcher/1.0.3/final/MojinDashuai-Setup-1.0.3-x64.exe"
 }

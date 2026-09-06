@@ -23,6 +23,7 @@ public partial class MainWindow : Window
     private readonly string appData=Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),"Boshan","Launcher");
     private readonly Dictionary<string,Process> games=[];
     private readonly Dictionary<string,CancellationTokenSource> transfers=[];
+    private readonly Dictionary<string,CancellationTokenSource> launchCancellations=[];
     private readonly Dictionary<string,TransferProgress> transferProgress=[];
     private readonly Dictionary<string,PackManifest> pendingPacks=[];
     private readonly HashSet<string> launchAfterDownload=[];
@@ -317,6 +318,7 @@ public partial class MainWindow : Window
                 else{pendingPacks.Remove(id);pendingRollbackPins.Remove(id);transferProgress.Remove(id);ForgetDownload(id);Event("download-cancelled",new{Instance=id});Event("instance-state",new{Instance=id,State=InstanceState(id)});}
                 return null;
             }
+            case "instance.launch.cancel":{if(launchCancellations.TryGetValue(Id(),out var pending))pending.Cancel();return null;}
             case "instance.launch":{var id=Id();await InstanceOperation(id,()=>Launch(id));return null;}
             case "instance.folder":OpenFolder(new TransactionalInstaller(settings.Root).InstancePath(Id()));return null;
             case "instance.import":return await Import(Id(),args);
@@ -587,7 +589,11 @@ public partial class MainWindow : Window
     {
         if(games.ContainsKey(id))throw new InvalidDataException("此世界已在运行。");
         if(savedDownloads.ContainsKey(id))throw new InvalidDataException("请先完成当前下载。");
-        await accounts.GameSession();var installer=new TransactionalInstaller(settings.Root);
+        using var cancellation=new CancellationTokenSource();launchCancellations[id]=cancellation;
+        var token=cancellation.Token;
+        try
+        {
+        await accounts.GameSession().WaitAsync(token);var installer=new TransactionalInstaller(settings.Root);
         if(checkForUpdates)
         {
             var installed=await Task.Run(()=>
@@ -597,30 +603,31 @@ public partial class MainWindow : Window
             });
             var pinPath=Path.Combine(installer.InstancePath(id),".hub","rollback-pin.json");
             var pin=File.Exists(pinPath)?Json.Read<RollbackPin>(pinPath):null;
-            using var timeout=new CancellationTokenSource(TimeSpan.FromSeconds(8));
+            using var timeout=CancellationTokenSource.CreateLinkedTokenSource(token);timeout.CancelAfter(TimeSpan.FromSeconds(8));
             var release=await LaunchUpdates.Check(installed,pin,FetchContentCatalog,timeout.Token);
             if(release is not null)
             {
-                var updated=await catalog.GetManifest(id,release);
+                var updated=await catalog.GetManifest(id,release,token);
                 pendingRollbackPins.Remove(id);launchAfterDownload.Remove(id);TrackDownload(id,release);await Transfer(updated);
                 return;
             }
         }
         // Installation can outlive an access token; obtain a current session just before launching.
-        var session=await accounts.GameSession();var gate=installer.Acquire(id);
+        var session=await accounts.GameSession().WaitAsync(token);var gate=installer.Acquire(id);
         GameLoadingSession? loading=null;
         GameJoinSession? join=null;
         try
         {
             var pack=await Task.Run(()=>{installer.Recover(id);return installer.ReadInstalled(id)??throw new InvalidDataException("请先安装这个世界。");});
-            var route=await Routes.Select(id,settings.SelectedRoutes[id]);
-            loading=new GameLoadingSession(installer.InstancePath(id),id,settings.ReducedMotion);
+            var route=await NetworkTimings.Measure("route-select",()=>Routes.Select(id,settings.SelectedRoutes[id],token),instance:id);
+            loading=new GameLoadingSession(installer.InstancePath(id),id,settings.ReducedMotion,route.Domain);
             loading.GameRevealed+=()=>{if(settings.WindowBehavior=="hide")Hide();};
             loading.Show();
             var identity=accounts.Current?.Profile??throw new InvalidDataException("请先登录账号。");
-            join=new GameJoinSession(installer.InstancePath(id),id,token=>Dispatcher.InvokeAsync(()=>accounts.CreateJoinTicket(id,identity,token)).Task.Unwrap());
-            var process=await new GameLauncher().Prepare(pack.Manifest,settings,session,route,loading:loading.Options,join:join.Options);
+            join=new GameJoinSession(installer.InstancePath(id),id,token=>NetworkTimings.Measure("join-ticket",()=>Dispatcher.InvokeAsync(()=>accounts.CreateJoinTicket(id,identity,token)).Task.Unwrap(),instance:id));
+            var process=await new GameLauncher().Prepare(pack.Manifest,settings,session,route,token,loading:loading.Options,join:join.Options);
             var graphics=await Task.Run(()=>GraphicsPreference.Apply(process.StartInfo.FileName,settings.PreferDedicatedGpu,appData));LogGraphics(graphics.Status,graphics.Success,graphics.Message);
+            token.ThrowIfCancellationRequested();
             loading.Configure(process);process.Start();join.Attach(process);loading.Attach(process);
             games[id]=process;Json.Write(Path.Combine(installer.InstancePath(id),".hub","active-game.json"),new ActiveGame(process.Id,process.StartTime.ToUniversalTime()));
             Event("instance-state",new{Instance=id,State="running"});
@@ -630,6 +637,9 @@ public partial class MainWindow : Window
             if(settings.WindowBehavior=="hide"&&loading.GameWindowVisible)Hide();
         }
         catch{join?.Dispose();loading?.Dispose();gate.Dispose();throw;}
+        }
+        catch(OperationCanceledException) when(token.IsCancellationRequested) { }
+        finally{launchCancellations.Remove(id);}
     }
     private async Task ObserveGame(string id,Process process,FileStream gate,GameLoadingSession loading,GameJoinSession join)
     {
@@ -744,6 +754,7 @@ public partial class MainWindow : Window
         var dialog=new SaveFileDialog{Title="导出脱敏诊断",Filter="ZIP 文件|*.zip",FileName="Boshan-diagnostics-"+DateTime.Now.ToString("yyyyMMdd-HHmm")+".zip"};
         if(dialog.ShowDialog(this)!=true)return new{Message="已取消导出"};
         using var zip=ZipFile.Open(dialog.FileName,ZipArchiveMode.Create);
+        var timings=zip.CreateEntry("network-timings.json");using(var writer=new StreamWriter(timings.Open()))writer.Write(JsonSerializer.Serialize(NetworkTimings.Snapshot(),Json.Options));
         var logs=Path.Combine(appData,"diagnostic.log");
         if(File.Exists(logs)){var entry=zip.CreateEntry("launcher.log");using var writer=new StreamWriter(entry.Open());writer.Write(File.ReadAllText(logs));}
         var info=zip.CreateEntry("environment.json");using(var writer=new StreamWriter(info.Open()))writer.Write(JsonSerializer.Serialize(new{Launcher=typeof(MainWindow).Assembly.GetName().Version?.ToString(),OS=Environment.OSVersion.VersionString,X64=Environment.Is64BitOperatingSystem,settings.Memory,settings.Width,settings.Height,settings.Concurrency,settings.ProxyMode,Diagnostics=diagnostics.Values},Json.Options));

@@ -261,20 +261,28 @@ def gsm(id: str, action: str):
         return fields['status'][1]
 
 
-def rcon(id: str, stop=False):
-    code = '''import asyncio,bridge,json,sys
+def rcon(id: str, stop=False, require_empty=False):
+    code = '''import asyncio,bridge,json,sys,re
 async def main():
  c=next(c for c in bridge.load_server_configs() if c.rcon_port==int(sys.argv[1]))
  client=bridge.RconClient(c.rcon_host,c.rcon_port,bridge.load_rcon_password(c.password_file,c.rcon_password))
- await asyncio.wait_for(client.command("list"),timeout=20)
+ listing=await asyncio.wait_for(client.command("list"),timeout=20)
+ if sys.argv[2] in ("stop","empty"):
+  listing=re.sub(r"\u00a7.","",str(listing))
+  match=re.search(r"There (?:are|is) (\\d+)(?: of a max of| out of|/| players? online)",listing)
+  if match is None: raise RuntimeError("Unable to confirm online count; restart deferred")
+  if int(match.group(1))!=0: raise RuntimeError("Players online; restart deferred")
  if sys.argv[2]=="stop":
   await asyncio.wait_for(client.command("save-all"),timeout=45)
+  listing=await asyncio.wait_for(client.command("list"),timeout=20)
+  match=re.search(r"There (?:are|is) (\\d+)(?: of a max of| out of|/| players? online)",re.sub(r"\u00a7.","",str(listing)))
+  if match is None or int(match.group(1))!=0: raise RuntimeError("Player count changed; restart deferred")
   try: await asyncio.wait_for(client.command("stop"),timeout=15)
   except Exception: pass
  print(json.dumps({"rconAvailable":True,"stopRequested":sys.argv[2]=="stop"}))
 asyncio.run(main())
 '''
-    command('docker', 'exec', '-i', 'mcqq-bridge', 'python', '-', str(SERVERS[id]['port']), 'stop' if stop else 'probe', input=code, timeout=90)
+    command('docker', 'exec', '-i', 'mcqq-bridge', 'python', '-', str(SERVERS[id]['port']), 'stop' if stop else 'empty' if require_empty else 'probe', input=code, timeout=90)
 
 
 def wait_for(predicate, seconds: int, failure: str):
@@ -313,7 +321,9 @@ def api_ready(plan):
     api = json.loads(command('docker', 'inspect', 'mc-client-hub-hub-api-1'))[0]
     environment = dict(item.split('=', 1) for item in api['Config'].get('Env', []) if '=' in item)
     keys = private_keys()
-    if (api['Config']['Image'] != 'boshan/hub-api:1.1.0' or not api['State']['Running']
+    # Other API features can ship independently. Check the deployed API family,
+    # exact authentication contract/settings and live health, not an obsolete tag.
+    if (not re.fullmatch(r'boshan/hub-api:1\.\d+\.\d+', api['Config']['Image']) or not api['State']['Running']
             or environment.get('JoinAuth__Enabled') != 'true'
             or environment.get('JoinAuth__InternalNetworks') != ip + '/32'
             or any(environment.get('JoinAuth__ServerKeys__' + id) != key for id, key in keys.items())):
@@ -360,12 +370,33 @@ def validate_candidate(id: str):
     return work, plan
 
 
+def activity_options(id: str) -> bytes:
+    root = CONTAINER_GAMES / SERVERS[id]['directory'] / '.activities'
+    return f'-javaagent:{root}/mojin-activities-server-agent.jar -Dmojin.activities.config={root}/server.properties '.encode()
+
+
+def matching_live_script(id: str, expected: bytes, actual: bytes) -> bool:
+    # The separately deployed activities integration adds exactly these two JVM
+    # arguments. Recognize that addition without accepting arbitrary script drift.
+    extra = activity_options(id)
+    return actual == expected or (extra not in expected and actual.count(extra) == 1 and actual.replace(extra, b'', 1) == expected)
+
+
+def replace_agent(id: str, source: bytes, previous: str, replacement: str) -> bytes:
+    root = CONTAINER_GAMES / SERVERS[id]['directory'] / '.join-auth'
+    old = f'-javaagent:{root}/agent-{previous}.jar '.encode()
+    new = f'-javaagent:{root}/agent-{replacement}.jar '.encode()
+    if source.count(old) != 1:
+        raise RuntimeError('Expected exactly one running authentication agent argument')
+    return source.replace(old, new, 1)
+
+
 def validate_live_generation(id: str, work: Path, plan):
     state = read_json(work / 'state.json')
     root = safe(HOST_GAMES, SERVERS[id]['directory'])
     actual_script = sha(safe(root, SERVERS[id]['script']).read_bytes())
     if state['phase'] == 'active':
-        if (actual_script != plan['candidateScriptSha256'] or game_processes(id) != [state.get('process')]
+        if (not matching_live_script(id, (work / 'candidate' / SERVERS[id]['script']).read_bytes(), safe(root, SERVERS[id]['script']).read_bytes()) or game_processes(id) != [state.get('process')]
                 or sha((root / '.join-auth/server.properties').read_bytes()) != state.get('runtimeConfigSha256', plan['configSha256'])
                 or sha((root / '.join-auth' / ('agent-' + plan['agentSha256'] + '.jar')).read_bytes()) != plan['agentSha256']):
             raise RuntimeError(f'{id}: current active generation drifted')
@@ -398,19 +429,22 @@ def prepare_server(id: str, agent: Path):
         if b'Premain-Class:' not in archive.read('META-INF/MANIFEST.MF'):
             raise RuntimeError('Replacement JAR has no premain entrypoint')
     agent_hash = sha(data)
-    candidate = inject(original, id, agent_hash)
+    candidate = (replace_agent(id, safe(HOST_GAMES, SERVERS[id]['directory'] + '/' + SERVERS[id]['script']).read_bytes(), old_plan['agentSha256'], agent_hash)
+                 if state['phase'] == 'active' else inject(original, id, agent_hash))
     keys = private_keys()
-    props = f'mode=observe\ninstance={id}\nredeemUrl={REDEEM_URL}\nsecret={keys[id]}\nallowLocalContainerHttp=true\n'.encode()
+    mode = state.get('mode', 'observe')
+    if mode not in ('observe','enforce'): raise RuntimeError('Unknown active authentication mode')
+    props = f'mode={mode}\ninstance={id}\nredeemUrl={REDEEM_URL}\nsecret={keys[id]}\nallowLocalContainerHttp=true\n'.encode()
     pending = work / 'pending'
     atomic(pending / 'agent.jar', data)
     atomic(pending / SERVERS[id]['script'], candidate)
     atomic(pending / 'server.properties', props)
     command('bash', '-n', str(pending / SERVERS[id]['script']))
     plan = dict(old_plan, phase='hold', preparedAt=now(), agentSha256=agent_hash,
-                candidateScriptSha256=sha(candidate), configSha256=sha(props), initialMode='observe',
+                candidateScriptSha256=sha(candidate), configSha256=sha(props), initialMode=mode,
                 sourcePlanSha256=sha((work / 'plan.json').read_bytes()), sourcePhase=state['phase'],
                 sourceProcess=state.get('process'), replacementOf=old_plan['agentSha256'],
-                previousActiveScriptSha256=old_plan['candidateScriptSha256'])
+                previousActiveScriptSha256=sha(safe(HOST_GAMES, SERVERS[id]['directory'] + '/' + SERVERS[id]['script']).read_bytes()))
     write_json(work / 'pending-plan.json', plan)
     print(json.dumps(dict(instance=id, phase='replacement-held', agentSha256=agent_hash, productionChanged=False, firstBackupPreserved=True)))
 
@@ -440,9 +474,14 @@ def activate_server(id: str):
         raise RuntimeError('First backup changed before replacement')
     other = {x: game_processes(x) for x in SERVERS if x != id}
     if state['phase'] != 'maintenance':
-        rcon(id)
+        rcon(id, require_empty=True)
     write_json(work / 'state.json', dict(instance=id, phase='stopping-server-update', at=now(), agentSha256=old_plan['agentSha256']))
-    stop_game(id)
+    try:
+        stop_game(id)
+    except Exception:
+        if state.get('process') and game_processes(id)==[state['process']]:
+            write_json(work / 'state.json', state)  # A player joined before stop; leave retryable staging.
+        raise
     history = work / 'generations' / (old_plan['agentSha256'] + '-' + str(time.time_ns()))
     history.mkdir(parents=True, mode=0o700)
     shutil.copytree(work / 'candidate', history / 'candidate')
@@ -464,8 +503,8 @@ def activate_server(id: str):
     if other != {x: game_processes(x) for x in other}:
         raise RuntimeError('Another game process changed during replacement')
     write_json(work / 'state.json', dict(instance=id, phase='active', at=now(), agentSha256=plan['agentSha256'],
-                                      process=process, mode='observe', runtimeConfigSha256=plan['configSha256']))
-    print(json.dumps(dict(instance=id, phase='active', mode='observe', agentSha256=plan['agentSha256'],
+                                      process=process, mode=plan.get('initialMode','observe'), runtimeConfigSha256=plan['configSha256']))
+    print(json.dumps(dict(instance=id, phase='active', mode=plan.get('initialMode','observe'), agentSha256=plan['agentSha256'],
                          process=process, otherGamesUnchanged=True, firstBackupPreserved=True)))
 
 
@@ -494,7 +533,7 @@ def activate(id: str):
         raise RuntimeError(f'{id}: outer script changed since preparation')
     api_ready(plan)
     others = {other: game_processes(other) for other in SERVERS if other != id}
-    rcon(id)  # Verify clean-stop control before changing production files.
+    rcon(id, require_empty=True)  # Confirm empty before changing deployment state.
     before = game_processes(id)
     if len(before) != 1:
         raise RuntimeError('Expected one running game before activation')

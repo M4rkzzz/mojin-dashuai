@@ -2,6 +2,7 @@ using System.Text.Json;
 using Boshan.Desktop;
 using Boshan.Launcher;
 
+if(args is ["--activities-live"]){await ActivityLive.Run();return;}
 if(args is ["--loading-smoke",var loadingOutput]){GameLoadingSmoke.Run(Path.GetFullPath(loadingOutput));return;}
 if(args is ["--loading-window-fixture"]){GameLoadingSmoke.Fixture();return;}
 if(args is ["--loading-live",var loadingRoot,var loadingInstance]){GameLoadingLive.Run(loadingRoot,loadingInstance);return;}

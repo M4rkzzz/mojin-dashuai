@@ -14,6 +14,45 @@ spec.loader.exec_module(deployment)
 
 
 class JoinDeploymentTests(unittest.TestCase):
+    def test_network_agent_replacement_preserves_separate_activity_integration(self):
+        for id, server in deployment.SERVERS.items():
+            source = ('#!/bin/bash\n' + server['command'] + ' nogui\n').encode()
+            old = deployment.inject(source, id, 'a' * 64)
+            marker = b'-javaagent:'
+            live = old.replace(marker, deployment.activity_options(id) + marker, 1)
+            self.assertTrue(deployment.matching_live_script(id, old, live))
+            self.assertFalse(deployment.matching_live_script(id, old, live + b'\nchanged\n'))
+            new = deployment.replace_agent(id, live, 'a' * 64, 'b' * 64)
+            self.assertIn(deployment.activity_options(id), new)
+            self.assertEqual(live.replace(('agent-'+'a'*64).encode(), ('agent-'+'b'*64).encode()), new)
+
+    def test_restart_requires_empty_and_rechecks_after_save(self):
+        import sys, types, contextlib, io
+        from types import SimpleNamespace
+        for replies, expected, fails in [
+            (["There are 0 of a max of 20 players online:"]*2,["list","save-all","list","stop"],False),
+            (["There are 2/20 players online:"],["list"],True),
+            (["unrecognized reply"],["list"],True),
+            (["There are 0 of a max of 20 players online:","There are 1 of a max of 20 players online:"],["list","save-all","list"],True),
+        ]:
+            calls=[];answers=iter(replies)
+            class Client:
+                async def command(self, command):
+                    calls.append(command)
+                    return next(answers) if command=="list" else "OK"
+            bridge=types.ModuleType('bridge')
+            bridge.load_server_configs=lambda:[SimpleNamespace(rcon_port=25575,rcon_host='fixture',password_file='',rcon_password='')]
+            bridge.load_rcon_password=lambda *_:'fixture'
+            bridge.RconClient=lambda *_:Client()
+            with patch.object(deployment,'command') as run:
+                deployment.rcon('m3e',stop=True)
+            code=run.call_args.kwargs['input']
+            with patch.dict(sys.modules,{'bridge':bridge}),patch.object(sys,'argv',['-','25575','stop']),contextlib.redirect_stdout(io.StringIO()):
+                if fails:
+                    with self.assertRaises(RuntimeError):exec(compile(code,'rcon-guard','exec'),{})
+                else:exec(compile(code,'rcon-guard','exec'),{})
+            self.assertEqual(expected,calls)
+
     def test_injection_changes_only_real_game_invocation_and_preserves_memory_and_probes(self):
         for id, server in deployment.SERVERS.items():
             old = server['command']
@@ -150,6 +189,10 @@ class JoinDeploymentTests(unittest.TestCase):
             (work / 'candidate').mkdir(parents=True)
             (work / 'backup').mkdir()
             original = ('#!/bin/bash\n' + deployment.SERVERS['mb']['command'] + ' nogui\n').encode()
+            games = base / 'games'
+            live = games / deployment.SERVERS['mb']['directory'] / 'ServerStart.sh'
+            live.parent.mkdir(parents=True)
+            live.write_bytes(deployment.inject(original, 'mb', 'a' * 64))
             (work / 'backup/ServerStart.sh').write_bytes(original)
             (work / 'candidate/agent.jar').write_bytes(b'old agent')
             old = {'instance':'mb','agentSha256':'a'*64,'candidateScriptSha256':'b'*64,'originalScriptSha256':deployment.sha(original)}
@@ -163,7 +206,7 @@ class JoinDeploymentTests(unittest.TestCase):
             with zipfile.ZipFile(jar,'w') as z:
                 z.writestr('META-INF/MANIFEST.MF','Premain-Class: example.Agent\n')
             state = {'phase':'active','process':{'pid':123,'startedTicks':'456'}}
-            with patch.object(deployment,'inspect_environment'), patch.object(deployment,'validate_candidate',return_value=(work,old)), patch.object(deployment,'validate_live_generation',return_value=state), patch.object(deployment,'private_keys',return_value={'mb':'private-key'}), patch.object(deployment,'command'):
+            with patch.object(deployment,'HOST_GAMES',games), patch.object(deployment,'inspect_environment'), patch.object(deployment,'validate_candidate',return_value=(work,old)), patch.object(deployment,'validate_live_generation',return_value=state), patch.object(deployment,'private_keys',return_value={'mb':'private-key'}), patch.object(deployment,'command'):
                 deployment.prepare_server('mb',jar)
             for p, data in preserved.items():
                 self.assertEqual(data,p.read_bytes())

@@ -29320,6 +29320,23 @@
         "at": "2026-09-06T06:55:15.654746+00:00",
         "evidence": "artifacts/complete-client-staged/vw-r4-sequence-4/public-object-check.json"
       }
+    },
+    {
+      "path": "mods/mojin-legacy-network-1.7.10-1.0.0.jar",
+      "size": 1921,
+      "sha256": "732de05413b8bd7039e5d44b2f2d0eee8bbe6c5aafeabf3bac0ab1094945de1a",
+      "sources": [
+        "https://launcher-direct.boshan.uk:21708/objects/sha256/732de05413b8bd7039e5d44b2f2d0eee8bbe6c5aafeabf3bac0ab1094945de1a"
+      ],
+      "policy": "managed",
+      "distributionBasis": "Operator-authored Forge event adapter; source included in the launcher repository.",
+      "status": "unified-origin-object-verified",
+      "publishedVerified": true,
+      "downloadVerification": {
+        "verified": true,
+        "at": "2026-09-06T16:08:47.970943+00:00",
+        "evidence": "packs/acceptance/vw-5.json"
+      }
     }
   ],
   "frozenBytes": 116117452,
@@ -29345,13 +29362,22 @@
   "publicationReceipt": "artifacts/complete-client-staged/vw-r4-sequence-4/publication.json",
   "verifiedAt": "2026-09-06T06:55:15.654746+00:00",
   "betaReady": true,
-  "betaSequence": 4,
-  "betaManifestSha256": "5788cc44482a92298893f60db540df3bd16fd069893a22b5f27e3a81b64f89f7",
+  "betaSequence": 5,
+  "betaManifestSha256": "528120ab34e35f022ae2ecf654fafdf6f11347f5b3d2cc28cc709cf013b7d567",
   "betaPublished": true,
   "contentHotfix": {
     "baseVersion": "1.1.9.1-boshan-r3",
     "reason": "Angelica rendering components and native land-map GUI, plus one-time rendering configuration migration"
   },
   "betaPublishedAt": "2026-09-06T08:29:41.954713+00:00",
-  "catalogSequence": 8
+  "catalogSequence": 8,
+  "networkOptimization": {
+    "version": "1.1.9.1-boshan-r5",
+    "changedFiles": [
+      "mods/mojin-legacy-network-1.7.10-1.0.0.jar"
+    ],
+    "deltaBytes": 1921,
+    "verifiedAt": "2026-09-06T16:08:47.970943+00:00"
+  },
+  "betaCatalogSequence": 10
 }

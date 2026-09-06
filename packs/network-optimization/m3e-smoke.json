@@ -1,0 +1,34 @@
+{
+  "id": "m3e",
+  "label": "m3e-network-live-2",
+  "ready": true,
+  "exitCode": -1,
+  "seconds": 101.2566019,
+  "timings": [
+    {
+      "at": "2026-09-06T15:30:23.1887855+00:00",
+      "stage": "game-connecting",
+      "elapsedMs": 0,
+      "success": true,
+      "target": null,
+      "instance": "m3e"
+    },
+    {
+      "at": "2026-09-06T15:30:25.1764747+00:00",
+      "stage": "join-ticket",
+      "elapsedMs": 1223,
+      "success": true,
+      "target": null,
+      "instance": "m3e"
+    },
+    {
+      "at": "2026-09-06T15:30:29.3349534+00:00",
+      "stage": "first-chunk-observed",
+      "elapsedMs": 6141,
+      "success": true,
+      "target": null,
+      "instance": "m3e"
+    }
+  ],
+  "scopeNote": "Actual join and first chunks observed. On legacy 1.7.10 the automated WM_CLOSE test did not stop the JVM within the cleanup deadline; test process was then terminated. This is not recorded as a clean-exit pass."
+}

@@ -1,0 +1,63 @@
+{
+  "version": "1.0.2",
+  "sequence": 21,
+  "published": true,
+  "at": "2026-09-06T15:41:02.038076+00:00",
+  "coreTestsPassed": 75,
+  "deploymentTestsPassed": 14,
+  "proxyTestsPassed": 2,
+  "uiTypecheckAndBuild": true,
+  "launcherUiBootstrap": true,
+  "launcherUiResponsive": true,
+  "installer": {
+    "version": "1.0.2",
+    "fileName": "MojinDashuai-Setup-1.0.2-x64.exe",
+    "bytes": 57056069,
+    "sha256": "1c9457b33049ef5bfae91960080325e01f4ef43371281add4f844ba7c6063441",
+    "format": "inno-setup",
+    "perUser": true,
+    "acceptanceFixture": false,
+    "downloadUrl": "https://launcher-direct.boshan.uk:21708/launcher/1.0.2/MojinDashuai-Setup-1.0.2-x64.exe",
+    "publicDownloadVerified": true,
+    "publicArchiveRoundTripVerified": true,
+    "revision": ""
+  },
+  "automaticUpdate": {
+    "version": "1.0.2",
+    "sequence": 21,
+    "sha256": "f4cdc7bb450b6d90b5820403d574a12f93010204467e5e7266b5be9ab2705716",
+    "bytes": 79804639,
+    "downloadUrl": "https://launcher-direct.boshan.uk:21708/launcher/1.0.2/MojinDashuai-windows-x64.zip",
+    "publicDownloadVerified": true,
+    "differential": true,
+    "fileObjects": 498,
+    "activated": true,
+    "revision": ""
+  },
+  "serverRestartPolicy": "RCON confirms zero players, rechecks after save-all, aborts on unknown count or newly joined players",
+  "m3e": {
+    "deployed": true,
+    "authMode": "enforce",
+    "agentSha256": "ec1819fd0ae24db990f5970063ba465436bd5655faf4a7ca25a0f65a001155b5"
+  },
+  "zstdProduction": false,
+  "mb": {
+    "deployed": true,
+    "authMode": "enforce",
+    "relayDiagnostics": true,
+    "smoke": "pending; earlier attempts interrupted by independent game-manager/API deployments"
+  },
+  "vw": {
+    "deployed": true,
+    "authMode": "enforce",
+    "relayDiagnostics": true,
+    "tcpAdapter": true,
+    "clientSequence": 5,
+    "catalogSequence": 10,
+    "publicJoin": "packs/network-optimization/vw-public-smoke.json"
+  },
+  "dc2": {
+    "deployed": false,
+    "reason": "players online; timing-only agent staged; Zstd production not enabled"
+  }
+}

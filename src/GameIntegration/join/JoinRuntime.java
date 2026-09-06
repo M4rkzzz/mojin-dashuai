@@ -397,6 +397,8 @@ public final class JoinRuntime {
 
     private static boolean redeem(String ticket, String name) {
         HttpURLConnection connection = null;
+        final long began = System.nanoTime();
+        boolean allowed = false;
         try {
             connection = (HttpURLConnection) new URL(endpoint).openConnection();
             connection.setInstanceFollowRedirects(false); connection.setConnectTimeout(8000); connection.setReadTimeout(8000);
@@ -412,10 +414,14 @@ public final class JoinRuntime {
             String json = new String(out.toByteArray(), StandardCharsets.UTF_8);
             String expectedUuid = UUID.nameUUIDFromBytes(("OfflinePlayer:" + name).getBytes(StandardCharsets.UTF_8)).toString().replace("-", "");
             String uuid = jsonString(json, "gameUuid");
-            return Pattern.compile("\"allowed\"\\s*:\\s*true(?:\\s*[,}])").matcher(json).find()
+            allowed = Pattern.compile("\"allowed\"\\s*:\\s*true(?:\\s*[,}])").matcher(json).find()
                     && name.equals(jsonString(json, "gameName")) && uuid != null && expectedUuid.equalsIgnoreCase(uuid.replace("-", ""));
+            return allowed;
         } catch (Exception ignored) { return false; }
-        finally { if (connection != null) connection.disconnect(); }
+        finally {
+            if (connection != null) connection.disconnect();
+            log("timing stage=redeem elapsedMs=" + ((System.nanoTime() - began) / 1000000L) + " success=" + allowed + " instance=" + instance);
+        }
     }
 
     private static boolean loginIntention(Object packet) throws Exception {

@@ -14,7 +14,17 @@ public static class NetworkPolicy
     public const string DirectApi="https://launcher-direct.boshan.uk:21708";
     public const string LegacyApi="https://launcher.boshan.uk";
     private static LauncherSettings current=new();
-    public static void Configure(LauncherSettings settings)=>current=settings;
+    private static readonly HttpClientPool metadataPool=new(settings=>
+    {
+        var client=new HttpClient(Handler(settings)){Timeout=TimeSpan.FromSeconds(10),MaxResponseContentBufferSize=16*1024*1024};
+        client.DefaultRequestHeaders.UserAgent.ParseAdd("MojinDashuai/"+typeof(NetworkPolicy).Assembly.GetName().Version!.ToString(3));
+        return client;
+    });
+    public static void Configure(LauncherSettings settings)
+    {
+        var snapshot=new LauncherSettings{ProxyMode=settings.ProxyMode,Proxy=settings.Proxy};
+        metadataPool.Update(snapshot);current=snapshot;
+    }
     public static string Mode=>current.ProxyMode;
     public static HttpMessageHandler Handler(LauncherSettings? settings=null,bool allowRedirect=true)
     {
@@ -49,17 +59,42 @@ public static class NetworkPolicy
     }
     public static async Task<byte[]> Metadata(Uri uri,string stage,CancellationToken token=default)
     {
-        Exception? last=null;
-        using var client=new HttpClient(Handler()){Timeout=TimeSpan.FromSeconds(10),MaxResponseContentBufferSize=16*1024*1024};
-        client.DefaultRequestHeaders.UserAgent.ParseAdd("MojinDashuai/0.1.2");
-        foreach(var source in MetadataSources(uri))
+        token.ThrowIfCancellationRequested();
+        using var lease=metadataPool.Acquire(current);
+        return await ReadMetadata(lease.Client,MetadataSources(uri).Single(),stage,token).ConfigureAwait(false);
+    }
+    internal static async Task<byte[]> ReadMetadata(HttpClient client,Uri source,string stage,CancellationToken token)
+    {
+        for(var attempt=1;attempt<=2;attempt++)
         {
             token.ThrowIfCancellationRequested();
-            try{using var response=await client.GetAsync(source,token);EnsureSuccess(response,stage);return await response.Content.ReadAsByteArrayAsync(token);}
+            try
+            {
+                return await NetworkTimings.Measure("metadata",async()=>
+                {
+                    using var response=await client.GetAsync(source,token).ConfigureAwait(false);
+                    EnsureSuccess(response,stage);
+                    return await response.Content.ReadAsByteArrayAsync(token).ConfigureAwait(false);
+                },source.Host).ConfigureAwait(false);
+            }
             catch(OperationCanceledException)when(token.IsCancellationRequested){throw;}
-            catch(Exception ex)when(IsNetwork(ex)){last=Failure(ex,stage,source);}
+            catch(Exception ex)when(IsNetwork(ex))
+            {
+                token.ThrowIfCancellationRequested();
+                if(attempt==2||!TransientMetadataFailure(ex))throw Failure(ex,stage,source,attempt:attempt);
+                await Task.Delay(Random.Shared.Next(150,301),token).ConfigureAwait(false);
+            }
         }
-        throw last??new HttpRequestException("没有可用的请求地址。");
+        throw new InvalidOperationException("Metadata retry exhausted.");
+    }
+    private static bool TransientMetadataFailure(Exception error)
+    {
+        var chain=Chain(error).ToArray();
+        var http=chain.OfType<HttpRequestException>().FirstOrDefault();
+        var status=http?.StatusCode;
+        if(status is not null)return status is HttpStatusCode.BadGateway or HttpStatusCode.ServiceUnavailable or HttpStatusCode.GatewayTimeout;
+        return chain.Any(e=>e is OperationCanceledException or SocketException)
+            ||http?.HttpRequestError is HttpRequestError.ConnectionError or HttpRequestError.NameResolutionError or HttpRequestError.ResponseEnded or HttpRequestError.HttpProtocolError;
     }
     private sealed class DiagnosticHandler(string mode):DelegatingHandler
     {
