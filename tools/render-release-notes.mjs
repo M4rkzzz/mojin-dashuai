@@ -37,7 +37,7 @@ const tokens={
   BRAND:escape(data.brand),PRODUCT:escape(data.product),DATE:escape(data.date),HEADING:escape(data.title||data.version+' 更新日志'),VERSION:escape(data.version),
   CHANGES:data.changes.map(item=>`<li><span>${escape(item)}</span></li>`).join(''),
   NOTES:data.notes?.length?`<div class="notes">${data.notes.map(item=>`<p>${escape(item)}</p>`).join('')}</div>`:'',
-  COMMUNITY:escape(data.community),FOOTER:escape(data.footer),
+  FOOTER_BLOCK:data.community||data.footer?`<footer class="footer"><span>${escape(data.community)}</span><small>${escape(data.footer)}</small></footer>`:'',
 };
 const template=await fs.readFile(path.join(root,'tools/templates/release-notes.html'),'utf8');
 const html=template.replace(/\{\{([A-Z_]+)\}\}/g,(_,name)=>{if(!(name in tokens))throw new Error('Unknown template token '+name);return tokens[name];});

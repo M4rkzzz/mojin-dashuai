@@ -7,17 +7,17 @@
 *{box-sizing:border-box}html,body{margin:0;padding:0;background:#111711}body{font-family:'Microsoft YaHei','Noto Sans CJK SC','PingFang SC',sans-serif;color:#edf0e7;-webkit-font-smoothing:antialiased}
 .poster{width:1080px;position:relative;background:#111711;isolation:isolate;--accent:{{ACCENT}};overflow:hidden}
 .poster:after{content:'';position:absolute;inset:0;border:1px solid #d7ebbd20;pointer-events:none}
-.header{position:relative;padding:48px 64px 38px;isolation:isolate;border-bottom:1px solid #d7ebbd25}
+.header{position:relative;padding:28px 44px 24px;isolation:isolate;border-bottom:1px solid #d7ebbd25}
 .header:before{content:'';position:absolute;inset:0;z-index:-2;background:url('{{BACKGROUND}}') center 43%/cover;opacity:.3}
 .header:after{content:'';position:absolute;inset:0;z-index:-1;background:linear-gradient(90deg,#111711e6,#11171150),linear-gradient(0deg,#111711,transparent)}
 .brand-row{display:flex;justify-content:space-between;align-items:center;gap:24px}
-.brand{display:flex;align-items:center;gap:15px;font-size:27px;font-weight:600}.brand img{height:44px;width:44px;object-fit:contain}.product{margin-left:4px;font-size:19px;font-weight:400;color:#abbba2}
-.date{font-family:'Segoe UI',sans-serif;color:#a6b79b;font-size:21px;letter-spacing:1px}
-h1{font-size:50px;line-height:1.35;font-weight:600;margin:34px 0 10px;letter-spacing:1px}
+.brand{display:flex;align-items:center;gap:12px;font-size:22px;font-weight:600}.brand img{height:32px;width:32px;object-fit:contain}.product{margin-left:4px;font-size:19px;font-weight:400;color:#abbba2}
+.date{font-family:'Segoe UI',sans-serif;color:#a6b79b;font-size:16px;letter-spacing:1px}
+h1{font-size:34px;line-height:1.3;font-weight:600;margin:24px 0 0;letter-spacing:1px}
 .version{font-family:'Segoe UI',sans-serif;font-size:20px;color:#98ac8b;margin:0}
-.content{padding:20px 64px 28px}
+.content{padding:16px 44px 22px}
 .changes{list-style:none;margin:0;padding:0;counter-reset:change}
-.changes li{counter-increment:change;display:flex;gap:22px;padding:20px 0;font-size:27px;line-height:1.8;white-space:pre-line;overflow-wrap:anywhere}
+.changes li{counter-increment:change;display:flex;gap:14px;padding:8px 0;font-size:23px;line-height:1.55;white-space:pre-line;overflow-wrap:anywhere}
 .changes li:before{content:counter(change) '.';color:var(--accent);font-family:'Segoe UI',sans-serif;min-width:26px;flex-shrink:0}
 .changes li span{min-width:0}
 .notes{border-top:1px solid #d7ebbd25;padding-top:22px;margin-top:16px}
@@ -27,7 +27,7 @@ h1{font-size:50px;line-height:1.35;font-weight:600;margin:34px 0 10px;letter-spa
 </style>
 </head>
 <body><article class="poster">
-<header class="header"><div class="brand-row"><div class="brand"><img src="{{LOGO}}" alt="">{{BRAND}}<span class="product">{{PRODUCT}}</span></div><span class="date">{{DATE}}</span></div><h1>{{HEADING}}</h1><p class="version">{{VERSION}}</p></header>
+<header class="header"><div class="brand-row"><div class="brand"><img src="{{LOGO}}" alt="">{{BRAND}}</div><span class="date">{{DATE}}</span></div><h1>{{HEADING}}</h1></header>
 <main class="content"><ol class="changes">{{CHANGES}}</ol>{{NOTES}}</main>
-<footer class="footer"><span>{{COMMUNITY}}</span><small>{{FOOTER}}</small></footer>
+{{FOOTER_BLOCK}}
 </article></body></html>
