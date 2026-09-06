@@ -2,7 +2,7 @@
   "version": "1.0.2",
   "sequence": 21,
   "published": true,
-  "at": "2026-09-06T15:41:02.038076+00:00",
+  "at": "2026-09-06T23:41:02.038076+08:00",
   "coreTestsPassed": 75,
   "deploymentTestsPassed": 14,
   "proxyTestsPassed": 2,
@@ -45,7 +45,7 @@
     "deployed": true,
     "authMode": "enforce",
     "relayDiagnostics": true,
-    "smoke": "pending; earlier attempts interrupted by independent game-manager/API deployments"
+    "smoke": "packs/network-optimization/mb-smoke.json"
   },
   "vw": {
     "deployed": true,
@@ -57,7 +57,14 @@
     "publicJoin": "packs/network-optimization/vw-public-smoke.json"
   },
   "dc2": {
-    "deployed": false,
-    "reason": "players online; timing-only agent staged; Zstd production not enabled"
+    "deployed": true,
+    "phase": "active",
+    "mode": "enforce",
+    "agentSha256": "ec1819fd0ae24db990f5970063ba465436bd5655faf4a7ca25a0f65a001155b5",
+    "process": {
+      "pid": 685634,
+      "startedTicks": "140372960"
+    },
+    "at": "2026-09-07T00:29:32.217792+08:00"
   }
 }

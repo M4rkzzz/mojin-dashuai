@@ -1,0 +1,58 @@
+{
+  "mb": {
+    "instance": "mb",
+    "deployed": true,
+    "at": "2026-09-06T16:35:28.650289+00:00",
+    "mod": "lagbgonrevived-1.1.0.jar",
+    "serverOnly": true,
+    "intervalMinutes": 10,
+    "playersAtRestart": 0,
+    "startupScriptPreserved": true,
+    "agentPreserved": "ec1819fd0ae24db990f5970063ba465436bd5655faf4a7ca25a0f65a001155b5",
+    "process": {
+      "pid": 694244,
+      "startedTicks": "140399198"
+    },
+    "previousConfig": true,
+    "rconReady": true,
+    "backup": "/vol1/mc-client-hub/staging/entity-cleanup-20260907/mb",
+    "liveConfigurationVerified": true,
+    "smoke": {
+      "fullPackStartup": true,
+      "scheduledWarning": true,
+      "scheduledClear": true,
+      "exitCode": 0,
+      "itemRemovalObserved": false,
+      "scopeVerifiedFromSourceOrBytecode": true,
+      "fixtureLimitation": "VW original pig/chest spawn was outside loaded chunks; MB unoccupied chunks did not age drops and chest orientation assertion was invalid. These assertions are not reported as passed."
+    }
+  },
+  "vw": {
+    "instance": "vw",
+    "deployed": true,
+    "at": "2026-09-06T16:32:51.738057+00:00",
+    "mod": "ClearLag-1.1.jar",
+    "serverOnly": true,
+    "intervalMinutes": 10,
+    "playersAtRestart": 0,
+    "startupScriptPreserved": true,
+    "agentPreserved": "ec1819fd0ae24db990f5970063ba465436bd5655faf4a7ca25a0f65a001155b5",
+    "process": {
+      "pid": 688907,
+      "startedTicks": "140386260"
+    },
+    "previousConfig": false,
+    "rconReady": true,
+    "backup": "/vol1/mc-client-hub/staging/entity-cleanup-20260907/vw",
+    "liveConfigurationVerified": true,
+    "smoke": {
+      "fullPackStartup": true,
+      "scheduledWarning": true,
+      "scheduledClear": true,
+      "exitCode": 0,
+      "itemRemovalObserved": true,
+      "scopeVerifiedFromSourceOrBytecode": true,
+      "fixtureLimitation": "VW original pig/chest spawn was outside loaded chunks; MB unoccupied chunks did not age drops and chest orientation assertion was invalid. These assertions are not reported as passed."
+    }
+  }
+}

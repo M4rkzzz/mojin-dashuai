@@ -18,7 +18,7 @@
 
 一服两条线路分别做了实际入服；最终区块采样修复后复测备线。四服隔离副本和正式主线均实际入服并观察首批区块；r4 到 r5 实际差异安装仅下载 1,921 字节。1.7.10 自动 WM_CLOSE 清理没有在截止前退出 JVM，测试工具随后只结束自己的 QA 进程；这不计为正常退出通过，也不是启动崩溃。
 
-三服诊断及转发已上线，后续正式入服烟测仍在进行；前两轮受到独立的管理面板/API 部署中断。二服正式诊断 agent 仍需无人窗口重启。
+三服诊断及转发已上线，最终通过统一端正式主线入服、观察首批区块并正常退出（`packs/network-optimization/mb-smoke.json`）。此前几轮受到独立的管理面板/API 部署中断。二服已于 2026-09-07 00:29 北京时间在确认无人后完成正式诊断 agent 重启上线，保持 enforce 认证；两条线路状态检查通过。
 
 2026-09-06 23:48 管理面板在调试器连接后产生 ERR_VM_DYNAMIC_IMPORT_CALLBACK_MISSING，导致 gsmanager 自动重启，Docker 未标记 OOM。四服随后恢复。并行的活动项目增加了 .activities JVM 参数；网络 agent 更新保留这些参数，未知脚本变更仍拒绝覆盖。
 
@@ -34,8 +34,14 @@
 
 - 操作目录：NAS /var/apps/mc-client-hub/staging/join-auth-1.0.0/servers；新 agent 已上传 /tmp/mojin-network-server-agent.jar，执行器 /tmp/activate-game-join-network.py。
 - 重启前 RCON 确认为零，save-all 后再次检查。非零、未知或新玩家进入即推迟；不停止其他服务器。
-- 二服只需先 --prepare-server dc2，再在无人时 --activate-server dc2。不能把测试 Zstd 包当作正式候选。
+- 四服诊断 agent 均已上线。后续替换使用 --prepare-server INSTANCE AGENT_JAR，再在无人时 --activate-server INSTANCE；不能把测试 Zstd 包当作正式候选。
 - 前一代 agent 和配置保存在各服 generations 中，最早基线 backup 保留。回退只恢复本次网络 agent/模组/转发镜像，保留独立活动项目参数、世界及玩家数据。
 - MB/VW 转发旧镜像：mcqq-bridge-mc3-port:network-before-20260906；新镜像：mcqq-bridge-mc3-port:network-20260906。只重建对应 mc3-port/mc4-port 服务。
 - VW TCP 模组可在停服后移出 mods 回退；客户端 r4 保留在签名目录的回退记录中。
 - 上一版统一端 1.0.1 仍在下载源，自动更新和目录切换均保留旧指针备份。
+
+## 定时地面掉落物清理
+
+按用户补充要求使用现成模组：三服 Lag'B'Gon Revived 1.1.0、四服 Legacy ClearLag 1.1。隔离副本确认可以启动和定时运行后，分别在无人时正常重启部署，线上配置和两条线路均检查通过。两个模组均仅装服务端，不增加玩家下载。
+
+约十分钟一轮，保留上游预告；仅清理地面掉落物，不处理生物和方块。三服保留实际 tick 年龄不足一分钟及自定义名称的掉落物，四服原版不提供这项保护。已关闭三服的清怪、繁殖限制、区块卸载和生物数量限制。配置、验证范围和回退路径见 `deploy/entity-cleanup/README.md`。本次两个临时整合包测试副本已删除，压缩日志和生产回退文件保留。
