@@ -1,0 +1,19 @@
+{
+  "version": "0.1.2-beta.16",
+  "scope": "Initial window fits monitor work area; draggable login background; login forms fit without scrolling.",
+  "loginLayoutCases": 28,
+  "windowGeometryCases": 32,
+  "hiddenNativeWindowFitsWorkArea": true,
+  "nativeMouseDragManuallyVerified": false,
+  "releaseBuild": {
+    "passed": true,
+    "warnings": 0,
+    "errors": 0
+  },
+  "silentMicrosoftAcceptance": "packs/launcher-acceptance.json",
+  "gameContentChanged": false,
+  "published": false,
+  "cleanWindows": false,
+  "actualDualGpuRendererVerified": false,
+  "littleSkinInGameVisualVerified": false
+}

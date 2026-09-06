@@ -2,6 +2,7 @@ using System.Text.Json;
 using Boshan.Desktop;
 using Boshan.Launcher;
 
+if(args is ["--window-viewport-smoke"]){WindowViewportSmoke.Run();return;}
 if(args is ["--launcher-update-smoke",var fixture]){await LauncherUpdateSmoke.Run(fixture);return;}
 if(args is ["--instance-state-smoke"]){InstanceStateSmoke.Run();return;}
 if(args is ["--dispatcher-install-smoke"]){DispatcherInstallSmoke.Run();return;}

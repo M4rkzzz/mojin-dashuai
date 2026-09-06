@@ -53,6 +53,7 @@ public partial class MainWindow : Window
     public MainWindow()
     {
         InitializeComponent();
+        _=new WindowViewport(this);
         Loaded+=async(_,_)=>await Initialize();
         StateChanged+=(_,_)=>{if(initialized)Event("window-state",new {Maximized=WindowState==WindowState.Maximized});};
         Closing+=(_,e)=>{if(games.Count>0){e.Cancel=true;Hide();}};
