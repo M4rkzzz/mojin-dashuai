@@ -12,8 +12,8 @@ node tools/render-release-notes.mjs --data packs/changelogs/beta16.json
 
 输出位于 `artifacts/changelogs/`：
 
-- `beta16.png`：2160 像素宽的高清图片，适合保存或上传原图。
-- `beta16.jpg`：1080 像素宽的压缩图片，适合群聊发送。
+- `beta16.png`：2160 × 3840 的高清竖版图片，适合保存或上传原图。
+- `beta16.jpg`：1080 × 1920 的压缩竖版图片，适合群聊发送。
 - `beta16.html`：包含图片素材的独立预览页。
 - `beta16.json`：本次生成的尺寸和文件记录。
 
@@ -25,8 +25,8 @@ node tools/render-release-notes.mjs --data packs/changelogs/beta16.json
 node tools/render-release-notes.mjs --data packs/changelogs/beta17.json --out artifacts/changelogs/beta17
 ```
 
-`changes` 是字符串数组，每项概括一个实际修复的问题，自动按序号逐行排列。同一个问题的实现细节不要拆成多条，不添加宣传口号、条目副标题或标签。例如 beta16 只保留“修复首次打开窗口过大、部分内容显示不全的问题。”一条。图片高度随内容自动增长，较长条目自动换行。默认只显示品牌、版本标题、日期和改动，使用较小字体及紧凑行距，不显示“四服”“Windows x64”等辅助小字。确有需要时可用 `notes` 添加补充说明；`product`、`community`、`footer` 也均可省略。`title` 为图片标题；`background`、`logo` 使用相对仓库根目录的本地图片路径；`accent` 设置六位十六进制主题色。排版在 `tools/templates/release-notes.html` 中维护。
+`changes` 是字符串数组，每项概括一个实际修复的问题，自动按序号逐行排列。同一个问题的实现细节不要拆成多条，不添加宣传口号、条目副标题或标签。例如 beta16 只保留“修复首次打开窗口过大、部分内容显示不全的问题。”一条。图片固定为 9:16 竖版，条目少时保留空白，不随内容变矮；较长条目自动换行。默认显示品牌、版本标题、日期、改动和底部群号，使用较小字体及紧凑行距，不显示“四服”“Windows x64”等辅助小字。确有需要时可用 `notes` 添加补充说明；`community` 填写底部群号，保留显示；其他辅助说明不填写。`title` 为图片标题；`background`、`logo` 使用相对仓库根目录的本地图片路径；`accent` 设置六位十六进制主题色。排版在 `tools/templates/release-notes.html` 中维护。
 
-`--scale 1` 导出 1080 像素宽 PNG，默认 `--scale 2` 导出 2160 像素宽 PNG；JPEG 始终保持 1080 像素宽。所有相对路径均以仓库根目录为基准，脚本可从其他工作目录调用。输出文件同名时会覆盖，请为不同版本使用不同输出前缀。
+`--scale 1` 导出 1080 × 1920 PNG，默认 `--scale 2` 导出 2160 × 3840 PNG；JPEG 始终为 1080 × 1920。条目超出固定画布时脚本会提示，避免静默截断。所有相对路径均以仓库根目录为基准，脚本可从其他工作目录调用。输出文件同名时会覆盖，请为不同版本使用不同输出前缀。
 
 首次准备环境：安装 Node.js 22，在 `ui` 目录运行 `npm ci` 和 `npx playwright install chromium`。Windows 默认使用微软雅黑；其他系统需要安装 Noto Sans CJK SC 等中文字体，避免中文显示为方框。生成后检查图片排版即可，不需要启动游戏或重新构建安装包。

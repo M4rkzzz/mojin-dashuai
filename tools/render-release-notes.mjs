@@ -54,6 +54,8 @@ try{
   await page.evaluate(async()=>{await document.fonts.ready;await Promise.all([...document.images].map(image=>image.decode()));});
   const problems=await page.evaluate(()=>[...document.querySelectorAll('h1,p,.changes li,.version,.brand-row,.footer')].filter(el=>el.scrollWidth>el.clientWidth+1).map(el=>el.className||el.tagName));
   if(problems.length)throw new Error('Text exceeds its layout; shorten the copy: '+problems.join(', '));
+  const verticalOverflow=await page.locator('.content').evaluate(el=>el.scrollHeight>el.clientHeight+1);
+  if(verticalOverflow)throw new Error('Too many changelog lines for the fixed portrait layout; shorten or split the content.');
   await page.locator('.poster').screenshot({path:output+'.png'});
   await sharp(output+'.png').resize({width:1080}).jpeg({quality:92,mozjpeg:true}).toFile(output+'.jpg');
   const metadata=await sharp(output+'.png').metadata();
