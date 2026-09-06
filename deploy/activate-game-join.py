@@ -26,6 +26,7 @@ HOST_GAMES = Path('/var/apps/docker-gsmanager/shares/gsmanager/home/steam/games'
 CONTAINER_GAMES = Path('/home/steam/games')
 PROC_ROOT = Path('/proc')
 NOT_BEFORE = dt.datetime(2026, 9, 6, 7, 30, tzinfo=dt.timezone.utc)
+DC2_NOT_BEFORE = dt.datetime(2026, 9, 6, 7, 43, 23, tzinfo=dt.timezone.utc)  # User authorized immediate dc2 restart.
 REDEEM_URL = 'http://hub-api:8080/internal/v1/join/redeem'
 SERVERS = {
     'm3e': dict(directory='M3E66', instance='26e0ee30-5b71-49a5-8932-41f86b407373', script='run.sh', port=25575,
@@ -50,6 +51,13 @@ def sha(data: bytes) -> str:
 
 def now() -> str:
     return dt.datetime.now(dt.timezone.utc).isoformat()
+
+
+def time_guard(id: str):
+    earliest = max(NOT_BEFORE, DC2_NOT_BEFORE) if id == 'dc2' else NOT_BEFORE
+    if dt.datetime.now(dt.timezone.utc) < earliest:
+        local = earliest.astimezone(dt.timezone(dt.timedelta(hours=8)))
+        raise RuntimeError(f'{id}: operation is held until {local:%Y-%m-%d %H:%M} Asia/Shanghai')
 
 
 def command(*args, input=None, timeout=60) -> str:
@@ -195,7 +203,8 @@ def prepare(agent: Path):
         props = f'mode=observe\ninstance={id}\nredeemUrl={REDEEM_URL}\nsecret={keys[id]}\nallowLocalContainerHttp=true\n'
         atomic(candidate_dir / 'server.properties', props.encode())
         command('bash', '-n', str(candidate_dir / spec['script']))
-        plan = dict(instance=id, preparedAt=now(), phase='hold', notBefore=NOT_BEFORE.isoformat(),
+        earliest = max(NOT_BEFORE, DC2_NOT_BEFORE) if id == 'dc2' else NOT_BEFORE
+        plan = dict(instance=id, preparedAt=now(), phase='hold', notBefore=earliest.isoformat(),
                     agentSha256=agent_hash, originalScriptSha256=sha(original), candidateScriptSha256=sha(candidate),
                     configSha256=sha(props.encode()), previousJoinAuth=old_auth,
                     script=spec['script'], untouchedOuterScript=spec.get('outerScript'),
@@ -213,6 +222,9 @@ def game_processes(id: str):
         try:
             if (directory / 'comm').read_text().strip() != 'java' or os.readlink(directory / 'cwd') != expected:
                 continue
+            args = (directory / 'cmdline').read_bytes().split(b'\0')
+            if any(flag in args for flag in (b'-version', b'--version', b'-fullversion')):
+                continue  # Startup scripts probe Java before launching the actual server.
             ticks = (directory / 'stat').read_text().rsplit(')', 1)[1].split()[19]
             result.append(dict(pid=int(directory.name), startedTicks=ticks))
         except (OSError, IndexError):
@@ -228,6 +240,10 @@ def workdir_processes(id: str):
     for directory in PROC_ROOT.glob('[0-9]*'):
         try:
             if os.readlink(directory / 'cwd') == expected:
+                args = [part for part in (directory / 'cmdline').read_bytes().split(b'\0') if part]
+                comm = (directory / 'comm').read_text().strip()
+                if comm in ('bash', 'sh', 'zsh') and len(args) == 1 and args[0].rsplit(b'/', 1)[-1].lstrip(b'-') in (b'bash', b'sh', b'zsh'):
+                    continue  # Existing idle interactive terminals do not launch a game by themselves.
                 result.append(int(directory.name))
         except OSError:
             pass
@@ -344,9 +360,117 @@ def validate_candidate(id: str):
     return work, plan
 
 
+def validate_live_generation(id: str, work: Path, plan):
+    state = read_json(work / 'state.json')
+    root = safe(HOST_GAMES, SERVERS[id]['directory'])
+    actual_script = sha(safe(root, SERVERS[id]['script']).read_bytes())
+    if state['phase'] == 'active':
+        if (actual_script != plan['candidateScriptSha256'] or game_processes(id) != [state.get('process')]
+                or sha((root / '.join-auth/server.properties').read_bytes()) != state.get('runtimeConfigSha256', plan['configSha256'])
+                or sha((root / '.join-auth' / ('agent-' + plan['agentSha256'] + '.jar')).read_bytes()) != plan['agentSha256']):
+            raise RuntimeError(f'{id}: current active generation drifted')
+    elif state['phase'] in ('maintenance', 'rolled-back'):
+        if actual_script != plan['originalScriptSha256'] or tree_inventory(root / '.join-auth') != plan['previousJoinAuth']:
+            raise RuntimeError(f'{id}: restored production baseline drifted')
+        if state['phase'] == 'maintenance' and (game_processes(id) or gsm(id, 'get') not in ('stopped', 'error')):
+            raise RuntimeError(f'{id}: maintenance instance is not stopped')
+        if state['phase'] == 'rolled-back' and game_processes(id) != [state.get('process')]:
+            raise RuntimeError(f'{id}: restored Java process changed')
+    else:
+        raise RuntimeError(f'{id}: cannot prepare a replacement during an interrupted operation')
+    if SERVERS[id].get('outerScript') and sha(safe(root, SERVERS[id]['outerScript']).read_bytes()) != SERVERS[id]['outerHash']:
+        raise RuntimeError(f'{id}: outer start script drifted')
+    return state
+
+
+def prepare_server(id: str, agent: Path):
+    """Stage one replacement without touching the active candidate, backup or game."""
+    if id not in SERVERS:
+        raise RuntimeError('Unknown server instance')
+    inspect_environment()
+    work, old_plan = validate_candidate(id)
+    state = validate_live_generation(id, work, old_plan)
+    original = (work / 'backup' / SERVERS[id]['script']).read_bytes()
+    if sha(original) != old_plan['originalScriptSha256']:
+        raise RuntimeError('First deployment backup is missing or changed')
+    data = agent.read_bytes()
+    with zipfile.ZipFile(agent) as archive:
+        if b'Premain-Class:' not in archive.read('META-INF/MANIFEST.MF'):
+            raise RuntimeError('Replacement JAR has no premain entrypoint')
+    agent_hash = sha(data)
+    candidate = inject(original, id, agent_hash)
+    keys = private_keys()
+    props = f'mode=observe\ninstance={id}\nredeemUrl={REDEEM_URL}\nsecret={keys[id]}\nallowLocalContainerHttp=true\n'.encode()
+    pending = work / 'pending'
+    atomic(pending / 'agent.jar', data)
+    atomic(pending / SERVERS[id]['script'], candidate)
+    atomic(pending / 'server.properties', props)
+    command('bash', '-n', str(pending / SERVERS[id]['script']))
+    plan = dict(old_plan, phase='hold', preparedAt=now(), agentSha256=agent_hash,
+                candidateScriptSha256=sha(candidate), configSha256=sha(props), initialMode='observe',
+                sourcePlanSha256=sha((work / 'plan.json').read_bytes()), sourcePhase=state['phase'],
+                sourceProcess=state.get('process'), replacementOf=old_plan['agentSha256'],
+                previousActiveScriptSha256=old_plan['candidateScriptSha256'])
+    write_json(work / 'pending-plan.json', plan)
+    print(json.dumps(dict(instance=id, phase='replacement-held', agentSha256=agent_hash, productionChanged=False, firstBackupPreserved=True)))
+
+
+def activate_server(id: str):
+    """Apply only an explicitly prepared server generation; retain the first backup."""
+    time_guard(id)
+    inspect_environment()
+    work, old_plan = validate_candidate(id)
+    state = validate_live_generation(id, work, old_plan)
+    plan = read_json(work / 'pending-plan.json')
+    if (plan.get('instance') != id or plan.get('sourcePlanSha256') != sha((work / 'plan.json').read_bytes())
+            or plan.get('sourcePhase') != state['phase'] or plan.get('sourceProcess') != state.get('process')
+            or plan['originalScriptSha256'] != old_plan['originalScriptSha256']):
+        raise RuntimeError('Replacement no longer matches the generation that was reviewed')
+    pending = work / 'pending'
+    for name, expected in [('agent.jar', plan['agentSha256']), ('server.properties', plan['configSha256']), (SERVERS[id]['script'], plan['candidateScriptSha256'])]:
+        if sha((pending / name).read_bytes()) != expected:
+            raise RuntimeError('Held replacement bytes changed')
+    keys = private_keys()
+    if 'secret=' + keys[id] + '\n' not in (pending / 'server.properties').read_text():
+        raise RuntimeError('Replacement key differs from activated API key')
+    api_ready(old_plan)
+    root = safe(HOST_GAMES, SERVERS[id]['directory'])
+    meta = read_json(work / 'backup/metadata.json')
+    if sha((work / 'backup' / SERVERS[id]['script']).read_bytes()) != plan['originalScriptSha256']:
+        raise RuntimeError('First backup changed before replacement')
+    other = {x: game_processes(x) for x in SERVERS if x != id}
+    if state['phase'] != 'maintenance':
+        rcon(id)
+    write_json(work / 'state.json', dict(instance=id, phase='stopping-server-update', at=now(), agentSha256=old_plan['agentSha256']))
+    stop_game(id)
+    history = work / 'generations' / (old_plan['agentSha256'] + '-' + str(time.time_ns()))
+    history.mkdir(parents=True, mode=0o700)
+    shutil.copytree(work / 'candidate', history / 'candidate')
+    shutil.copy2(work / 'plan.json', history / 'plan.json')
+    write_json(history / 'state-before-update.json', state)
+    for name in ('agent.jar', 'server.properties', SERVERS[id]['script']):
+        atomic(work / 'candidate' / name, (pending / name).read_bytes())
+    write_json(work / 'plan.json', plan)
+    owner = (meta['gameUid'], meta['gameGid'])
+    auth = safe(root, '.join-auth')
+    auth.mkdir(exist_ok=True, mode=0o700)
+    os.chmod(auth, 0o700)
+    os.chown(auth, *owner)
+    atomic(auth / ('agent-' + plan['agentSha256'] + '.jar'), (pending / 'agent.jar').read_bytes(), 0o644, owner)
+    atomic(auth / 'server.properties', (pending / 'server.properties').read_bytes(), 0o600, owner)
+    atomic(safe(root, SERVERS[id]['script']), (pending / SERVERS[id]['script']).read_bytes(), meta['scriptMode'], (meta['scriptUid'], meta['scriptGid']))
+    write_json(work / 'state.json', dict(instance=id, phase='starting', at=now(), agentSha256=plan['agentSha256']))
+    process = start_game(id, plan['agentSha256'])
+    if other != {x: game_processes(x) for x in other}:
+        raise RuntimeError('Another game process changed during replacement')
+    write_json(work / 'state.json', dict(instance=id, phase='active', at=now(), agentSha256=plan['agentSha256'],
+                                      process=process, mode='observe', runtimeConfigSha256=plan['configSha256']))
+    print(json.dumps(dict(instance=id, phase='active', mode='observe', agentSha256=plan['agentSha256'],
+                         process=process, otherGamesUnchanged=True, firstBackupPreserved=True)))
+
+
 def activate(id: str):
-    if dt.datetime.now(dt.timezone.utc) < NOT_BEFORE:
-        raise RuntimeError('Activation is held until 2026-09-06 15:30 Asia/Shanghai')
+    time_guard(id)
     inspect_environment()
     work, plan = validate_candidate(id)
     root = safe(HOST_GAMES, SERVERS[id]['directory'])
@@ -408,8 +532,7 @@ def activate(id: str):
 def set_mode(id: str, mode: str):
     if id not in SERVERS or mode not in ('off', 'observe', 'enforce'):
         raise RuntimeError('Expected --mode INSTANCE off|observe|enforce')
-    if dt.datetime.now(dt.timezone.utc) < NOT_BEFORE:
-        raise RuntimeError('Mode changes are held until 2026-09-06 15:30 Asia/Shanghai')
+    time_guard(id)
     inspect_environment()
     work, plan = validate_candidate(id)
     state = read_json(work / 'state.json')
@@ -443,13 +566,15 @@ def set_mode(id: str, mode: str):
 
 
 def rollback(id: str):
+    if id == 'dc2':
+        time_guard(id)  # Follow the latest separately authorized dc2 restart time.
     inspect_environment()
     work, plan = validate_candidate(id)
     state = read_json(work / 'state.json')
     if state['phase'] == 'rolled-back':
         print(json.dumps(dict(instance=id, phase='rolled-back', unchanged=True)))
         return
-    if state['phase'] not in ('active', 'starting', 'stopping', 'rolling-back'):
+    if state['phase'] not in ('active', 'starting', 'stopping', 'rolling-back', 'stopping-server-update'):
         raise RuntimeError('There is no attempted activation to roll back')
     spec = SERVERS[id]
     root = safe(HOST_GAMES, spec['directory'])
@@ -457,7 +582,7 @@ def rollback(id: str):
     backup = work / 'backup'
     if sha((backup / spec['script']).read_bytes()) != plan['originalScriptSha256']:
         raise RuntimeError('Rollback script backup is missing or invalid')
-    if sha(script.read_bytes()) not in (plan['originalScriptSha256'], plan['candidateScriptSha256']):
+    if sha(script.read_bytes()) not in (plan['originalScriptSha256'], plan['candidateScriptSha256'], plan.get('previousActiveScriptSha256')):
         raise RuntimeError('Live script was changed independently; refusing to overwrite it')
     write_json(work / 'state.json', dict(instance=id, phase='rolling-back', at=now()))
     stop_game(id)
@@ -490,6 +615,8 @@ def main():
     action = parser.add_mutually_exclusive_group(required=True)
     action.add_argument('--prepare', type=Path, metavar='AGENT_JAR')
     action.add_argument('--activate', choices=SERVERS)
+    action.add_argument('--prepare-server', nargs=2, metavar=('INSTANCE', 'AGENT_JAR'))
+    action.add_argument('--activate-server', choices=SERVERS)
     action.add_argument('--rollback', choices=SERVERS)
     action.add_argument('--mode', nargs=2, metavar=('INSTANCE', 'MODE'))
     action.add_argument('--status', action='store_true')
@@ -503,6 +630,10 @@ def main():
             prepare(args.prepare)
         elif args.activate:
             activate(args.activate)
+        elif args.prepare_server:
+            prepare_server(args.prepare_server[0], Path(args.prepare_server[1]))
+        elif args.activate_server:
+            activate_server(args.activate_server)
         elif args.rollback:
             rollback(args.rollback)
         elif args.mode:

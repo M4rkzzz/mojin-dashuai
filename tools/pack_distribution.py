@@ -165,7 +165,10 @@ def override_files(source, spec):
                 raise ValueError('Possible credential requires local review: ' + relative)
             entries[relative] = data
     # Seed defaults contain no previous account, server IP, world or personal key bindings.
-    entries['options.txt'] = ('lang:' + ('zh_CN' if spec['minecraft'] == '1.7.10' else 'zh_cn') + '\nfullscreen:false\n').encode()
+    defaults = 'lang:' + ('zh_CN' if spec['minecraft'] == '1.7.10' else 'zh_cn') + '\nfullscreen:false\n'
+    if spec.get('defaultResourcePacks'):
+        defaults += 'resourcePacks:' + json.dumps(spec['defaultResourcePacks'], ensure_ascii=False, separators=(',', ':')) + '\n'
+    entries['options.txt'] = defaults.encode('utf-8')
     entries['servers.dat'] = servers_dat(spec['routes'])
     return entries, excluded
 

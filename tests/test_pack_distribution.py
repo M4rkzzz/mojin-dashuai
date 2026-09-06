@@ -55,6 +55,12 @@ class DistributionTests(unittest.TestCase):
             for name in names[2:]:
                 self.assertNotIn(name, entries)
             self.assertEqual(entries['options.txt'], b'lang:zh_cn\nfullscreen:false\n')
+            (root / 'options.txt').write_text('lang:en_us\nlastServer:private.example\n', encoding='utf-8')
+            dc2_entries, _ = pack.override_files(root, self.config['instances']['dc2'])
+            defaults = dict(line.split(':', 1) for line in dc2_entries['options.txt'].decode().splitlines())
+            self.assertEqual(defaults['lang'], 'zh_cn')
+            self.assertEqual(json.loads(defaults['resourcePacks']), ['file/DeceasedCraft Chinese Translation Resource.zip'])
+            self.assertNotIn('lastServer', defaults)
 
     def test_nonempty_credential_blocks_export_without_echoing_it(self):
         with tempfile.TemporaryDirectory() as tmp:

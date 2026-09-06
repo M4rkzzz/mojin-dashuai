@@ -3,13 +3,14 @@
   "encryptedSessionRestored": true,
   "silentAuthenticationPassed": true,
   "gameSessionVerified": true,
-  "checkedAt": "2026-09-06T07:28:16.701369+00:00",
-  "authFingerprint": "977b935a5f0be740950c93a9ce0f1083d01089a4efce098922db24ccefe0cd7f",
+  "checkedAt": "2026-09-06T08:21:21.975064+00:00",
+  "authFingerprint": "f626e8a6637327f5a97bc6e208c63739098b45f15adff4b3db84285da035aa61",
   "provider": "cmllib-windows",
   "interactiveWindowOpened": false,
   "gameWindowsOpened": 0,
   "authorization": "existing encrypted Microsoft authorization",
   "interactiveAuthorizationReusedFrom": "2026-09-05T06:16:33.700548+00:00",
-  "validation": "Final 1.0.0 source: NativeAccountSmoke --microsoft-resume restored the existing encrypted Microsoft authorization, silently authenticated, restored it through a new Accounts instance and verified the matching game session. No interactive authorization or game window was opened. --join-api-identity also verified official profile and entitlement; production join exchange is separate.",
-  "previousAcceptance": "packs\\acceptance\\beta16-microsoft-history.json"
+  "validation": "Final 1.0.0 source after dependency-lock restore: NativeAccountSmoke --microsoft-resume restored existing encrypted Microsoft authorization, silently authenticated, restored it through a new Accounts instance and verified the matching game session. No interactive authorization or game window was opened. Production join exchange is verified separately in each instance acceptance report.",
+  "previousAcceptance": "packs\\acceptance\\beta16-microsoft-history.json",
+  "skinDownloaded": true
 }

@@ -1,6 +1,10 @@
 """Build a Java 8 login gate; relocate ASM so Forge's ASM versions are unaffected."""
 from pathlib import Path
-import hashlib, struct, subprocess, zipfile
+import argparse, hashlib, struct, subprocess, zipfile
+
+parser = argparse.ArgumentParser()
+parser.add_argument('--server', action='store_true', help='Build the separately deployed server agent; leave the frozen client resource untouched')
+args = parser.parse_args()
 
 root = Path(__file__).resolve().parents[1]
 javac = next((root.parent / '.tools/temurin25').glob('*/bin/javac.exe'))
@@ -35,7 +39,7 @@ with zipfile.ZipFile(asm) as source:
         if name.startswith('org/objectweb/asm/') and name.endswith('.class'):
             entries[name.replace('org/objectweb/asm/', 'uk/boshan/join/shaded/asm/')] = relocate(source.read(name))
     entries['META-INF/ASM-LICENSE.txt'] = (root / 'src/GameIntegration/join/ASM-LICENSE.txt').read_bytes()
-output = root / 'src/GameIntegration/join/mojin-join-agent.jar'
+output = root / 'src/GameIntegration/join' / ('mojin-join-server-agent.jar' if args.server else 'mojin-join-agent.jar')
 with zipfile.ZipFile(output, 'w') as archive:
     for name, content in sorted(entries.items()):
         info = zipfile.ZipInfo(name, (2026,9,6,0,0,0)); info.compress_type = zipfile.ZIP_DEFLATED

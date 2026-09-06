@@ -36,10 +36,15 @@ def main():
     parser.add_argument('--deny',action='store_true',help='Send an uncredentialed pre-login and require the explicit unified-launcher denial')
     args=parser.parse_args();port,protocol=SERVERS[args.instance]
     report={'instance':args.instance,'mode':'unauthorized-login' if args.deny else 'status','checkedAt':datetime.datetime.now(datetime.timezone.utc).isoformat(),'passed':False}
+    # Match the real Forge client marker, but deliberately send no MOJIN ticket.
+    # Otherwise Forge rejects a vanilla client before the join-auth gate is exercised.
+    forge_marker={'dc2':'FML3','mb':'FML'}.get(args.instance) if args.deny else None
+    handshake_host='localhost'+('\0'+forge_marker+'\0' if forge_marker else '')
+    if args.deny:report['forgeMarker']=forge_marker
     try:
         with socket.create_connection(('192.168.5.124',port),timeout=8) as sock:
             sock.settimeout(12)
-            sock.sendall(packet(varint(0)+varint(protocol)+string('localhost')+struct.pack('>H',port)+varint(2 if args.deny else 1)))
+            sock.sendall(packet(varint(0)+varint(protocol)+string(handshake_host)+struct.pack('>H',port)+varint(2 if args.deny else 1)))
             login=string('MojinJoinProbe')+(b'\x01'+uuid.UUID('b6d4255d-70a1-410f-b651-10b992418d05').bytes if protocol==763 else b'')
             sock.sendall(packet(varint(0)+(login if args.deny else b'')))
             size=read_var(sock)

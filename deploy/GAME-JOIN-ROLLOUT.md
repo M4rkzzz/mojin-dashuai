@@ -2,6 +2,8 @@
 
 本文件中的命令在 NAS 宿主通过 sudo 运行。脚本本身不设置定时任务；15:30 前只允许准备。最终顺序固定为：**API 激活 → 四服 observe 重启且健康 → 发布 1.0 更新与目录 → 真实正负连接验证 → 逐服 enforce**。
 
+用户随后明确授权“二服现在就可以重启了”，取消此前 15:50 等待。dc2 的独立硬限制与暂存计划已同步为本次授权执行时刻 **15:43:23**，其他服仍为 15:30；顺序为一、三、四服后再部署二服。
+
 ## 准备
 
 1. `activate-join-api.py --prepare` 生成私有四服 key，位置固定为 `/var/apps/mc-client-hub/staging/join-auth-1.0.0/server-keys.json`，权限 0600。
@@ -14,7 +16,7 @@
 ## 北京时间 2026-09-06 15:30 后
 
 1. 先由 `activate-join-api.py --activate` 更新 Hub API、连接既有 edge 网络并配置真实游戏容器 IP 的 /32 白名单。
-2. 逐服执行 `activate-game-join.py --activate m3e`，再按实际操作顺序对 `dc2`、`mb`、`vw` 执行相同命令。
+2. 逐服执行 `activate-game-join.py --activate m3e`，再对 `mb`、`vw` 执行相同命令；`dc2` 按用户最新即时授权部署。
 3. 每服先核对 API 的真实 `state.json`、实时 API image/env、私钥、网络 IP 和容器内健康请求；备份启动脚本与原 `.join-auth`；RCON `save-all` / `stop`；精确等待该目录 Java 退出，关闭闲置 GSManager terminal，再通过 GSManager start。
 4. 新 Java 必须带固定 agent 参数，PID 与启动 ticks 不变且 RCON 已就绪，才记录 `active / observe`。不会杀死 Java，也不会修改世界、模组、内存或其他服务器。
 5. **四服全部健康并保持 observe 后**，发布负责人再激活 1.0.0 启动器安装包、自动更新清单和游戏目录。新目录的最低启动器版本须包含四服 r4 迁移及入服票据支持；发布内容必须与最终已测试的 agent JAR 一致。
@@ -30,9 +32,10 @@
 ```sh
 python3 /tmp/mojin-activate-game-join.py --status
 python3 /tmp/mojin-activate-game-join.py --activate m3e
-python3 /tmp/mojin-activate-game-join.py --activate dc2
 python3 /tmp/mojin-activate-game-join.py --activate mb
 python3 /tmp/mojin-activate-game-join.py --activate vw
+# 二服已获用户即时授权，独立限制为北京时间 15:43:23
+python3 /tmp/mojin-activate-game-join.py --activate dc2
 python3 /tmp/mojin-activate-game-join.py --status
 ```
 
@@ -42,9 +45,22 @@ python3 /tmp/mojin-activate-game-join.py --status
 
 ## 状态与回滚
 
+二服已使用服务端修正版完成实际入服与生产票据核销，维护已解除。当前四服均 healthy/enforce：一、四服为 d870 代理，二、三服为 acd591 服务端专用修正版。最终热切换和四服明确无票据拒绝均已通过，游戏 PID 未变。首次备份和旧候选保留；不要误用下列历史替换命令重复重启已验收目标。
+
+单服替换服务端 agent 使用以下独立命令，避免全体 prepare 迫使一、四服重复重启：
+
+```sh
+python3 /tmp/mojin-activate-game-join.py --prepare-server dc2 /absolute/fixed-server-agent.jar
+python3 /tmp/mojin-activate-game-join.py --activate-server dc2
+python3 /tmp/mojin-activate-game-join.py --prepare-server mb /absolute/fixed-server-agent.jar
+python3 /tmp/mojin-activate-game-join.py --activate-server mb
+```
+
+`--prepare-server` 只写目标服的 pending 候选与计划，当前生产、当前候选和首次 backup 均保持；支持健康 active 或已恢复原脚本的 maintenance/rolled-back 状态。`--activate-server` 再次核对当前代的精确进程、脚本和配置哈希，正常保存停止目标服；维护中的二服直接从停止状态安装并启动。首次 backup 永不覆盖，旧候选移入 generations 记录，只有目标服写入新 agent，初始仍为 observe。其他三个服不重启，客户端 agent 不受这些命令影响。
+
 - `activate-game-join.py --status` 输出无私钥状态，包括当前 mode、PID/启动 ticks 与阶段。
 - 任何阶段中断会保留 staging 状态；不会静默覆盖独立修改的原脚本，也不会启动第二份 Java。
-- `activate-game-join.py --rollback vw` 等单服命令：通过 RCON 正常停止，恢复精确原脚本与原 `.join-auth`，再由 GSManager 正常启动。失败候选 `.join-auth` 改名保留供诊断，原备份不删除。回滚不需要等 15:30，因为它只恢复已尝试过的部署。
+- `activate-game-join.py --rollback vw` 等单服命令：通过 RCON 正常停止，恢复精确原脚本与原 `.join-auth`，再由 GSManager 正常启动。失败候选 `.join-auth` 改名保留供诊断，原备份不删除。其他服回滚不需要等 15:30；二服所有重启包括回滚遵循其单独的最新授权时间。
 - API 由独立脚本管理；本脚本不会擅自连接/断开 Docker 网络或更新 API。
 
-本地测试命令：`python -X utf8 -m unittest discover -s tests -p test_activate_game_join.py -v`。6 项通过；仅使用临时目录和模拟 Docker/RCON 调用，不构成生产重启或入服验收。
+本地测试命令：`python -X utf8 -m unittest discover -s tests -p test_activate_game_join.py -v`。12 项通过，包括独立的二服时间限制、排除 Java 版本探测进程、排除闲置交互 shell（保留真实启动脚本互斥）、单服准备不改当前代和首次备份、源代漂移拒绝、维护态单服启动；仅使用临时目录和模拟 Docker/RCON 调用，不构成生产重启或入服验收。

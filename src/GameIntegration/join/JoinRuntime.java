@@ -20,6 +20,7 @@ public final class JoinRuntime {
     private static String instance, endpoint, secret, configPath, launcherPipe;
     private static volatile long configStamp = Long.MIN_VALUE;
     private static final Map<Object, Gate> gates = Collections.synchronizedMap(new WeakHashMap<Object, Gate>());
+    private static final Map<Object, String> decodedTickets = Collections.synchronizedMap(new WeakHashMap<Object, String>());
     private static final Set<Object> openedModules = Collections.newSetFromMap(new ConcurrentHashMap<Object, Boolean>());
     private static final ExecutorService workers = new ThreadPoolExecutor(0, 32, 30, TimeUnit.SECONDS,
             new SynchronousQueue<Runnable>(), new ThreadFactory() {
@@ -69,6 +70,7 @@ public final class JoinRuntime {
                             return transform(name, (byte[]) args[offset + 4]);
                         } catch (Throwable error) {
                             log("fatal unsupported authentication hook " + name + " category=" + error.getClass().getSimpleName());
+                            if (server) recordHookFailure(name, (byte[]) args[offset + 4], error);
                             // Instrumentation silently ignores thrown transformer errors. Invalid
                             // bytes deliberately prevent this networking class from loading instead.
                             return new byte[]{0};
@@ -97,14 +99,29 @@ public final class JoinRuntime {
     }
     public static byte[] transform(final String name, byte[] bytes) {
         final boolean network = name.endsWith("/NetworkManager") || name.endsWith("/Connection");
-        if ((network && !server) || (!network && server)) return null;
+        if (network && !server) return null;
         ClassReader reader = new ClassReader(bytes);
         ClassWriter writer = new ClassWriter(reader, ClassWriter.COMPUTE_MAXS);
         final int[] count = {0};
         reader.accept(new ClassVisitor(Opcodes.ASM9, writer) {
             public MethodVisitor visitMethod(int access, String methodName, String descriptor, String signature, String[] exceptions) {
                 MethodVisitor mv = super.visitMethod(access, methodName, descriptor, signature, exceptions);
-                if (network && descriptor.startsWith("(Lio/netty/channel/ChannelHandlerContext;L") && descriptor.endsWith(")V")
+                org.objectweb.asm.Type[] arguments = org.objectweb.asm.Type.getArgumentTypes(descriptor);
+                if (server && !network && arguments.length == 1 && arguments[0].getSort() == org.objectweb.asm.Type.OBJECT) {
+                    final String buffer = arguments[0].getInternalName();
+                    return new MethodVisitor(Opcodes.ASM9, mv) {
+                        public void visitMethodInsn(int opcode, String owner, String method, String desc, boolean itf) {
+                            super.visitMethodInsn(opcode, owner, method, desc, itf);
+                            if (owner.equals(buffer) && desc.equals("(I)Ljava/lang/String;")) {
+                                count[0]++;
+                                mv.visitVarInsn(Opcodes.ALOAD, 0); mv.visitInsn(Opcodes.SWAP);
+                                mv.visitMethodInsn(Opcodes.INVOKESTATIC, HOOK, "serverHandshakeHost", "(Ljava/lang/Object;Ljava/lang/String;)Ljava/lang/String;", false);
+                            }
+                        }
+                    };
+                }
+                boolean readEntry = methodName.equals("channelRead0") || (methodName.equals("a") && (reader.getClassName().equals("ej") || reader.getClassName().equals("gw")));
+                if (network && readEntry && descriptor.startsWith("(Lio/netty/channel/ChannelHandlerContext;L") && descriptor.endsWith(")V")
                         && org.objectweb.asm.Type.getArgumentTypes(descriptor).length == 2
                         && !descriptor.contains("Ljava/lang/Object;") && !descriptor.contains("Ljava/lang/Throwable;")) {
                     count[0]++;
@@ -118,7 +135,7 @@ public final class JoinRuntime {
                         }
                     };
                 }
-                if (!network && methodName.equals("<init>") && descriptor.contains("Ljava/lang/String;")) {
+                if (!server && !network && methodName.equals("<init>") && descriptor.contains("Ljava/lang/String;")) {
                     count[0]++;
                     return new MethodVisitor(Opcodes.ASM9, mv) {
                         public void visitInsn(int opcode) {
@@ -133,6 +150,37 @@ public final class JoinRuntime {
         if ((network && count[0] != 1) || (!network && count[0] < 1)) throw new IllegalStateException("Unsupported join hook shape: " + name + " matches=" + count[0]);
         log("hook installed " + name.substring(name.lastIndexOf('/') + 1));
         return writer.toByteArray();
+    }
+
+    public static String serverHandshakeHost(Object packet, String host) {
+        decodedTickets.remove(packet);
+        int start = host.indexOf(MARKER);
+        if (start < 0) return host;
+        int end = start + MARKER.length() + 43;
+        if (end <= host.length()) {
+            String ticket = host.substring(start + MARKER.length(), end);
+            if (ticket.matches("[A-Za-z0-9_-]{43}") && (end == host.length() || host.charAt(end) == '\0') && host.indexOf(MARKER, end) < 0) {
+                decodedTickets.put(packet, ticket);
+                // Forge decoders split the NUL-delimited hostname. Capture the
+                // ticket first, then give Forge its original FML suffix unchanged.
+                return host.substring(0, start) + host.substring(end);
+            }
+        }
+        decodedTickets.put(packet, "invalid");
+        return host;
+    }
+    private static void recordHookFailure(String name, byte[] bytes, Throwable failure) {
+        try {
+            String simple = name.substring(name.lastIndexOf('/') + 1);
+            File folder = new File(configPath).getAbsoluteFile().getParentFile();
+            try (OutputStream out = new FileOutputStream(new File(folder, "join-hook-" + simple + ".failed.class"))) { out.write(bytes); }
+            Throwable cause = failure;
+            while (cause.getCause() != null) cause = cause.getCause();
+            String detail = cause instanceof IllegalStateException && String.valueOf(cause.getMessage()).startsWith("Unsupported join hook shape:") ? cause.getMessage() : cause.getClass().getName();
+            try (Writer out = new OutputStreamWriter(new FileOutputStream(new File(folder, "join-hook-failure.log"), true), StandardCharsets.UTF_8)) {
+                out.write(new Date().toString() + " class=" + name + " category=" + failure.getClass().getName() + " detail=" + detail + "\n");
+            }
+        } catch (Exception ignored) {}
     }
 
     public static void clientHandshake(Object packet) {
@@ -228,9 +276,12 @@ public final class JoinRuntime {
             boolean login = type.endsWith(".C00PacketLoginStart") || type.endsWith(".CPacketLoginStart") || type.endsWith(".ServerboundHelloPacket");
             Gate existing = gates.get(manager);
             if (handshake) {
+                String decodedTicket = decodedTickets.remove(packet);
                 if (existing != null) return reject(manager, context, "重复握手，请重新连接。", "duplicate_handshake");
                 if (!loginIntention(packet)) return false;
+                if ("invalid".equals(decodedTicket)) return reject(manager, context, "入服凭据格式错误，请更新统一客户端。", "malformed_ticket");
                 Gate gate = new Gate();
+                gate.ticket = decodedTicket;
                 gate.admitted = mode.equals("off");
                 Field field = stringField(packet.getClass()); String host = (String) field.get(packet);
                 int start = host.indexOf(MARKER);
@@ -347,7 +398,7 @@ public final class JoinRuntime {
         return null;
     }
     private static void dispatch(Object manager, Object context, Object packet) throws Exception {
-        for (Method m : manager.getClass().getDeclaredMethods()) if (m.getReturnType() == Void.TYPE && m.getParameterTypes().length == 2 && m.getParameterTypes()[0].getName().equals("io.netty.channel.ChannelHandlerContext") && m.getParameterTypes()[1] != Object.class && m.getParameterTypes()[1].isInstance(packet)) {
+        for (Method m : manager.getClass().getDeclaredMethods()) if (m.getName().equals("channelRead0") && m.getReturnType() == Void.TYPE && m.getParameterTypes().length == 2 && m.getParameterTypes()[0].getName().equals("io.netty.channel.ChannelHandlerContext") && m.getParameterTypes()[1] != Object.class && m.getParameterTypes()[1].isInstance(packet)) {
             m.setAccessible(true); m.invoke(manager, context, packet); return;
         }
         throw new NoSuchMethodException("channelRead0");

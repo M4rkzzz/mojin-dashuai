@@ -29,6 +29,7 @@ public sealed class GameLauncher
         await Task.Run(()=>MapIdentity.Prepare(instance,manifest.Instance),token).ConfigureAwait(false);
         await Task.Run(()=>NewModDefaults.Prepare(instance,manifest),token).ConfigureAwait(false);
         await Task.Run(()=>LegacySplashCompatibility.Prepare(instance,manifest),token).ConfigureAwait(false);
+        await Dc2TranslationMigration.PrepareAsync(instance,manifest.Instance,token).ConfigureAwait(false);
         if(manifest.Instance=="vw"&&manifest.Sequence>=4)
         {
             using var migrationDownloads=new Downloader(Path.Combine(settings.Root,"cache"),settings,origin:NetworkPolicy.DirectApi);

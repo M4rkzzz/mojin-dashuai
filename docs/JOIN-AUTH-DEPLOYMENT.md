@@ -1,6 +1,6 @@
 # 入服认证 API 部署说明
 
-API 版本 1.1.0。本文是发布准备资料，不代表生产已启用。
+API 版本 1.1.0。2026-09-06 15:30:39 北京时间已完成 API 激活；游戏服是否 enforce 以各服单独验收记录为准。
 
 ## 15:30 切换脚本
 
@@ -65,3 +65,17 @@ dotnet Hub.Api.dll admin join-bind-minecraft <官方UUID> <精确游戏名>
 `NativeAccountSmoke --join-api-identity` 使用现有 M4rkzzz 的 DPAPI 副本做静默官方验证，仅输出角色名、官方 UUID 和服务端离线 UUID，已通过。15:30 API 激活并完成管理员关联后运行 `NativeAccountSmoke --join-api-live dc2`，验证真实微软 exchange→ticket；不会打印票据、grant 或官方 token，不接收内部服务密钥，不把领票结果记为游戏服兑换/入服验收。临时加密副本完成后删除，原账号文件不修改。
 
 在新 API 初始化前也可执行 NAS `python3 tools/join-identity-preflight.py M4rkzzz`，它只查受保护名字和现有绑定元数据，不修改数据库，不读取会话或密码。14:43 的只读结果为：M4rkzzz 受保护，精确大小写一致，无同名 Hub 账号，生产入服身份表尚未创建。
+
+## 本次实际 API 激活结果
+
+15:30:39 启用 1.1.0 镜像 `sha256:11dd7a2aba4f5d879d0bccaffca717a3e86873ba16f7e24fc74f174eacc6a7a2`，API 健康通过，gsmanager 启动时间未改变，内部白名单为实际容器地址 `172.25.0.5/32`。首份回滚快照保存在 `/var/apps/mc-client-hub/staging/join-auth-1.0.0/backups/20260906T073036Z-0142d2`。随后显式关联已验证的 M4rkzzz 官方身份，保留现有离线 UUID。
+
+15:30:51 开始的真实微软验证中，官方资料、Java 所有权、生产 exchange、dc2 领票均 HTTP 200；临时票据未打印或落盘。15:31 主公网入口访问 `/internal/v1/join/redeem` 实际返回 404。未打开游戏窗口，未开启任何游戏服 enforce；服务端实际兑换和入服仍由后续游戏侧验收覆盖。
+
+## 游戏侧成功消费证据
+
+冻结的认证组件只记录失败和 observe 放行，不能把 observe 模式下成功进服直接算作票据认证通过。`tools/join-consumption-evidence.py` 在生产数据库做只读查询，以实例、精确游戏名、已验证微软 UUID 和离线 UUID 一起限定身份，并按 `ConsumedAt` 的 UTC 时间段统计。输出不选择原票据、哈希、grant 或服务密钥。表没有独立签发时间列，因此输出 `issuedAtDerivedUtc`（ExpiresAt 减固定 120 秒），不把它说成客户端收到响应的时刻。
+
+示例：`python3 /tmp/mojin-join-consumption-evidence.py --instance m3e --from-utc 2026-09-06T07:34:49Z --until-utc 2026-09-06T07:36:30Z`。查询窗口为左闭右开。记录可能在签发约 12–17 分钟后被正常清理，需每服连接后及时取证并保存脱敏结果。
+
+一服 07:35:49 UTC 实际入服时，数据库记录对应成功消费 1 次，ConsumedAt 为 `07:35:49.418507Z`，与服务器登录日志时间吻合；证据保存在本地 `artifacts/api-1.1.0/consumption-m3e-20260906.json`。

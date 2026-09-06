@@ -43,6 +43,7 @@
       "memoryMiB": 8192,
       "format": "modrinth",
       "source": "../DeceasedCraft-2-client-zh-5.10.17/overrides",
+      "defaultResourcePacks": ["file/DeceasedCraft Chinese Translation Resource.zip"],
       "include": [
         "config",
         "customnpcs",
