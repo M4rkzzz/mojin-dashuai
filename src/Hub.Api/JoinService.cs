@@ -22,7 +22,13 @@ public sealed class JoinService(HubDb db, MinecraftJoinVerifier minecraft, IConf
         if (identity is null)
         {
             var key = Secret.NameKey(verified.GameName);
-            if (await identities.AnyAsync(i => i.GameNameKey == key, ct) || await db.Users.AnyAsync(u => u.GameNameKey == key, ct) || await db.ProtectedNames.AnyAsync(n => n.Key == key, ct))
+            var legacy = await db.ProtectedNames.SingleOrDefaultAsync(n => n.Key == key, ct);
+            // A protected legacy name is not an account binding. Official token + Java
+            // ownership proof above may claim its exact spelling and retain its offline
+            // UUID. Ambiguous casing and existing account ownership still require review.
+            if (await identities.AnyAsync(i => i.GameNameKey == key, ct)
+                || await db.Users.AnyAsync(u => u.GameNameKey == key, ct)
+                || (legacy is not null && legacy.ExactName != verified.GameName))
                 throw Conflict();
             identity = new() { MinecraftProfileId = verified.ProfileId, GameName = verified.GameName, GameNameKey = key, GameUuid = JoinSecurity.OfflineUuid(verified.GameName) };
             identities.Add(identity);
