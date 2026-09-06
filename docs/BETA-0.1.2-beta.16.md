@@ -9,3 +9,5 @@
 [下载 Windows 安装包](https://launcher-direct.boshan.uk:21708/launcher/0.1.2-beta.16/MojinDashuai-Setup-0.1.2-beta.16-x64.exe)。已安装 beta15 的玩家重新打开启动器，或点击右上角“检查更新”，即可通过自动更新升级。启动器按变化文件下载；四个服的游戏内容版本不变。
 
 已检查 7 种窗口尺寸下的 4 类登录表单布局、屏幕边界计算和实际 Windows 窗口初始化。发布结果见 `packs/beta-release.json`。干净 Windows 环境、真实双显卡渲染器和 LittleSkin 游戏内画面等既有未验收项继续保留。
+
+beta15 → beta16 公网实际差异下载 **1,204,568 字节（约 1.15 MiB）**。安装包约 53.3 MiB；SHA256：`a5bc36351206e2788d1c94761f718ce3bbf5929674f90ecc53065ad3983c93f0`。

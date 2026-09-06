@@ -12,8 +12,30 @@
   },
   "silentMicrosoftAcceptance": "packs/launcher-acceptance.json",
   "gameContentChanged": false,
-  "published": false,
+  "published": true,
   "cleanWindows": false,
   "actualDualGpuRendererVerified": false,
-  "littleSkinInGameVisualVerified": false
+  "littleSkinInGameVisualVerified": false,
+  "publishedAt": "2026-09-06T02:29:45.176864+00:00",
+  "codeCommit": "68313cafe6cc198cb54399480b39949805829b3f",
+  "ci": "https://github.com/M4rkzzz/mojin-dashuai/actions/runs/34006345935",
+  "ciPassed": true,
+  "ciJobs": {
+    "api": "success",
+    "ui": "success",
+    "windows": "success"
+  },
+  "catalogSequence": 7,
+  "launcherSequence": 18,
+  "installerLifecycleVerified": true,
+  "installerSha256": "a5bc36351206e2788d1c94761f718ce3bbf5929674f90ecc53065ad3983c93f0",
+  "installerBytes": 55852194,
+  "installerPublicRoundTripVerified": true,
+  "launcherDifferentialUpdateVerified": true,
+  "launcherDifferentialBaseline": "0.1.2-beta.15",
+  "launcherDifferentialDownloadBytes": 1204568,
+  "publicLauncherObjectsVerified": true,
+  "singleDownloadOrigin": true,
+  "finalInstaller": "artifacts/installer-0.1.2-beta.16-final",
+  "finalUpdate": "artifacts/launcher-update-0.1.2-beta.16-final"
 }
