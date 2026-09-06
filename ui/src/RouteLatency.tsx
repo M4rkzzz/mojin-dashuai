@@ -1,10 +1,12 @@
-import {useCallback,useEffect,useRef,useState} from 'react';
+import {useCallback,useEffect,useRef,useState,type ReactNode} from 'react';
+import {ArrowRight} from 'lucide-react';
 import {invoke,isNative} from './bridge';
 
 export const routeNames=['河北阿里云','宿迁三网'];
 type Latencies=[number|null,number|null];
 export function useRouteLatencies(instance:string,onError?:(message:string)=>void){
  const [latencies,setLatencies]=useState<Latencies>([null,null]);
+ const [onlinePlayers,setOnlinePlayers]=useState<number|null>(null);
  const [checking,setChecking]=useState(false);
  const generation=useRef(0);
  const inFlight=useRef<number|null>(null);
@@ -16,17 +18,26 @@ export function useRouteLatencies(instance:string,onError?:(message:string)=>voi
   try{
    const result=await invoke<unknown>('routes.probe',{instance});
    if(request!==generation.current)return;
-   setLatencies([0,1].map(index=>Array.isArray(result)&&typeof result[index]==='number'&&Number.isFinite(result[index])?Math.max(-1,Math.round(result[index])):-1) as Latencies);
-  }catch(error){if(request===generation.current){setLatencies([-1,-1]);errorHandler.current?.((error as Error).message);}}
+   const routes=[0,1].map(index=>{
+    const value=Array.isArray(result)?result[index]:null;
+    const latency=typeof value==='number'?value:value?.latency;
+    return {latency:typeof latency==='number'&&Number.isFinite(latency)?Math.max(-1,Math.round(latency)):-1,
+     onlinePlayers:typeof value?.onlinePlayers==='number'&&Number.isSafeInteger(value.onlinePlayers)&&value.onlinePlayers>=0?value.onlinePlayers:null};
+   });
+   setLatencies(routes.map(route=>route.latency) as Latencies);
+   // Both routes lead to the same server. Use one successful response, never add their counts.
+   setOnlinePlayers(routes.filter(route=>route.latency>=0&&route.onlinePlayers!==null).sort((a,b)=>a.latency-b.latency)[0]?.onlinePlayers??null);
+  }catch(error){if(request===generation.current){setLatencies([-1,-1]);setOnlinePlayers(null);errorHandler.current?.((error as Error).message);}}
   finally{if(request===generation.current){inFlight.current=null;setChecking(false);}}
  },[instance]);
  useEffect(()=>{
   setLatencies([null,null]);
+  setOnlinePlayers(null);
   if(!isNative)return;
   void probe();
   return()=>{generation.current++;inFlight.current=null;};
  },[instance,probe]);
- return {latencies,checking,probe};
+ return {latencies,onlinePlayers,checking,probe};
 }
 
 export function LatencySignal({latency,checking=false}:{latency:number|null;checking?:boolean}){
@@ -41,7 +52,8 @@ export function LatencySignal({latency,checking=false}:{latency:number|null;chec
  </span>;
 }
 
-export function ServerRouteLatencies({instance}:{instance:string}){
- const {latencies,checking}=useRouteLatencies(instance);
- return <div className="card-routes" aria-label="线路延迟">{routeNames.map((name,index)=><div className="card-route" key={name}><span>{name}</span><LatencySignal latency={latencies[index]} checking={checking}/></div>)}</div>;
+export function ServerRouteLatencies({instance,children}:{instance:string;children:ReactNode}){
+ const {latencies,onlinePlayers,checking}=useRouteLatencies(instance);
+ return <><div className="card-routes" aria-label="线路延迟">{routeNames.map((name,index)=><div className="card-route" key={name}><span>{name}</span><LatencySignal latency={latencies[index]} checking={checking}/></div>)}</div>
+  <div className="card-bottom">{children}<span className="card-online" aria-label="在线玩家数量">{onlinePlayers!==null?`在线 ${onlinePlayers} 人`:checking?'人数查询中':'人数暂不可用'}</span><ArrowRight size={19}/></div></>;
 }

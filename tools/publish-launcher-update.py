@@ -1,5 +1,5 @@
 """Publish a legacy ZIP and immutable per-file update objects; activate only with --activate."""
-import argparse,base64,hashlib,json,pathlib,re,subprocess,sys,time,urllib.error,urllib.parse,urllib.request,uuid
+import argparse,base64,hashlib,json,pathlib,re,runpy,subprocess,sys,time,urllib.error,urllib.parse,urllib.request,uuid,zipfile
 
 ROOT=pathlib.Path(__file__).resolve().parents[1]
 parser=argparse.ArgumentParser(description=__doc__)
@@ -7,9 +7,11 @@ parser.add_argument('bundle',type=pathlib.Path)
 parser.add_argument('--dotnet',default='dotnet')
 parser.add_argument('--publisher',type=pathlib.Path,default=ROOT/'src/Publisher/bin/Release/net10.0/Publisher.dll')
 parser.add_argument('--activate',action='store_true')
+parser.add_argument('--activate-only',action='store_true',help='Activate an already uploaded and publicly verified bundle without reuploading it')
 parser.add_argument('--beta',action='store_true',help='Use approved beta acceptance; clean Windows stays unverified')
 parser.add_argument('--revision',default='',help='Immutable subdirectory for a user-requested same-version rebuild')
 args=parser.parse_args()
+if args.activate_only:args.activate=True
 if args.revision and not re.fullmatch(r'[a-z0-9][a-z0-9-]{0,39}',args.revision):parser.error('Invalid revision')
 def public_open(request,timeout=25):
     # Match the player's direct route; transient handshakes retry the same URL.
@@ -30,7 +32,15 @@ release=json.loads(base64.b64decode(envelope['payload']))
 archive=bundle/'MojinDashuai-windows-x64.zip'
 with archive.open('rb') as f:digest=hashlib.file_digest(f,'sha256').hexdigest()
 if digest!=release['archive']['sha256'].lower() or archive.stat().st_size!=release['archive']['size']:raise ValueError('Archive does not match signed launcher release')
+if tuple(map(int,release['version'].split('-')[0].split('.'))) >= (1,0,1):
+    inspect_host=runpy.run_path(str(ROOT/'tools/check-apphost-cet.py'))['inspect_bytes']
+    with zipfile.ZipFile(archive) as package:host=inspect_host(package.read('MojinDashuai.Launcher.exe'))
+    if host['cetCompatible']:raise ValueError('Launcher update must include the old-Windows CET compatibility fix')
 if release['archive']['path']!='objects/sha256/'+digest:raise ValueError('Launcher object path must use its SHA256')
+if args.activate_only:
+    previous=json.loads((bundle/'publication.json').read_text(encoding='utf-8'))
+    if not previous.get('publicDownloadVerified') or any(previous.get(key)!=value for key,value in {'sha256':digest,'bytes':archive.stat().st_size,'version':release['version'],'sequence':release['sequence'],'revision':args.revision}.items()):
+        raise ValueError('Activation-only requires the matching successful upload receipt')
 if args.beta and '-beta.' not in release['version']:
     authorization=json.loads((ROOT/'packs/beta-authorization.json').read_text(encoding='utf-8'))
     if release['version'] not in authorization.get('approvedVersionLabels',[]):
@@ -51,11 +61,12 @@ def ssh(*parameters):
     result=subprocess.run([sys.executable,str(helper),'--user','Agent2',*parameters],capture_output=True,timeout=600)
     if result.returncode:raise RuntimeError('Launcher publication failed; no credentials were printed')
     return result.stdout.decode('utf-8',errors='replace').strip()
-for path,suffix in [(archive,'.zip'),(signed,'.json')]:ssh('--send',str(path),remote+suffix)
+uploads=[(signed,'.json')] if args.activate_only else [(archive,'.zip'),(signed,'.json')]
+for path,suffix in uploads:ssh('--send',str(path),remote+suffix)
 script=stage/(run+'.py')
 script.write_text('''import base64,hashlib,json,pathlib,shutil,datetime,os,zipfile
 root=pathlib.Path('/vol1/mc-client-hub/public').resolve()
-source=pathlib.Path(BASE+'.zip')
+source=root/'objects/sha256'/HASH if ACTIVATE_ONLY else pathlib.Path(BASE+'.zip')
 envelope=json.loads(pathlib.Path(BASE+'.json').read_text())
 release=json.loads(base64.b64decode(envelope['payload']))
 with source.open('rb') as f:sha=hashlib.file_digest(f,'sha256').hexdigest()
@@ -114,14 +125,14 @@ if ACTIVATE:
   backups=pathlib.Path('/vol1/mc-client-hub/backups/launcher');backups.mkdir(parents=True,exist_ok=True)
   shutil.copyfile(metadata,backups/(datetime.datetime.now(datetime.timezone.utc).strftime('%Y%m%dT%H%M%SZ')+'.signed.json'))
  staged=root/('launcher-'+RUN+'.stage');staged.write_text(json.dumps(envelope));staged.chmod(0o644);staged.replace(metadata)
-source.unlink()
+if not ACTIVATE_ONLY:source.unlink()
 print(json.dumps({'uploaded':True,'activated':ACTIVATE,'sequence':release['sequence'],'fileObjects':object_count}))
-'''.replace('BASE',repr(remote)).replace('HASH',repr(digest)).replace('SIZE',str(archive.stat().st_size)).replace('RUN',repr(run)).replace('ACTIVATE',repr(args.activate)).replace('REVISION',repr(args.revision)),encoding='utf-8')
+'''.replace('BASE',repr(remote)).replace('HASH',repr(digest)).replace('SIZE',str(archive.stat().st_size)).replace('RUN',repr(run)).replace('ACTIVATE_ONLY',repr(args.activate_only)).replace('ACTIVATE',repr(args.activate)).replace('REVISION',repr(args.revision)),encoding='utf-8')
 ssh('--send',str(script),remote+'.py')
 print(ssh('--sudo','--timeout','120','python3 '+remote+'.py'))
 with public_open(urllib.request.Request(expected,method='HEAD')) as response:
     if response.status!=200 or int(response.headers['Content-Length'])!=archive.stat().st_size:raise ValueError('Public launcher ZIP unavailable')
-if release.get('differential',False):
+if release.get('differential',False) and not args.activate_only:
     # All contents were checked against the signature on the origin. Check one
     # public object for each distinct hash as well before declaring publication.
     from concurrent.futures import ThreadPoolExecutor

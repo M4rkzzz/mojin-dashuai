@@ -90,6 +90,7 @@ public final class MojinLoadingAgent {
         Object result = bars.invoke(null);
         Iterator<?> iterator = modern ? ((List<?>) result).iterator() : (Iterator<?>) result;
         Object active = null;
+        String task = "", detail = "";
         // Read the loader's overall startup bar, never a nested mod/texture counter.
         // Forge/Cleanroom: Loader's seven-step Loading bar. Modern Forge: the Minecraft
         // reload aggregate (all registered reload tasks), published by ForgeLoadingOverlay.
@@ -99,26 +100,33 @@ public final class MojinLoadingAgent {
             // Mod gathering/loading runs inside Minecraft's constructor, after class initialization.
             // Do not touch Minecraft's singleton before observing that real lifecycle signal.
             if (modern && title.startsWith("Mod ")) minecraftReady = true;
+            String currentTask = taskFor(title);
+            // Modern Forge pushes the newest nested meter to the front; legacy appends it.
+            if (!currentTask.isEmpty() && (!modern || task.isEmpty())) {
+                task = currentTask;
+                // Legacy lifecycle messages are ModContainer.getName(), whereas modern labels
+                // contain internal lifecycle identifiers. Never forward those modern labels.
+                detail = !modern && task.equals("mods") ? displayName(call(candidate, "getMessage")) : "";
+            }
             if (!title.equals(modern ? "Minecraft Progress" : "Loading")) continue;
             int total = number(candidate, modern ? "steps" : "getSteps");
             int completed = number(candidate, modern ? "current" : "getStep");
-            if (total > 0 && completed >= 0 && completed <= total) {
+            if (active == null && total > 0 && completed >= 0 && completed <= total) {
                 active = candidate;
-                break;
             }
         }
         if (modern) {
             // Custom loading screens can leave Forge's published meter permanently at zero.
             // Prefer the underlying real task aggregate, shared by both renderers.
-            String reload = minecraftReload();
+            String reload = minecraftReload(task, detail);
             if (reload != null) return reload;
         }
-        if (active == null) return unknown();
+        if (active == null) return frame(task, detail, 0, 0);
         int total = number(active, modern ? "steps" : "getSteps"), completed = number(active, modern ? "current" : "getStep");
-        if (total <= 0 || completed < 0 || completed > total) return unknown();
-        return "\"phase\":\"loading\",\"detail\":\"\",\"completed\":" + completed + ",\"total\":" + total;
+        if (total <= 0 || completed < 0 || completed > total) return frame(task, detail, 0, 0);
+        return frame(task, detail, completed, total);
     }
-    private static String minecraftReload() throws Exception {
+    private static String minecraftReload(String task, String detail) throws Exception {
         if (!minecraftReady || minecraft == null) return null;
         // FancyMenu/Drippy replaces ForgeLoadingOverlay and does not publish Minecraft Progress.
         // Read the very same ReloadInstance aggregate from the active vanilla/custom overlay.
@@ -137,14 +145,40 @@ public final class MojinLoadingAgent {
                 if (reload == null) continue;
                 double progress = ((Number) field.getType().getMethod("m_7750_").invoke(reload)).doubleValue();
                 if (Double.isNaN(progress) || progress < 0 || progress > 1) return null;
-                return "\"phase\":\"loading\",\"detail\":\"\",\"completed\":" + (int)(progress * 10000) + ",\"total\":10000";
+                return frame(task.isEmpty() ? "resources" : task, detail, (int)(progress * 10000), 10000);
             }
         }
         return null;
     }
     private static Object call(Object target, String method) throws Exception { return target.getClass().getMethod(method).invoke(target); }
     private static int number(Object target, String method) throws Exception { return ((Number) call(target, method)).intValue(); }
-    private static String unknown() { return "\"phase\":\"正在加载\",\"detail\":\"\",\"completed\":0,\"total\":0"; }
+    private static String unknown() { return frame("", "", 0, 0); }
+    private static String frame(String task, String detail, int completed, int total) {
+        return "\"phase\":\"loading\",\"task\":" + quote(task) + ",\"detail\":" + quote(detail)
+            + ",\"completed\":" + completed + ",\"total\":" + total;
+    }
+    private static String taskFor(String title) {
+        String key = title.toLowerCase(Locale.ROOT).replaceAll("[ _-]", "");
+        if (key.equals("modgather") || key.equals("modgathering")) return "mods-discovery";
+        if (key.equals("modcomplete") || key.equals("loadcomplete")) return "mods-complete";
+        if (key.equals("construction") || key.equals("constructingmods") || key.equals("preinitialization")
+                || key.equals("initialization") || key.equals("postinitialization") || key.equals("modloading")) return "mods";
+        if (key.equals("texturecreation") || key.equals("texturestitching") || key.equals("textureloading")) return "textures";
+        if (key.equals("modelloader") || key.equals("modelbaking") || key.equals("modelregistry") || key.equals("models")) return "models";
+        if (key.equals("soundloading") || key.equals("soundhandler")) return "sounds";
+        if (key.equals("resourceloading") || key.equals("resourcereload") || key.equals("reloadingresources")) return "resources";
+        if (key.equals("recipeloading") || key.equals("recipes")) return "recipes";
+        return "";
+    }
+    private static String displayName(Object value) {
+        if (!(value instanceof String)) return "";
+        String name = ((String) value).trim();
+        if (name.isEmpty() || name.length() > 80 || !name.matches("[\\p{L}\\p{N} '&+_()\\-]+")) return "";
+        String lower = name.toLowerCase(Locale.ROOT);
+        for (String internal : new String[]{"forge", "cleanroom", "fml", "mixin", "lwjgl", "opengl", "javaagent", "modlauncher"})
+            if (lower.contains(internal)) return "";
+        return name;
+    }
     private static String quote(String input) {
         StringBuilder out = new StringBuilder("\"");
         for (int i = 0; i < Math.min(input.length(), 220); i++) {

@@ -151,8 +151,9 @@ public sealed class Accounts
     private static async Task Check(HttpResponseMessage response)
     {
         if(response.IsSuccessStatusCode)return;
-        if(response.StatusCode==HttpStatusCode.TooManyRequests)throw new InvalidDataException("操作过于频繁，请稍后重试。");
-        try{var json=await response.Content.ReadFromJsonAsync<JsonElement>();if(json.TryGetProperty("error",out var error)&&error.ValueKind==JsonValueKind.String)throw new InvalidDataException(error.GetString());}
+        InvalidDataException Rejected(string? message){var error=new InvalidDataException(message);error.Data[JoinAuthenticationErrors.HttpStatusKey]=(int)response.StatusCode;return error;}
+        if(response.StatusCode==HttpStatusCode.TooManyRequests)throw Rejected("操作过于频繁，请稍后重试。");
+        try{var json=await response.Content.ReadFromJsonAsync<JsonElement>();if(json.TryGetProperty("error",out var error)&&error.ValueKind==JsonValueKind.String)throw Rejected(error.GetString());}
         catch(JsonException){}
         throw NetworkPolicy.Failure(new HttpRequestException("账号服务暂时不可用，请稍后重试。",null,response.StatusCode),"账号服务",response.RequestMessage?.RequestUri);
     }

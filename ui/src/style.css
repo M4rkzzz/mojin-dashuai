@@ -171,3 +171,5 @@ dialog{border-color:#454545;color:#f2f2f2}dialog::backdrop{background:#000b}.ski
 .instance-picker,.tools-servers{flex-wrap:wrap}
 @media(max-height:780px) and (min-width:851px){.world-card{height:clamp(250px,calc((100dvh - 230px)/2),255px)}.world-grid{gap:16px}}
 @media(max-width:850px){.world-grid{grid-template-columns:1fr}.world-card{height:250px}}
+
+.card-bottom .card-online{margin-left:auto;margin-right:12px;color:#d0dcc6;white-space:nowrap;font-variant-numeric:tabular-nums}

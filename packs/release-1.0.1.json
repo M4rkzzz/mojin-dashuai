@@ -1,0 +1,73 @@
+{
+  "version": "1.0.1",
+  "status": "released",
+  "launcherSequence": 20,
+  "previousLauncherSequence": 19,
+  "catalogChanged": false,
+  "gameContentChanged": false,
+  "serverRestartRequired": false,
+  "checks": {
+    "coreTestsPassed": 300,
+    "joinPipeScenariosPassed": 19,
+    "microsoftErrorClassificationsPassed": 3,
+    "loadingInterfaces": [
+      "forge-1.7.10",
+      "cleanroom-1.12.2",
+      "forge-1.20.1"
+    ],
+    "loadingWindowAndHandoffPassed": true,
+    "onlinePlayerQueriesPassed": [
+      "m3e",
+      "dc2",
+      "mb",
+      "vw"
+    ],
+    "uiLayoutPassed": true,
+    "installerAcceptancePassed": true,
+    "microsoftSilentResumePassed": true,
+    "cetCompatibilityOptOutVerified": true,
+    "affectedPlayerDiagnosticConfirmed": true,
+    "cleanWindows": "deferred-unverified",
+    "fullGameRevalidation": "not-repeated"
+  },
+  "installer": {
+    "version": "1.0.1",
+    "fileName": "MojinDashuai-Setup-1.0.1-x64.exe",
+    "bytes": 57059295,
+    "sha256": "27cb326cfbbcaddcef6a19aa307dd84e8e99e269761d4b7b66c6ddfa8feeb581",
+    "format": "inno-setup",
+    "perUser": true,
+    "acceptanceFixture": false,
+    "downloadUrl": "https://launcher-direct.boshan.uk:21708/launcher/1.0.1/MojinDashuai-Setup-1.0.1-x64.exe",
+    "publicDownloadVerified": true,
+    "publicArchiveRoundTripVerified": true,
+    "revision": ""
+  },
+  "differential": {
+    "version": "1.0.1",
+    "files": 500,
+    "size": 79791484,
+    "downloadedAndVerified": true,
+    "expectedDownloadBytes": 2475573,
+    "actualDownloadBytes": 2475573,
+    "singleOrigin": true,
+    "gameStarted": false,
+    "activated": false
+  },
+  "launcher": {
+    "version": "1.0.1",
+    "sequence": 20,
+    "sha256": "fb2763e742c1111dfbbdc9401c3dee2060568e9f43ecd059335fd7dbc9e5ac3c",
+    "bytes": 79791484,
+    "downloadUrl": "https://launcher-direct.boshan.uk:21708/launcher/1.0.1/MojinDashuai-windows-x64.zip",
+    "publicDownloadVerified": true,
+    "differential": true,
+    "fileObjects": 498,
+    "activated": true,
+    "revision": ""
+  },
+  "joinAgentSha256": "3c51a0b362296b008b0a418ee89657f990da04a967981c27565a524b35fb537a",
+  "loadingAgentSha256": "c0c00aff6def02a8d1342883c4be739ac4e2ce6c8921aaf6d69021778cc62d58",
+  "publishedAt": "2026-09-06T09:35:28.687571+00:00",
+  "githubRelease": "https://github.com/M4rkzzz/mojin-dashuai/releases/tag/launcher-v1.0.1"
+}

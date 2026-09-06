@@ -52,49 +52,99 @@ public partial class MainWindow : Window
     private object launcherUpdate=App.StartupUpdateState;
     public MainWindow()
     {
-        InitializeComponent();
-        _=new WindowViewport(this);
-        Loaded+=async(_,_)=>await Initialize();
+        using(StartupDiagnostics.Begin("window.xaml.initialize"))InitializeComponent();
+        using(StartupDiagnostics.Begin("window.viewport.initialize"))_=new WindowViewport(this);
+        Loaded+=async(_,_)=>{StartupDiagnostics.Record("window.loaded");await Initialize();};
+        ContentRendered+=(_,_)=>StartupDiagnostics.Record("window.content-rendered");
         StateChanged+=(_,_)=>{if(initialized)Event("window-state",new {Maximized=WindowState==WindowState.Maximized});};
         Closing+=(_,e)=>{if(games.Count>0){e.Cancel=true;Hide();}};
-        Closed+=(_,_)=>{initialized=false;microsoftLogin?.Cancel();};
+        Closed+=(_,_)=>{StartupDiagnostics.Record("window.closed");initialized=false;microsoftLogin?.Cancel();};
     }
     private async Task Initialize()
     {
+        using var initialization=StartupDiagnostics.Begin("window.initialize");
         try
         {
-            Directory.CreateDirectory(appData);
-            var config=Json.Read<AppConfig>(Path.Combine(AppContext.BaseDirectory,"launcher.json"));
+            AppConfig config;
+            using(StartupDiagnostics.Begin("window.configuration"))
+            {
+                Directory.CreateDirectory(appData);
+                config=Json.Read<AppConfig>(Path.Combine(AppContext.BaseDirectory,"launcher.json"));
+            }
             launcherUpdates=new(UpdateStartup.DataRoot,config.PublicKeys);updateApi=config.Api;
-            var settingsPath=Path.Combine(appData,"settings.json");settings=ContentDirectorySetup.LoadSettings(settingsPath,UpdateStartup.ProgramDirectory);settings.Validate();NetworkPolicy.Configure(settings);
+            using(StartupDiagnostics.Begin("window.settings"))
+            {
+                var settingsPath=Path.Combine(appData,"settings.json");settings=ContentDirectorySetup.LoadSettings(settingsPath,UpdateStartup.ProgramDirectory);settings.Validate();NetworkPolicy.Configure(settings);
+            }
             var microsoftId=config.MicrosoftClientId??"";
-            accounts=new(new Vault(appData),config.Api,microsoftId.Trim(),()=>new MicrosoftWebUi(this,Path.Combine(appData,"MicrosoftAuth")));
-            catalog=new(config.Api,config.PublicKeys,Path.Combine(appData,"catalog-checkpoint.json"));
-            RestoreDownloads();
-            try{CoreWebView2Environment.GetAvailableBrowserVersionString();}
-            catch(WebView2RuntimeNotFoundException){await InstallWebView();}
+            using(StartupDiagnostics.Begin("window.services"))
+            {
+                accounts=new(new Vault(appData),config.Api,microsoftId.Trim(),()=>new MicrosoftWebUi(this,Path.Combine(appData,"MicrosoftAuth")));
+                catalog=new(config.Api,config.PublicKeys,Path.Combine(appData,"catalog-checkpoint.json"));
+            }
+            using(StartupDiagnostics.Begin("window.downloads.restore"))RestoreDownloads();
+            try
+            {
+                using var detect=StartupDiagnostics.Begin("webview.runtime.detect");
+                var version=CoreWebView2Environment.GetAvailableBrowserVersionString();
+                StartupDiagnostics.Record("webview.runtime.available",new {version});
+            }
+            catch(WebView2RuntimeNotFoundException ex)
+            {
+                StartupDiagnostics.Error("webview.runtime.missing",ex);
+                if(StartupDiagnostics.Enabled)
+                {
+                    Loading.Text="未检测到 Microsoft Edge WebView2 运行时。诊断模式不会自动安装，请将诊断日志发给管理员。";
+                    return;
+                }
+                await InstallWebView();
+            }
             var options=new CoreWebView2EnvironmentOptions();
             var webProfile="WebView";
 #if DEBUG
-            options.AdditionalBrowserArguments="--remote-debugging-port=18474";
-            webProfile="WebView-Debug";
+            if(!StartupDiagnostics.Enabled)
+            {
+                options.AdditionalBrowserArguments="--remote-debugging-port=18474";
+                webProfile="WebView-Debug";
+            }
 #endif
-            var environment=await CoreWebView2Environment.CreateAsync(userDataFolder:Path.Combine(appData,webProfile),options:options);
-            await Web.EnsureCoreWebView2Async(environment);
+            var profileDirectory=Path.Combine(appData,webProfile);
+            if(StartupDiagnostics.Compatibility)
+            {
+                profileDirectory=Path.Combine(StartupDiagnostics.DirectoryPath??throw new IOException("诊断目录不可用。"),"WebView-StartupDiagnostics");
+                options.AdditionalBrowserArguments="--disable-gpu";
+                StartupDiagnostics.Record("webview.compatibility",new {softwareRendering=true,isolatedProfile=true});
+            }
+            CoreWebView2Environment environment;
+            using(StartupDiagnostics.Begin("webview.environment.create"))environment=await CoreWebView2Environment.CreateAsync(userDataFolder:profileDirectory,options:options);
+            StartupDiagnostics.Record("webview.environment.created",new {version=environment.BrowserVersionString});
+            using(StartupDiagnostics.Begin("webview.core.ensure"))await Web.EnsureCoreWebView2Async(environment);
             var core=Web.CoreWebView2;
+            StartupDiagnostics.Record("webview.core.ready");
             core.Settings.AreDevToolsEnabled=false;core.Settings.AreDefaultContextMenusEnabled=false;core.Settings.AreHostObjectsAllowed=false;
             core.Settings.IsPasswordAutosaveEnabled=false;core.Settings.IsGeneralAutofillEnabled=false;
             core.Settings.IsNonClientRegionSupportEnabled=true;
             core.SetVirtualHostNameToFolderMapping("app.boshan.local",Path.Combine(AppContext.BaseDirectory,"web"),CoreWebView2HostResourceAccessKind.DenyCors);
-            core.NavigationStarting+=(_,e)=>{if(!Uri.TryCreate(e.Uri,UriKind.Absolute,out var uri)||uri.Scheme!="https"||uri.Host!="app.boshan.local")e.Cancel=true;};
+            core.NavigationStarting+=(_,e)=>{if(!Uri.TryCreate(e.Uri,UriKind.Absolute,out var uri)||uri.Scheme!="https"||uri.Host!="app.boshan.local")e.Cancel=true;StartupDiagnostics.Record("webview.navigation.starting",new {cancelled=e.Cancel});};
             core.NewWindowRequested+=(_,e)=>e.Handled=true;
             core.PermissionRequested+=(_,e)=>e.State=CoreWebView2PermissionState.Deny;
             core.DownloadStarting+=(_,e)=>e.Cancel=true;
             core.WebMessageReceived+=HandleMessage;
-            core.NavigationCompleted+=(_,_)=>{Loading.Visibility=Visibility.Collapsed;Event("window-state",new {Maximized=WindowState==WindowState.Maximized});};
-            initialized=true;core.Navigate("https://app.boshan.local/index.html");
+            core.DOMContentLoaded+=(_,_)=>StartupDiagnostics.Record("webview.dom-content-loaded");
+            core.ProcessFailed+=(_,e)=>StartupDiagnostics.Record("webview.process-failed",new {kind=e.ProcessFailedKind.ToString(),reason=e.Reason.ToString(),exitCode=e.ExitCode});
+            core.NavigationCompleted+=(_,e)=>
+            {
+                StartupDiagnostics.Record("webview.navigation.completed",new {success=e.IsSuccess,status=e.WebErrorStatus.ToString(),httpStatus=e.HttpStatusCode});
+                if(StartupDiagnostics.Enabled&&!e.IsSuccess){Loading.Visibility=Visibility.Visible;Loading.Text="启动器页面未能加载，请将诊断日志发给管理员。";}
+                else Loading.Visibility=Visibility.Collapsed;
+                Event("window-state",new {Maximized=WindowState==WindowState.Maximized});
+            };
+            initialized=true;
+            StartupDiagnostics.Record("webview.navigate.begin");
+            core.Navigate("https://app.boshan.local/index.html");
+            StartupDiagnostics.Record("webview.navigate.returned");
         }
-        catch(Exception ex){Loading.Text="启动器准备失败："+Friendly(ex);File.WriteAllText(Path.Combine(appData,"startup-diagnostic.txt"),ex.GetType().FullName+"\n"+ex.HResult+"\n"+ex.StackTrace);}
+        catch(Exception ex){StartupDiagnostics.Error("window.initialize.failed",ex);Loading.Text="启动器准备失败："+Friendly(ex);if(!StartupDiagnostics.Enabled)File.WriteAllText(Path.Combine(appData,"startup-diagnostic.txt"),ex.GetType().FullName+"\n"+ex.HResult+"\n"+ex.StackTrace);}
     }
     private async Task InstallWebView()
     {
@@ -117,12 +167,15 @@ public partial class MainWindow : Window
             if(e.WebMessageAsJson.Length>32*1024)throw new InvalidDataException("请求过大。");
             request=JsonSerializer.Deserialize<BridgeRequest>(e.WebMessageAsJson,Json.Options);
             if(request is null||!Guid.TryParse(request.Id,out _))return;
+            using var bootstrap=request.Command=="bootstrap"?StartupDiagnostics.Begin("ui.bootstrap"):null;
             var result=await Dispatch(request.Command,request.Args);
             if(!initialized)return;
             Web.CoreWebView2.PostWebMessageAsJson(JsonSerializer.Serialize(new {request.Id,Ok=true,Result=result},Json.Options));
+            if(request.Command=="bootstrap")StartupDiagnostics.Record("ui.bootstrap.completed");
         }
         catch(Exception ex)
         {
+            StartupDiagnostics.Error(request?.Command=="bootstrap"?"ui.bootstrap.failed":"ui.bridge.failed",ex);
             var diagnostic=NetworkPolicy.Find(ex)??(NetworkPolicy.IsNetwork(ex)?NetworkPolicy.Failure(ex,request?.Command??"连接服务").Diagnostic:null);
             if(diagnostic is not null)RememberDiagnostic(diagnostic);
             if(initialized&&request is not null)Web.CoreWebView2.PostWebMessageAsJson(JsonSerializer.Serialize(new {request.Id,Ok=false,Error=Friendly(ex),Diagnostic=diagnostic},Json.Options));
@@ -139,10 +192,16 @@ public partial class MainWindow : Window
         switch(command)
         {
             case "bootstrap":
+            {
                 UpdateStartup.MarkReady();
                 if(await App.CompleteLegacyStartupUpdate()){Application.Current.Shutdown();return null;}
                 launcherUpdate=App.StartupUpdateState;
-                return new {LauncherVersion=App.ReleaseVersion.Split('+')[0],Profile=await accounts.Restore(),Settings=settings,LauncherUpdate=launcherUpdate,WindowMaximized=WindowState==WindowState.Maximized,Installs=await InstalledStates(),Progress=transferProgress,States=InstanceStates(),AvailableUpdates=availableUpdates};
+                object? profile;
+                using(StartupDiagnostics.Begin("bootstrap.account.restore",network:true))profile=await accounts.Restore();
+                object installs;
+                using(StartupDiagnostics.Begin("bootstrap.installs.read"))installs=await InstalledStates();
+                return new {LauncherVersion=App.ReleaseVersion.Split('+')[0],Profile=profile,Settings=settings,LauncherUpdate=launcherUpdate,WindowMaximized=WindowState==WindowState.Maximized,Installs=installs,Progress=transferProgress,States=InstanceStates(),AvailableUpdates=availableUpdates};
+            }
             case "instances.status":return new {Installs=await InstalledStates(),Progress=transferProgress,States=InstanceStates(),AvailableUpdates=availableUpdates};
             case "instances.updates.check":
             {
@@ -201,7 +260,7 @@ public partial class MainWindow : Window
                     return null;
                 }
                 finally{settingsGate.Release();}
-            case "routes.probe":return (await Routes.ProbeAll(Id())).Select(x=>x.Latency).ToArray();
+            case "routes.probe":return (await Routes.ProbeAll(Id())).Select(x=>new{latency=x.Latency,onlinePlayers=x.OnlinePlayers,maxPlayers=x.MaxPlayers}).ToArray();
             case "instance.install":
             {
                 var id=Id();var downloadOnly=args.TryGetProperty("downloadOnly",out var only)&&only.GetBoolean();
@@ -507,6 +566,7 @@ public partial class MainWindow : Window
             }
             var ready=await launcherUpdates.Ready(AppContext.BaseDirectory,App.ReleaseVersion);
             State(ready is null?"current":"ready",ready?.Release.Version);
+            if(ready is not null&&StartupDiagnostics.Enabled){StartupDiagnostics.Record("update.handoff.suppressed");return launcherUpdate;}
             if(ready is not null&&games.Count==0&&transfers.Count==0&&instanceOperations.Count==0&&savedDownloads.Count==0&&microsoftLogin is null)
             {
                 restartingLauncher=true;

@@ -205,16 +205,49 @@ public final class JoinRuntime {
             Throwable cause = e;
             while ((cause instanceof ExecutionException || cause instanceof InvocationTargetException) && cause.getCause() != null) cause = cause.getCause();
             if (cause instanceof JoinFailure) stage = ((JoinFailure)cause).stage;
-            while (cause.getCause() != null) cause = cause.getCause();
+            while (!(cause instanceof JoinRejection) && cause.getCause() != null) cause = cause.getCause();
+            if (cause instanceof JoinRejection) {
+                String code = ((JoinRejection)cause).code;
+                log("client authentication rejected code=" + code);
+                throw new PlayerJoinException(playerMessage(code));
+            }
             log("client failure stage=" + stage + " category=" + cause.getClass().getSimpleName() + " detail=" + systemFailure(cause));
-            throw new IllegalStateException("入服认证失败，请保持魔金大帅统一客户端运行并重新登录。", e instanceof InvocationTargetException ? null : safeCause(e));
+            String code = stage.equals("pipe_response") ? "invalid_response"
+                    : stage.startsWith("pipe_") || stage.equals("launcher_ipc") ? "ipc_unavailable" : "client_component_error";
+            throw new PlayerJoinException(playerMessage(code));
         }
     }
     private static final class JoinFailure extends IOException {
         final String stage;
         JoinFailure(String stage, Exception cause) { super("Join IPC failed", cause); this.stage = stage; }
     }
-    private static Throwable safeCause(Exception e) { return new IOException(e instanceof TimeoutException ? "Join IPC timeout" : "Join IPC unavailable"); }
+    private static final class JoinRejection extends IOException {
+        final String code;
+        JoinRejection(String code) { super("Launcher authentication rejected"); this.code = code; }
+    }
+    private static final class PlayerJoinException extends IllegalStateException {
+        PlayerJoinException(String message) { super(message); }
+        // Legacy Minecraft uses exception.toString() on the disconnect screen.
+        // Keep both that path and getMessage() free of implementation class names.
+        public String toString() { return getMessage(); }
+    }
+    private static String safeErrorCode(String value) {
+        return Arrays.asList("role_conflict", "login_expired", "account_changed", "ownership_required", "service_unavailable", "service_timeout", "rate_limited", "invalid_response").contains(value)
+                ? value : "authentication_failed";
+    }
+    private static String playerMessage(String code) {
+        if (code.equals("role_conflict")) return "此角色的归属或名称存在冲突，请联系管理员核实关联后再连接。";
+        if (code.equals("login_expired")) return "登录已失效，请回统一客户端重新登录，再重新启动游戏。";
+        if (code.equals("account_changed")) return "启动账号已切换，请从统一客户端重新启动游戏。";
+        if (code.equals("ownership_required")) return "登录或 Minecraft Java 版所有权验证未通过，请使用拥有 Java 版的微软账号重新登录。";
+        if (code.equals("service_unavailable")) return "入服认证服务暂时无法连接，请检查网络后重试；仍失败请联系管理员。";
+        if (code.equals("service_timeout")) return "入服认证请求超时，请稍后重新连接；仍失败请检查网络。";
+        if (code.equals("rate_limited")) return "入服请求过于频繁，请稍后重新连接。";
+        if (code.equals("invalid_response")) return "入服认证返回异常，请更新统一客户端后重试；仍失败请联系管理员。";
+        if (code.equals("ipc_unavailable")) return "无法与统一客户端通信，请保持统一客户端运行，并从统一客户端重新启动游戏。";
+        if (code.equals("client_component_error")) return "入服认证组件未能完成准备，请更新统一客户端后重试。";
+        return "入服认证未通过，请回统一客户端检查登录状态；仍失败请联系管理员。";
+    }
     private static String systemFailure(Throwable error) {
         String text = String.valueOf(error.getMessage()).toLowerCase(Locale.ROOT);
         if (text.contains("cannot find") || text.contains("找不到")) return "not_found";
@@ -238,9 +271,15 @@ public final class JoinRuntime {
                     f.write(("{\"instance\":" + quote(instance) + "}\n").getBytes(StandardCharsets.UTF_8));
                     stage = "pipe_read";
                     ByteArrayOutputStream response = new ByteArrayOutputStream();
-                    for (int n = 0; n < 4096; n++) { int b = f.read(); if (b < 0) throw new EOFException(); if (b == '\n') break; response.write(b); }
+                    boolean complete = false;
+                    for (int n = 0; n < 4096; n++) { int b = f.read(); if (b < 0) throw new EOFException(); if (b == '\n') { complete = true; break; } response.write(b); }
                     String json = new String(response.toByteArray(), StandardCharsets.UTF_8);
                     stage = "pipe_response";
+                    if (!complete) throw new IOException("Invalid join response");
+                    String errorCode = jsonString(json, "errorCode");
+                    // Treat a business rejection as such even when its code is unknown
+                    // (or sent by an older launcher). Never display the raw error text.
+                    if (errorCode != null || jsonString(json, "error") != null) throw new JoinRejection(safeErrorCode(errorCode));
                     String ticket = jsonString(json, "ticket");
                     if (ticket == null || !ticket.matches("[A-Za-z0-9_-]{43}")) throw new IOException("No join ticket");
                     return ticket;

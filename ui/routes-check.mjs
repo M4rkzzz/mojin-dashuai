@@ -6,7 +6,7 @@ const errors=[];page.on('pageerror',error=>errors.push(error.message));
 await page.clock.install();
 await page.addInitScript(()=>{
  const listeners=[];
- window.routeCalls=[];window.routeReplies={m3e:[42,138],dc2:[256,-1],mb:[99,200],vw:[31,62]};window.holdRoutes=true;window.pendingRoutes=[];
+ window.routeCalls=[];window.routeReplies={m3e:[{latency:42,onlinePlayers:7},{latency:138,onlinePlayers:7}],dc2:[{latency:256,onlinePlayers:0},{latency:-1,onlinePlayers:99}],mb:[{latency:99,onlinePlayers:null},{latency:200,onlinePlayers:12}],vw:[{latency:31,onlinePlayers:null},{latency:62,onlinePlayers:null}]};window.holdRoutes=true;window.pendingRoutes=[];
  const settings={root:'C:\\Games\\魔金大帅',contentDirectoryConfigured:true,memory:{m3e:8192,dc2:8192,mb:8736,vw:4096},java:{m3e:'',dc2:'',mb:'',vw:''},jvm:{m3e:'',dc2:'',mb:'',vw:''},width:1280,height:720,fullscreen:false,windowBehavior:'keep',concurrency:4,limitMiB:0,proxy:'',reducedMotion:true,theme:'dark',selectedRoutes:{m3e:'auto',dc2:'auto',mb:'auto',vw:'auto'}};
  const emit=data=>listeners.forEach(callback=>callback({data}));
  window.chrome={webview:{addEventListener:(_,callback)=>listeners.push(callback),postMessage:request=>queueMicrotask(()=>{
@@ -27,6 +27,7 @@ try{
  const cards=page.locator('.world-card');
  await expect(cards).toHaveCount(4);
  await expect(page.locator('.card-routes .latency-pending')).toHaveCount(8);
+ await expect(page.locator('.card-online')).toHaveText(['人数查询中','人数查询中','人数查询中','人数查询中']);
  await expect.poll(()=>page.evaluate(()=>window.routeCalls.length)).toBe(4);
  await page.evaluate(()=>{window.holdRoutes=false;window.pendingRoutes.splice(0).forEach(reply=>reply());});
  for(const [name,values] of [['魔法金属',['42 ms','138 ms']],['亡者世界',['256 ms','不可达']],['肉丸工艺',['99 ms','200 ms']],['虚空行者',['31 ms','62 ms']]]){
@@ -38,6 +39,12 @@ try{
  await expect(page.locator('.card-routes .latency-fair')).toHaveCount(1);
  await expect(page.locator('.card-routes .latency-poor')).toHaveCount(2);
  await expect(page.locator('.card-routes .latency-offline')).toHaveCount(1);
+ await expect(page.locator('.card-online')).toHaveText(['在线 7 人','在线 0 人','在线 12 人','人数暂不可用']);
+ for(const viewport of [{width:1280,height:820},{width:1024,height:768}]){
+  await page.setViewportSize(viewport);
+  expect(await cards.evaluateAll(nodes=>nodes.every(card=>{const count=card.querySelector('.card-online').getBoundingClientRect(),footer=card.querySelector('.card-bottom').getBoundingClientRect();return count.left>=footer.left&&count.right<=footer.right&&count.bottom<=card.getBoundingClientRect().bottom;}))).toBe(true);
+ }
+ await page.setViewportSize({width:1280,height:820});
  expect(await cards.locator('.server-logo').evaluateAll(images=>images.every(img=>img.complete&&img.naturalWidth>0))).toBe(true);
  await page.screenshot({path:'../.local/lobby-routes.png',animations:'disabled'});
  await page.evaluate(()=>{window.routeReplies.m3e=[80,220];});

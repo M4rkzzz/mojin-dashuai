@@ -9,7 +9,8 @@
   ],
   "completeDeliveryClaimed": false,
   "approvedVersionLabels": [
-    "1.0.0"
+    "1.0.0",
+    "1.0.1"
   ],
-  "versionLabelAuthorization": "2026-09-06 user requested version 1.0.0 directly; previously approved clean-Windows deferral remains unverified, not treated as passed."
+  "versionLabelAuthorization": "2026-09-06 user requested release 1.0.0 and then implementation/deployment of 1.0.1; retained clean-Windows deferral is not treated as passed. The affected old-Windows player confirmed startup-debug.4 works."
 }

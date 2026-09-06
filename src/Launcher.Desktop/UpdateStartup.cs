@@ -29,12 +29,15 @@ internal static class UpdateStartup
     }
     internal static void MarkReady()
     {
+        StartupDiagnostics.Record("update.health-handshake.begin",new {required=Nonce is not null});
         if(Nonce is null)return;
         Json.Write(ContentSecurity.SafePath(DataRoot,"ready/"+Nonce+".json"),new UpdateReady(Environment.ProcessId,AppContext.BaseDirectory));
         Nonce=null;
+        StartupDiagnostics.Record("update.health-handshake.completed");
     }
     internal static async Task<bool> Start(LauncherUpdates updates,PreparedLauncher prepared)
     {
+        if(StartupDiagnostics.Enabled){StartupDiagnostics.Record("update.handoff.suppressed");return false;}
         var nonce=Guid.NewGuid().ToString("N");
         var readyFile=ContentSecurity.SafePath(updates.Root,"ready/"+nonce+".json");
         var info=new ProcessStartInfo(prepared.Executable){UseShellExecute=false,CreateNoWindow=true,WorkingDirectory=prepared.Directory};

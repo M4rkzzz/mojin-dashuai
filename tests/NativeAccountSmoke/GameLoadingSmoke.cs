@@ -29,10 +29,22 @@ internal static class GameLoadingSmoke
                         if(window.WindowStyle!=WindowStyle.None)throw new Exception("Unexpected title bar");
                         if(window.Icon is null)throw new Exception("Loading window icon missing");
                         if(window.ShowInTaskbar)throw new Exception("Duplicate launcher taskbar entry");
-                        window.Update(new("test","loading","",3,7));
+                        window.Update(new("test","loading","GregTech 6",3,7,"mods"));
                         if(window.DisplayedPercent!=42)throw new Exception("Overall counter not displayed");
+                        if(window.DisplayedTask!="正在加载模组：GregTech 6")throw new Exception("Current mod name not displayed");
+                        window.Update(new("test","loading","JourneyMap",0,0,"mods"));
+                        if(window.DisplayedTask!="正在加载模组：JourneyMap"||window.DisplayedPercent!=42)throw new Exception("Task update changed total progress");
+                        foreach(var raw in new[]{"net.minecraft.internal.ClassName","C:\\Users\\player\\file.jar","Minecraft Forge","Cleanroom","ModLauncher","<internal>"})
+                        {
+                            window.Update(new("test","loading",raw,0,0,"mods"));
+                            if(window.DisplayedTask!="正在加载模组")throw new Exception("Internal task detail leaked");
+                        }
+                        window.Update(new("test","loading","assets/private/file.png",0,0,"textures"));
+                        if(window.DisplayedTask!="正在加载材质")throw new Exception("Resource task not localized");
                         window.Update(new("test","unknown","internal text must never be displayed",0,0));
                         if(window.DisplayedPercent!=42)throw new Exception("Progress reset between reports");
+                        if(window.DisplayedTask!="正在加载游戏内容")throw new Exception("Unknown raw task text displayed");
+                        window.Update(new("test","loading","GregTech 6",0,0,"mods"));
                         var visual=(FrameworkElement)window.Content;
                         visual.Measure(new Size(960,540));visual.Arrange(new Rect(0,0,960,540));visual.UpdateLayout();
                         var bitmap=new RenderTargetBitmap(960,540,96,96,PixelFormats.Pbgra32);bitmap.Render(visual);
@@ -43,6 +55,7 @@ internal static class GameLoadingSmoke
                         window.Update(new("test","connecting","",0,0));
                         window.Update(new("test","unknown","",0,0));
                         if(window.DisplayedPercent!=100)throw new Exception("Completed progress was erased");
+                        if(window.DisplayedTask!="正在连接所选服务器")throw new Exception("Handoff task reset");
                         window.Close();
                     }
                     if(new GameLoadingFrame("x","stage","",24,93).Percent!=25||new GameLoadingFrame("x","stage","",1,0).Percent is not null
@@ -76,7 +89,7 @@ internal static class GameLoadingSmoke
                     await Task.Delay(1600);
                     if(!IsWindowVisible(hwnd))throw new Exception("Game window was not restored on connection");
                     await child.WaitForExitAsync();loading.Dispose();
-                    Console.WriteLine("PASS four branded previews; no topbar; overall progress; holds 99/100; XML handoff; native hide/restore");
+                    Console.WriteLine("PASS four branded previews; live localized task/mod names; private detail filtered; no topbar; overall progress; holds 99/100; XML handoff; native hide/restore");
                 }
                 catch(Exception ex){error=ex;}
                 finally{dispatcher.InvokeShutdown();}

@@ -3,16 +3,18 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Text.RegularExpressions;
 
 namespace Boshan.Desktop;
 
 public sealed class GameLoadingWindow : Window
 {
-    private readonly TextBlock phase,percentage;
+    private readonly TextBlock phase,detail,percentage;
     private readonly ProgressBar progress;
     private readonly bool reducedMotion;
     private int overallPercent;
     public int DisplayedPercent=>overallPercent;
+    public string DisplayedTask=>detail.Text;
     public event Action? RevealRequested;
     public GameLoadingWindow(string instance,bool reducedMotion=false)
     {
@@ -43,7 +45,9 @@ public sealed class GameLoadingWindow : Window
         footer.ColumnDefinitions.Add(new ColumnDefinition());footer.ColumnDefinitions.Add(new ColumnDefinition{Width=GridLength.Auto});
         var status=new StackPanel{Margin=new Thickness(0,0,24,0),VerticalAlignment=VerticalAlignment.Bottom};
         phase=Text("正在加载",20,Brushes.White);phase.FontWeight=FontWeights.SemiBold;
-        status.Children.Add(phase);footer.Children.Add(status);
+        status.Children.Add(phase);
+        detail=Text("准备游戏内容",14,new SolidColorBrush(Color.FromRgb(218,224,226)));detail.Margin=new Thickness(0,7,0,0);
+        status.Children.Add(detail);footer.Children.Add(status);
         var right=new StackPanel{HorizontalAlignment=HorizontalAlignment.Right};Grid.SetColumn(right,1);
         var show=Link("显示游戏 ↗",13);show.HorizontalAlignment=HorizontalAlignment.Right;show.Margin=new Thickness(0,0,0,12);show.ToolTip="需要查看游戏原始加载画面时，可手动显示";show.Click+=(_,_)=>RevealRequested?.Invoke();right.Children.Add(show);
         percentage=Text("0%",28,Brushes.White);percentage.TextAlignment=TextAlignment.Right;right.Children.Add(percentage);footer.Children.Add(right);frame.Children.Add(footer);
@@ -60,13 +64,28 @@ public sealed class GameLoadingWindow : Window
         if(frame.Percent is int percent)overallPercent=Math.Max(overallPercent,Math.Min(99,percent));
         if(frame.Phase=="connecting")overallPercent=100;
         phase.Text=frame.Phase=="connecting"?"正在连接服务器":overallPercent>=99?"即将进入游戏":"正在加载";
+        detail.Text=overallPercent==100?"正在连接所选服务器":CurrentTask(frame);
         progress.Value=overallPercent;percentage.Text=overallPercent+"%";
+    }
+    private static string CurrentTask(GameLoadingFrame frame)
+    {
+        // Only protocol task codes become UI text. Raw phase/message/log text is never shown.
+        var task=frame.Task switch {
+            "mods-discovery"=>"正在整理模组","mods"=>"正在加载模组","mods-complete"=>"正在完成模组加载",
+            "textures"=>"正在加载材质","models"=>"正在加载模型","sounds"=>"正在加载声音",
+            "resources"=>"正在加载游戏资源","recipes"=>"正在加载合成配方",_=>"正在加载游戏内容"};
+        var name=frame.Detail?.Trim();
+        if(frame.Task=="mods"&&!string.IsNullOrEmpty(name)&&name.Length<=80
+            &&Regex.IsMatch(name,@"\A[\p{L}\p{N} '&+_()\-]+\z",RegexOptions.CultureInvariant)
+            &&!new[]{"forge","cleanroom","fml","mixin","lwjgl","opengl","javaagent","modlauncher"}.Any(part=>name.Contains(part,StringComparison.OrdinalIgnoreCase)))
+            return task+"："+name;
+        return task;
     }
     private static TextBlock Text(string text,double size,Brush brush)=>new(){Text=text,FontSize=size,Foreground=brush,TextTrimming=TextTrimming.CharacterEllipsis};
     private static Button Link(string text,double size)=>new(){Content=text,FontSize=size,Foreground=Brushes.White,Background=Brushes.Transparent,BorderThickness=new Thickness(0),Padding=new Thickness(7,5,7,5),Cursor=Cursors.Hand};
 }
 
-public sealed record GameLoadingFrame(string Session,string Phase,string Detail,int Completed,int Total)
+public sealed record GameLoadingFrame(string Session,string Phase,string Detail,int Completed,int Total,string? Task=null)
 {
     public bool HasCount=>Total>0&&Completed>=0&&Completed<=Total;
     // Counter comes from the loader's overall startup bar, never a timer.

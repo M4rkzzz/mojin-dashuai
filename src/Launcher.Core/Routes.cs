@@ -8,7 +8,7 @@ using System.Buffers.Binary;
 
 namespace Boshan.Launcher;
 
-public sealed record RouteEndpoint(string Domain,string Host,int Port,int Latency);
+public sealed record RouteEndpoint(string Domain,string Host,int Port,int Latency,int? OnlinePlayers=null,int? MaxPlayers=null);
 public static class Routes
 {
     public static readonly IReadOnlyDictionary<string,string[]> Domains = new Dictionary<string,string[]> {
@@ -45,7 +45,7 @@ public static class Routes
     }
     public static async Task<RouteEndpoint> Probe(RouteEndpoint resolved,CancellationToken token=default)
     {
-        resolved=resolved with{Latency=-1};
+        resolved=resolved with{Latency=-1,OnlinePlayers=null,MaxPlayers=null};
         try
         {
             using var timeout=CancellationTokenSource.CreateLinkedTokenSource(token);timeout.CancelAfter(TimeSpan.FromSeconds(5));
@@ -73,10 +73,17 @@ public static class Routes
             if(await ReadVarInt(stream,timeout.Token)!=9||await ReadVarInt(stream,timeout.Token)!=1)throw new IOException("测速响应无效。");
             var pong=new byte[8];await stream.ReadExactlyAsync(pong,timeout.Token);timer.Stop();
             if(BinaryPrimitives.ReadInt64BigEndian(pong)!=payload)throw new IOException("测速响应不匹配。");
-            return resolved with {Latency=(int)timer.ElapsedMilliseconds};
+            int? online=null,maximum=null;
+            if(status.RootElement.TryGetProperty("players",out var players)&&players.ValueKind==JsonValueKind.Object)
+            {
+                online=PlayerCount(players,"online");maximum=PlayerCount(players,"max");
+            }
+            return resolved with {Latency=(int)timer.ElapsedMilliseconds,OnlinePlayers=online,MaxPlayers=maximum};
         }
         catch(Exception e) when(e is IOException or SocketException or OperationCanceledException or JsonException) {return resolved;}
     }
+    private static int? PlayerCount(JsonElement players,string property)=>
+        players.TryGetProperty(property,out var count)&&count.ValueKind==JsonValueKind.Number&&count.TryGetInt32(out var value)&&value>=0?value:null;
     public static async Task<RouteEndpoint[]> ProbeAll(string instance,CancellationToken token=default)
     {
         if(!Domains.TryGetValue(instance,out var domains))throw new InvalidDataException("未知服务器。");

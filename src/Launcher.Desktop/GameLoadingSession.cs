@@ -105,7 +105,7 @@ public sealed class GameLoadingSession : IDisposable
             {
                 var text=await File.ReadAllTextAsync(path);
                 var frame=JsonSerializer.Deserialize<GameLoadingFrame>(text,Json.Options);
-                if(frame is not null&&frame.Session==session&&frame.Phase?.Length<=220&&frame.Detail?.Length<=220)
+                if(frame is not null&&frame.Session==session&&frame.Phase?.Length<=220&&frame.Detail?.Length<=220&&(frame.Task is null||frame.Task.Length<=32))
                 {lastWrite=info.LastWriteTimeUtc;lastReport=Environment.TickCount64;if(!revealed&&!disposed){window.Update(frame);FrameObserved?.Invoke(frame);}}
             }
             if(Environment.TickCount64-lastReport>15000)RevealGame(false,"reporter-unavailable");

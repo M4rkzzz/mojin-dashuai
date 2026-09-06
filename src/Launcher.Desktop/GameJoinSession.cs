@@ -62,9 +62,14 @@ public sealed class GameJoinSession : IDisposable
                     using var request=JsonDocument.Parse(text.ToString());
                     if(!request.RootElement.TryGetProperty("instance",out var target)||target.GetString()!=instance)throw new InvalidDataException("Invalid instance");
                     object result;
-                    try{result=await ticket(timeout.Token);}
-                    catch(InvalidDataException ex){result=new{error=ex.Message};}
-                    catch(Exception){result=new{error="入服认证失败，请检查统一客户端登录与网络后重新连接。"};}
+                    // Leave time to deliver a classified service timeout before Java's
+                    // 20-second pipe deadline. A stalled provider cannot leave a valid
+                    // local connection looking like a missing launcher.
+                    using var ticketTimeout=CancellationTokenSource.CreateLinkedTokenSource(timeout.Token);
+                    ticketTimeout.CancelAfter(TimeSpan.FromSeconds(18));
+                    try{result=await ticket(ticketTimeout.Token).WaitAsync(ticketTimeout.Token);}
+                    catch(OperationCanceledException) when(stop.IsCancellationRequested){throw;}
+                    catch(Exception ex){result=JoinAuthenticationErrors.From(ex);}
                     await writer.WriteLineAsync(JsonSerializer.Serialize(result,new JsonSerializerOptions(Json.Options){WriteIndented=false}).AsMemory(),timeout.Token);
                 }
                 catch(Exception ex) when(ex is IOException or OperationCanceledException or JsonException or InvalidDataException or InvalidOperationException){ }

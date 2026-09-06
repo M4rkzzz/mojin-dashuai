@@ -2,31 +2,6 @@
   "version": 1,
   "dependencies": {
     "net10.0-windows7.0": {
-      "CmlLib.Core.Auth.Microsoft": {
-        "type": "Direct",
-        "requested": "[3.3.0, )",
-        "resolved": "3.3.0",
-        "contentHash": "fi9TcytVfSjCYUZhZPMwbj4tT/YSkXsmOuKmIS6dx55N9HXiMmw0hMpEmCGvNLCcpvwMIEO8Z4oNSSKVJOvbgA==",
-        "dependencies": {
-          "CmlLib.Core.Commons": "4.0.0",
-          "XboxAuthNet.Game": "1.4.0"
-        }
-      },
-      "Microsoft.Identity.Client": {
-        "type": "Direct",
-        "requested": "[4.88.0, )",
-        "resolved": "4.88.0",
-        "contentHash": "7Eg+0J3DQyy/HNMucGScRBCcxetZUJkti8KNxY6K/HtM5BsyYQpc25agW0xxKmjvpaZY9XcEbyUL7DbSkIIcZQ==",
-        "dependencies": {
-          "Microsoft.IdentityModel.Abstractions": "8.14.0"
-        }
-      },
-      "Microsoft.Web.WebView2": {
-        "type": "Direct",
-        "requested": "[1.0.4191.47, )",
-        "resolved": "1.0.4191.47",
-        "contentHash": "Snb6mlTpuz6ZFjWMwIdg28Xp6kAUMy3zaLUyGbFSaw+/AJKlwoX8EiaWJ1eUMfKyJHksPkFjJHl1LIB7kX+0AQ=="
-      },
       "CmlLib.Core": {
         "type": "Transitive",
         "resolved": "4.0.6",
@@ -35,6 +10,15 @@
           "CmlLib.Core.Commons": "4.0.0",
           "LZMA-SDK": "19.0.0",
           "SharpZipLib": "1.4.2"
+        }
+      },
+      "CmlLib.Core.Auth.Microsoft": {
+        "type": "Transitive",
+        "resolved": "3.3.0",
+        "contentHash": "fi9TcytVfSjCYUZhZPMwbj4tT/YSkXsmOuKmIS6dx55N9HXiMmw0hMpEmCGvNLCcpvwMIEO8Z4oNSSKVJOvbgA==",
+        "dependencies": {
+          "CmlLib.Core.Commons": "4.0.0",
+          "XboxAuthNet.Game": "1.4.0"
         }
       },
       "CmlLib.Core.Commons": {
@@ -79,10 +63,23 @@
           "Microsoft.Extensions.DependencyInjection.Abstractions": "8.0.1"
         }
       },
+      "Microsoft.Identity.Client": {
+        "type": "Transitive",
+        "resolved": "4.88.0",
+        "contentHash": "7Eg+0J3DQyy/HNMucGScRBCcxetZUJkti8KNxY6K/HtM5BsyYQpc25agW0xxKmjvpaZY9XcEbyUL7DbSkIIcZQ==",
+        "dependencies": {
+          "Microsoft.IdentityModel.Abstractions": "8.14.0"
+        }
+      },
       "Microsoft.IdentityModel.Abstractions": {
         "type": "Transitive",
         "resolved": "8.14.0",
         "contentHash": "iwbCpSjD3ehfTwBhtSNEtKPK0ICun6ov7Ibx6ISNA9bfwIyzI2Siwyi9eJFCJBwxowK9xcA1mj+jBWiigeqgcQ=="
+      },
+      "Microsoft.Web.WebView2": {
+        "type": "Transitive",
+        "resolved": "1.0.4191.47",
+        "contentHash": "Snb6mlTpuz6ZFjWMwIdg28Xp6kAUMy3zaLUyGbFSaw+/AJKlwoX8EiaWJ1eUMfKyJHksPkFjJHl1LIB7kX+0AQ=="
       },
       "SharpZipLib": {
         "type": "Transitive",
@@ -117,14 +114,16 @@
       },
       "launcher.shared": {
         "type": "Project"
-      }
-    },
-    "net10.0-windows7.0/win-x64": {
-      "Microsoft.Web.WebView2": {
-        "type": "Direct",
-        "requested": "[1.0.4191.47, )",
-        "resolved": "1.0.4191.47",
-        "contentHash": "Snb6mlTpuz6ZFjWMwIdg28Xp6kAUMy3zaLUyGbFSaw+/AJKlwoX8EiaWJ1eUMfKyJHksPkFjJHl1LIB7kX+0AQ=="
+      },
+      "MojinDashuai.Launcher": {
+        "type": "Project",
+        "dependencies": {
+          "CmlLib.Core.Auth.Microsoft": "[3.3.0, )",
+          "Launcher.Core": "[1.0.1, )",
+          "Launcher.Shared": "[1.0.1, )",
+          "Microsoft.Identity.Client": "[4.88.0, )",
+          "Microsoft.Web.WebView2": "[1.0.4191.47, )"
+        }
       }
     }
   }

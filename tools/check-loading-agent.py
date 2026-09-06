@@ -32,7 +32,9 @@ for instance, manager in sources:
     if result.returncode:
         raise RuntimeError((result.stdout + result.stderr).decode('utf-8', errors='replace'))
     print(result.stdout.decode('utf-8', errors='replace').strip())
-    report.append({'instance': instance, 'actualCounter': '3/8', 'elapsedTimeDoesNotIncreaseProgress': True, 'stopsAfterHandoff': True})
+    report.append({'instance': instance, 'actualCounter': '3/8', 'currentTaskUpdates': True,
+                   'modDisplayNameUpdates': instance != 'dc2', 'internalDetailFiltered': True,
+                   'taskAvailableWithoutOverallCounter': True, 'elapsedTimeDoesNotIncreaseProgress': True, 'stopsAfterHandoff': True})
     # Delete only this check's small protocol files, never any client instance or shared runtime.
     for suffix in ('.json', '.tmp', '.stop'):
         (work / '.hub/loading' / (session + suffix)).unlink(missing_ok=True)

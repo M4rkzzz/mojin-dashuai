@@ -11,6 +11,10 @@ $numericVersion = $Matches[1] + '.0'
 $repository = Split-Path $PSScriptRoot -Parent
 $sourcePath = (Resolve-Path -LiteralPath $Source).Path
 if (!(Test-Path -LiteralPath (Join-Path $sourcePath 'MojinDashuai.Launcher.exe')) -or !(Test-Path -LiteralPath (Join-Path $sourcePath 'web/index.html'))) { throw 'Publish the complete launcher before building its installer' }
+if ([version]($Version.Split('-')[0]) -ge [version]'1.0.1') {
+    & python (Join-Path $PSScriptRoot 'check-apphost-cet.py') (Join-Path $sourcePath 'MojinDashuai.Launcher.exe') --expected disabled
+    if ($LASTEXITCODE -ne 0) { throw 'Launcher apphost must include the old-Windows CET compatibility fix' }
+}
 $outputPath = [IO.Path]::GetFullPath($Output)
 if (!$Compiler) {
     $candidates = @(

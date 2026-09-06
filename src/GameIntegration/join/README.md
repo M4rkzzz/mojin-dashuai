@@ -16,6 +16,8 @@
 
 Windows `RandomAccessFile` 命名管道已在实际 Java 8、17、25 运行时验证。IPC 在有界工作线程执行，连接线程最多等 20 秒；不会阻塞 Netty 收包线程。不存在加载完成后的计时刷新。
 
+从 1.0.1 起，统一端拒绝领票时返回固定 `errorCode` 和中文 `error`，区分角色冲突、登录失效、账号切换、所有权验证、网络错误、超时等。Java 仅按允许的错误代码展示内置中文提示，不展示 API 原始错误或内部异常原因；未知业务错误也不误报成本机通信故障。统一端给领票调用 18 秒预算，预留时间在 Java 的 20 秒等待前返回明确超时提示。成功票据格式及服务端线协议不变，此项无需替换服务端组件或重启。
+
 旧版 Forge 的 `FMLSecurityManager` 会通过 `FilePermission` 路径规范化短暂探测管道。打开管道遇到 `FileNotFoundException` 时最多重试 3 秒、间隔 25 ms，让统一端丢弃空探测并重新接受正式请求；不更换管道、不绕过进程身份校验、不降级认证。
 
 1.7.10 / Cleanroom 客户端同时替换 Forge 的启动连接入口，直接进入游戏原生连接页面，避免 `connectToServerAtStartup` 在主线程等待服务器状态查询 30 秒。保留服务器列表初始化和正常 Forge 连接逻辑。
@@ -77,11 +79,14 @@ python tests/game-integration/join/check-fixed.py
 python tests/game-integration/join/check-security.py
 python tests/game-integration/join/prepare-server-classes.py
 python tests/game-integration/join/check-wire.py
+dotnet run --project tests/JoinErrorsSmoke -c Release -- D:/project/MCserver/unified-client
 ```
 
 构建依赖固定 ASM 9.10.1 缓存和现有本机 Java 工具链；此版本支持 Cleanroom 在运行时使用的 Java 25 字节码。`check.py` 使用实际 Windows 管道、HTTP、Netty 与固定映射的包形状，覆盖三个 Java 运行时、三版登录包、无票据拒绝、单次异步递交、同票据重放、错误名字/UUID、HTTP 503、重复登录、热切换及配置损坏。`check-fixed.py` 使用三个固定真实游戏 JAR 的六个类做注入和 ASM 数据流校验。
 
 `check-security.py` 使用实际 Java 8 和 Forge 的安全管理器，确认发生空探测后能重新接受管道连接，且正式票据请求只有一次。真实游戏启动与真实统一端管道互通另记录在本地验收报告中。
+
+`JoinErrorsSmoke` 使用实际 `GameJoinSession` 进程绑定管道和 Java 8/17/25 中被真实 agent 改写的握手构造器，核对中文错误、未知服务端原文脱敏、正常票据、领票调用超时和统一端确实不可连接的不同提示；不启动真实游戏或调用玩家账号。
 
 `prepare-server-classes.py` 从 NAS 只读复制的固定原包重建解码类并校验 Cleanroom 补丁源的 Adler32；`check-wire.py` 使用这些真实握手类、实际 1.20.1 服务端 SRG 类及 Forge 47.4.0 带 FML3 分割的类，运行实际解码字节码，再经真实 Netty/HTTP 认证链路验证有票据和无票据两条路径。依赖 `.local/join-agent` 中该准备脚本注明的三个原包副本；客户端线上的附票测试不能替代这项服务端解码验收。
 
