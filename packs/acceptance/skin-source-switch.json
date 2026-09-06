@@ -1,0 +1,43 @@
+{
+  "checkedAt": "2026-09-06T04:13:07Z",
+  "scope": "LittleSkin source selection followed by game restart through the unified launcher",
+  "instances": {
+    "m3e": {
+      "skinComponentInDistribution": true,
+      "componentFiles": [
+        "mods/CompatibilityLayerForCustomSkinLoader-ALPHA-11.jar",
+        "mods/CustomSkinLoader_ForgeLegacy-14.17.jar"
+      ],
+      "sourceAppliedBeforeLaunch": true,
+      "littleSkinAfterRestartVisuallyVerified": false
+    },
+    "dc2": {
+      "skinComponentInDistribution": true,
+      "componentFiles": [
+        "mods/CustomSkinLoader_Universal-15.0.1.jar"
+      ],
+      "sourceAppliedBeforeLaunch": true,
+      "littleSkinAfterRestartVisuallyVerified": false
+    },
+    "mb": {
+      "skinComponentInDistribution": true,
+      "componentFiles": [
+        "mods/CustomSkinLoader_Universal-15.0.1.jar"
+      ],
+      "sourceAppliedBeforeLaunch": true,
+      "littleSkinAfterRestartVisuallyVerified": false
+    },
+    "vw": {
+      "skinComponentInDistribution": true,
+      "componentFiles": [
+        "mods/CompatibilityLayerForCustomSkinLoader-ALPHA-11.jar",
+        "mods/CustomSkinLoader_ForgeLegacy-14.17.jar"
+      ],
+      "sourceAppliedBeforeLaunch": true,
+      "littleSkinAfterRestartVisuallyVerified": true,
+      "evidence": "User confirmed fourth-server skin-source-switch acceptance in this conversation."
+    }
+  },
+  "allInstancesVisuallyVerified": false,
+  "note": "Distribution inventory and shared launch configuration are verified for all four instances. Visual acceptance is confirmed only for vw."
+}

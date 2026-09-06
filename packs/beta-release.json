@@ -90,5 +90,6 @@
     "chinesePathLoadingAndJoinVerified": true
   },
   "gameContentChanged": false,
-  "contentVerificationRetainedFrom": "packs/acceptance/beta15-publication-history.json"
+  "contentVerificationRetainedFrom": "packs/acceptance/beta15-publication-history.json",
+  "skinSourceSwitchAcceptance": "packs/acceptance/skin-source-switch.json"
 }
