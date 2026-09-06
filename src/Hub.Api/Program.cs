@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Npgsql;
 using Boshan.Shared;
+using Boshan.Hub.Activities;
 using Microsoft.AspNetCore.Http.Features;
 using Secret = Boshan.Hub.Secret;
 
@@ -22,6 +23,8 @@ var keyPath = builder.Configuration["DataProtectionPath"];
 if (!string.IsNullOrEmpty(keyPath)) builder.Services.AddDataProtection().SetApplicationName("Boshan.Hub").PersistKeysToFileSystem(new DirectoryInfo(keyPath));
 builder.Services.AddScoped<AccountService>();
 builder.Services.AddScoped<JoinService>();
+builder.Services.AddScoped<ActivityService>();
+builder.Services.AddSingleton<ActivityCatalog>();
 builder.Services.AddSingleton<JoinRequestLimits>();
 builder.Services.AddHttpClient<MinecraftJoinVerifier>(client => client.Timeout = TimeSpan.FromSeconds(12))
     .ConfigurePrimaryHttpMessageHandler(() => new SocketsHttpHandler { AllowAutoRedirect = false, UseCookies = false, ConnectTimeout = TimeSpan.FromSeconds(5) });
@@ -51,6 +54,7 @@ if (builder.Configuration.GetValue<bool>("InitializeDatabase")) {
 {
     using var scope = app.Services.CreateScope();
     await JoinData.Initialize(scope.ServiceProvider.GetRequiredService<HubDb>());
+    await ActivityData.Initialize(scope.ServiceProvider.GetRequiredService<HubDb>());
 }
 app.Use(async (context, next) => {
     if (context.Request.Path == "/v1/account/skin" && context.Features.Get<IHttpMaxRequestBodySizeFeature>() is {IsReadOnly:false} limit) limit.MaxRequestBodySize = 192 * 1024;
@@ -96,6 +100,7 @@ account.MapPost("/password", async (ClaimsPrincipal p, PasswordRequest r, Accoun
 account.MapPost("/recovery-code", async (ClaimsPrincipal p, LoginRequest r, AccountService service) => new { recoveryCode = await service.RotateRecovery(Guid.Parse(p.FindFirstValue(ClaimTypes.NameIdentifier)!), r.Password) });
 account.MapPost("/skin", (ClaimsPrincipal p, SkinTexture texture, SkinService skins) => skins.Save(Guid.Parse(p.FindFirstValue(ClaimTypes.NameIdentifier)!),texture));
 app.MapGameSkins();
+app.MapActivities();
 app.MapGet("/v1/skins/{gameName}", async (string gameName, HubDb db, SkinService skins, HttpContext context) => {
     if (!Secret.GameNamePattern().IsMatch(gameName)) return Results.NotFound();
     var key = Secret.NameKey(gameName);

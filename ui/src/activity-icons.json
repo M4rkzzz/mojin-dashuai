@@ -1,0 +1,158 @@
+{
+  "m3e:minecraft:torch@0": {
+    "src": "./activities/items/m3e-minecraft_torch_0.png",
+    "name": "火把",
+    "block": false,
+    "overlay": null
+  },
+  "m3e:minecraft:coal@1": {
+    "src": "./activities/items/m3e-minecraft_coal_1.png",
+    "name": "木炭",
+    "block": false,
+    "overlay": null
+  },
+  "m3e:minecraft:arrow@0": {
+    "src": "./activities/items/m3e-minecraft_arrow_0.png",
+    "name": "箭",
+    "block": false,
+    "overlay": null
+  },
+  "mb:minecraft:torch@0": {
+    "src": "./activities/items/mb-minecraft_torch_0.png",
+    "name": "火把",
+    "block": false,
+    "overlay": null
+  },
+  "mb:minecraft:coal@1": {
+    "src": "./activities/items/mb-minecraft_coal_1.png",
+    "name": "木炭",
+    "block": false,
+    "overlay": null
+  },
+  "mb:minecraft:ladder@0": {
+    "src": "./activities/items/mb-minecraft_ladder_0.png",
+    "name": "梯子",
+    "block": false,
+    "overlay": null
+  },
+  "dc2:minecraft:torch@0": {
+    "src": "./activities/items/dc2-minecraft_torch_0.png",
+    "name": "火把",
+    "block": false,
+    "overlay": null
+  },
+  "dc2:minecraft:charcoal@0": {
+    "src": "./activities/items/dc2-minecraft_charcoal_0.png",
+    "name": "木炭",
+    "block": false,
+    "overlay": null
+  },
+  "vw:minecraft:torch@0": {
+    "src": "./activities/items/vw-minecraft_torch_0.png",
+    "name": "火把",
+    "block": false,
+    "overlay": null
+  },
+  "vw:minecraft:coal@1": {
+    "src": "./activities/items/vw-minecraft_coal_1.png",
+    "name": "木炭",
+    "block": false,
+    "overlay": null
+  },
+  "vw:minecraft:ladder@0": {
+    "src": "./activities/items/vw-minecraft_ladder_0.png",
+    "name": "梯子",
+    "block": false,
+    "overlay": null
+  },
+  "m3e:manametalmod:magicStone3@0": {
+    "src": "./activities/items/m3e-manametalmod_magicStone3_0.png",
+    "name": "祭坛符文石柱",
+    "block": true,
+    "overlay": null
+  },
+  "m3e:manametalmod:magicStone1@0": {
+    "src": "./activities/items/m3e-manametalmod_magicStone1_0.png",
+    "name": "祭坛石",
+    "block": true,
+    "overlay": null
+  },
+  "m3e:manametalmod:ManaCrystal@0": {
+    "src": "./activities/items/m3e-manametalmod_ManaCrystal_0.png",
+    "name": "魔力水晶",
+    "block": true,
+    "overlay": null
+  },
+  "mb:erebus:planks_petrified_wood@0": {
+    "src": "./activities/items/mb-erebus_planks_petrified_wood_0.png",
+    "name": "化石木板",
+    "block": true,
+    "overlay": null
+  },
+  "mb:aoa3:emberstone_block@0": {
+    "src": "./activities/items/mb-aoa3_emberstone_block_0.png",
+    "name": "余烬石块",
+    "block": true,
+    "overlay": null
+  },
+  "mb:divinerpg:purple_steel@0": {
+    "src": "./activities/items/mb-divinerpg_purple_steel_0.png",
+    "name": "紫色钢铁",
+    "block": true,
+    "overlay": null
+  },
+  "dc2:legendarysurvivaloverhaul:purified_water_bottle@0": {
+    "src": "./activities/items/dc2-legendarysurvivaloverhaul_purified_water_bottle_0.png",
+    "name": "净水瓶",
+    "block": false,
+    "overlay": null
+  },
+  "dc2:legendarysurvivaloverhaul:bandage@0": {
+    "src": "./activities/items/dc2-legendarysurvivaloverhaul_bandage_0.png",
+    "name": "绷带",
+    "block": false,
+    "overlay": null
+  },
+  "dc2:immersiveengineering:sheetmetal_iron@0": {
+    "src": "./activities/items/dc2-immersiveengineering_sheetmetal_iron_0.png",
+    "name": "铁钣金块",
+    "block": true,
+    "overlay": null
+  },
+  "dc2:immersiveengineering:steel_scaffolding_standard@0": {
+    "src": "./activities/items/dc2-immersiveengineering_steel_scaffolding_standard_0.png",
+    "name": "钢脚手架",
+    "block": true,
+    "overlay": null
+  },
+  "dc2:immersiveengineering:fluid_pipe@0": {
+    "src": "./activities/items/dc2-immersiveengineering_fluid_pipe_0.png",
+    "name": "流体管道",
+    "block": true,
+    "overlay": null
+  },
+  "dc2:immersiveengineering:blastbrick@0": {
+    "src": "./activities/items/dc2-immersiveengineering_blastbrick_0.png",
+    "name": "高炉砖",
+    "block": true,
+    "overlay": null
+  },
+  "vw:gregtech:gt.multitileentity@18102": {
+    "src": "./activities/items/vw-gregtech_gt.multitileentity_18102.png",
+    "name": "蒸馏塔部件",
+    "block": true,
+    "overlay": "./activities/items/overlay-vw-gregtech_gt.multitileentity_18102.png"
+  },
+  "vw:gregtech:gt.multitileentity@18101": {
+    "src": "./activities/items/vw-gregtech_gt.multitileentity_18101.png",
+    "name": "热能传输器",
+    "block": true,
+    "overlay": "./activities/items/overlay-vw-gregtech_gt.multitileentity_18101.png"
+  },
+  "vw:gregtech:gt.multitileentity@18000": {
+    "src": "./activities/items/vw-gregtech_gt.multitileentity_18000.png",
+    "name": "耐火砖块",
+    "block": true,
+    "overlay": "./activities/items/overlay-vw-gregtech_gt.multitileentity_18000.png"
+  }
+}

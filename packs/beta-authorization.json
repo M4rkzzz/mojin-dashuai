@@ -10,7 +10,8 @@
   "completeDeliveryClaimed": false,
   "approvedVersionLabels": [
     "1.0.0",
-    "1.0.1"
+    "1.0.1",
+    "1.0.3"
   ],
-  "versionLabelAuthorization": "2026-09-06 user requested release 1.0.0 and then implementation/deployment of 1.0.1; retained clean-Windows deferral is not treated as passed. The affected old-Windows player confirmed startup-debug.4 works."
+  "versionLabelAuthorization": "2026-09-06 user requested release 1.0.0 and then implementation/deployment of 1.0.1; retained clean-Windows deferral is not treated as passed. The affected old-Windows player confirmed startup-debug.4 works. User requested implementing and deploying the four-server activities plan; User explicitly chose 1.0.3 for this feature release and retains the existing clean-Windows limitation."
 }

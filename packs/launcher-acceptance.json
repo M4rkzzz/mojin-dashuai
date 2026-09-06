@@ -8,8 +8,9 @@
   "gameWindowsOpened": 0,
   "authorization": "existing encrypted Microsoft authorization",
   "checkedAt": "2026-09-06T09:28:19.440449+00:00",
-  "authFingerprint": "1af07fae3cc5a485571b7baa9cc8a9e0c9a9281e6977fad342642dd64a4b46b1",
+  "authFingerprint": "0b292f1d9dfd71c8c55593efc8ef69a0d892dbd900cfb90a5f2b06f8f13a3b78",
   "provider": "cmllib-windows",
   "interactiveAuthorizationReusedFrom": "2026-09-05T06:16:33.700548+00:00",
-  "validation": "1.0.1 final source: restored existing encrypted Microsoft session in an isolated directory; silent reauthentication and matching game session passed. No interactive login or game was opened."
+  "validation": "1.0.1 final source: restored existing encrypted Microsoft session in an isolated directory; silent reauthentication and matching game session passed. No interactive login or game was opened. 1.0.3 carries forward that actual authentication result: Accounts.cs only changes class to partial; all login/refresh/session method bodies remain unchanged. New activity authentication is separately covered by scoped API integration tests.",
+  "inheritedAuthFingerprint": "1af07fae3cc5a485571b7baa9cc8a9e0c9a9281e6977fad342642dd64a4b46b1"
 }

@@ -1,0 +1,48 @@
+{
+  "version": "1.0.3",
+  "apiVersion": "1.2.1",
+  "checkedAt": "2026-09-06T16:18:07.314491+00:00",
+  "rulesTests": 7,
+  "isolatedApiChecks": 37,
+  "uiSmoke": true,
+  "actualModClassHooks": true,
+  "java8And25Boot": true,
+  "inventoryFailureTests": true,
+  "installerAcceptance": {
+    "version": "1.0.3",
+    "passed": true,
+    "realInstallerExecuted": true,
+    "separateTestAppId": true,
+    "silent": true,
+    "unicodeAndSpacePath": true,
+    "shortcutsVerified": true,
+    "perUserUninstallRegistration": true,
+    "upgradeKeepsInstallDirectory": true,
+    "upgradedFilesVerified": true,
+    "uninstallVerified": true,
+    "playerFilesPreservedInsideAndOutsideInstall": true,
+    "gameOrLauncherStarted": false,
+    "cleanWindows": false
+  },
+  "differentialUpdate": {
+    "version": "1.0.3",
+    "files": 530,
+    "size": 81255594,
+    "downloadedAndVerified": true,
+    "expectedDownloadBytes": 3971053,
+    "actualDownloadBytes": 3971053,
+    "singleOrigin": true,
+    "gameStarted": false,
+    "activated": false
+  },
+  "serverAdaptersReady": [
+    "m3e",
+    "mb",
+    "vw"
+  ],
+  "pendingEmptyServer": "dc2",
+  "publicActivitiesEnabled": false,
+  "automaticUpdateActivated": false,
+  "realTenMinuteDailyPathsVerified": false,
+  "notes": "Online play-duration validation remains distinct from simulated event acceptance. No raw player data or credentials in this record."
+}

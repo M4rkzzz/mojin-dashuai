@@ -1,0 +1,106 @@
+[
+  {
+    "world": "m3e",
+    "reward": "mana-enchantment-foundation",
+    "quest": "6992b597-f070-4726-8e7b-3642b2152698",
+    "required": 24,
+    "awarded": 3,
+    "source": "原任务 requiredItems magicStone3"
+  },
+  {
+    "world": "m3e",
+    "reward": "mana-pillars",
+    "quest": "6992b597-f070-4726-8e7b-3642b2152698",
+    "required": 9,
+    "awarded": 1,
+    "source": "法力附魔台原任务 requiredItems"
+  },
+  {
+    "world": "m3e",
+    "reward": "mana-crystals",
+    "quest": "6992b597-f070-4726-8e7b-3642b2152698",
+    "required": 8,
+    "awarded": 1,
+    "source": "法力附魔台原任务 requiredItems"
+  },
+  {
+    "world": "dc2",
+    "reward": "refinery-plates",
+    "quest": "7EE0809A9B220503",
+    "required": 16,
+    "awarded": 2,
+    "source": "ImmersiveEngineering 10.2.0-183 multiblock template"
+  },
+  {
+    "world": "dc2",
+    "reward": "refinery-scaffold",
+    "quest": "7EE0809A9B220503",
+    "required": 8,
+    "awarded": 1,
+    "source": "ImmersiveEngineering 10.2.0-183 multiblock template"
+  },
+  {
+    "world": "dc2",
+    "reward": "refinery-pipe",
+    "quest": "7EE0809A9B220503",
+    "required": 5,
+    "awarded": 1,
+    "source": "ImmersiveEngineering 10.2.0-183 multiblock template"
+  },
+  {
+    "world": "dc2",
+    "reward": "blast-furnace-bricks",
+    "quest": "741526AA7D74D11C",
+    "required": 27,
+    "awarded": 3,
+    "source": "ImmersiveEngineering 10.2.0-183 blast_furnace.nbt"
+  },
+  {
+    "world": "mb",
+    "reward": "petrified-foundation",
+    "quest": "179",
+    "required": 26,
+    "awarded": 3,
+    "source": "维度飞升 requiredItems"
+  },
+  {
+    "world": "mb",
+    "reward": "emberstone-building",
+    "quest": "163",
+    "required": 8,
+    "awarded": 1,
+    "source": "维度飞升原任务 requiredItems"
+  },
+  {
+    "world": "mb",
+    "reward": "purple-steel-building",
+    "quest": "164",
+    "required": 8,
+    "awarded": 1,
+    "source": "维度飞升原任务 requiredItems"
+  },
+  {
+    "world": "vw",
+    "reward": "tower-wall",
+    "quest": "6434aee3-1470-4810-9fe7-b9bd98a6c2c7",
+    "required": 71,
+    "awarded": 10,
+    "source": "蒸馏塔原任务结构清单"
+  },
+  {
+    "world": "vw",
+    "reward": "tower-base",
+    "quest": "6434aee3-1470-4810-9fe7-b9bd98a6c2c7",
+    "required": 9,
+    "awarded": 1,
+    "source": "蒸馏塔原任务结构清单"
+  },
+  {
+    "world": "vw",
+    "reward": "coke-wall",
+    "quest": "4f47e96c-b410-4bd2-a44f-674389e5d03f",
+    "required": 25,
+    "awarded": 3,
+    "source": "焦炉原任务 requiredItems"
+  }
+]

@@ -66,6 +66,7 @@ public sealed class HubDb(DbContextOptions<HubDb> options) : IdentityDbContext<H
     {
         base.OnModelCreating(builder);
         JoinData.Configure(builder);
+        Boshan.Hub.Activities.ActivityData.Configure(builder);
         builder.Entity<HubUser>().HasIndex(x => x.GameNameKey).IsUnique();
         builder.Entity<HubUser>().Property(x => x.GameName).HasMaxLength(16);
         builder.Entity<HubUser>().Property(x => x.GameNameKey).HasMaxLength(16);

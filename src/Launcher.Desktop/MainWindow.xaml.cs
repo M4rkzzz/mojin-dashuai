@@ -202,6 +202,7 @@ public partial class MainWindow : Window
                 using(StartupDiagnostics.Begin("bootstrap.installs.read"))installs=await InstalledStates();
                 return new {LauncherVersion=App.ReleaseVersion.Split('+')[0],Profile=profile,Settings=settings,LauncherUpdate=launcherUpdate,WindowMaximized=WindowState==WindowState.Maximized,Installs=installs,Progress=transferProgress,States=InstanceStates(),AvailableUpdates=availableUpdates};
             }
+            case "activities":return await accounts.Activities(args);
             case "instances.status":return new {Installs=await InstalledStates(),Progress=transferProgress,States=InstanceStates(),AvailableUpdates=availableUpdates};
             case "instances.updates.check":
             {

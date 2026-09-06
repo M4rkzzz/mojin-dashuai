@@ -10,6 +10,17 @@ public static class Admin
         var db = scope.ServiceProvider.GetRequiredService<HubDb>();
         if (args.Length == 0) throw new ArgumentException("admin init | invite-create single|super [exactGameName|-] [days] | invite-revoke id | invite-list | invite-uses id | protect gameName | protect-conflict variant1 variant2 | disable loginName | reset loginName");
         switch (args[0]) {
+            case "activities-init": await Activities.ActivityData.Initialize(db); Console.WriteLine("Activity schema ready."); break;
+            case "activities-review": {
+                if (args.Length == 1) {
+                    var pending = await (from s in db.Set<Activities.ActivityShowcase>().AsNoTracking() join i in db.Set<JoinIdentity>() on s.IdentityId equals i.Id where s.Status == "pending" orderby s.CreatedAt select new { s.Id, s.Instance, i.GameName, s.Stage, s.Month, s.Text }).ToListAsync();
+                    Console.WriteLine(Activities.ActivityJson.Write(pending)); break;
+                }
+                if (args.Length != 3 || !Guid.TryParse(args[1], out var submission) || args[2] is not ("approve" or "reject")) throw new ArgumentException("activities-review [id approve|reject]");
+                var row = await db.Set<Activities.ActivityShowcase>().SingleOrDefaultAsync(s => s.Id == submission) ?? throw new ArgumentException("Submission not found.");
+                row.Status = args[2] == "approve" ? "approved" : "rejected";
+                await db.SaveChangesAsync(); Console.WriteLine($"{row.Id}: {row.Status}"); break;
+            }
             case "init": await db.Database.EnsureCreatedAsync(); await JoinData.Initialize(db); Console.WriteLine("Database ready."); break;
             case "join-init": await JoinData.Initialize(db); Console.WriteLine("Join schema ready; existing Hub identities retained."); break;
             case "join-list":

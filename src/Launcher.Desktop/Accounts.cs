@@ -16,7 +16,7 @@ public sealed record PlayerProfile(string Id,string LoginName,string GameName,st
 public sealed record AccountSession(PlayerProfile Profile,string AccessToken,DateTimeOffset AccessExpiresAt,string RefreshToken,DateTimeOffset RefreshExpiresAt,string? RecoveryCode=null,string? MicrosoftAccountId=null,string? SkinUrl=null,string SkinModel="classic",string? MicrosoftClientId=null,string? MicrosoftXuid=null);
 public sealed record JoinTicket(string Ticket,DateTimeOffset ExpiresAt,string GameName,string GameUuid);
 internal sealed record JoinGrant(string AccessToken,DateTimeOffset ExpiresAt,string GameName,string GameUuid);
-public sealed class Accounts
+public sealed partial class Accounts
 {
     private readonly Vault vault;
     private HttpClient api;
