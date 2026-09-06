@@ -1,0 +1,33 @@
+{
+  "passed": true,
+  "channel": "beta",
+  "manifestSha256": "528120ab34e35f022ae2ecf654fafdf6f11347f5b3d2cc28cc709cf013b7d567",
+  "cleanWindows": false,
+  "joinedServer": true,
+  "allSourcesAutomated": true,
+  "javaMajor": 8,
+  "loader": "forge",
+  "map": true,
+  "quests": false,
+  "machines": false,
+  "baseAcceptance": "packs/acceptance/vw-4.json",
+  "scope": "Adds one Forge event adapter that enables TCP_NODELAY. Existing game/mod/runtime/map binaries unchanged. Real isolated test server/client join and production primary FRP join both observed first chunks. Actual r4-to-r5 differential installer downloaded 1921 bytes and preserved player files. Map visual acceptance inherited from r4; no new GUI interaction claim. Legacy automated process cleanup required terminating its own test JVM after WM_CLOSE timed out.",
+  "changedFiles": [
+    "mods/mojin-legacy-network-1.7.10-1.0.0.jar"
+  ],
+  "settingsAndMapDataPreserved": true,
+  "actualDifferentialDownloadBytes": 1921,
+  "fullArchiveHashInventoryVerified": true,
+  "verifiedZipEntries": 1726,
+  "evidence": [
+    "packs/network-optimization/vw-smoke.json",
+    "packs/network-optimization/vw-public-smoke.json",
+    "artifacts/complete-client-staged/vw-network-sequence-5/report.json",
+    ".local/network-rollout/vw/update-check.json"
+  ],
+  "checkedAt": "2026-09-06T16:08:47.970943+00:00",
+  "deferredChecks": [
+    "cleanWindows"
+  ],
+  "approvedDeferral": "packs/beta-authorization.json"
+}

@@ -1,5 +1,5 @@
 {
-  "version": "1.0.1",
+  "version": "1.0.2",
   "passed": true,
   "realInstallerExecuted": true,
   "separateTestAppId": true,
@@ -12,5 +12,6 @@
   "uninstallVerified": true,
   "playerFilesPreservedInsideAndOutsideInstall": true,
   "gameOrLauncherStarted": false,
-  "cleanWindows": false
+  "cleanWindows": false,
+  "evidence": "Full installer lifecycle completed in .local/installer-acceptance/c1b4d93546fc4e4f92ce8cdffb48c862; final process assertion initially overlapped our DC2 smoke. Reused the same compiled installer for a separate install/uninstall process check, which passed with game processes unchanged."
 }

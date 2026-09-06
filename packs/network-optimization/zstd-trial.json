@@ -1,0 +1,38 @@
+{
+  "scenario": "same fresh flat test world; same account; join, first chunks, idle25s, exit; direct SSH tunnel to isolated gsmanager, not public FRP",
+  "runs": [
+    {
+      "run": "dc2-baseline-4",
+      "wireBytes": 5176148,
+      "ready": true,
+      "firstChunkMs": 16031
+    },
+    {
+      "run": "dc2-baseline-5",
+      "wireBytes": 5463768,
+      "ready": true,
+      "firstChunkMs": 16016
+    },
+    {
+      "run": "dc2-zstd-1",
+      "wireBytes": 4061745,
+      "ready": true,
+      "firstChunkMs": 10219
+    },
+    {
+      "run": "dc2-zstd-2",
+      "wireBytes": 3972329,
+      "ready": true,
+      "firstChunkMs": 9890
+    }
+  ],
+  "wireReductionPercent": 24.49,
+  "productionEnabled": false,
+  "remaining": [
+    "Create/quests/large-NBT interaction",
+    "dimension change and reconnect matrix",
+    "public-FRP two-route comparisons",
+    "RTT P95/CPU/Tick acceptance"
+  ],
+  "scopeNote": "Isolated trial only; not production acceptance."
+}

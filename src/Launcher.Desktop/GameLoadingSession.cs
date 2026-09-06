@@ -27,14 +27,20 @@ public sealed class GameLoadingSession : IDisposable
     private bool revealed,disposed,reading;
     private long lastReport=Environment.TickCount64;
     private DateTime lastWrite;
+    private readonly string instanceId;
+    private readonly string? routeDomain;
+    private long connectingAt;
+    private string connectionAttempt="",observedAttempt="";
+    private bool handshakeObserved;
     public GameLoadingOptions Options {get;}
     public event Action<GameLoadingFrame>? FrameObserved;
     public event Action? GameRevealed;
     public string? RevealReason {get;private set;}
     public bool GameWindowVisible {get;private set;}
     public int HiddenWindowCount=>hidden.Count(handle=>IsWindow(handle)&&!IsWindowVisible(handle));
-    public GameLoadingSession(string instancePath,string instance,bool reducedMotion=false)
+    public GameLoadingSession(string instancePath,string instance,bool reducedMotion=false,string? routeDomain=null)
     {
+        instanceId=instance;this.routeDomain=routeDomain;
         directory=Path.Combine(instancePath,".hub","loading");Directory.CreateDirectory(directory);
         using var resource=Assembly.GetExecutingAssembly().GetManifestResourceStream("Mojin.LoadingAgent")??throw new FileNotFoundException("加载界面组件缺失。");
         using var bytes=new MemoryStream();resource.CopyTo(bytes);var data=bytes.ToArray();var hash=Convert.ToHexStringLower(SHA256.HashData(data));
@@ -86,6 +92,29 @@ public sealed class GameLoadingSession : IDisposable
     }
     private void Output(object sender,DataReceivedEventArgs e)
     {
+        if(!disposed&&e.Data is not null)
+        {
+            if(e.Data.Contains("Connecting to ",StringComparison.Ordinal)&&IsConnectingLine(e.Data))
+                window.Dispatcher.BeginInvoke(async()=>
+                {
+                    if(disposed)return;
+                    connectingAt=Environment.TickCount64;connectionAttempt=DateTime.UtcNow.Ticks.ToString();handshakeObserved=false;
+                    timer.Start();
+                    NetworkTimings.Record("game-connecting",0,true,instance:instanceId);
+                    try{await File.WriteAllTextAsync(Path.Combine(directory,session+".connection"),connectionAttempt);}catch(IOException){}catch(UnauthorizedAccessException){}
+                });
+            else if(routeDomain is not null&&new[]{"Connection refused","Connection timed out","connect timed out","UnknownHostException"}.Any(reason=>e.Data.Contains(reason,StringComparison.Ordinal)))
+            {
+                Routes.Invalidate(routeDomain);
+                NetworkTimings.Record("game-connect-failed",connectingAt==0?0:Environment.TickCount64-connectingAt,false,routeDomain,instanceId);
+            }
+            else if(e.Data.Contains("Connected to a modded server.",StringComparison.Ordinal))
+                window.Dispatcher.BeginInvoke(()=>
+                {
+                    if(disposed||connectingAt==0||handshakeObserved)return;handshakeObserved=true;
+                    NetworkTimings.Record("forge-handshake",Environment.TickCount64-connectingAt,true,instance:instanceId);
+                });
+        }
         // Consume pipes continuously without retaining raw output: it can contain session credentials.
         if(!revealed&&!disposed&&e.Data is not null&&(e.Data.Contains("Connecting to ",StringComparison.Ordinal)||e.Data.Contains("[Mojin]",StringComparison.Ordinal))&&IsConnectingLine(e.Data))
             window.Dispatcher.BeginInvoke(()=>RevealGame(false));
@@ -97,8 +126,24 @@ public sealed class GameLoadingSession : IDisposable
         try
         {
             if(game is null)return; // A manual reveal may precede the asynchronous JVM preparation.
+            if(connectionAttempt.Length>0&&observedAttempt!=connectionAttempt)
+            {
+                var networkPath=Path.Combine(directory,session+".network.json");
+                if(File.Exists(networkPath)&&new FileInfo(networkPath).Length<=256)
+                {
+                    using var record=JsonDocument.Parse(await File.ReadAllTextAsync(networkPath));
+                    if(record.RootElement.TryGetProperty("attempt",out var attempt)&&attempt.ValueKind==JsonValueKind.String&&attempt.GetString()==connectionAttempt
+                        &&record.RootElement.TryGetProperty("stage",out var stage)&&stage.ValueKind==JsonValueKind.String&&stage.GetString()=="first-chunk-observed")
+                    {observedAttempt=connectionAttempt;NetworkTimings.Record("first-chunk-observed",Environment.TickCount64-connectingAt,true,instance:instanceId);}
+                }
+            }
             if(game.HasExited){Dispose();return;}
-            if(revealed){TryRestoreWindows();return;}
+            if(revealed)
+            {
+                TryRestoreWindows();
+                if(GameWindowVisible&&(connectingAt==0||observedAttempt==connectionAttempt||Environment.TickCount64-connectingAt>180000))timer.Stop();
+                return;
+            }
             ScanWindows();
             var path=Path.Combine(directory,session+".json");var info=new FileInfo(path);
             if(info.Exists&&info.Length<=4096&&info.LastWriteTimeUtc!=lastWrite)
@@ -175,7 +220,7 @@ public sealed class GameLoadingSession : IDisposable
             else hidden.Remove(handle);
         }
         if(visible==IntPtr.Zero)return;
-        GameWindowVisible=true;timer.Stop();
+        GameWindowVisible=true;
         if(RevealReason=="manual"||foregroundPid==(uint)Environment.ProcessId)SetForegroundWindow(visible);
         hidden.Clear();window.Close();GameRevealed?.Invoke();
     }
@@ -201,11 +246,12 @@ public sealed class GameLoadingSession : IDisposable
     {
         if(disposed)return;
         RevealGame(false,"disposed");disposed=true;timer.Stop();window.Close();
+        try{File.WriteAllText(Path.Combine(directory,session+".exit"),"");}catch(IOException){}
         if(game is not null)
         {game.OutputDataReceived-=Output;game.ErrorDataReceived-=Output;}
         // Keep stop marker while a live agent might still be exiting; clean this session on process exit.
         if(game is null||game.HasExited)
-            foreach(var suffix in new[]{".json",".tmp",".stop"})
+            foreach(var suffix in new[]{".json",".tmp",".stop",".exit",".connection",".network.json",".network.tmp"})
                 try{File.Delete(Path.Combine(directory,session+suffix));}catch(IOException){}
     }
     private delegate void WinEvent(IntPtr hook,uint evt,IntPtr window,int objectId,int childId,uint thread,uint time);

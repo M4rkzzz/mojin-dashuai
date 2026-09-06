@@ -1,0 +1,34 @@
+{
+  "id": "vw",
+  "label": "vw-network-isolated-3",
+  "ready": true,
+  "exitCode": -1,
+  "seconds": 129.6575375,
+  "timings": [
+    {
+      "at": "2026-09-06T15:32:18.7859559+00:00",
+      "stage": "game-connecting",
+      "elapsedMs": 0,
+      "success": true,
+      "target": null,
+      "instance": "vw"
+    },
+    {
+      "at": "2026-09-06T15:32:26.3824253+00:00",
+      "stage": "join-ticket",
+      "elapsedMs": 1791,
+      "success": true,
+      "target": null,
+      "instance": "vw"
+    },
+    {
+      "at": "2026-09-06T15:32:30.521244+00:00",
+      "stage": "first-chunk-observed",
+      "elapsedMs": 11734,
+      "success": true,
+      "target": null,
+      "instance": "vw"
+    }
+  ],
+  "scopeNote": "Actual join and first chunks observed. On legacy 1.7.10 the automated WM_CLOSE test did not stop the JVM within the cleanup deadline; test process was then terminated. This is not recorded as a clean-exit pass."
+}

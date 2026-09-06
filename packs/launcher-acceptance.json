@@ -8,8 +8,10 @@
   "gameWindowsOpened": 0,
   "authorization": "existing encrypted Microsoft authorization",
   "checkedAt": "2026-09-06T09:28:19.440449+00:00",
-  "authFingerprint": "1af07fae3cc5a485571b7baa9cc8a9e0c9a9281e6977fad342642dd64a4b46b1",
+  "authFingerprint": "b26d69f96bbef55cb03514233bf1f2f83b5f8bcbc45f85d4421481354a69cb28",
   "provider": "cmllib-windows",
   "interactiveAuthorizationReusedFrom": "2026-09-05T06:16:33.700548+00:00",
-  "validation": "1.0.1 final source: restored existing encrypted Microsoft session in an isolated directory; silent reauthentication and matching game session passed. No interactive login or game was opened."
+  "validation": "1.0.1 final source: restored existing encrypted Microsoft session in an isolated directory; silent reauthentication and matching game session passed. No interactive login or game was opened.",
+  "previousAuthFingerprint": "1af07fae3cc5a485571b7baa9cc8a9e0c9a9281e6977fad342642dd64a4b46b1",
+  "fingerprintMigration": "Authentication source, configuration and external dependency versions are unchanged from 1.0.1. Only the Launcher.Shared internal project version reference in packages.lock.json changed from 1.0.1 to 1.0.2; prior live Microsoft acceptance is retained."
 }

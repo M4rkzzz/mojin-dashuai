@@ -3,6 +3,7 @@ package uk.boshan.loading;
 import java.lang.instrument.Instrumentation;
 import java.lang.reflect.Method;
 import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.*;
 import java.util.*;
@@ -16,6 +17,7 @@ public final class MojinLoadingAgent {
     private static Class<?> minecraft;
     private static boolean minecraftReady;
     private static final Set<Class<?>> readable = new HashSet<Class<?>>();
+    private static String connectionAttempt = "", reportedAttempt = "";
 
     public static void premain(String ignored, final Instrumentation instrumentation) {
         try {
@@ -31,6 +33,7 @@ public final class MojinLoadingAgent {
                     while (!Files.exists(directory.resolve(name + ".stop"))) {
                         try {
                             discover(instrumentation);
+                            try { observeFirstChunk(directory, name); } catch (Throwable unavailable) { }
                             String snapshot;
                             try { snapshot = snapshot(); }
                             catch (Throwable unavailable) { snapshot = unknown(); }
@@ -45,6 +48,12 @@ public final class MojinLoadingAgent {
                         }
                     }
                     try { Files.deleteIfExists(target); Files.deleteIfExists(temporary); } catch (Exception ignored) { }
+                    // The splash ends at Connecting, before chunks arrive. Keep only the
+                    // lightweight read-only connection observer until the game exits.
+                    while (!Files.exists(directory.resolve(name + ".exit"))) {
+                        try { observeFirstChunk(directory, name); } catch (Throwable unavailable) { }
+                        try { Thread.sleep(500); } catch (InterruptedException interrupted) { return; }
+                    }
                 }
             }, "Mojin loading telemetry");
             sampler.setDaemon(true);
@@ -54,6 +63,74 @@ public final class MojinLoadingAgent {
             // A presentation component must never prevent the game from starting.
             System.err.println("[Mojin] Loading telemetry unavailable; use the game window.");
         }
+    }
+
+    // Only inspect Minecraft after the launcher has observed its actual Connecting
+    // message. This prevents the reporter from triggering early class initialization.
+    private static void observeFirstChunk(Path directory, String session) throws Exception {
+        Path signal = directory.resolve(session + ".connection");
+        if (!Files.exists(signal)) return;
+        String attempt = new String(Files.readAllBytes(signal), StandardCharsets.UTF_8).trim();
+        if (!attempt.matches("[0-9]{1,19}") || attempt.equals(reportedAttempt)) return;
+        connectionAttempt = attempt;
+        if (minecraft == null) {
+            for (Class<?> type : instrumentation.getAllLoadedClasses())
+                if (type.getName().equals("net.minecraft.client.Minecraft")) { minecraft = type; break; }
+        }
+        if (minecraft == null) return;
+        exportProgressPackage(instrumentation, minecraft);
+        Object client = null;
+        for (String method : new String[]{"getMinecraft", "func_71410_x", "m_91087_"}) {
+            try { client = minecraft.getMethod(method).invoke(null); break; }
+            catch (NoSuchMethodException absent) { }
+        }
+        if (client == null) return;
+        Object world = fieldEnding(client, new String[]{".WorldClient", ".ClientLevel"});
+        if (world == null) return;
+        Object provider = fieldEnding(world, new String[]{".ChunkProviderClient", ".ClientChunkCache"});
+        if (provider == null || !hasChunks(provider, 0)) return;
+        Path target = directory.resolve(session + ".network.json"), tmp = directory.resolve(session + ".network.tmp");
+        Files.write(tmp, ("{\"attempt\":\"" + connectionAttempt + "\",\"stage\":\"first-chunk-observed\"}").getBytes(StandardCharsets.UTF_8));
+        Files.move(tmp, target, StandardCopyOption.REPLACE_EXISTING);
+        reportedAttempt = connectionAttempt;
+    }
+    private static Object fieldEnding(Object owner, String[] endings) throws Exception {
+        for (Class<?> type = owner.getClass(); type != null; type = type.getSuperclass()) {
+            exportProgressPackage(instrumentation, type);
+            for (Field f : type.getDeclaredFields()) {
+                if (Modifier.isStatic(f.getModifiers())) continue;
+                for (String ending : endings) if (f.getType().getName().endsWith(ending)) { f.setAccessible(true); return f.get(owner); }
+            }
+        }
+        return null;
+    }
+    private static boolean hasChunks(Object owner, int depth) throws Exception {
+        if (depth > 1) return false;
+        Class<?> type = owner.getClass(); exportProgressPackage(instrumentation, type);
+        for (Field f : type.getDeclaredFields()) {
+            if (Modifier.isStatic(f.getModifiers())) continue;
+            if (!(Map.class.isAssignableFrom(f.getType()) || Collection.class.isAssignableFrom(f.getType())
+                    || f.getType().getName().equals("java.util.concurrent.atomic.AtomicReferenceArray")
+                    || f.getType().getName().endsWith(".LongHashMap")
+                    || f.getType().getName().contains("ClientChunkCache$"))) continue;
+            f.setAccessible(true); Object value = f.get(owner);
+            // 1.7.10 stores chunks in LongHashMap. Hodgepodge can keep the old
+            // auxiliary List empty, so it cannot serve as the only observation.
+            if (value != null && f.getType().getName().endsWith(".LongHashMap")) {
+                for (String name : new String[]{"getNumHashElements", "func_76162_a"}) {
+                    try { if (((Number)value.getClass().getMethod(name).invoke(value)).intValue() > 0) return true; }
+                    catch (NoSuchMethodException absent) { }
+                }
+            }
+            if (value instanceof Map && !((Map<?,?>) value).isEmpty()) return true;
+            if (value instanceof Collection && !((Collection<?>) value).isEmpty()) return true;
+            if (value instanceof java.util.concurrent.atomic.AtomicReferenceArray) {
+                java.util.concurrent.atomic.AtomicReferenceArray<?> chunks = (java.util.concurrent.atomic.AtomicReferenceArray<?>) value;
+                for (int i = 0; i < chunks.length(); i++) if (chunks.get(i) != null) return true;
+            }
+            if (value != null && f.getType().getName().contains("ClientChunkCache$") && hasChunks(value, depth + 1)) return true;
+        }
+        return false;
     }
 
     private static void discover(Instrumentation instrumentation) throws Exception {
