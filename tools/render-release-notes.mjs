@@ -52,14 +52,32 @@ try{
   await page.route(/^https?:\/\//,route=>route.abort());
   await page.setContent(html,{waitUntil:'load'});
   await page.evaluate(async()=>{await document.fonts.ready;await Promise.all([...document.images].map(image=>image.decode()));});
+  const layout=await page.evaluate(()=>{
+    const reservedRows=20;
+    const poster=document.querySelector('.poster'),content=document.querySelector('.content');
+    const items=[...document.querySelectorAll('.changes li')];
+    const itemStyle=getComputedStyle(items[0]),contentStyle=getComputedStyle(content);
+    const lineHeight=parseFloat(itemStyle.lineHeight);
+    const rowHeight=lineHeight+parseFloat(itemStyle.paddingTop)+parseFloat(itemStyle.paddingBottom);
+    const renderedRows=items.reduce((total,item)=>total+Math.max(1,Math.round(item.querySelector('span').getBoundingClientRect().height/lineHeight)),0);
+    const notes=document.querySelector('.notes'),notesStyle=notes&&getComputedStyle(notes);
+    const notesHeight=notes?notes.getBoundingClientRect().height+parseFloat(notesStyle.marginTop)+parseFloat(notesStyle.marginBottom):0;
+    const chromeHeight=poster.getBoundingClientRect().height-content.getBoundingClientRect().height;
+    const padding=parseFloat(contentStyle.paddingTop)+parseFloat(contentStyle.paddingBottom);
+    const baseHeight=Math.max(1920,Math.ceil(chromeHeight+padding+reservedRows*rowHeight+notesHeight));
+    poster.style.height=Math.ceil(baseHeight+Math.max(0,renderedRows-reservedRows)*rowHeight)+'px';
+    return {reservedRows,renderedRows,baseHeight,rowHeight};
+  });
   const problems=await page.evaluate(()=>[...document.querySelectorAll('h1,p,.changes li,.version,.brand-row,.footer')].filter(el=>el.scrollWidth>el.clientWidth+1).map(el=>el.className||el.tagName));
   if(problems.length)throw new Error('Text exceeds its layout; shorten the copy: '+problems.join(', '));
   const verticalOverflow=await page.locator('.content').evaluate(el=>el.scrollHeight>el.clientHeight+1);
-  if(verticalOverflow)throw new Error('Too many changelog lines for the fixed portrait layout; shorten or split the content.');
+  if(verticalOverflow)throw new Error('Changelog layout exceeds the expanded canvas.');
+  // Keep the standalone preview at the same expanded height as the exported image.
+  await fs.writeFile(output+'.html',await page.content(),'utf8');
   await page.locator('.poster').screenshot({path:output+'.png'});
   await sharp(output+'.png').resize({width:1080}).jpeg({quality:92,mozjpeg:true}).toFile(output+'.jpg');
   const metadata=await sharp(output+'.png').metadata();
-  const report={version:data.version,input:path.relative(root,resolve(options.data)),width:metadata.width,height:metadata.height,scale,files:[output+'.png',output+'.jpg',output+'.html']};
+  const report={version:data.version,input:path.relative(root,resolve(options.data)),width:metadata.width,height:metadata.height,scale,...layout,files:[output+'.png',output+'.jpg',output+'.html']};
   await fs.writeFile(output+'.json',JSON.stringify(report,null,2)+'\n');
   console.log(JSON.stringify(report,null,2));
 }finally{await browser.close();}
