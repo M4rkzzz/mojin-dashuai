@@ -172,6 +172,7 @@ for instance in args.instances:
         # Personal configuration initializes once; pack scripts and machine/quest definitions remain managed.
         seeded = relative in ('options.txt', 'servers.dat') or relative.startswith(('config/', 'shaderpacks/', 'resourcepacks/'))
         if any(fnmatch.fnmatchcase(relative, pattern) for pattern in ['config/modularmachinery/**', 'config/ftbquests/**']): seeded = False
+        if relative in spec.get('configOverrides', {}): seeded = spec['configOverrides'][relative]['policy'] == 'seed'
         records[relative] = record(path, relative, [config['publicBase'] + '/' + version_base + '/' + urllib.parse.quote(relative)],
                                    'seed' if seeded else 'managed', 'Operator-provided pack overrides; personal files excluded')
     if spec['format'] == 'modrinth':

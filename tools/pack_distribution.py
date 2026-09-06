@@ -164,6 +164,18 @@ def override_files(source, spec):
             if path.suffix.lower() in {'.json', '.cfg', '.toml', '.properties', '.txt', '.ini', '.yml', '.yaml'} and SECRET.search(data):
                 raise ValueError('Possible credential requires local review: ' + relative)
             entries[relative] = data
+    # Reviewed pack fixes override the frozen upstream defaults on every rebuild.
+    for relative, fix in spec.get('configOverrides', {}).items():
+        safe_path(relative)
+        if not relative.startswith('config/') or private_path(relative):
+            raise ValueError('Configuration override must be a public config path')
+        origin = (ROOT / safe_path(fix['source'])).resolve()
+        if not origin.is_relative_to(ROOT / 'packs/overrides') or origin.is_symlink():
+            raise ValueError('Configuration override must come from packs/overrides')
+        data = origin.read_bytes()
+        if SECRET.search(data): raise ValueError('Possible credential in configuration override')
+        if fix['policy'] not in ('seed', 'managed'): raise ValueError('Invalid configuration override policy')
+        entries[relative] = data
     # Seed defaults contain no previous account, server IP, world or personal key bindings.
     defaults = 'lang:' + ('zh_CN' if spec['minecraft'] == '1.7.10' else 'zh_cn') + '\nfullscreen:false\n'
     if spec.get('defaultResourcePacks'):

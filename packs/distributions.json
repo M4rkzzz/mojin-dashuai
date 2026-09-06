@@ -5,7 +5,13 @@
   "instances": {
     "m3e": {
       "name": "魔法金属",
-      "version": "8.0.4-2-mojin.2",
+      "version": "8.0.4-2-mojin.3",
+      "configOverrides": {
+        "config/angelica-modules.cfg": {
+          "source": "packs/overrides/m3e/config/angelica-modules.cfg",
+          "policy": "managed"
+        }
+      },
       "minecraft": "1.7.10",
       "loader": "forge",
       "loaderVersion": "10.13.4.1614",

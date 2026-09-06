@@ -1,0 +1,52 @@
+{
+  "passed": true,
+  "channel": "beta",
+  "manifestSha256": "86d8d0ee6804a13c20444fb5d8439add1c6484a04596df99e8f435ee4537c439",
+  "cleanWindows": false,
+  "joinedServer": true,
+  "allSourcesAutomated": true,
+  "javaMajor": 8,
+  "loader": "forge",
+  "map": true,
+  "quests": false,
+  "machines": false,
+  "scope": "Configuration-only hotfix. Previously accepted sequence 2 game binaries, runtime and map mods are unchanged. Joined-server and map acceptance are inherited from sequence 2; this hotfix was verified with the actual differential installer and the rebuilt full archive, without launching a new game.",
+  "inheritedGameAcceptance": "packs/acceptance/m3e-2.json",
+  "newGameWindowOpened": false,
+  "changedFiles": [
+    "config/angelica-modules.cfg"
+  ],
+  "changedKeys": {
+    "enableHudCaching": false,
+    "enableHudCachingEventTransformer": false
+  },
+  "configurationPolicy": "managed",
+  "originalConfigurationBackedUp": true,
+  "settingsAndMapDataPreserved": true,
+  "actualDifferentialDownloadBytes": 6839,
+  "repeatUpdateHasNoChanges": true,
+  "fullArchiveHashInventoryVerified": true,
+  "verifiedZipEntries": 4781,
+  "sourceIssue": "https://github.com/GTNewHorizons/Angelica/issues/542",
+  "issueScope": "Upstream reports the same HUD-cache crash class on an older Angelica build. This exact alpha19 configuration workaround was supplied by the operator; no new crash reproduction is claimed.",
+  "evidence": [
+    "artifacts/complete-client-staged/m3e-hud-sequence-3/report.json",
+    "artifacts/complete-client-staged/m3e-hud-sequence-3/public-object-check.json",
+    ".local/m3e-hud-hotfix/update-check.json"
+  ],
+  "deferredChecks": [
+    "cleanWindows"
+  ],
+  "approvedDeferral": "packs/beta-authorization.json",
+  "checkedAt": "2026-09-06T12:10:58.081159+00:00",
+  "publication": {
+    "catalogSequence": 9,
+    "activated": true,
+    "publicManifestVerified": true,
+    "manifestUrl": "https://launcher-direct.boshan.uk:21708/v1/manifests/m3e/3",
+    "signedManifestSha256": "af9ee45e1f0dee191d6fc399034e15ca74b745138d0f6a2bbe3d47a77f3dc747",
+    "completeArchiveSha256": "3d00e413c61831d87d1cfd7abc28ca8b13acb0eeb6a131654ebc350f1c4434a5",
+    "launcherUpdated": false,
+    "gameServersRestarted": false
+  }
+}
