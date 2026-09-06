@@ -25,7 +25,7 @@ node tools/render-release-notes.mjs --data packs/changelogs/beta16.json
 node tools/render-release-notes.mjs --data packs/changelogs/beta17.json --out artifacts/changelogs/beta17
 ```
 
-`changes` 是字符串数组，每项概括一个实际修复的问题，自动按序号逐行排列。同一个问题的实现细节不要拆成多条，不添加宣传口号、条目副标题或标签。例如 beta16 只保留“修复首次打开窗口过大、部分内容显示不全的问题。”一条。图片固定为 9:16 竖版，条目少时保留空白，不随内容变矮；较长条目自动换行。默认显示品牌、版本标题、日期、改动和底部群号，使用较小字体及紧凑行距，不显示“四服”“Windows x64”等辅助小字。确有需要时可用 `notes` 添加补充说明；`community` 填写底部群号，保留显示；其他辅助说明不填写。`title` 为图片标题；`background`、`logo` 使用相对仓库根目录的本地图片路径；`accent` 设置六位十六进制主题色。排版在 `tools/templates/release-notes.html` 中维护。
+`changes` 是字符串数组，每项概括一个实际修复的问题，自动按序号逐行排列。同一个问题的实现细节不要拆成多条，不添加宣传口号、条目副标题或标签。例如 beta16 只保留“修复首次打开窗口过大、部分内容显示不全的问题。”一条。图片固定为 9:16 竖版，条目少时保留空白，不随内容变矮；较长条目自动换行。默认显示品牌、版本标题、日期、改动和底部群号，使用适合手机查看的较大字体及紧凑行距（1080 像素画布上标题 64px、正文 40px、群号 34px），不显示“四服”“Windows x64”等辅助小字。确有需要时可用 `notes` 添加补充说明；`community` 填写底部群号，保留显示；其他辅助说明不填写。`title` 为图片标题；`background`、`logo` 使用相对仓库根目录的本地图片路径；`accent` 设置六位十六进制主题色。排版在 `tools/templates/release-notes.html` 中维护。
 
 `--scale 1` 导出 1080 × 1920 PNG，默认 `--scale 2` 导出 2160 × 3840 PNG；JPEG 始终为 1080 × 1920。条目超出固定画布时脚本会提示，避免静默截断。所有相对路径均以仓库根目录为基准，脚本可从其他工作目录调用。输出文件同名时会覆盖，请为不同版本使用不同输出前缀。
 
