@@ -4,52 +4,30 @@
 <meta charset="utf-8">
 <title>{{TITLE}}</title>
 <style>
-*{box-sizing:border-box}html,body{margin:0;padding:0;background:#101510}body{font-family:'Microsoft YaHei','Noto Sans CJK SC','PingFang SC',sans-serif;color:#f1f2e9;-webkit-font-smoothing:antialiased}
-.poster{width:1080px;position:relative;background:#101510;isolation:isolate;--accent:{{ACCENT}};overflow:hidden}
-.poster:after{content:'';position:absolute;inset:0;border:1px solid #d7ebbd20;pointer-events:none;z-index:5}
-.hero{position:relative;padding:56px 66px 68px;min-height:586px;isolation:isolate}
-.scene{position:absolute;inset:0;z-index:-3;background:url('{{BACKGROUND}}') center 49%/cover}
-.hero:before{content:'';position:absolute;inset:0;z-index:-2;background:linear-gradient(90deg,#0c150eee 0%,#0d190dd9 34%,#08140936 85%),linear-gradient(0deg,#101510 0%,#10151000 48%)}
-.hero:after{content:'';position:absolute;inset:0;z-index:-1;background:radial-gradient(ellipse at 76% 50%,#ddf19718,transparent 55%)}
-.brand-row{display:flex;justify-content:space-between;align-items:center;gap:32px}
-.brand{display:flex;align-items:center;gap:18px;font-size:30px;font-weight:700;letter-spacing:2px}.brand img{height:52px;width:52px;object-fit:contain}
-.product{font-size:15px;font-weight:400;letter-spacing:4px;color:#b7c5b0;margin-top:5px}
-.stamp{display:flex;flex-direction:column;align-items:flex-end;gap:10px;color:#c6d8b7;font-family:'Segoe UI',sans-serif;font-size:17px;letter-spacing:3px}
-.stamp span{font-family:'Microsoft YaHei',sans-serif;font-size:15px;letter-spacing:3px;display:flex;align-items:center;gap:9px}.stamp i{width:7px;height:7px;background:var(--accent);border-radius:50%;box-shadow:0 0 18px #d7ebbd80}
-.version{font-family:'Segoe UI',sans-serif;font-size:142px;line-height:1.06;font-weight:700;letter-spacing:-6px;margin-top:61px;color:var(--accent);white-space:nowrap}
-.hero h1{margin:18px 0 0;font-size:52px;line-height:1.35;letter-spacing:2px;font-weight:700}
-.hero-bottom{margin-top:29px;display:flex;align-items:center;gap:20px;color:#c5ccbc;font-size:24px;letter-spacing:2px}
-.hero-bottom:before{content:'';height:2px;width:36px;background:var(--accent)}
-.release-number{margin-left:auto;font-family:'Segoe UI',sans-serif;font-size:17px;letter-spacing:1px;color:#afbaa8}
-.content{padding:0 66px 0;margin-top:-8px}
-.section-heading{display:flex;align-items:center;justify-content:space-between;gap:20px;border-bottom:1px solid #d7ebbd28;padding:0 0 24px}
-.section-heading h2{font-size:27px;letter-spacing:2px;font-weight:500;margin:0}.section-heading span{font-family:'Segoe UI',sans-serif;font-size:15px;letter-spacing:4px;color:#839378}
-.change{position:relative;display:grid;grid-template-columns:80px 1fr;column-gap:27px;padding:35px 0 33px;border-bottom:1px solid #d7ebbd1c}
-.symbol{color:var(--accent);padding-top:8px}.symbol svg{width:47px;height:47px;stroke-width:1.4}
-.symbol span{display:block;font-family:'Segoe UI',sans-serif;color:#6e8063;font-size:14px;letter-spacing:3px;margin-top:15px}
-.change-title{display:flex;align-items:center;justify-content:space-between;gap:18px}.change h3{font-size:34px;font-weight:600;line-height:1.5;letter-spacing:1px;margin:0}
-.tag{font-size:16px;font-weight:400;white-space:nowrap;color:#a8b599;border:1px solid #c3d9ac2c;padding:5px 10px;border-radius:3px}
-.change p{font-size:24px;line-height:1.9;color:#aab5a2;margin:12px 0 0;white-space:pre-line;overflow-wrap:anywhere}
-.delivery{margin:38px 0 0;background:linear-gradient(120deg,#d7ebbd,#c5dab0);color:#1c2b15;padding:33px 36px 29px;position:relative}
-.delivery:before,.delivery:after{content:'';width:8px;height:8px;position:absolute;background:#1c2b1533;top:15px}.delivery:before{left:15px}.delivery:after{right:15px}
-.metrics{display:grid;grid-template-columns:repeat({{METRIC_COUNT}},1fr);padding-bottom:28px;border-bottom:1px solid #35472a30}
-.metric{padding-left:28px;border-left:1px solid #35472a30}.metric:first-child{border-left:0;padding-left:0}
-.number{font-family:'Segoe UI',sans-serif;font-size:65px;line-height:1.1;font-weight:600;letter-spacing:-3px}.number small{font-size:22px;letter-spacing:0;margin-left:10px;font-weight:400}
-.metric p{font-size:18px;margin:10px 0 0;color:#48603a}
-.how{display:flex;align-items:center;gap:20px;padding-top:25px}.how svg{width:32px;height:32px;flex-shrink:0}.how h3{font-size:27px;letter-spacing:1px;font-weight:600;margin:0}.how p{font-size:20px;color:#4e643f;margin:9px 0 0;line-height:1.65}
-.note{text-align:center;color:#96a589;font-size:19px;letter-spacing:1px;margin:24px 0 38px}
-.footer{display:flex;justify-content:space-between;align-items:center;padding:30px 66px 36px;border-top:1px solid #d7ebbd20;font-size:20px;color:#d5ddca;gap:22px}
-.footer .community{display:flex;align-items:center;gap:12px}.footer svg{width:22px;height:22px;color:#adc594}.footer small{font-size:16px;color:#849579;letter-spacing:1px}
+*{box-sizing:border-box}html,body{margin:0;padding:0;background:#111711}body{font-family:'Microsoft YaHei','Noto Sans CJK SC','PingFang SC',sans-serif;color:#edf0e7;-webkit-font-smoothing:antialiased}
+.poster{width:1080px;position:relative;background:#111711;isolation:isolate;--accent:{{ACCENT}};overflow:hidden}
+.poster:after{content:'';position:absolute;inset:0;border:1px solid #d7ebbd20;pointer-events:none}
+.header{position:relative;padding:48px 64px 38px;isolation:isolate;border-bottom:1px solid #d7ebbd25}
+.header:before{content:'';position:absolute;inset:0;z-index:-2;background:url('{{BACKGROUND}}') center 43%/cover;opacity:.3}
+.header:after{content:'';position:absolute;inset:0;z-index:-1;background:linear-gradient(90deg,#111711e6,#11171150),linear-gradient(0deg,#111711,transparent)}
+.brand-row{display:flex;justify-content:space-between;align-items:center;gap:24px}
+.brand{display:flex;align-items:center;gap:15px;font-size:27px;font-weight:600}.brand img{height:44px;width:44px;object-fit:contain}.product{margin-left:4px;font-size:19px;font-weight:400;color:#abbba2}
+.date{font-family:'Segoe UI',sans-serif;color:#a6b79b;font-size:21px;letter-spacing:1px}
+h1{font-size:50px;line-height:1.35;font-weight:600;margin:34px 0 10px;letter-spacing:1px}
+.version{font-family:'Segoe UI',sans-serif;font-size:20px;color:#98ac8b;margin:0}
+.content{padding:20px 64px 28px}
+.changes{list-style:none;margin:0;padding:0;counter-reset:change}
+.changes li{counter-increment:change;display:flex;gap:22px;padding:20px 0;font-size:27px;line-height:1.8;white-space:pre-line;overflow-wrap:anywhere}
+.changes li:before{content:counter(change) '.';color:var(--accent);font-family:'Segoe UI',sans-serif;min-width:26px;flex-shrink:0}
+.changes li span{min-width:0}
+.notes{border-top:1px solid #d7ebbd25;padding-top:22px;margin-top:16px}
+.notes p{font-size:22px;line-height:1.85;color:#aabb9f;margin:8px 0;white-space:pre-line;overflow-wrap:anywhere}
+.footer{display:flex;justify-content:space-between;align-items:center;padding:25px 64px 30px;border-top:1px solid #d7ebbd20;font-size:20px;color:#c3d1b9;gap:22px}
+.footer small{font-size:17px;color:#8fa182}
 </style>
 </head>
 <body><article class="poster">
-<header class="hero"><div class="scene"></div>
-<div class="brand-row"><div class="brand"><img src="{{LOGO}}" alt=""><div>{{BRAND}}<div class="product">{{PRODUCT}}</div></div></div><div class="stamp">{{DATE}}<span><i></i>{{STATUS}}</span></div></div>
-<div class="version">{{EDITION}}</div><h1>{{HEADLINE}}</h1><div class="hero-bottom">{{SUBTITLE}}<span class="release-number">{{VERSION}}</span></div>
-</header>
-<main class="content"><div class="section-heading"><h2>{{SECTION_TITLE}}</h2><span>WHAT'S NEW</span></div>
-{{CHANGES}}
-<section class="delivery"><div class="metrics">{{METRICS}}</div><div class="how">{{UPDATE_ICON}}<div><h3>{{UPDATE_TITLE}}</h3><p>{{UPDATE_BODY}}</p></div></div></section>
-<p class="note">{{NOTE}}</p></main>
-<footer class="footer"><span class="community">{{COMMUNITY_ICON}}{{COMMUNITY}}</span><small>{{FOOTER}}</small></footer>
+<header class="header"><div class="brand-row"><div class="brand"><img src="{{LOGO}}" alt="">{{BRAND}}<span class="product">{{PRODUCT}}</span></div><span class="date">{{DATE}}</span></div><h1>{{HEADING}}</h1><p class="version">{{VERSION}}</p></header>
+<main class="content"><ol class="changes">{{CHANGES}}</ol>{{NOTES}}</main>
+<footer class="footer"><span>{{COMMUNITY}}</span><small>{{FOOTER}}</small></footer>
 </article></body></html>

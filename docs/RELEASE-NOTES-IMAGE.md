@@ -19,13 +19,13 @@ node tools/render-release-notes.mjs --data packs/changelogs/beta16.json
 
 ## 生成后续版本
 
-复制 `packs/changelogs/beta16.json` 为新版本文件，修改版本、日期、标题、更新条目和下载数据，然后运行：
+复制 `packs/changelogs/beta16.json` 为新版本文件，修改版本、日期、标题和逐行更新内容，然后运行：
 
 ```powershell
 node tools/render-release-notes.mjs --data packs/changelogs/beta17.json --out artifacts/changelogs/beta17
 ```
 
-`changes` 条目数量可以调整，图片高度随内容自动增长。支持 `window`、`move`、`fit`、`update` 图标；未知图标使用 `fit`。`metrics` 支持 1–3 项。`background`、`logo` 使用相对仓库根目录的本地图片路径；`accent` 设置六位十六进制主题色。美术排版在 `tools/templates/release-notes.html` 中维护。正文可用 `\n` 指定换行。
+`changes` 是字符串数组，每项直接填写一条改动，自动按序号逐行排列。文案平铺直叙，不添加宣传口号、条目副标题或标签。图片高度随内容自动增长，较长条目自动换行。可选 `notes` 数组用于更新方式、下载体积等补充说明，也按行显示。`title` 为图片标题；`background`、`logo` 使用相对仓库根目录的本地图片路径；`accent` 设置六位十六进制主题色。排版在 `tools/templates/release-notes.html` 中维护。
 
 `--scale 1` 导出 1080 像素宽 PNG，默认 `--scale 2` 导出 2160 像素宽 PNG；JPEG 始终保持 1080 像素宽。所有相对路径均以仓库根目录为基准，脚本可从其他工作目录调用。输出文件同名时会覆盖，请为不同版本使用不同输出前缀。
 
