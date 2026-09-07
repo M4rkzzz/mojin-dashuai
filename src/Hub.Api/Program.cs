@@ -25,6 +25,7 @@ builder.Services.AddScoped<AccountService>();
 builder.Services.AddScoped<JoinService>();
 builder.Services.AddScoped<ActivityService>();
 builder.Services.AddSingleton<ActivityCatalog>();
+builder.Services.AddHostedService(services=>services.GetRequiredService<ActivityCatalog>());
 builder.Services.AddSingleton<JoinRequestLimits>();
 builder.Services.AddHttpClient<MinecraftJoinVerifier>(client => client.Timeout = TimeSpan.FromSeconds(12))
     .ConfigurePrimaryHttpMessageHandler(() => new SocketsHttpHandler { AllowAutoRedirect = false, UseCookies = false, ConnectTimeout = TimeSpan.FromSeconds(5) });

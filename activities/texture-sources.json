@@ -128,5 +128,465 @@
     "archive": "gregtech_1.7.10-6.17.06.jar",
     "texture": "assets/gregtech/textures/blocks/machines/multiblockparts/firebricks/0/colored/side.png",
     "overlay": "assets/gregtech/textures/blocks/machines/multiblockparts/firebricks/0/overlay/side.png"
+  },
+  "m3e:manametalmod:BLOCKCrystalPillars@0": {
+    "archive": "manametalmod-8.0.4-2.jar",
+    "texture": "assets/manametalmod/textures/blocks/BLOCKCrystalPillars.png",
+    "overlay": null
+  },
+  "m3e:manametalmod:BLOCKManaMetalInjection@0": {
+    "archive": "manametalmod-8.0.4-2.jar",
+    "texture": "assets/manametalmod/textures/blocks/BLOCKManaMetalInjection.png",
+    "overlay": null
+  },
+  "m3e:manametalmod:BlockMagicUpdates@0": {
+    "archive": "manametalmod-8.0.4-2.jar",
+    "texture": "assets/manametalmod/textures/blocks/BlockMagicUpdate.png",
+    "overlay": null
+  },
+  "m3e:manametalmod:BlockTileEntityHumanReforms@0": {
+    "archive": "manametalmod-8.0.4-2.jar",
+    "texture": "assets/manametalmod/textures/blocks/BlockTileEntityHumanReforms.png",
+    "overlay": null
+  },
+  "m3e:manametalmod:BlockTileEntityManaEnchantings@0": {
+    "archive": "manametalmod-8.0.4-2.jar",
+    "texture": "assets/manametalmod/textures/blocks/TileEntityManaEnchanting.png",
+    "overlay": null
+  },
+  "m3e:manametalmod:ManaCoal@0": {
+    "archive": "manametalmod-8.0.4-2.jar",
+    "texture": "assets/manametalmod/textures/items/ManaCoal.png",
+    "overlay": null,
+    "frame": {
+      "x": 0,
+      "y": 0,
+      "width": 16,
+      "height": 16,
+      "size": 16
+    }
+  },
+  "m3e:manametalmod:ManaRuneE@0": {
+    "archive": "manametalmod-8.0.4-2.jar",
+    "texture": "assets/manametalmod/textures/blocks/ManaRuneE_0.png",
+    "overlay": null,
+    "frame": {
+      "x": 0,
+      "y": 0,
+      "width": 16,
+      "height": 16,
+      "size": 16
+    }
+  },
+  "m3e:manametalmod:MetalEnergy02@0": {
+    "archive": "manametalmod-8.0.4-2.jar",
+    "texture": "assets/manametalmod/textures/items/MetalEnergy02.png",
+    "overlay": null,
+    "frame": {
+      "x": 0,
+      "y": 0,
+      "width": 16,
+      "height": 16,
+      "size": 16
+    }
+  },
+  "m3e:manametalmod:dustMana@0": {
+    "archive": "manametalmod-8.0.4-2.jar",
+    "texture": "assets/manametalmod/textures/items/dustMana.png",
+    "overlay": null,
+    "frame": {
+      "x": 0,
+      "y": 0,
+      "width": 16,
+      "height": 16,
+      "size": 16
+    }
+  },
+  "m3e:manametalmod:ingotManaS@0": {
+    "archive": "manametalmod-8.0.4-2.jar",
+    "texture": "assets/manametalmod/textures/items/ingotManaS.png",
+    "overlay": null,
+    "frame": {
+      "x": 0,
+      "y": 0,
+      "width": 16,
+      "height": 16,
+      "size": 16
+    }
+  },
+  "m3e:manametalmod:magicStone2@0": {
+    "archive": "manametalmod-8.0.4-2.jar",
+    "texture": "assets/manametalmod/textures/blocks/magicStone2.png",
+    "overlay": null
+  },
+  "m3e:manametalmod:magicStone4@0": {
+    "archive": "manametalmod-8.0.4-2.jar",
+    "texture": "assets/manametalmod/textures/blocks/magicStone4.png",
+    "overlay": null
+  },
+  "m3e:minecraft:brick_block@0": {
+    "archive": "MSE.jar",
+    "texture": "assets/minecraft/textures/blocks/brick.png",
+    "overlay": null
+  },
+  "m3e:minecraft:chest@0": {
+    "archive": "MSE.jar",
+    "texture": "assets/minecraft/textures/entity/chest/normal.png",
+    "overlay": null
+  },
+  "m3e:minecraft:glass@0": {
+    "archive": "MSE.jar",
+    "texture": "assets/minecraft/textures/blocks/glass.png",
+    "overlay": null
+  },
+  "m3e:minecraft:golden_rail@0": {
+    "archive": "MSE.jar",
+    "texture": "assets/minecraft/textures/blocks/rail_golden.png",
+    "overlay": null
+  },
+  "m3e:minecraft:hopper@0": {
+    "archive": "MSE.jar",
+    "texture": "assets/minecraft/textures/items/hopper.png",
+    "overlay": null
+  },
+  "m3e:minecraft:ladder@0": {
+    "archive": "MSE.jar",
+    "texture": "assets/minecraft/textures/blocks/ladder.png",
+    "overlay": null
+  },
+  "m3e:minecraft:paper@0": {
+    "archive": "MSE.jar",
+    "texture": "assets/minecraft/textures/items/paper.png",
+    "overlay": null
+  },
+  "m3e:minecraft:piston@0": {
+    "archive": "MSE.jar",
+    "texture": "assets/minecraft/textures/blocks/piston_side.png",
+    "overlay": null
+  },
+  "m3e:minecraft:rail@0": {
+    "archive": "MSE.jar",
+    "texture": "assets/minecraft/textures/blocks/rail_normal.png",
+    "overlay": null
+  },
+  "m3e:minecraft:repeater@0": {
+    "archive": "MSE.jar",
+    "texture": "assets/minecraft/textures/items/repeater.png",
+    "overlay": null
+  },
+  "m3e:minecraft:stonebrick@0": {
+    "archive": "MSE.jar",
+    "texture": "assets/minecraft/textures/blocks/stonebrick.png",
+    "overlay": null
+  },
+  "dc2:immersiveengineering:cokebrick@0": {
+    "archive": "ImmersiveEngineering-1.20.1-10.2.0-183.jar",
+    "texture": "assets/immersiveengineering/textures/block/stone_decoration/cokebrick.png",
+    "overlay": null
+  },
+  "dc2:immersiveengineering:conveyor_basic@0": {
+    "archive": "ImmersiveEngineering-1.20.1-10.2.0-183.jar",
+    "texture": "assets/immersiveengineering/textures/block/conveyor/off.png",
+    "overlay": null
+  },
+  "dc2:immersiveengineering:heavy_engineering@0": {
+    "archive": "ImmersiveEngineering-1.20.1-10.2.0-183.jar",
+    "texture": "assets/immersiveengineering/textures/block/metal_decoration/heavy_engineering.png",
+    "overlay": null
+  },
+  "dc2:immersiveengineering:ingot_steel@0": {
+    "archive": "ImmersiveEngineering-1.20.1-10.2.0-183.jar",
+    "texture": "assets/immersiveengineering/textures/item/metal_ingot_steel.png",
+    "overlay": null
+  },
+  "dc2:immersiveengineering:light_engineering@0": {
+    "archive": "ImmersiveEngineering-1.20.1-10.2.0-183.jar",
+    "texture": "assets/immersiveengineering/textures/block/metal_decoration/light_engineering.png",
+    "overlay": null
+  },
+  "dc2:immersiveengineering:plate_iron@0": {
+    "archive": "ImmersiveEngineering-1.20.1-10.2.0-183.jar",
+    "texture": "assets/immersiveengineering/textures/item/metal_plate_iron.png",
+    "overlay": null
+  },
+  "dc2:immersiveengineering:rs_engineering@0": {
+    "archive": "ImmersiveEngineering-1.20.1-10.2.0-183.jar",
+    "texture": "assets/immersiveengineering/textures/block/metal_decoration/redstone_engineering.png",
+    "overlay": null
+  },
+  "dc2:immersiveengineering:steel_fence@0": {
+    "archive": "ImmersiveEngineering-1.20.1-10.2.0-183.jar",
+    "texture": "assets/immersiveengineering/textures/block/metal/storage_steel.png",
+    "overlay": null
+  },
+  "dc2:immersiveengineering:wooden_barrel@0": {
+    "archive": "ImmersiveEngineering-1.20.1-10.2.0-183.jar",
+    "texture": "assets/immersiveengineering/textures/block/wooden_device/barrel_side.png",
+    "overlay": null
+  },
+  "dc2:minecraft:bricks@0": {
+    "archive": "1.20.1.jar",
+    "texture": "assets/minecraft/textures/block/bricks.png",
+    "overlay": null
+  },
+  "dc2:minecraft:cauldron@0": {
+    "archive": "1.20.1.jar",
+    "texture": "assets/minecraft/textures/item/cauldron.png",
+    "overlay": null
+  },
+  "dc2:minecraft:chest@0": {
+    "archive": "1.20.1.jar",
+    "texture": "assets/minecraft/textures/entity/chest/normal.png",
+    "overlay": null
+  },
+  "dc2:minecraft:glass@0": {
+    "archive": "1.20.1.jar",
+    "texture": "assets/minecraft/textures/block/glass.png",
+    "overlay": null
+  },
+  "dc2:minecraft:hopper@0": {
+    "archive": "1.20.1.jar",
+    "texture": "assets/minecraft/textures/item/hopper.png",
+    "overlay": null
+  },
+  "dc2:minecraft:ladder@0": {
+    "archive": "1.20.1.jar",
+    "texture": "assets/minecraft/textures/block/ladder.png",
+    "overlay": null
+  },
+  "dc2:minecraft:paper@0": {
+    "archive": "1.20.1.jar",
+    "texture": "assets/minecraft/textures/item/paper.png",
+    "overlay": null
+  },
+  "dc2:minecraft:piston@0": {
+    "archive": "1.20.1.jar",
+    "texture": "assets/minecraft/textures/block/piston_side.png",
+    "overlay": null
+  },
+  "dc2:minecraft:powered_rail@0": {
+    "archive": "1.20.1.jar",
+    "texture": "assets/minecraft/textures/block/powered_rail.png",
+    "overlay": null
+  },
+  "dc2:minecraft:rail@0": {
+    "archive": "1.20.1.jar",
+    "texture": "assets/minecraft/textures/block/rail.png",
+    "overlay": null
+  },
+  "dc2:minecraft:repeater@0": {
+    "archive": "1.20.1.jar",
+    "texture": "assets/minecraft/textures/item/repeater.png",
+    "overlay": null
+  },
+  "dc2:minecraft:stone_bricks@0": {
+    "archive": "1.20.1.jar",
+    "texture": "assets/minecraft/textures/block/stone_bricks.png",
+    "overlay": null
+  },
+  "mb:immersiveengineering:metal@39": {
+    "archive": "ImmersiveEngineering-0.12-98.jar",
+    "texture": "assets/immersiveengineering/textures/items/metal_plate_iron.png",
+    "overlay": null
+  },
+  "mb:immersiveengineering:metal@8": {
+    "archive": "ImmersiveEngineering-0.12-98.jar",
+    "texture": "assets/immersiveengineering/textures/items/metal_ingot_steel.png",
+    "overlay": null
+  },
+  "mb:immersiveengineering:metal_decoration0@3": {
+    "archive": "ImmersiveEngineering-0.12-98.jar",
+    "texture": "assets/immersiveengineering/textures/blocks/metal_decoration0_redstone_engineering.png",
+    "overlay": null
+  },
+  "mb:immersiveengineering:metal_decoration0@4": {
+    "archive": "ImmersiveEngineering-0.12-98.jar",
+    "texture": "assets/immersiveengineering/textures/blocks/metal_decoration0_light_engineering.png",
+    "overlay": null
+  },
+  "mb:immersiveengineering:metal_decoration0@5": {
+    "archive": "ImmersiveEngineering-0.12-98.jar",
+    "texture": "assets/immersiveengineering/textures/blocks/metal_decoration0_heavy_engineering.png",
+    "overlay": null
+  },
+  "mb:immersiveengineering:metal_decoration1@1": {
+    "archive": "ImmersiveEngineering-0.12-98.jar",
+    "texture": "assets/immersiveengineering/textures/blocks/metal_decoration1_steel_scaffolding.png",
+    "overlay": null
+  },
+  "mb:immersiveengineering:metal_device1@6": {
+    "archive": "ImmersiveEngineering-0.12-98.jar",
+    "texture": "assets/immersiveengineering/textures/blocks/metal_device1_fluid_pipe.png",
+    "overlay": null
+  },
+  "mb:immersiveengineering:sheetmetal@9": {
+    "archive": "ImmersiveEngineering-0.12-98.jar",
+    "texture": "assets/immersiveengineering/textures/blocks/sheetmetal_iron.png",
+    "overlay": null
+  },
+  "mb:immersiveengineering:stone_decoration@0": {
+    "archive": "ImmersiveEngineering-0.12-98.jar",
+    "texture": "assets/immersiveengineering/textures/blocks/stone_decoration_cokebrick.png",
+    "overlay": null
+  },
+  "mb:immersiveengineering:stone_decoration@1": {
+    "archive": "ImmersiveEngineering-0.12-98.jar",
+    "texture": "assets/immersiveengineering/textures/blocks/stone_decoration_blastbrick.png",
+    "overlay": null
+  },
+  "mb:minecraft:brick_block@0": {
+    "archive": "1.12.2-Cleanroom-0.5.17-alpha.jar",
+    "texture": "assets/minecraft/textures/blocks/brick.png",
+    "overlay": null
+  },
+  "mb:minecraft:cauldron@0": {
+    "archive": "1.12.2-Cleanroom-0.5.17-alpha.jar",
+    "texture": "assets/minecraft/textures/items/cauldron.png",
+    "overlay": null
+  },
+  "mb:minecraft:chest@0": {
+    "archive": "1.12.2-Cleanroom-0.5.17-alpha.jar",
+    "texture": "assets/minecraft/textures/entity/chest/normal.png",
+    "overlay": null
+  },
+  "mb:minecraft:glass@0": {
+    "archive": "1.12.2-Cleanroom-0.5.17-alpha.jar",
+    "texture": "assets/minecraft/textures/blocks/glass.png",
+    "overlay": null
+  },
+  "mb:minecraft:golden_rail@0": {
+    "archive": "1.12.2-Cleanroom-0.5.17-alpha.jar",
+    "texture": "assets/minecraft/textures/blocks/rail_golden.png",
+    "overlay": null
+  },
+  "mb:minecraft:hopper@0": {
+    "archive": "1.12.2-Cleanroom-0.5.17-alpha.jar",
+    "texture": "assets/minecraft/textures/items/hopper.png",
+    "overlay": null
+  },
+  "mb:minecraft:paper@0": {
+    "archive": "1.12.2-Cleanroom-0.5.17-alpha.jar",
+    "texture": "assets/minecraft/textures/items/paper.png",
+    "overlay": null
+  },
+  "mb:minecraft:piston@0": {
+    "archive": "1.12.2-Cleanroom-0.5.17-alpha.jar",
+    "texture": "assets/minecraft/textures/blocks/piston_side.png",
+    "overlay": null
+  },
+  "mb:minecraft:rail@0": {
+    "archive": "1.12.2-Cleanroom-0.5.17-alpha.jar",
+    "texture": "assets/minecraft/textures/blocks/rail_normal.png",
+    "overlay": null
+  },
+  "mb:minecraft:repeater@0": {
+    "archive": "1.12.2-Cleanroom-0.5.17-alpha.jar",
+    "texture": "assets/minecraft/textures/items/repeater.png",
+    "overlay": null
+  },
+  "mb:minecraft:stonebrick@0": {
+    "archive": "1.12.2-Cleanroom-0.5.17-alpha.jar",
+    "texture": "assets/minecraft/textures/blocks/stonebrick.png",
+    "overlay": null
+  },
+  "vw:gregtech:gt.meta.plate@260": {
+    "archive": "gregtech_1.7.10-6.17.06.jar",
+    "texture": "assets/gregtech/textures/items/materialicons/METALLIC/plate.png",
+    "overlay": "assets/gregtech/textures/items/materialicons/METALLIC/plate_OVERLAY.png"
+  },
+  "vw:gregtech:gt.meta.plate@8636": {
+    "archive": "gregtech_1.7.10-6.17.06.jar",
+    "texture": "assets/gregtech/textures/items/materialicons/SHINY/plate.png",
+    "overlay": "assets/gregtech/textures/items/materialicons/SHINY/plate_OVERLAY.png"
+  },
+  "vw:gregtech:gt.meta.screw@260": {
+    "archive": "gregtech_1.7.10-6.17.06.jar",
+    "texture": "assets/gregtech/textures/items/materialicons/METALLIC/screw.png",
+    "overlay": "assets/gregtech/textures/items/materialicons/METALLIC/screw_OVERLAY.png"
+  },
+  "vw:gregtech:gt.meta.stick@260": {
+    "archive": "gregtech_1.7.10-6.17.06.jar",
+    "texture": "assets/gregtech/textures/items/materialicons/METALLIC/stick.png",
+    "overlay": "assets/gregtech/textures/items/materialicons/METALLIC/stick_OVERLAY.png"
+  },
+  "vw:gregtech:gt.multitileentity@17000": {
+    "archive": "gregtech_1.7.10-6.17.06.jar",
+    "texture": "assets/gregtech/textures/blocks/machines/basicmachines/cokeoven/colored/front.png",
+    "overlay": "assets/gregtech/textures/blocks/machines/basicmachines/cokeoven/overlay/front.png"
+  },
+  "vw:gregtech:gt.multitileentity@17101": {
+    "archive": "gregtech_1.7.10-6.17.06.jar",
+    "texture": "assets/gregtech/textures/blocks/machines/basicmachines/distillationtower/colored/front.png",
+    "overlay": "assets/gregtech/textures/blocks/machines/basicmachines/distillationtower/overlay/front.png"
+  },
+  "vw:gregtech:gt.multitileentity@17103": {
+    "archive": "gregtech_1.7.10-6.17.06.jar",
+    "texture": "assets/gregtech/textures/blocks/machines/basicmachines/electrolyzer/colored/front.png",
+    "overlay": "assets/gregtech/textures/blocks/machines/basicmachines/electrolyzer/overlay/front.png"
+  },
+  "vw:gregtech:gt.multitileentity@17112": {
+    "archive": "gregtech_1.7.10-6.17.06.jar",
+    "texture": "assets/gregtech/textures/blocks/machines/basicmachines/autoclave/colored/front.png",
+    "overlay": "assets/gregtech/textures/blocks/machines/basicmachines/autoclave/overlay/front.png"
+  },
+  "vw:gregtech:gt.multitileentity@18022": {
+    "archive": "gregtech_1.7.10-6.17.06.jar",
+    "texture": "assets/gregtech/textures/blocks/machines/multiblockparts/metalwalldense/0/colored/side.png",
+    "overlay": "assets/gregtech/textures/blocks/machines/multiblockparts/metalwalldense/0/overlay/side.png"
+  },
+  "vw:gregtech:gt.multitileentity@18105": {
+    "archive": "gregtech_1.7.10-6.17.06.jar",
+    "texture": "assets/gregtech/textures/blocks/machines/multiblockparts/electrolyzerparts/0/colored/side.png",
+    "overlay": "assets/gregtech/textures/blocks/machines/multiblockparts/electrolyzerparts/0/overlay/side.png"
+  },
+  "vw:minecraft:brick_block@0": {
+    "archive": "MSE.jar",
+    "texture": "assets/minecraft/textures/blocks/brick.png",
+    "overlay": null
+  },
+  "vw:minecraft:chest@0": {
+    "archive": "MSE.jar",
+    "texture": "assets/minecraft/textures/entity/chest/normal.png",
+    "overlay": null
+  },
+  "vw:minecraft:glass@0": {
+    "archive": "MSE.jar",
+    "texture": "assets/minecraft/textures/blocks/glass.png",
+    "overlay": null
+  },
+  "vw:minecraft:golden_rail@0": {
+    "archive": "MSE.jar",
+    "texture": "assets/minecraft/textures/blocks/rail_golden.png",
+    "overlay": null
+  },
+  "vw:minecraft:hopper@0": {
+    "archive": "MSE.jar",
+    "texture": "assets/minecraft/textures/items/hopper.png",
+    "overlay": null
+  },
+  "vw:minecraft:paper@0": {
+    "archive": "MSE.jar",
+    "texture": "assets/minecraft/textures/items/paper.png",
+    "overlay": null
+  },
+  "vw:minecraft:piston@0": {
+    "archive": "MSE.jar",
+    "texture": "assets/minecraft/textures/blocks/piston_side.png",
+    "overlay": null
+  },
+  "vw:minecraft:rail@0": {
+    "archive": "MSE.jar",
+    "texture": "assets/minecraft/textures/blocks/rail_normal.png",
+    "overlay": null
+  },
+  "vw:minecraft:repeater@0": {
+    "archive": "MSE.jar",
+    "texture": "assets/minecraft/textures/items/repeater.png",
+    "overlay": null
+  },
+  "vw:minecraft:stonebrick@0": {
+    "archive": "MSE.jar",
+    "texture": "assets/minecraft/textures/blocks/stonebrick.png",
+    "overlay": null
   }
 }

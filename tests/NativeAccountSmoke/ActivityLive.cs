@@ -15,12 +15,19 @@ internal static class ActivityLive
         }
         var accounts=new Accounts(new Vault(root),NetworkPolicy.DirectApi,"");
         var profile=await accounts.Restore()??throw new InvalidOperationException("Saved account unavailable");
+        int rewards=0,sets=0;
         foreach(var world in new[]{"m3e","dc2","mb","vw"})
         {
             var response=await accounts.Activities(JsonSerializer.SerializeToElement(new{instance=world}));
             if(response.GetProperty("instance").GetString()!=world||response.GetProperty("actions").GetArrayLength()!=3)
                 throw new InvalidOperationException("Activity response contract mismatch");
+            foreach(var reward in response.GetProperty("pool").EnumerateArray())
+            {
+                if(reward.GetProperty("tier").GetString()!="daily")rewards++;
+                if(reward.TryGetProperty("completeSet",out var whole)&&whole.GetBoolean())sets++;
+            }
         }
-        Console.WriteLine(JsonSerializer.Serialize(new{nativeActivityAuthentication=true,worlds=4,claimsSubmitted=0,drawsSubmitted=0}));
+        if(rewards!=114||sets!=18)throw new InvalidOperationException("Published 1.0.4 reward catalogue mismatch");
+        Console.WriteLine(JsonSerializer.Serialize(new{nativeActivityAuthentication=true,worlds=4,rewards,sets,claimsSubmitted=0,drawsSubmitted=0}));
     }
 }

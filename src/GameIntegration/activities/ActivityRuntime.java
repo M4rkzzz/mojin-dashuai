@@ -24,10 +24,11 @@ public final class ActivityRuntime {
     static final ConcurrentLinkedQueue<JsonObject> incoming = new ConcurrentLinkedQueue<JsonObject>();
     static final BlockingQueue<JsonObject> events = new ArrayBlockingQueue<JsonObject>(8192);
     static volatile Definition definition;
+    static long definitionRefreshAt;
     static Path spool, playerData;
     static String base, secret, instance;
     static final ScheduledExecutorService worker = Executors.newSingleThreadScheduledExecutor(r -> { Thread t=new Thread(r,"Mojin-Activities-IO");t.setDaemon(true);return t; });
-    static final class Definition { String id; String[] questIds, trackedItems, trackedKills; }
+    static final class Definition { String id; String[] questIds, trackedItems, trackedKills, trackedControllers; }
     static final class PlayerState {
         volatile Object player; volatile long lastPoll, aliveAt; long ticks; int questCursor;
         final Set<String> facts = new HashSet<String>();
@@ -68,7 +69,14 @@ public final class ActivityRuntime {
     static void io() {
         try {
             flush();
-            if(definition==null){Definition next=JSON.fromJson(request("/definition",null),Definition.class);if(!instance.equals(next.id)||next.questIds==null||next.trackedItems==null)throw new IOException("Activity definition mismatch");definition=next;System.out.println("[Mojin Activities] rules loaded: "+next.questIds.length+" quests");}
+            if(definition==null || System.currentTimeMillis()>=definitionRefreshAt){
+                definitionRefreshAt=System.currentTimeMillis()+60000;
+                try {Definition next=JSON.fromJson(request("/definition",null),Definition.class);if(!instance.equals(next.id)||next.questIds==null||next.questIds.length==0||next.trackedItems==null||next.trackedKills==null)throw new IOException("Activity definition mismatch");boolean first=definition==null;definition=next;if(first)System.out.println("[Mojin Activities] rules loaded: "+next.questIds.length+" quests");
+                    JsonObject status=new JsonObject();status.addProperty("version","1.0.4");status.addProperty("instance",instance);status.addProperty("rulesLoadedAt",Instant.now().toString());status.addProperty("quests",next.questIds.length);status.addProperty("items",next.trackedItems.length);status.addProperty("controllers",next.trackedControllers==null?0:next.trackedControllers.length);
+                    Path temp=spool.resolve("status.json.tmp");Files.write(temp,JSON.toJson(status).getBytes(StandardCharsets.UTF_8));Files.move(temp,spool.resolve("status.json"),StandardCopyOption.REPLACE_EXISTING,StandardCopyOption.ATOMIC_MOVE);
+                }
+                catch(Exception failure){if(definition==null)throw failure;problem("definition-refresh",failure);}
+            }
             try(DirectoryStream<Path> paths=Files.newDirectoryStream(spool.resolve("events"),"*.json")) {
                 int count=0;
                 for(Path file:paths){if(++count>48)break;JsonObject e=new JsonParser().parse(new String(Files.readAllBytes(file),StandardCharsets.UTF_8)).getAsJsonObject();try{
@@ -104,6 +112,7 @@ public final class ActivityRuntime {
         try {
             PlayerState s=state(player);if(++s.ticks%20!=0)return;
             snapshot(player,s,32);
+            if(s.ticks%100==0)controllerSnapshot(player,s);
             JsonObject next=s.deliveries.peek();
             if(next!=null&&deliver(player,next)){s.deliveries.poll();JsonObject ack=new JsonObject();ack.addProperty("eventId",UUID.randomUUID().toString());ack.addProperty("gameUuid",uuid(player).toString());ack.addProperty("deliveryAck",next.get("id").getAsString());events.offer(ack);}
         }catch(Throwable error){problem("player-tick",error);}
@@ -160,6 +169,25 @@ public final class ActivityRuntime {
             int count=((Number)call(nbt,new String[]{"getByte","func_74771_c","m_128445_"},"Count")).intValue();
             if(count<=0)return;record(player,"craft",key,count);
         }catch(Throwable error){problem("craft",error);}
+    }
+    // Presence is solely an eligibility proof for reviewed ritual/multiblock
+    // controllers. It never produces a craft, pickup, daily or weekly event.
+    static void controllerSnapshot(Object player,PlayerState s) throws Exception {
+        Definition rules=definition;if(rules.trackedControllers==null||rules.trackedControllers.length==0)return;
+        List<String> fresh=new ArrayList<String>();
+        Object inventory=instance.equals("dc2")?call(player,new String[]{"getInventory","m_150109_"}):field(player,"inventory","field_71071_by");
+        int size=((Number)call(inventory,new String[]{"getSizeInventory","func_70302_i_","getContainerSize","m_6643_"})).intValue();
+        for(int slot=0;slot<Math.min(size,36);slot++){
+            Object stack=call(inventory,new String[]{"getStackInSlot","func_70301_a","getItem","m_8020_"},slot);if(stack==null)continue;
+            Object nbt=tag(player);call(stack,new String[]{"writeToNBT","func_77955_b","save","m_41739_"},nbt);
+            if(((Number)call(nbt,new String[]{"getByte","func_74771_c","m_128445_"},"Count")).intValue()<=0)continue;
+            String id;
+            if(instance.equals("dc2"))id=string(nbt,"id");
+            else {Object item=call(stack,new String[]{"getItem","func_77973_b"});Object registry=field(type(player,"net.minecraft.item.Item"),"itemRegistry","field_150901_e","REGISTRY");id=String.valueOf(call(registry,new String[]{"getNameForObject","func_148750_c","func_177774_c"},item));}
+            int meta=instance.equals("dc2")?0:((Number)call(nbt,new String[]{"getShort","func_74765_d"},"Damage")).intValue();
+            String key=id+"@"+meta;if(contains(rules.trackedControllers,key)&&s.facts.add("owned:"+key))fresh.add("owned:"+key);
+        }
+        if(!fresh.isEmpty()&&!submit(uuid(player),"snapshot","",1,fresh,null))s.facts.removeAll(fresh);
     }
     // GT6's doActive calls addStackToSlot only for real completed recipe outputs. Transfers,
     // repeated item pickup and an idle machine never reach this observer.

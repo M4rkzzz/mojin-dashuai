@@ -8,7 +8,7 @@ image=os.environ.get('HUB_API_TEST_IMAGE','boshan/hub-api:activities-candidate')
 keys={w:secrets.token_hex(32) for w in ['m3e','dc2','mb','vw']}
 env=pathlib.Path('/var/apps/mc-client-hub/secrets')/('activity-test-'+stamp+'.env')
 password=pathlib.Path('/var/apps/mc-client-hub/secrets/db-password').read_text().strip()
-env.write_text('ConnectionStrings__Hub=Host=mc-client-hub-postgres-1;Database='+database+';Username=hub;Password='+password+'\nInitializeDatabase=true\nASPNETCORE_URLS=http://+:8080\nActivities__Enabled=true\nJoinAuth__InternalNetworks=0.0.0.0/0\n'+''.join('Activities__ServerKeys__'+w+'='+k+'\n' for w,k in keys.items()));env.chmod(0o600)
+env.write_text('ConnectionStrings__Hub=Host=mc-client-hub-postgres-1;Database='+database+';Username=hub;Password='+password+'\nInitializeDatabase=true\nASPNETCORE_URLS=http://+:8080\nActivities__Enabled=true\nActivities__CatalogPath=/tmp/activity-live/catalog.json\nJoinAuth__InternalNetworks=0.0.0.0/0\n'+''.join('Activities__ServerKeys__'+w+'='+k+'\n' for w,k in keys.items()));env.chmod(0o600)
 checks=[]
 def check(ok,name):
  if not ok:raise AssertionError(name)
@@ -67,15 +67,29 @@ try:
  sql('UPDATE "ActivityAccounts" SET "StateJson"=$state$'+json.dumps(state)+'$state$ WHERE "IdentityId"=\''+identity+'\';')
  c,v=command('m3e','draw');a=next(a for a in v['awards'] if a['source']=='抽奖')
  check(c==200 and a['tier']=='rare' and not a['choices'] and v['misses']==0,'50th guarantee retains rare when production prerequisites missing')
- reward=next(r for r in definitions['m3e']['rewards'] if r['tier']=='rare')
- event('m3e','snapshot','',facts=reward['requires']['all'])
+ reward=next(r for r in definitions['m3e']['rewards'] if r['tier']=='rare' and not r.get('retired') and r.get('completeSet'))
+ event('m3e','snapshot','',facts=reward['requires']['all']+[reward['requires']['any'][0]])
  c,v=command('m3e','select',awardId=a['id'],rewardId=reward['id']);check(c==200,'rare selection requires reviewed unlocked goal and own production')
  c,deliveries=api('/internal/v1/activities/m3e/deliveries/'+game_uuid,token=keys['m3e']);check(c==200 and deliveries,'durable mailbox receives selected rewards')
  pending_count=len(deliveries);check(len(api('/internal/v1/activities/m3e/deliveries/'+game_uuid,token=keys['m3e'])[1])==pending_count,'polling without ack retains mailbox')
  target=deliveries[-1]['id'];ack='/internal/v1/activities/m3e/deliveries/'+game_uuid+'/'+target+'/ack'
  check(api(ack,{},keys['dc2'])[0]==403,'another server cannot ack mailbox')
  check(api(ack,{},keys['m3e'])[0]==200 and api(ack,{},keys['m3e'])[0]==200,'delivery ack safely retries')
- before=command('m3e')[1];run('docker','restart',container)
+ tower=next(r for r in definitions['vw']['rewards'] if r['id']=='v2-set-tower')
+ event('vw','snapshot','',facts=tower['requires']['all']+[tower['requires']['any'][0]])
+ raw=sql('SELECT "StateJson" FROM "ActivityAccounts" WHERE "IdentityId"=\''+identity+'\';').strip();state=json.loads(raw)
+ state['worlds']['vw']['tickets']=2;state['worlds']['vw']['misses']=49
+ sql('UPDATE "ActivityAccounts" SET "StateJson"=$state$'+json.dumps(state)+'$state$ WHERE "IdentityId"=\''+identity+'\';')
+ c,v=command('vw','draw');award=v['resultAwardId']
+ check(c==200 and command('vw','select',awardId=award,rewardId=tower['id'])[0]==200,'rare tower selects one whole reviewed structure')
+ c,mail=api('/internal/v1/activities/vw/deliveries/'+game_uuid,token=keys['vw'])
+ package=next(d for d in mail if sum(i['count'] for i in d['items'])==81)
+ check(c==200 and all(i['count']<=64 for i in package['items']) and sum(i['count'] for i in package['items'] if i['meta']==18102)==71,'whole tower delivers 71 walls 9 bases and controller in stack-safe atomic mailbox')
+ raw=sql('SELECT "StateJson" FROM "ActivityAccounts" WHERE "IdentityId"=\''+identity+'\';').strip();state=json.loads(raw);state['worlds']['vw']['misses']=49
+ sql('UPDATE "ActivityAccounts" SET "StateJson"=$state$'+json.dumps(state)+'$state$ WHERE "IdentityId"=\''+identity+'\';')
+ c,v=command('vw','draw')
+ check(c==200 and command('vw','select',awardId=v['resultAwardId'],rewardId=tower['id'])[0]==409,'same structure cannot award a second whole set')
+ before=command('m3e')[1];before_vw=command('vw')[1];run('docker','restart',container)
  for _ in range(60):
   try:
    if api('/health')[0]==200:break
@@ -83,11 +97,29 @@ try:
   time.sleep(.3)
  after=command('m3e')[1]
  check(after['tickets']==before['tickets'] and after['misses']==before['misses'] and after['awards']==before['awards'],'API restart retains wallet pity pending and delivered awards')
+ check(command('vw')[1]['awards']==before_vw['awards'],'API restart retains full set entitlement and pending rare award')
  check(command('m3e','showcase',text='这是测试隔离库内的产线说明，介绍输入输出与实际用途。')[0]==200,'showcase submission accepts plain text')
  pending=json.loads(admin('activities-review'));check(len(pending)==1,'moderation lists pending only')
  check(not command('m3e')[1]['showcases'],'unreviewed showcase not published')
  admin('activities-review',pending[0]['id'],'approve');check(len(command('m3e')[1]['showcases'])==1,'approved showcase visible')
  check(event('m3e','pickup','minecraft:torch@0',4096)[1][0]==400,'pickup spam cannot count as production')
+ started=run('docker','inspect','--format','{{.State.StartedAt}}',container)
+ prior=command('m3e')[1];revision=prior['catalogRevision']
+ world=json.loads(json.dumps(definitions['m3e']));world['dailyName']='hot-reload-smoke'
+ world['actions']=[dict(a,count=a['count']+7) for a in world['actions']]
+ run('docker','exec','-i',container,'sh','-c','cat > /tmp/activity-world.json',input=json.dumps(world))
+ result=json.loads(admin('activities-config','apply','m3e','/tmp/activity-world.json',str(revision)))
+ check(result['applied'] and not result['restartRequired'],'common per-world admin interface accepts atomic live configuration')
+ for _ in range(30):
+  refreshed=api('/internal/v1/activities/m3e/definition',token=keys['m3e'])[1]
+  if refreshed['dailyName']=='hot-reload-smoke':break
+  time.sleep(.3)
+ check(refreshed['dailyName']=='hot-reload-smoke','running API exposes new common definition without restart')
+ view=command('m3e')[1]
+ check(view['dailyName']=='hot-reload-smoke' and view['actions']==prior['actions'] and view['awards']==prior['awards'],'hot publish preserves started goals and existing prizes')
+ check(run('docker','inspect','--format','{{.State.StartedAt}}',container)==started,'API container stayed running throughout hot publish')
+ conflict=subprocess.run(['docker','exec',container,'dotnet','Hub.Api.dll','admin','activities-config','apply','m3e','/tmp/activity-world.json',str(revision)],capture_output=True)
+ check(conflict.returncode!=0,'stale config publisher cannot overwrite a newer revision')
  print(json.dumps({'passed':len(checks),'checks':checks},ensure_ascii=False))
 except Exception:
  result=subprocess.run(['docker','logs','--tail','45',container],capture_output=True,text=True)

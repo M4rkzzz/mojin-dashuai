@@ -1,11 +1,12 @@
 """Build isolated Java 8 activity observer with relocated ASM and Gson."""
 from pathlib import Path
-import struct,subprocess,zipfile
+import struct,subprocess,zipfile,os
 
 root=Path(__file__).resolve().parents[1]
 javac=next((root.parent/'.tools/temurin25').glob('*/bin/javac.exe'))
-asm=root/'.local/engines/mb/libraries/org/ow2/asm/asm/9.10.1/asm-9.10.1.jar'
-gson=root/'.local/engines/dc2/libraries/com/google/code/gson/gson/2.10.1/gson-2.10.1.jar'
+source=Path(os.environ.get('ACTIVITY_SOURCE_ROOT',str(root)))
+asm=source/'.local/engines/mb/libraries/org/ow2/asm/asm/9.10.1/asm-9.10.1.jar'
+gson=source/'.local/engines/dc2/libraries/com/google/code/gson/gson/2.10.1/gson-2.10.1.jar'
 classes=root/'.local/activities/classes';classes.mkdir(parents=True,exist_ok=True)
 result=subprocess.run([str(javac),'-J-Duser.language=en','--release','8','-encoding','UTF-8','-cp',str(asm)+';'+str(gson),'-d',str(classes),*map(str,(root/'src/GameIntegration/activities').glob('*.java'))],capture_output=True,creationflags=0x08000000)
 if result.returncode:raise RuntimeError(result.stderr.decode('utf-8','replace'))

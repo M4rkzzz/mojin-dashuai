@@ -10,10 +10,11 @@ public sealed record ActivityCondition(string[] All, string[] Any, string[] None
 public sealed record ActivityStage(string Id, string Name, ActivityCondition Requires);
 public sealed record ActivityAction(string Id, string Name, string Description, string Kind, string[] Keys, int Count, ActivityCondition Requires);
 public sealed record ActivityItem(string Id, int Meta, int Count, string Nbt = "{}");
-public sealed record ActivityReward(string Id, string Name, string Tier, string Purpose, ActivityItem[] Items, ActivityCondition Requires, string? Goal = null, int BasisPoints = 0);
+public sealed record ActivityReward(string Id, string Name, string Tier, string Purpose, ActivityItem[] Items, ActivityCondition Requires, string? Goal = null, int BasisPoints = 0, bool CompleteSet = false, bool Retired = false);
 public sealed record ActivityWorld(string Id, string Name, string DailyName, string WeeklyName, string MonthlyName, ActivityStage[] Stages, ActivityAction[] Actions,
-    string[][] WeeklySteps, string[] WeeklyLabels, string[] QuestIds, string[] TrackedItems, string[] TrackedKills, ActivityReward[] Rewards);
+    string[][] WeeklySteps, string[] WeeklyLabels, string[] QuestIds, string[] TrackedItems, string[] TrackedKills, ActivityReward[] Rewards, string[]? TrackedControllers = null);
 public sealed record ActivityCatalogue(int Version, ActivityWorld[] Worlds);
+public sealed record ActivityGoals(ActivityAction[] Actions,string[][] WeeklySteps,string[] WeeklyLabels);
 public sealed record ActivityEvent(Guid EventId, string GameUuid, DateTimeOffset OccurredAt, string Kind, string Key, int Count = 1, string[]? Facts = null);
 public sealed record ActivityCommand(string Instance, string Action = "view", Guid OperationId = default, string? Period = null, string? AwardId = null, string? RewardId = null, string? Cosmetic = null, string? Text = null);
 
@@ -64,11 +65,13 @@ public sealed class ActivityWorldState
     public HashSet<string> Facts { get; set; } = [];
     public Dictionary<string, Dictionary<string, int>> Days { get; set; } = [];
     public Dictionary<string, int> Weeks { get; set; } = [];
+    public Dictionary<string, ActivityGoals> GoalPeriods { get; set; } = [];
     public HashSet<string> WeeklyClaims { get; set; } = [];
     public int Tickets { get; set; }
     public int Medals { get; set; }
     public int Misses { get; set; }
     public Dictionary<string, int> GoalBudgets { get; set; } = [];
+    public HashSet<string> ClaimedSets { get; set; } = [];
     public List<ActivityAward> Awards { get; set; } = [];
     public HashSet<string> Cosmetics { get; set; } = [];
     public string? EquippedTitle { get; set; }

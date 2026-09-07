@@ -1,0 +1,44 @@
+{
+  "revision": "reward-pools-v2",
+  "deployed": true,
+  "worlds": {
+    "m3e": {
+      "daily": 4,
+      "ordinary": 13,
+      "selected": 11,
+      "rare": 4
+    },
+    "dc2": {
+      "daily": 4,
+      "ordinary": 14,
+      "selected": 12,
+      "rare": 6
+    },
+    "mb": {
+      "daily": 4,
+      "ordinary": 12,
+      "selected": 10,
+      "rare": 4
+    },
+    "vw": {
+      "daily": 4,
+      "ordinary": 13,
+      "selected": 11,
+      "rare": 4
+    }
+  },
+  "checks": {
+    "activityRulesPassed": 12,
+    "mailboxFailureCasesPassed": 17,
+    "uiFourWorlds": true,
+    "buildPassed": true,
+    "isolatedApiPassed": 46
+  },
+  "limits": [
+    "Fourth server observer upgrade pending while players online.",
+    "No real player received a test reward; inventory failure tests use an isolated fixture.",
+    "Clean Windows remains unverified; existing explicit release scope retained."
+  ],
+  "launcherVersion": "1.0.4",
+  "deploymentRecord": "acceptance-1.0.4.json"
+}

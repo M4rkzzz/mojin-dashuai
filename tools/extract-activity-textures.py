@@ -1,16 +1,26 @@
 """Copy game-authored reward textures; never synthesize item artwork."""
-import json,zipfile
+import json,zipfile,os,struct
 from pathlib import Path
 
-root=Path(__file__).resolve().parents[1];instances=root/'.local/complete-client-qa/全新整包安装/instances';out=root/'ui/public/activities/items';out.mkdir(parents=True,exist_ok=True)
+root=Path(__file__).resolve().parents[1];source=Path(os.environ.get('ACTIVITY_SOURCE_ROOT',str(root)));instances=source/'.local/complete-client-qa/全新整包安装/instances';out=root/'ui/public/activities/items';out.mkdir(parents=True,exist_ok=True)
 sources={};icons={}
 def extract(world,key,jar,texture,name,block=False,overlay=None):
     target=world+'-'+key.replace(':','_').replace('@','_')+'.png'
+    frame=None
     with zipfile.ZipFile(jar) as z:
-        (out/target).write_bytes(z.read(texture))
+        sprite=z.read(texture);(out/target).write_bytes(sprite)
+        if texture+'.mcmeta' in z.namelist():
+            animation=json.loads(z.read(texture+'.mcmeta')).get('animation')
+            if animation is not None:
+                width,height=struct.unpack('>II',sprite[16:24]);fw=animation.get('width',width);fh=animation.get('height',fw)
+                first=animation.get('frames',[0])[0];first=first.get('index',0) if isinstance(first,dict) else first
+                if width!=fw or height!=fh:frame=dict(x=(first%(width//fw))*fw,y=(first//(width//fw))*fh,width=fw,height=fh,size=width)
         if overlay:(out/('overlay-'+target)).write_bytes(z.read(overlay))
     icons[world+':'+key]=dict(src='./activities/items/'+target,name=name,block=block,overlay='./activities/items/overlay-'+target if overlay else None)
     sources[world+':'+key]=dict(archive=Path(jar).name,texture=texture,overlay=overlay)
+    if frame and not block:
+        icons[world+':'+key]['atlas']=frame
+        sources[world+':'+key]['frame']=frame
 
 for w,version in [('m3e','1.7.10'),('mb','1.12.2'),('dc2','1.20.1'),('vw','1.7.10')]:
     base=instances/('m3e' if w=='vw' else w)
@@ -35,6 +45,8 @@ for meta,folder,label in [(18102,'distillationtowerparts','蒸馏塔部件'),(18
     prefix='assets/gregtech/textures/blocks/machines/multiblockparts/'+folder+'/0/'
     extract('vw','gregtech:gt.multitileentity@'+str(meta),gt,prefix+'colored/side.png',label,True,prefix+'overlay/side.png')
 
+from activity_reward_textures import extract_revision
+extract_revision(root, instances, extract, icons, gt)
 catalog=json.loads((root/'activities/catalog.json').read_text(encoding='utf-8'))
 for world in catalog['worlds']:
     for reward in world['rewards']:

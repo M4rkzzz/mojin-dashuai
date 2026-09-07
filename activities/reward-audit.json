@@ -102,5 +102,2411 @@
     "required": 25,
     "awarded": 3,
     "source": "焦炉原任务 requiredItems"
+  },
+  {
+    "world": "m3e",
+    "reward": "v2-daily-torches",
+    "source": "原版配方 / 对应模组实际物品",
+    "items": [
+      {
+        "id": "minecraft:torch",
+        "meta": 0,
+        "count": 8,
+        "nbt": "{}"
+      }
+    ],
+    "completeSet": false,
+    "qualification": "本人实际制作过对应物品"
+  },
+  {
+    "world": "m3e",
+    "reward": "v2-daily-fuel",
+    "source": "原版配方 / 对应模组实际物品",
+    "items": [
+      {
+        "id": "minecraft:coal",
+        "meta": 1,
+        "count": 8,
+        "nbt": "{}"
+      }
+    ],
+    "completeSet": false,
+    "qualification": "本人实际制作过对应物品"
+  },
+  {
+    "world": "m3e",
+    "reward": "v2-daily-glass",
+    "source": "原版配方 / 对应模组实际物品",
+    "items": [
+      {
+        "id": "minecraft:glass",
+        "meta": 0,
+        "count": 8,
+        "nbt": "{}"
+      }
+    ],
+    "completeSet": false,
+    "qualification": "本人实际制作过对应物品"
+  },
+  {
+    "world": "m3e",
+    "reward": "v2-daily-ladder",
+    "source": "原版配方 / 对应模组实际物品",
+    "items": [
+      {
+        "id": "minecraft:ladder",
+        "meta": 0,
+        "count": 8,
+        "nbt": "{}"
+      }
+    ],
+    "completeSet": false,
+    "qualification": "本人实际制作过对应物品"
+  },
+  {
+    "world": "m3e",
+    "reward": "v2-ordinary-torches",
+    "source": "原版配方 / 对应模组实际物品",
+    "items": [
+      {
+        "id": "minecraft:torch",
+        "meta": 0,
+        "count": 32,
+        "nbt": "{}"
+      }
+    ],
+    "completeSet": false,
+    "qualification": "本人实际制作过对应物品"
+  },
+  {
+    "world": "m3e",
+    "reward": "v2-ordinary-fuel",
+    "source": "原版配方 / 对应模组实际物品",
+    "items": [
+      {
+        "id": "minecraft:coal",
+        "meta": 1,
+        "count": 24,
+        "nbt": "{}"
+      }
+    ],
+    "completeSet": false,
+    "qualification": "本人实际制作过对应物品"
+  },
+  {
+    "world": "m3e",
+    "reward": "v2-ordinary-glass",
+    "source": "原版配方 / 对应模组实际物品",
+    "items": [
+      {
+        "id": "minecraft:glass",
+        "meta": 0,
+        "count": 32,
+        "nbt": "{}"
+      }
+    ],
+    "completeSet": false,
+    "qualification": "本人实际制作过对应物品"
+  },
+  {
+    "world": "m3e",
+    "reward": "v2-ordinary-ladder",
+    "source": "原版配方 / 对应模组实际物品",
+    "items": [
+      {
+        "id": "minecraft:ladder",
+        "meta": 0,
+        "count": 24,
+        "nbt": "{}"
+      }
+    ],
+    "completeSet": false,
+    "qualification": "本人实际制作过对应物品"
+  },
+  {
+    "world": "m3e",
+    "reward": "v2-ordinary-storage",
+    "source": "原版配方 / 对应模组实际物品",
+    "items": [
+      {
+        "id": "minecraft:chest",
+        "meta": 0,
+        "count": 4,
+        "nbt": "{}"
+      }
+    ],
+    "completeSet": false,
+    "qualification": "本人实际制作过对应物品"
+  },
+  {
+    "world": "m3e",
+    "reward": "v2-ordinary-rail",
+    "source": "原版配方 / 对应模组实际物品",
+    "items": [
+      {
+        "id": "minecraft:rail",
+        "meta": 0,
+        "count": 32,
+        "nbt": "{}"
+      }
+    ],
+    "completeSet": false,
+    "qualification": "本人实际制作过对应物品"
+  },
+  {
+    "world": "m3e",
+    "reward": "v2-ordinary-paper",
+    "source": "原版配方 / 对应模组实际物品",
+    "items": [
+      {
+        "id": "minecraft:paper",
+        "meta": 0,
+        "count": 32,
+        "nbt": "{}"
+      }
+    ],
+    "completeSet": false,
+    "qualification": "本人实际制作过对应物品"
+  },
+  {
+    "world": "m3e",
+    "reward": "v2-ordinary-bricks",
+    "source": "原版配方 / 对应模组实际物品",
+    "items": [
+      {
+        "id": "minecraft:brick_block",
+        "meta": 0,
+        "count": 24,
+        "nbt": "{}"
+      }
+    ],
+    "completeSet": false,
+    "qualification": "本人实际制作过对应物品"
+  },
+  {
+    "world": "m3e",
+    "reward": "v2-selected-exploration",
+    "source": "原版配方 / 对应模组实际物品",
+    "items": [
+      {
+        "id": "minecraft:torch",
+        "meta": 0,
+        "count": 64,
+        "nbt": "{}"
+      },
+      {
+        "id": "minecraft:coal",
+        "meta": 1,
+        "count": 64,
+        "nbt": "{}"
+      }
+    ],
+    "completeSet": false,
+    "qualification": "本人实际制作过对应物品"
+  },
+  {
+    "world": "m3e",
+    "reward": "v2-selected-building",
+    "source": "原版配方 / 对应模组实际物品",
+    "items": [
+      {
+        "id": "minecraft:glass",
+        "meta": 0,
+        "count": 64,
+        "nbt": "{}"
+      },
+      {
+        "id": "minecraft:stonebrick",
+        "meta": 0,
+        "count": 64,
+        "nbt": "{}"
+      }
+    ],
+    "completeSet": false,
+    "qualification": "本人实际制作过对应物品"
+  },
+  {
+    "world": "m3e",
+    "reward": "v2-selected-railway",
+    "source": "原版配方 / 对应模组实际物品",
+    "items": [
+      {
+        "id": "minecraft:rail",
+        "meta": 0,
+        "count": 64,
+        "nbt": "{}"
+      },
+      {
+        "id": "minecraft:golden_rail",
+        "meta": 0,
+        "count": 8,
+        "nbt": "{}"
+      }
+    ],
+    "completeSet": false,
+    "qualification": "本人实际制作过对应物品"
+  },
+  {
+    "world": "m3e",
+    "reward": "v2-selected-warehouse",
+    "source": "原版配方 / 对应模组实际物品",
+    "items": [
+      {
+        "id": "minecraft:chest",
+        "meta": 0,
+        "count": 8,
+        "nbt": "{}"
+      },
+      {
+        "id": "minecraft:hopper",
+        "meta": 0,
+        "count": 4,
+        "nbt": "{}"
+      }
+    ],
+    "completeSet": false,
+    "qualification": "本人实际制作过对应物品"
+  },
+  {
+    "world": "m3e",
+    "reward": "v2-selected-automation",
+    "source": "原版配方 / 对应模组实际物品",
+    "items": [
+      {
+        "id": "minecraft:repeater",
+        "meta": 0,
+        "count": 8,
+        "nbt": "{}"
+      },
+      {
+        "id": "minecraft:piston",
+        "meta": 0,
+        "count": 8,
+        "nbt": "{}"
+      }
+    ],
+    "completeSet": false,
+    "qualification": "本人实际制作过对应物品"
+  },
+  {
+    "world": "m3e",
+    "reward": "v2-selected-worksite",
+    "source": "原版配方 / 对应模组实际物品",
+    "items": [
+      {
+        "id": "minecraft:ladder",
+        "meta": 0,
+        "count": 64,
+        "nbt": "{}"
+      },
+      {
+        "id": "minecraft:glass",
+        "meta": 0,
+        "count": 64,
+        "nbt": "{}"
+      }
+    ],
+    "completeSet": false,
+    "qualification": "本人实际制作过对应物品"
+  },
+  {
+    "world": "m3e",
+    "reward": "v2-ordinary-arrows",
+    "source": "原版配方 / 对应模组实际物品",
+    "items": [
+      {
+        "id": "minecraft:arrow",
+        "meta": 0,
+        "count": 32,
+        "nbt": "{}"
+      }
+    ],
+    "completeSet": false,
+    "qualification": "本人实际制作过对应物品"
+  },
+  {
+    "world": "m3e",
+    "reward": "v2-selected-arrows",
+    "source": "原版配方 / 对应模组实际物品",
+    "items": [
+      {
+        "id": "minecraft:arrow",
+        "meta": 0,
+        "count": 64,
+        "nbt": "{}"
+      }
+    ],
+    "completeSet": false,
+    "qualification": "本人实际制作过对应物品"
+  },
+  {
+    "world": "m3e",
+    "reward": "v2-ordinary-mana",
+    "source": "原版配方 / 对应模组实际物品",
+    "items": [
+      {
+        "id": "manametalmod:dustMana",
+        "meta": 0,
+        "count": 16,
+        "nbt": "{}"
+      }
+    ],
+    "completeSet": false,
+    "qualification": "本人实际制作过对应物品"
+  },
+  {
+    "world": "m3e",
+    "reward": "v2-selected-mana",
+    "source": "原版配方 / 对应模组实际物品",
+    "items": [
+      {
+        "id": "manametalmod:dustMana",
+        "meta": 0,
+        "count": 48,
+        "nbt": "{}"
+      }
+    ],
+    "completeSet": false,
+    "qualification": "本人实际制作过对应物品"
+  },
+  {
+    "world": "m3e",
+    "reward": "v2-ordinary-mana-fuel",
+    "source": "原版配方 / 对应模组实际物品",
+    "items": [
+      {
+        "id": "manametalmod:ManaCoal",
+        "meta": 0,
+        "count": 8,
+        "nbt": "{}"
+      }
+    ],
+    "completeSet": false,
+    "qualification": "本人实际制作过对应物品"
+  },
+  {
+    "world": "m3e",
+    "reward": "v2-selected-mana-fuel",
+    "source": "原版配方 / 对应模组实际物品",
+    "items": [
+      {
+        "id": "manametalmod:ManaCoal",
+        "meta": 0,
+        "count": 24,
+        "nbt": "{}"
+      }
+    ],
+    "completeSet": false,
+    "qualification": "本人实际制作过对应物品"
+  },
+  {
+    "world": "m3e",
+    "reward": "v2-ordinary-metal-energy",
+    "source": "原版配方 / 对应模组实际物品",
+    "items": [
+      {
+        "id": "manametalmod:MetalEnergy02",
+        "meta": 0,
+        "count": 4,
+        "nbt": "{}"
+      }
+    ],
+    "completeSet": false,
+    "qualification": "本人实际制作过对应物品"
+  },
+  {
+    "world": "m3e",
+    "reward": "v2-selected-metal-energy",
+    "source": "原版配方 / 对应模组实际物品",
+    "items": [
+      {
+        "id": "manametalmod:MetalEnergy02",
+        "meta": 0,
+        "count": 12,
+        "nbt": "{}"
+      }
+    ],
+    "completeSet": false,
+    "qualification": "本人实际制作过对应物品"
+  },
+  {
+    "world": "m3e",
+    "reward": "v2-ordinary-mana-steel",
+    "source": "原版配方 / 对应模组实际物品",
+    "items": [
+      {
+        "id": "manametalmod:ingotManaS",
+        "meta": 0,
+        "count": 4,
+        "nbt": "{}"
+      }
+    ],
+    "completeSet": false,
+    "qualification": "本人实际制作过对应物品"
+  },
+  {
+    "world": "m3e",
+    "reward": "v2-selected-mana-steel",
+    "source": "原版配方 / 对应模组实际物品",
+    "items": [
+      {
+        "id": "manametalmod:ingotManaS",
+        "meta": 0,
+        "count": 12,
+        "nbt": "{}"
+      }
+    ],
+    "completeSet": false,
+    "qualification": "本人实际制作过对应物品"
+  },
+  {
+    "world": "m3e",
+    "reward": "v2-set-enchantment",
+    "source": "M3E 原任务 法力附魔台 的 requiredItems / 结构清单；含核心",
+    "items": [
+      {
+        "id": "manametalmod:BlockTileEntityManaEnchantings",
+        "meta": 0,
+        "count": 1,
+        "nbt": "{}"
+      },
+      {
+        "id": "manametalmod:magicStone1",
+        "meta": 0,
+        "count": 9,
+        "nbt": "{}"
+      },
+      {
+        "id": "manametalmod:magicStone3",
+        "meta": 0,
+        "count": 24,
+        "nbt": "{}"
+      },
+      {
+        "id": "manametalmod:ManaCrystal",
+        "meta": 0,
+        "count": 8,
+        "nbt": "{}"
+      }
+    ],
+    "completeSet": true,
+    "qualification": "核心先按原流程取得并由服务端确认本人持有；其余结构件实际生产；原任务已开放或完成；同结构一套"
+  },
+  {
+    "world": "m3e",
+    "reward": "v2-set-infusion",
+    "source": "M3E 原任务 魔力灌注 的 requiredItems / 结构清单；含核心",
+    "items": [
+      {
+        "id": "manametalmod:BLOCKManaMetalInjection",
+        "meta": 0,
+        "count": 1,
+        "nbt": "{}"
+      },
+      {
+        "id": "manametalmod:BLOCKCrystalPillars",
+        "meta": 0,
+        "count": 8,
+        "nbt": "{}"
+      },
+      {
+        "id": "manametalmod:magicStone3",
+        "meta": 0,
+        "count": 12,
+        "nbt": "{}"
+      },
+      {
+        "id": "manametalmod:ManaCrystal",
+        "meta": 0,
+        "count": 4,
+        "nbt": "{}"
+      },
+      {
+        "id": "manametalmod:ManaRuneE",
+        "meta": 0,
+        "count": 16,
+        "nbt": "{}"
+      }
+    ],
+    "completeSet": true,
+    "qualification": "核心先按原流程取得并由服务端确认本人持有；其余结构件实际生产；原任务已开放或完成；同结构一套"
+  },
+  {
+    "world": "m3e",
+    "reward": "v2-set-wand",
+    "source": "M3E 原任务 法杖融合 的 requiredItems / 结构清单；含核心",
+    "items": [
+      {
+        "id": "manametalmod:BlockMagicUpdates",
+        "meta": 0,
+        "count": 1,
+        "nbt": "{}"
+      },
+      {
+        "id": "manametalmod:magicStone1",
+        "meta": 0,
+        "count": 21,
+        "nbt": "{}"
+      },
+      {
+        "id": "manametalmod:magicStone2",
+        "meta": 0,
+        "count": 24,
+        "nbt": "{}"
+      },
+      {
+        "id": "manametalmod:magicStone3",
+        "meta": 0,
+        "count": 28,
+        "nbt": "{}"
+      },
+      {
+        "id": "manametalmod:magicStone4",
+        "meta": 0,
+        "count": 8,
+        "nbt": "{}"
+      },
+      {
+        "id": "manametalmod:ManaRuneE",
+        "meta": 0,
+        "count": 24,
+        "nbt": "{}"
+      },
+      {
+        "id": "manametalmod:ManaCrystal",
+        "meta": 0,
+        "count": 8,
+        "nbt": "{}"
+      }
+    ],
+    "completeSet": true,
+    "qualification": "核心先按原流程取得并由服务端确认本人持有；其余结构件实际生产；原任务已开放或完成；同结构一套"
+  },
+  {
+    "world": "m3e",
+    "reward": "v2-set-reform",
+    "source": "M3E 原任务 人体改造 的 requiredItems / 结构清单；含核心",
+    "items": [
+      {
+        "id": "manametalmod:BlockTileEntityHumanReforms",
+        "meta": 0,
+        "count": 1,
+        "nbt": "{}"
+      },
+      {
+        "id": "manametalmod:magicStone1",
+        "meta": 0,
+        "count": 9,
+        "nbt": "{}"
+      },
+      {
+        "id": "manametalmod:magicStone3",
+        "meta": 0,
+        "count": 24,
+        "nbt": "{}"
+      },
+      {
+        "id": "manametalmod:ManaRuneE",
+        "meta": 0,
+        "count": 24,
+        "nbt": "{}"
+      },
+      {
+        "id": "manametalmod:ManaCrystal",
+        "meta": 0,
+        "count": 8,
+        "nbt": "{}"
+      }
+    ],
+    "completeSet": true,
+    "qualification": "核心先按原流程取得并由服务端确认本人持有；其余结构件实际生产；原任务已开放或完成；同结构一套"
+  },
+  {
+    "world": "dc2",
+    "reward": "v2-daily-torches",
+    "source": "原版配方 / 对应模组实际物品",
+    "items": [
+      {
+        "id": "minecraft:torch",
+        "meta": 0,
+        "count": 8,
+        "nbt": "{}"
+      }
+    ],
+    "completeSet": false,
+    "qualification": "本人实际制作过对应物品"
+  },
+  {
+    "world": "dc2",
+    "reward": "v2-daily-fuel",
+    "source": "原版配方 / 对应模组实际物品",
+    "items": [
+      {
+        "id": "minecraft:charcoal",
+        "meta": 0,
+        "count": 8,
+        "nbt": "{}"
+      }
+    ],
+    "completeSet": false,
+    "qualification": "本人实际制作过对应物品"
+  },
+  {
+    "world": "dc2",
+    "reward": "v2-daily-glass",
+    "source": "原版配方 / 对应模组实际物品",
+    "items": [
+      {
+        "id": "minecraft:glass",
+        "meta": 0,
+        "count": 8,
+        "nbt": "{}"
+      }
+    ],
+    "completeSet": false,
+    "qualification": "本人实际制作过对应物品"
+  },
+  {
+    "world": "dc2",
+    "reward": "v2-daily-ladder",
+    "source": "原版配方 / 对应模组实际物品",
+    "items": [
+      {
+        "id": "minecraft:ladder",
+        "meta": 0,
+        "count": 8,
+        "nbt": "{}"
+      }
+    ],
+    "completeSet": false,
+    "qualification": "本人实际制作过对应物品"
+  },
+  {
+    "world": "dc2",
+    "reward": "v2-ordinary-torches",
+    "source": "原版配方 / 对应模组实际物品",
+    "items": [
+      {
+        "id": "minecraft:torch",
+        "meta": 0,
+        "count": 32,
+        "nbt": "{}"
+      }
+    ],
+    "completeSet": false,
+    "qualification": "本人实际制作过对应物品"
+  },
+  {
+    "world": "dc2",
+    "reward": "v2-ordinary-fuel",
+    "source": "原版配方 / 对应模组实际物品",
+    "items": [
+      {
+        "id": "minecraft:charcoal",
+        "meta": 0,
+        "count": 24,
+        "nbt": "{}"
+      }
+    ],
+    "completeSet": false,
+    "qualification": "本人实际制作过对应物品"
+  },
+  {
+    "world": "dc2",
+    "reward": "v2-ordinary-glass",
+    "source": "原版配方 / 对应模组实际物品",
+    "items": [
+      {
+        "id": "minecraft:glass",
+        "meta": 0,
+        "count": 32,
+        "nbt": "{}"
+      }
+    ],
+    "completeSet": false,
+    "qualification": "本人实际制作过对应物品"
+  },
+  {
+    "world": "dc2",
+    "reward": "v2-ordinary-ladder",
+    "source": "原版配方 / 对应模组实际物品",
+    "items": [
+      {
+        "id": "minecraft:ladder",
+        "meta": 0,
+        "count": 24,
+        "nbt": "{}"
+      }
+    ],
+    "completeSet": false,
+    "qualification": "本人实际制作过对应物品"
+  },
+  {
+    "world": "dc2",
+    "reward": "v2-ordinary-storage",
+    "source": "原版配方 / 对应模组实际物品",
+    "items": [
+      {
+        "id": "minecraft:chest",
+        "meta": 0,
+        "count": 4,
+        "nbt": "{}"
+      }
+    ],
+    "completeSet": false,
+    "qualification": "本人实际制作过对应物品"
+  },
+  {
+    "world": "dc2",
+    "reward": "v2-ordinary-rail",
+    "source": "原版配方 / 对应模组实际物品",
+    "items": [
+      {
+        "id": "minecraft:rail",
+        "meta": 0,
+        "count": 32,
+        "nbt": "{}"
+      }
+    ],
+    "completeSet": false,
+    "qualification": "本人实际制作过对应物品"
+  },
+  {
+    "world": "dc2",
+    "reward": "v2-ordinary-paper",
+    "source": "原版配方 / 对应模组实际物品",
+    "items": [
+      {
+        "id": "minecraft:paper",
+        "meta": 0,
+        "count": 32,
+        "nbt": "{}"
+      }
+    ],
+    "completeSet": false,
+    "qualification": "本人实际制作过对应物品"
+  },
+  {
+    "world": "dc2",
+    "reward": "v2-ordinary-bricks",
+    "source": "原版配方 / 对应模组实际物品",
+    "items": [
+      {
+        "id": "minecraft:bricks",
+        "meta": 0,
+        "count": 24,
+        "nbt": "{}"
+      }
+    ],
+    "completeSet": false,
+    "qualification": "本人实际制作过对应物品"
+  },
+  {
+    "world": "dc2",
+    "reward": "v2-selected-exploration",
+    "source": "原版配方 / 对应模组实际物品",
+    "items": [
+      {
+        "id": "minecraft:torch",
+        "meta": 0,
+        "count": 64,
+        "nbt": "{}"
+      },
+      {
+        "id": "minecraft:charcoal",
+        "meta": 0,
+        "count": 64,
+        "nbt": "{}"
+      }
+    ],
+    "completeSet": false,
+    "qualification": "本人实际制作过对应物品"
+  },
+  {
+    "world": "dc2",
+    "reward": "v2-selected-building",
+    "source": "原版配方 / 对应模组实际物品",
+    "items": [
+      {
+        "id": "minecraft:glass",
+        "meta": 0,
+        "count": 64,
+        "nbt": "{}"
+      },
+      {
+        "id": "minecraft:stone_bricks",
+        "meta": 0,
+        "count": 64,
+        "nbt": "{}"
+      }
+    ],
+    "completeSet": false,
+    "qualification": "本人实际制作过对应物品"
+  },
+  {
+    "world": "dc2",
+    "reward": "v2-selected-railway",
+    "source": "原版配方 / 对应模组实际物品",
+    "items": [
+      {
+        "id": "minecraft:rail",
+        "meta": 0,
+        "count": 64,
+        "nbt": "{}"
+      },
+      {
+        "id": "minecraft:powered_rail",
+        "meta": 0,
+        "count": 8,
+        "nbt": "{}"
+      }
+    ],
+    "completeSet": false,
+    "qualification": "本人实际制作过对应物品"
+  },
+  {
+    "world": "dc2",
+    "reward": "v2-selected-warehouse",
+    "source": "原版配方 / 对应模组实际物品",
+    "items": [
+      {
+        "id": "minecraft:chest",
+        "meta": 0,
+        "count": 8,
+        "nbt": "{}"
+      },
+      {
+        "id": "minecraft:hopper",
+        "meta": 0,
+        "count": 4,
+        "nbt": "{}"
+      }
+    ],
+    "completeSet": false,
+    "qualification": "本人实际制作过对应物品"
+  },
+  {
+    "world": "dc2",
+    "reward": "v2-selected-automation",
+    "source": "原版配方 / 对应模组实际物品",
+    "items": [
+      {
+        "id": "minecraft:repeater",
+        "meta": 0,
+        "count": 8,
+        "nbt": "{}"
+      },
+      {
+        "id": "minecraft:piston",
+        "meta": 0,
+        "count": 8,
+        "nbt": "{}"
+      }
+    ],
+    "completeSet": false,
+    "qualification": "本人实际制作过对应物品"
+  },
+  {
+    "world": "dc2",
+    "reward": "v2-selected-worksite",
+    "source": "原版配方 / 对应模组实际物品",
+    "items": [
+      {
+        "id": "minecraft:ladder",
+        "meta": 0,
+        "count": 64,
+        "nbt": "{}"
+      },
+      {
+        "id": "minecraft:glass",
+        "meta": 0,
+        "count": 64,
+        "nbt": "{}"
+      }
+    ],
+    "completeSet": false,
+    "qualification": "本人实际制作过对应物品"
+  },
+  {
+    "world": "dc2",
+    "reward": "v2-ordinary-steel",
+    "source": "原版配方 / 对应模组实际物品",
+    "items": [
+      {
+        "id": "immersiveengineering:ingot_steel",
+        "meta": 0,
+        "count": 4,
+        "nbt": "{}"
+      }
+    ],
+    "completeSet": false,
+    "qualification": "本人实际制作过对应物品"
+  },
+  {
+    "world": "dc2",
+    "reward": "v2-selected-steel",
+    "source": "原版配方 / 对应模组实际物品",
+    "items": [
+      {
+        "id": "immersiveengineering:ingot_steel",
+        "meta": 0,
+        "count": 12,
+        "nbt": "{}"
+      }
+    ],
+    "completeSet": false,
+    "qualification": "本人实际制作过对应物品"
+  },
+  {
+    "world": "dc2",
+    "reward": "v2-ordinary-plate",
+    "source": "原版配方 / 对应模组实际物品",
+    "items": [
+      {
+        "id": "immersiveengineering:plate_iron",
+        "meta": 0,
+        "count": 8,
+        "nbt": "{}"
+      }
+    ],
+    "completeSet": false,
+    "qualification": "本人实际制作过对应物品"
+  },
+  {
+    "world": "dc2",
+    "reward": "v2-selected-plate",
+    "source": "原版配方 / 对应模组实际物品",
+    "items": [
+      {
+        "id": "immersiveengineering:plate_iron",
+        "meta": 0,
+        "count": 24,
+        "nbt": "{}"
+      }
+    ],
+    "completeSet": false,
+    "qualification": "本人实际制作过对应物品"
+  },
+  {
+    "world": "dc2",
+    "reward": "v2-ordinary-pipe",
+    "source": "原版配方 / 对应模组实际物品",
+    "items": [
+      {
+        "id": "immersiveengineering:fluid_pipe",
+        "meta": 0,
+        "count": 8,
+        "nbt": "{}"
+      }
+    ],
+    "completeSet": false,
+    "qualification": "本人实际制作过对应物品"
+  },
+  {
+    "world": "dc2",
+    "reward": "v2-selected-pipe",
+    "source": "原版配方 / 对应模组实际物品",
+    "items": [
+      {
+        "id": "immersiveengineering:fluid_pipe",
+        "meta": 0,
+        "count": 24,
+        "nbt": "{}"
+      }
+    ],
+    "completeSet": false,
+    "qualification": "本人实际制作过对应物品"
+  },
+  {
+    "world": "dc2",
+    "reward": "v2-ordinary-scaffold",
+    "source": "原版配方 / 对应模组实际物品",
+    "items": [
+      {
+        "id": "immersiveengineering:steel_scaffolding_standard",
+        "meta": 0,
+        "count": 8,
+        "nbt": "{}"
+      }
+    ],
+    "completeSet": false,
+    "qualification": "本人实际制作过对应物品"
+  },
+  {
+    "world": "dc2",
+    "reward": "v2-selected-scaffold",
+    "source": "原版配方 / 对应模组实际物品",
+    "items": [
+      {
+        "id": "immersiveengineering:steel_scaffolding_standard",
+        "meta": 0,
+        "count": 24,
+        "nbt": "{}"
+      }
+    ],
+    "completeSet": false,
+    "qualification": "本人实际制作过对应物品"
+  },
+  {
+    "world": "dc2",
+    "reward": "v2-ordinary-water",
+    "source": "原版配方 / 对应模组实际物品",
+    "items": [
+      {
+        "id": "legendarysurvivaloverhaul:purified_water_bottle",
+        "meta": 0,
+        "count": 4,
+        "nbt": "{}"
+      }
+    ],
+    "completeSet": false,
+    "qualification": "本人实际制作过对应物品"
+  },
+  {
+    "world": "dc2",
+    "reward": "v2-selected-water",
+    "source": "原版配方 / 对应模组实际物品",
+    "items": [
+      {
+        "id": "legendarysurvivaloverhaul:purified_water_bottle",
+        "meta": 0,
+        "count": 12,
+        "nbt": "{}"
+      }
+    ],
+    "completeSet": false,
+    "qualification": "本人实际制作过对应物品"
+  },
+  {
+    "world": "dc2",
+    "reward": "v2-ordinary-bandage",
+    "source": "原版配方 / 对应模组实际物品",
+    "items": [
+      {
+        "id": "legendarysurvivaloverhaul:bandage",
+        "meta": 0,
+        "count": 4,
+        "nbt": "{}"
+      }
+    ],
+    "completeSet": false,
+    "qualification": "本人实际制作过对应物品"
+  },
+  {
+    "world": "dc2",
+    "reward": "v2-selected-bandage",
+    "source": "原版配方 / 对应模组实际物品",
+    "items": [
+      {
+        "id": "legendarysurvivaloverhaul:bandage",
+        "meta": 0,
+        "count": 12,
+        "nbt": "{}"
+      }
+    ],
+    "completeSet": false,
+    "qualification": "本人实际制作过对应物品"
+  },
+  {
+    "world": "dc2",
+    "reward": "v2-set-coke_oven",
+    "source": "ImmersiveEngineering-1.20.1-10.2.0-183.jar:data/immersiveengineering/structures/multiblocks/coke_oven.nbt",
+    "items": [
+      {
+        "id": "immersiveengineering:cokebrick",
+        "meta": 0,
+        "count": 27,
+        "nbt": "{}"
+      }
+    ],
+    "completeSet": true,
+    "qualification": "本人实际制作各类部件；原任务已开放或完成；同结构一套"
+  },
+  {
+    "world": "dc2",
+    "reward": "v2-set-blast_furnace",
+    "source": "ImmersiveEngineering-1.20.1-10.2.0-183.jar:data/immersiveengineering/structures/multiblocks/blast_furnace.nbt",
+    "items": [
+      {
+        "id": "immersiveengineering:blastbrick",
+        "meta": 0,
+        "count": 27,
+        "nbt": "{}"
+      }
+    ],
+    "completeSet": true,
+    "qualification": "本人实际制作各类部件；原任务已开放或完成；同结构一套"
+  },
+  {
+    "world": "dc2",
+    "reward": "v2-set-metal_press",
+    "source": "ImmersiveEngineering-1.20.1-10.2.0-183.jar:data/immersiveengineering/structures/multiblocks/metal_press.nbt",
+    "items": [
+      {
+        "id": "immersiveengineering:rs_engineering",
+        "meta": 0,
+        "count": 1,
+        "nbt": "{}"
+      },
+      {
+        "id": "minecraft:piston",
+        "meta": 0,
+        "count": 1,
+        "nbt": "{}"
+      },
+      {
+        "id": "immersiveengineering:heavy_engineering",
+        "meta": 0,
+        "count": 1,
+        "nbt": "{}"
+      },
+      {
+        "id": "immersiveengineering:steel_scaffolding_standard",
+        "meta": 0,
+        "count": 2,
+        "nbt": "{}"
+      },
+      {
+        "id": "immersiveengineering:conveyor_basic",
+        "meta": 0,
+        "count": 2,
+        "nbt": "{}"
+      }
+    ],
+    "completeSet": true,
+    "qualification": "本人实际制作各类部件；原任务已开放或完成；同结构一套"
+  },
+  {
+    "world": "dc2",
+    "reward": "v2-set-refinery",
+    "source": "ImmersiveEngineering-1.20.1-10.2.0-183.jar:data/immersiveengineering/structures/multiblocks/refinery.nbt",
+    "items": [
+      {
+        "id": "immersiveengineering:light_engineering",
+        "meta": 0,
+        "count": 2,
+        "nbt": "{}"
+      },
+      {
+        "id": "immersiveengineering:heavy_engineering",
+        "meta": 0,
+        "count": 2,
+        "nbt": "{}"
+      },
+      {
+        "id": "immersiveengineering:sheetmetal_iron",
+        "meta": 0,
+        "count": 16,
+        "nbt": "{}"
+      },
+      {
+        "id": "immersiveengineering:rs_engineering",
+        "meta": 0,
+        "count": 1,
+        "nbt": "{}"
+      },
+      {
+        "id": "immersiveengineering:steel_scaffolding_standard",
+        "meta": 0,
+        "count": 8,
+        "nbt": "{}"
+      },
+      {
+        "id": "immersiveengineering:fluid_pipe",
+        "meta": 0,
+        "count": 5,
+        "nbt": "{}"
+      }
+    ],
+    "completeSet": true,
+    "qualification": "本人实际制作各类部件；原任务已开放或完成；同结构一套"
+  },
+  {
+    "world": "dc2",
+    "reward": "v2-set-fermenter",
+    "source": "ImmersiveEngineering-1.20.1-10.2.0-183.jar:data/immersiveengineering/structures/multiblocks/fermenter.nbt",
+    "items": [
+      {
+        "id": "immersiveengineering:light_engineering",
+        "meta": 0,
+        "count": 2,
+        "nbt": "{}"
+      },
+      {
+        "id": "immersiveengineering:rs_engineering",
+        "meta": 0,
+        "count": 1,
+        "nbt": "{}"
+      },
+      {
+        "id": "immersiveengineering:sheetmetal_iron",
+        "meta": 0,
+        "count": 4,
+        "nbt": "{}"
+      },
+      {
+        "id": "immersiveengineering:steel_scaffolding_standard",
+        "meta": 0,
+        "count": 6,
+        "nbt": "{}"
+      },
+      {
+        "id": "minecraft:cauldron",
+        "meta": 0,
+        "count": 4,
+        "nbt": "{}"
+      },
+      {
+        "id": "immersiveengineering:fluid_pipe",
+        "meta": 0,
+        "count": 2,
+        "nbt": "{}"
+      }
+    ],
+    "completeSet": true,
+    "qualification": "本人实际制作各类部件；原任务已开放或完成；同结构一套"
+  },
+  {
+    "world": "dc2",
+    "reward": "v2-set-squeezer",
+    "source": "ImmersiveEngineering-1.20.1-10.2.0-183.jar:data/immersiveengineering/structures/multiblocks/squeezer.nbt",
+    "items": [
+      {
+        "id": "immersiveengineering:light_engineering",
+        "meta": 0,
+        "count": 2,
+        "nbt": "{}"
+      },
+      {
+        "id": "immersiveengineering:rs_engineering",
+        "meta": 0,
+        "count": 1,
+        "nbt": "{}"
+      },
+      {
+        "id": "minecraft:piston",
+        "meta": 0,
+        "count": 1,
+        "nbt": "{}"
+      },
+      {
+        "id": "immersiveengineering:steel_scaffolding_standard",
+        "meta": 0,
+        "count": 6,
+        "nbt": "{}"
+      },
+      {
+        "id": "immersiveengineering:steel_fence",
+        "meta": 0,
+        "count": 3,
+        "nbt": "{}"
+      },
+      {
+        "id": "immersiveengineering:fluid_pipe",
+        "meta": 0,
+        "count": 2,
+        "nbt": "{}"
+      },
+      {
+        "id": "immersiveengineering:wooden_barrel",
+        "meta": 0,
+        "count": 4,
+        "nbt": "{}"
+      }
+    ],
+    "completeSet": true,
+    "qualification": "本人实际制作各类部件；原任务已开放或完成；同结构一套"
+  },
+  {
+    "world": "mb",
+    "reward": "v2-daily-torches",
+    "source": "原版配方 / 对应模组实际物品",
+    "items": [
+      {
+        "id": "minecraft:torch",
+        "meta": 0,
+        "count": 8,
+        "nbt": "{}"
+      }
+    ],
+    "completeSet": false,
+    "qualification": "本人实际制作过对应物品"
+  },
+  {
+    "world": "mb",
+    "reward": "v2-daily-fuel",
+    "source": "原版配方 / 对应模组实际物品",
+    "items": [
+      {
+        "id": "minecraft:coal",
+        "meta": 1,
+        "count": 8,
+        "nbt": "{}"
+      }
+    ],
+    "completeSet": false,
+    "qualification": "本人实际制作过对应物品"
+  },
+  {
+    "world": "mb",
+    "reward": "v2-daily-glass",
+    "source": "原版配方 / 对应模组实际物品",
+    "items": [
+      {
+        "id": "minecraft:glass",
+        "meta": 0,
+        "count": 8,
+        "nbt": "{}"
+      }
+    ],
+    "completeSet": false,
+    "qualification": "本人实际制作过对应物品"
+  },
+  {
+    "world": "mb",
+    "reward": "v2-daily-ladder",
+    "source": "原版配方 / 对应模组实际物品",
+    "items": [
+      {
+        "id": "minecraft:ladder",
+        "meta": 0,
+        "count": 8,
+        "nbt": "{}"
+      }
+    ],
+    "completeSet": false,
+    "qualification": "本人实际制作过对应物品"
+  },
+  {
+    "world": "mb",
+    "reward": "v2-ordinary-torches",
+    "source": "原版配方 / 对应模组实际物品",
+    "items": [
+      {
+        "id": "minecraft:torch",
+        "meta": 0,
+        "count": 32,
+        "nbt": "{}"
+      }
+    ],
+    "completeSet": false,
+    "qualification": "本人实际制作过对应物品"
+  },
+  {
+    "world": "mb",
+    "reward": "v2-ordinary-fuel",
+    "source": "原版配方 / 对应模组实际物品",
+    "items": [
+      {
+        "id": "minecraft:coal",
+        "meta": 1,
+        "count": 24,
+        "nbt": "{}"
+      }
+    ],
+    "completeSet": false,
+    "qualification": "本人实际制作过对应物品"
+  },
+  {
+    "world": "mb",
+    "reward": "v2-ordinary-glass",
+    "source": "原版配方 / 对应模组实际物品",
+    "items": [
+      {
+        "id": "minecraft:glass",
+        "meta": 0,
+        "count": 32,
+        "nbt": "{}"
+      }
+    ],
+    "completeSet": false,
+    "qualification": "本人实际制作过对应物品"
+  },
+  {
+    "world": "mb",
+    "reward": "v2-ordinary-ladder",
+    "source": "原版配方 / 对应模组实际物品",
+    "items": [
+      {
+        "id": "minecraft:ladder",
+        "meta": 0,
+        "count": 24,
+        "nbt": "{}"
+      }
+    ],
+    "completeSet": false,
+    "qualification": "本人实际制作过对应物品"
+  },
+  {
+    "world": "mb",
+    "reward": "v2-ordinary-storage",
+    "source": "原版配方 / 对应模组实际物品",
+    "items": [
+      {
+        "id": "minecraft:chest",
+        "meta": 0,
+        "count": 4,
+        "nbt": "{}"
+      }
+    ],
+    "completeSet": false,
+    "qualification": "本人实际制作过对应物品"
+  },
+  {
+    "world": "mb",
+    "reward": "v2-ordinary-rail",
+    "source": "原版配方 / 对应模组实际物品",
+    "items": [
+      {
+        "id": "minecraft:rail",
+        "meta": 0,
+        "count": 32,
+        "nbt": "{}"
+      }
+    ],
+    "completeSet": false,
+    "qualification": "本人实际制作过对应物品"
+  },
+  {
+    "world": "mb",
+    "reward": "v2-ordinary-paper",
+    "source": "原版配方 / 对应模组实际物品",
+    "items": [
+      {
+        "id": "minecraft:paper",
+        "meta": 0,
+        "count": 32,
+        "nbt": "{}"
+      }
+    ],
+    "completeSet": false,
+    "qualification": "本人实际制作过对应物品"
+  },
+  {
+    "world": "mb",
+    "reward": "v2-ordinary-bricks",
+    "source": "原版配方 / 对应模组实际物品",
+    "items": [
+      {
+        "id": "minecraft:brick_block",
+        "meta": 0,
+        "count": 24,
+        "nbt": "{}"
+      }
+    ],
+    "completeSet": false,
+    "qualification": "本人实际制作过对应物品"
+  },
+  {
+    "world": "mb",
+    "reward": "v2-selected-exploration",
+    "source": "原版配方 / 对应模组实际物品",
+    "items": [
+      {
+        "id": "minecraft:torch",
+        "meta": 0,
+        "count": 64,
+        "nbt": "{}"
+      },
+      {
+        "id": "minecraft:coal",
+        "meta": 1,
+        "count": 64,
+        "nbt": "{}"
+      }
+    ],
+    "completeSet": false,
+    "qualification": "本人实际制作过对应物品"
+  },
+  {
+    "world": "mb",
+    "reward": "v2-selected-building",
+    "source": "原版配方 / 对应模组实际物品",
+    "items": [
+      {
+        "id": "minecraft:glass",
+        "meta": 0,
+        "count": 64,
+        "nbt": "{}"
+      },
+      {
+        "id": "minecraft:stonebrick",
+        "meta": 0,
+        "count": 64,
+        "nbt": "{}"
+      }
+    ],
+    "completeSet": false,
+    "qualification": "本人实际制作过对应物品"
+  },
+  {
+    "world": "mb",
+    "reward": "v2-selected-railway",
+    "source": "原版配方 / 对应模组实际物品",
+    "items": [
+      {
+        "id": "minecraft:rail",
+        "meta": 0,
+        "count": 64,
+        "nbt": "{}"
+      },
+      {
+        "id": "minecraft:golden_rail",
+        "meta": 0,
+        "count": 8,
+        "nbt": "{}"
+      }
+    ],
+    "completeSet": false,
+    "qualification": "本人实际制作过对应物品"
+  },
+  {
+    "world": "mb",
+    "reward": "v2-selected-warehouse",
+    "source": "原版配方 / 对应模组实际物品",
+    "items": [
+      {
+        "id": "minecraft:chest",
+        "meta": 0,
+        "count": 8,
+        "nbt": "{}"
+      },
+      {
+        "id": "minecraft:hopper",
+        "meta": 0,
+        "count": 4,
+        "nbt": "{}"
+      }
+    ],
+    "completeSet": false,
+    "qualification": "本人实际制作过对应物品"
+  },
+  {
+    "world": "mb",
+    "reward": "v2-selected-automation",
+    "source": "原版配方 / 对应模组实际物品",
+    "items": [
+      {
+        "id": "minecraft:repeater",
+        "meta": 0,
+        "count": 8,
+        "nbt": "{}"
+      },
+      {
+        "id": "minecraft:piston",
+        "meta": 0,
+        "count": 8,
+        "nbt": "{}"
+      }
+    ],
+    "completeSet": false,
+    "qualification": "本人实际制作过对应物品"
+  },
+  {
+    "world": "mb",
+    "reward": "v2-selected-worksite",
+    "source": "原版配方 / 对应模组实际物品",
+    "items": [
+      {
+        "id": "minecraft:ladder",
+        "meta": 0,
+        "count": 64,
+        "nbt": "{}"
+      },
+      {
+        "id": "minecraft:glass",
+        "meta": 0,
+        "count": 64,
+        "nbt": "{}"
+      }
+    ],
+    "completeSet": false,
+    "qualification": "本人实际制作过对应物品"
+  },
+  {
+    "world": "mb",
+    "reward": "v2-ordinary-steel",
+    "source": "原版配方 / 对应模组实际物品",
+    "items": [
+      {
+        "id": "immersiveengineering:metal",
+        "meta": 8,
+        "count": 4,
+        "nbt": "{}"
+      }
+    ],
+    "completeSet": false,
+    "qualification": "本人实际制作过对应物品"
+  },
+  {
+    "world": "mb",
+    "reward": "v2-selected-steel",
+    "source": "原版配方 / 对应模组实际物品",
+    "items": [
+      {
+        "id": "immersiveengineering:metal",
+        "meta": 8,
+        "count": 12,
+        "nbt": "{}"
+      }
+    ],
+    "completeSet": false,
+    "qualification": "本人实际制作过对应物品"
+  },
+  {
+    "world": "mb",
+    "reward": "v2-ordinary-plate",
+    "source": "原版配方 / 对应模组实际物品",
+    "items": [
+      {
+        "id": "immersiveengineering:metal",
+        "meta": 39,
+        "count": 8,
+        "nbt": "{}"
+      }
+    ],
+    "completeSet": false,
+    "qualification": "本人实际制作过对应物品"
+  },
+  {
+    "world": "mb",
+    "reward": "v2-selected-plate",
+    "source": "原版配方 / 对应模组实际物品",
+    "items": [
+      {
+        "id": "immersiveengineering:metal",
+        "meta": 39,
+        "count": 24,
+        "nbt": "{}"
+      }
+    ],
+    "completeSet": false,
+    "qualification": "本人实际制作过对应物品"
+  },
+  {
+    "world": "mb",
+    "reward": "v2-ordinary-pipe",
+    "source": "原版配方 / 对应模组实际物品",
+    "items": [
+      {
+        "id": "immersiveengineering:metal_device1",
+        "meta": 6,
+        "count": 8,
+        "nbt": "{}"
+      }
+    ],
+    "completeSet": false,
+    "qualification": "本人实际制作过对应物品"
+  },
+  {
+    "world": "mb",
+    "reward": "v2-selected-pipe",
+    "source": "原版配方 / 对应模组实际物品",
+    "items": [
+      {
+        "id": "immersiveengineering:metal_device1",
+        "meta": 6,
+        "count": 24,
+        "nbt": "{}"
+      }
+    ],
+    "completeSet": false,
+    "qualification": "本人实际制作过对应物品"
+  },
+  {
+    "world": "mb",
+    "reward": "v2-ordinary-scaffold",
+    "source": "原版配方 / 对应模组实际物品",
+    "items": [
+      {
+        "id": "immersiveengineering:metal_decoration1",
+        "meta": 1,
+        "count": 8,
+        "nbt": "{}"
+      }
+    ],
+    "completeSet": false,
+    "qualification": "本人实际制作过对应物品"
+  },
+  {
+    "world": "mb",
+    "reward": "v2-selected-scaffold",
+    "source": "原版配方 / 对应模组实际物品",
+    "items": [
+      {
+        "id": "immersiveengineering:metal_decoration1",
+        "meta": 1,
+        "count": 24,
+        "nbt": "{}"
+      }
+    ],
+    "completeSet": false,
+    "qualification": "本人实际制作过对应物品"
+  },
+  {
+    "world": "mb",
+    "reward": "v2-set-coke",
+    "source": "ImmersiveEngineering 0.12-98 Multiblockcoke getTotalMaterials；原主线工艺及本人制作证明",
+    "items": [
+      {
+        "id": "immersiveengineering:stone_decoration",
+        "meta": 0,
+        "count": 27,
+        "nbt": "{}"
+      }
+    ],
+    "completeSet": true,
+    "qualification": "本人实际制作各类部件；原任务已开放或完成；同结构一套"
+  },
+  {
+    "world": "mb",
+    "reward": "v2-set-blast",
+    "source": "ImmersiveEngineering 0.12-98 Multiblockblast getTotalMaterials；原主线工艺及本人制作证明",
+    "items": [
+      {
+        "id": "immersiveengineering:stone_decoration",
+        "meta": 1,
+        "count": 27,
+        "nbt": "{}"
+      }
+    ],
+    "completeSet": true,
+    "qualification": "本人实际制作各类部件；原任务已开放或完成；同结构一套"
+  },
+  {
+    "world": "mb",
+    "reward": "v2-set-fermenter",
+    "source": "ImmersiveEngineering 0.12-98 Multiblockfermenter getTotalMaterials；原主线工艺及本人制作证明",
+    "items": [
+      {
+        "id": "immersiveengineering:metal_decoration1",
+        "meta": 1,
+        "count": 6,
+        "nbt": "{}"
+      },
+      {
+        "id": "immersiveengineering:metal_device1",
+        "meta": 6,
+        "count": 2,
+        "nbt": "{}"
+      },
+      {
+        "id": "immersiveengineering:metal_decoration0",
+        "meta": 3,
+        "count": 1,
+        "nbt": "{}"
+      },
+      {
+        "id": "immersiveengineering:metal_decoration0",
+        "meta": 4,
+        "count": 2,
+        "nbt": "{}"
+      },
+      {
+        "id": "minecraft:cauldron",
+        "meta": 0,
+        "count": 4,
+        "nbt": "{}"
+      },
+      {
+        "id": "immersiveengineering:sheetmetal",
+        "meta": 9,
+        "count": 4,
+        "nbt": "{}"
+      }
+    ],
+    "completeSet": true,
+    "qualification": "本人实际制作各类部件；原任务已开放或完成；同结构一套"
+  },
+  {
+    "world": "mb",
+    "reward": "v2-set-refinery",
+    "source": "ImmersiveEngineering 0.12-98 Multiblockrefinery getTotalMaterials；原主线工艺及本人制作证明",
+    "items": [
+      {
+        "id": "immersiveengineering:metal_decoration1",
+        "meta": 1,
+        "count": 8,
+        "nbt": "{}"
+      },
+      {
+        "id": "immersiveengineering:metal_device1",
+        "meta": 6,
+        "count": 5,
+        "nbt": "{}"
+      },
+      {
+        "id": "immersiveengineering:metal_decoration0",
+        "meta": 3,
+        "count": 1,
+        "nbt": "{}"
+      },
+      {
+        "id": "immersiveengineering:metal_decoration0",
+        "meta": 4,
+        "count": 2,
+        "nbt": "{}"
+      },
+      {
+        "id": "immersiveengineering:metal_decoration0",
+        "meta": 5,
+        "count": 2,
+        "nbt": "{}"
+      },
+      {
+        "id": "immersiveengineering:sheetmetal",
+        "meta": 9,
+        "count": 16,
+        "nbt": "{}"
+      }
+    ],
+    "completeSet": true,
+    "qualification": "本人实际制作各类部件；原任务已开放或完成；同结构一套"
+  },
+  {
+    "world": "vw",
+    "reward": "v2-daily-torches",
+    "source": "原版配方 / 对应模组实际物品",
+    "items": [
+      {
+        "id": "minecraft:torch",
+        "meta": 0,
+        "count": 8,
+        "nbt": "{}"
+      }
+    ],
+    "completeSet": false,
+    "qualification": "本人实际制作过对应物品"
+  },
+  {
+    "world": "vw",
+    "reward": "v2-daily-fuel",
+    "source": "原版配方 / 对应模组实际物品",
+    "items": [
+      {
+        "id": "minecraft:coal",
+        "meta": 1,
+        "count": 8,
+        "nbt": "{}"
+      }
+    ],
+    "completeSet": false,
+    "qualification": "本人实际制作过对应物品"
+  },
+  {
+    "world": "vw",
+    "reward": "v2-daily-glass",
+    "source": "原版配方 / 对应模组实际物品",
+    "items": [
+      {
+        "id": "minecraft:glass",
+        "meta": 0,
+        "count": 8,
+        "nbt": "{}"
+      }
+    ],
+    "completeSet": false,
+    "qualification": "本人实际制作过对应物品"
+  },
+  {
+    "world": "vw",
+    "reward": "v2-daily-ladder",
+    "source": "原版配方 / 对应模组实际物品",
+    "items": [
+      {
+        "id": "minecraft:ladder",
+        "meta": 0,
+        "count": 8,
+        "nbt": "{}"
+      }
+    ],
+    "completeSet": false,
+    "qualification": "本人实际制作过对应物品"
+  },
+  {
+    "world": "vw",
+    "reward": "v2-ordinary-torches",
+    "source": "原版配方 / 对应模组实际物品",
+    "items": [
+      {
+        "id": "minecraft:torch",
+        "meta": 0,
+        "count": 32,
+        "nbt": "{}"
+      }
+    ],
+    "completeSet": false,
+    "qualification": "本人实际制作过对应物品"
+  },
+  {
+    "world": "vw",
+    "reward": "v2-ordinary-fuel",
+    "source": "原版配方 / 对应模组实际物品",
+    "items": [
+      {
+        "id": "minecraft:coal",
+        "meta": 1,
+        "count": 24,
+        "nbt": "{}"
+      }
+    ],
+    "completeSet": false,
+    "qualification": "本人实际制作过对应物品"
+  },
+  {
+    "world": "vw",
+    "reward": "v2-ordinary-glass",
+    "source": "原版配方 / 对应模组实际物品",
+    "items": [
+      {
+        "id": "minecraft:glass",
+        "meta": 0,
+        "count": 32,
+        "nbt": "{}"
+      }
+    ],
+    "completeSet": false,
+    "qualification": "本人实际制作过对应物品"
+  },
+  {
+    "world": "vw",
+    "reward": "v2-ordinary-ladder",
+    "source": "原版配方 / 对应模组实际物品",
+    "items": [
+      {
+        "id": "minecraft:ladder",
+        "meta": 0,
+        "count": 24,
+        "nbt": "{}"
+      }
+    ],
+    "completeSet": false,
+    "qualification": "本人实际制作过对应物品"
+  },
+  {
+    "world": "vw",
+    "reward": "v2-ordinary-storage",
+    "source": "原版配方 / 对应模组实际物品",
+    "items": [
+      {
+        "id": "minecraft:chest",
+        "meta": 0,
+        "count": 4,
+        "nbt": "{}"
+      }
+    ],
+    "completeSet": false,
+    "qualification": "本人实际制作过对应物品"
+  },
+  {
+    "world": "vw",
+    "reward": "v2-ordinary-rail",
+    "source": "原版配方 / 对应模组实际物品",
+    "items": [
+      {
+        "id": "minecraft:rail",
+        "meta": 0,
+        "count": 32,
+        "nbt": "{}"
+      }
+    ],
+    "completeSet": false,
+    "qualification": "本人实际制作过对应物品"
+  },
+  {
+    "world": "vw",
+    "reward": "v2-ordinary-paper",
+    "source": "原版配方 / 对应模组实际物品",
+    "items": [
+      {
+        "id": "minecraft:paper",
+        "meta": 0,
+        "count": 32,
+        "nbt": "{}"
+      }
+    ],
+    "completeSet": false,
+    "qualification": "本人实际制作过对应物品"
+  },
+  {
+    "world": "vw",
+    "reward": "v2-ordinary-bricks",
+    "source": "原版配方 / 对应模组实际物品",
+    "items": [
+      {
+        "id": "minecraft:brick_block",
+        "meta": 0,
+        "count": 24,
+        "nbt": "{}"
+      }
+    ],
+    "completeSet": false,
+    "qualification": "本人实际制作过对应物品"
+  },
+  {
+    "world": "vw",
+    "reward": "v2-selected-exploration",
+    "source": "原版配方 / 对应模组实际物品",
+    "items": [
+      {
+        "id": "minecraft:torch",
+        "meta": 0,
+        "count": 64,
+        "nbt": "{}"
+      },
+      {
+        "id": "minecraft:coal",
+        "meta": 1,
+        "count": 64,
+        "nbt": "{}"
+      }
+    ],
+    "completeSet": false,
+    "qualification": "本人实际制作过对应物品"
+  },
+  {
+    "world": "vw",
+    "reward": "v2-selected-building",
+    "source": "原版配方 / 对应模组实际物品",
+    "items": [
+      {
+        "id": "minecraft:glass",
+        "meta": 0,
+        "count": 64,
+        "nbt": "{}"
+      },
+      {
+        "id": "minecraft:stonebrick",
+        "meta": 0,
+        "count": 64,
+        "nbt": "{}"
+      }
+    ],
+    "completeSet": false,
+    "qualification": "本人实际制作过对应物品"
+  },
+  {
+    "world": "vw",
+    "reward": "v2-selected-railway",
+    "source": "原版配方 / 对应模组实际物品",
+    "items": [
+      {
+        "id": "minecraft:rail",
+        "meta": 0,
+        "count": 64,
+        "nbt": "{}"
+      },
+      {
+        "id": "minecraft:golden_rail",
+        "meta": 0,
+        "count": 8,
+        "nbt": "{}"
+      }
+    ],
+    "completeSet": false,
+    "qualification": "本人实际制作过对应物品"
+  },
+  {
+    "world": "vw",
+    "reward": "v2-selected-warehouse",
+    "source": "原版配方 / 对应模组实际物品",
+    "items": [
+      {
+        "id": "minecraft:chest",
+        "meta": 0,
+        "count": 8,
+        "nbt": "{}"
+      },
+      {
+        "id": "minecraft:hopper",
+        "meta": 0,
+        "count": 4,
+        "nbt": "{}"
+      }
+    ],
+    "completeSet": false,
+    "qualification": "本人实际制作过对应物品"
+  },
+  {
+    "world": "vw",
+    "reward": "v2-selected-automation",
+    "source": "原版配方 / 对应模组实际物品",
+    "items": [
+      {
+        "id": "minecraft:repeater",
+        "meta": 0,
+        "count": 8,
+        "nbt": "{}"
+      },
+      {
+        "id": "minecraft:piston",
+        "meta": 0,
+        "count": 8,
+        "nbt": "{}"
+      }
+    ],
+    "completeSet": false,
+    "qualification": "本人实际制作过对应物品"
+  },
+  {
+    "world": "vw",
+    "reward": "v2-selected-worksite",
+    "source": "原版配方 / 对应模组实际物品",
+    "items": [
+      {
+        "id": "minecraft:ladder",
+        "meta": 0,
+        "count": 64,
+        "nbt": "{}"
+      },
+      {
+        "id": "minecraft:glass",
+        "meta": 0,
+        "count": 64,
+        "nbt": "{}"
+      }
+    ],
+    "completeSet": false,
+    "qualification": "本人实际制作过对应物品"
+  },
+  {
+    "world": "vw",
+    "reward": "v2-ordinary-brick",
+    "source": "原版配方 / 对应模组实际物品",
+    "items": [
+      {
+        "id": "gregtech:gt.multitileentity",
+        "meta": 18000,
+        "count": 4,
+        "nbt": "{}"
+      }
+    ],
+    "completeSet": false,
+    "qualification": "本人实际制作过对应物品"
+  },
+  {
+    "world": "vw",
+    "reward": "v2-selected-brick",
+    "source": "原版配方 / 对应模组实际物品",
+    "items": [
+      {
+        "id": "gregtech:gt.multitileentity",
+        "meta": 18000,
+        "count": 12,
+        "nbt": "{}"
+      }
+    ],
+    "completeSet": false,
+    "qualification": "本人实际制作过对应物品"
+  },
+  {
+    "world": "vw",
+    "reward": "v2-ordinary-plate",
+    "source": "原版配方 / 对应模组实际物品",
+    "items": [
+      {
+        "id": "gregtech:gt.meta.plate",
+        "meta": 260,
+        "count": 8,
+        "nbt": "{}"
+      }
+    ],
+    "completeSet": false,
+    "qualification": "本人实际制作过对应物品"
+  },
+  {
+    "world": "vw",
+    "reward": "v2-selected-plate",
+    "source": "原版配方 / 对应模组实际物品",
+    "items": [
+      {
+        "id": "gregtech:gt.meta.plate",
+        "meta": 260,
+        "count": 24,
+        "nbt": "{}"
+      }
+    ],
+    "completeSet": false,
+    "qualification": "本人实际制作过对应物品"
+  },
+  {
+    "world": "vw",
+    "reward": "v2-ordinary-rod",
+    "source": "原版配方 / 对应模组实际物品",
+    "items": [
+      {
+        "id": "gregtech:gt.meta.stick",
+        "meta": 260,
+        "count": 16,
+        "nbt": "{}"
+      }
+    ],
+    "completeSet": false,
+    "qualification": "本人实际制作过对应物品"
+  },
+  {
+    "world": "vw",
+    "reward": "v2-selected-rod",
+    "source": "原版配方 / 对应模组实际物品",
+    "items": [
+      {
+        "id": "gregtech:gt.meta.stick",
+        "meta": 260,
+        "count": 48,
+        "nbt": "{}"
+      }
+    ],
+    "completeSet": false,
+    "qualification": "本人实际制作过对应物品"
+  },
+  {
+    "world": "vw",
+    "reward": "v2-ordinary-screw",
+    "source": "原版配方 / 对应模组实际物品",
+    "items": [
+      {
+        "id": "gregtech:gt.meta.screw",
+        "meta": 260,
+        "count": 32,
+        "nbt": "{}"
+      }
+    ],
+    "completeSet": false,
+    "qualification": "本人实际制作过对应物品"
+  },
+  {
+    "world": "vw",
+    "reward": "v2-selected-screw",
+    "source": "原版配方 / 对应模组实际物品",
+    "items": [
+      {
+        "id": "gregtech:gt.meta.screw",
+        "meta": 260,
+        "count": 64,
+        "nbt": "{}"
+      }
+    ],
+    "completeSet": false,
+    "qualification": "本人实际制作过对应物品"
+  },
+  {
+    "world": "vw",
+    "reward": "v2-ordinary-stainless",
+    "source": "原版配方 / 对应模组实际物品",
+    "items": [
+      {
+        "id": "gregtech:gt.meta.plate",
+        "meta": 8636,
+        "count": 4,
+        "nbt": "{}"
+      }
+    ],
+    "completeSet": false,
+    "qualification": "本人实际制作过对应物品"
+  },
+  {
+    "world": "vw",
+    "reward": "v2-selected-stainless",
+    "source": "原版配方 / 对应模组实际物品",
+    "items": [
+      {
+        "id": "gregtech:gt.meta.plate",
+        "meta": 8636,
+        "count": 12,
+        "nbt": "{}"
+      }
+    ],
+    "completeSet": false,
+    "qualification": "本人实际制作过对应物品"
+  },
+  {
+    "world": "vw",
+    "reward": "v2-set-coke",
+    "source": "GT6 6.17.06 原任务及 MultiTileEntityCokeOven 结构校验/提示；主方块替代一块结构件",
+    "items": [
+      {
+        "id": "gregtech:gt.multitileentity",
+        "meta": 17000,
+        "count": 1,
+        "nbt": "{}"
+      },
+      {
+        "id": "gregtech:gt.multitileentity",
+        "meta": 18000,
+        "count": 25,
+        "nbt": "{}"
+      }
+    ],
+    "completeSet": true,
+    "qualification": "核心先按原流程取得并由服务端确认本人持有；其余结构件实际生产；原任务已开放或完成；同结构一套"
+  },
+  {
+    "world": "vw",
+    "reward": "v2-set-tower",
+    "source": "GT6 6.17.06 原任务及 MultiTileEntityDistillationTower 结构校验/提示；主方块替代一块结构件",
+    "items": [
+      {
+        "id": "gregtech:gt.multitileentity",
+        "meta": 17101,
+        "count": 1,
+        "nbt": "{}"
+      },
+      {
+        "id": "gregtech:gt.multitileentity",
+        "meta": 18102,
+        "count": 71,
+        "nbt": "{}"
+      },
+      {
+        "id": "gregtech:gt.multitileentity",
+        "meta": 18101,
+        "count": 9,
+        "nbt": "{}"
+      }
+    ],
+    "completeSet": true,
+    "qualification": "核心先按原流程取得并由服务端确认本人持有；其余结构件实际生产；原任务已开放或完成；同结构一套"
+  },
+  {
+    "world": "vw",
+    "reward": "v2-set-autoclave",
+    "source": "GT6 6.17.06 原任务及 MultiTileEntityAutoclave 结构校验/提示；主方块替代一块结构件",
+    "items": [
+      {
+        "id": "gregtech:gt.multitileentity",
+        "meta": 17112,
+        "count": 1,
+        "nbt": "{}"
+      },
+      {
+        "id": "gregtech:gt.multitileentity",
+        "meta": 18022,
+        "count": 25,
+        "nbt": "{}"
+      }
+    ],
+    "completeSet": true,
+    "qualification": "核心先按原流程取得并由服务端确认本人持有；其余结构件实际生产；原任务已开放或完成；同结构一套"
+  },
+  {
+    "world": "vw",
+    "reward": "v2-set-electrolyzer",
+    "source": "GT6 6.17.06 原任务及 MultiTileEntityElectrolyzer 结构校验/提示；主方块替代一块结构件",
+    "items": [
+      {
+        "id": "gregtech:gt.multitileentity",
+        "meta": 17103,
+        "count": 1,
+        "nbt": "{}"
+      },
+      {
+        "id": "gregtech:gt.multitileentity",
+        "meta": 18105,
+        "count": 17,
+        "nbt": "{}"
+      }
+    ],
+    "completeSet": true,
+    "qualification": "核心先按原流程取得并由服务端确认本人持有；其余结构件实际生产；原任务已开放或完成；同结构一套"
   }
 ]

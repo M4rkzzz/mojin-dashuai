@@ -1,0 +1,53 @@
+{
+  "version": "1.0.4",
+  "sequence": 23,
+  "publishedAt": "2026-09-07T00:21:10.266783+00:00",
+  "launcherPublished": true,
+  "autoUpdateActivated": true,
+  "apiVersion": "1.2.3",
+  "catalogRevision": 3,
+  "installerUrl": "https://launcher-direct.boshan.uk:21708/launcher/1.0.4/MojinDashuai-Setup-1.0.4-x64.exe",
+  "differentialBytesFrom103": 2590525,
+  "serverObservers": {
+    "m3e": {
+      "version": "1.0.4",
+      "ready": true
+    },
+    "dc2": {
+      "version": "1.0.4",
+      "ready": true
+    },
+    "mb": {
+      "version": "1.0.4",
+      "ready": true
+    },
+    "vw": {
+      "ready": false,
+      "deferred": "1 player online; keep server running until empty"
+    }
+  },
+  "checks": {
+    "isolatedApi": 46,
+    "activityRules": 12,
+    "mailboxFailures": 17,
+    "installerLifecycle": true,
+    "publicInstallerDownload": true,
+    "nativeAuthenticatedWorldViews": 4,
+    "drawRewards": 114,
+    "completeSets": 18,
+    "uiFourWorlds": true,
+    "hotPublishWithoutApiRestart": true,
+    "liveDefinitionsReachable": 4,
+    "liveGameHotRefreshVerified": [
+      "m3e",
+      "dc2",
+      "mb"
+    ]
+  },
+  "limits": [
+    "Fourth server observer upgrade pending while players online.",
+    "No real player received a test reward; inventory failure tests use an isolated fixture.",
+    "Clean Windows remains unverified; existing explicit release scope retained."
+  ],
+  "followUpAutomation": "1-0-3"
+}

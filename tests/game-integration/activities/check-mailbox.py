@@ -53,6 +53,9 @@ public class MailboxCheck {
   ActivityRuntime.instance="m3e";ActivityRuntime.playerData=Paths.get(args[0]);Files.createDirectories(ActivityRuntime.playerData);EntityPlayerMP.directory=ActivityRuntime.playerData;
   ActivityRuntime.definition=new ActivityRuntime.Definition();ActivityRuntime.definition.id="m3e";ActivityRuntime.definition.trackedItems=new String[]{"minecraft:torch@0"};
   EntityPlayerMP p=new EntityPlayerMP(UUID.randomUUID());ActivityRuntime.crafted(p,item("minecraft:torch",4));JsonObject event=ActivityRuntime.events.poll();require(event!=null&&event.get("key").getAsString().equals("minecraft:torch@0"),"1.7 numeric NBT id resolves through actual registry identity");
+  ActivityRuntime.events.clear();ActivityRuntime.definition.trackedControllers=new String[]{"minecraft:torch@0"};p.inventory.items[0]=item("minecraft:torch",1);
+  ActivityRuntime.controllerSnapshot(p,ActivityRuntime.state(p));event=ActivityRuntime.events.poll();require(event!=null&&event.get("kind").getAsString().equals("snapshot")&&event.getAsJsonArray("facts").get(0).getAsString().equals("owned:minecraft:torch@0"),"controller presence is a fact, never production credit");
+  ActivityRuntime.controllerSnapshot(p,ActivityRuntime.state(p));require(ActivityRuntime.events.isEmpty(),"repeated controller pickup cannot manufacture daily events");p.inventory.items[0]=null;
   ActivityRuntime.events.clear();ActivityRuntime.instance="vw";Machine machine=new Machine(p.id);
   ActivityRuntime.beginMachineOutput(item("minecraft:torch",4),machine);ActivityRuntime.finishMachineOutput(false);require(ActivityRuntime.events.isEmpty(),"blocked GT6 recipe output gives no production credit");
   ActivityRuntime.beginMachineOutput(item("minecraft:torch",4),machine);ActivityRuntime.finishMachineOutput(true);require(ActivityRuntime.events.poll()!=null,"completed GT6 recipe credits its online owner");
@@ -68,10 +71,16 @@ public class MailboxCheck {
   require(ActivityRuntime.deliver(r,after)&&r.inventory.items[0].stackSize==8,"failure after save does not roll back a durable reward");
   EntityPlayerMP clone=new EntityPlayerMP(q.id);ActivityRuntime.clonePlayer(clone,q);require(clone.getEntityData().getString(ActivityRuntime.LEDGER).equals(q.getEntityData().getString(ActivityRuntime.LEDGER)),"death clone retains anti-duplicate receipts");
   ActivityRuntime.questContext(p);ActivityRuntime.questContext(q);ActivityRuntime.clearQuestContext();require(ActivityRuntime.context.get().peek()==p,"nested quest detection preserves acting player");ActivityRuntime.clearQuestContext();
+  EntityPlayerMP tower=new EntityPlayerMP(UUID.randomUUID());tower.inventory.items=new ItemStack[3];
+  JsonObject whole=new JsonParser().parse("{\"id\":\""+UUID.randomUUID()+"\",\"items\":[{\"id\":\"test:wall\",\"meta\":0,\"count\":64,\"nbt\":\"{}\"},{\"id\":\"test:wall\",\"meta\":0,\"count\":7,\"nbt\":\"{}\"},{\"id\":\"test:base\",\"meta\":0,\"count\":9,\"nbt\":\"{}\"},{\"id\":\"test:core\",\"meta\":0,\"count\":1,\"nbt\":\"{}\"}]}").getAsJsonObject();
+  require(!ActivityRuntime.deliver(tower,whole)&&Arrays.stream(tower.inventory.items).allMatch(Objects::isNull),"full 81-block set rolls back when only its final core does not fit");
+  tower.inventory.items=new ItemStack[4];require(ActivityRuntime.deliver(tower,whole)&&Arrays.stream(tower.inventory.items).mapToInt(i->i.stackSize).sum()==81,"full 81-block set including core is delivered together");
+  EntityPlayerMP again=new EntityPlayerMP(tower.id);again.load();require(ActivityRuntime.deliver(again,whole)&&Arrays.stream(again.inventory.items).mapToInt(i->i.stackSize).sum()==81,"restart and retry cannot duplicate a whole structure");
  }
 }'''}
 for name,text in sources.items():p=src/name;p.parent.mkdir(parents=True,exist_ok=True);p.write_text(text,encoding='utf-8')
-java=next((root.parent/'.tools/temurin25').glob('*/bin'));gson=root/'.local/engines/dc2/libraries/com/google/code/gson/gson/2.10.1/gson-2.10.1.jar';asm=root/'.local/engines/mb/libraries/org/ow2/asm/asm/9.10.1/asm-9.10.1.jar'
+source=Path(os.environ.get('ACTIVITY_SOURCE_ROOT',str(root)))
+java=next((root.parent/'.tools/temurin25').glob('*/bin'));gson=source/'.local/engines/dc2/libraries/com/google/code/gson/gson/2.10.1/gson-2.10.1.jar';asm=source/'.local/engines/mb/libraries/org/ow2/asm/asm/9.10.1/asm-9.10.1.jar'
 cp=os.pathsep.join(map(str,[classes,root/'.local/activities/classes',gson,asm]))
 for command in [[java/'javac.exe','--release','8','-cp',cp,'-d',classes,*src.rglob('*.java')],[java/'java.exe','-cp',cp,'uk.boshan.activities.MailboxCheck',out/'playerdata']]:
  p=subprocess.run(list(map(str,command)),capture_output=True,text=True,encoding='utf-8',errors='replace',creationflags=0x08000000)

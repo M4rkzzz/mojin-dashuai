@@ -112,7 +112,7 @@
           "CmlLib.Core": "[4.0.6, )",
           "CmlLib.Core.Installer.Forge": "[1.1.1, )",
           "DnsClient": "[1.8.0, )",
-          "Launcher.Shared": "[1.0.2, )"
+          "Launcher.Shared": "[1.0.4, )"
         }
       },
       "launcher.shared": {

@@ -10,7 +10,7 @@ try{
  await page.addInitScript(({catalogue})=>{
   const listeners=[],views={};window.activityRequests=[];window.failDraw=true;
   for(const w of catalogue.worlds)views[w.id]={...w,instance:w.id,stage:w.stages.at(-1).name,today:'2026-09-06',week:'2026-08-31',lastSeen:'2026-09-06T11:00:00Z',tickets:3,medals:68,misses:49,guaranteeWithin:1,
-   actions:w.actions.map(a=>({...a,current:a.count,eligible:true})),dailyReady:true,claimedIn:null,pendingDays:[],weeklySteps:w.weeklyLabels.map(label=>({label,done:true})),weeklyDays:3,weeklyReady:true,weeklyClaimed:false,pendingWeeks:[],awards:[],pool:w.rewards.map(r=>({...r,eligible:true})),cosmetics:[],showcases:[]};
+   actions:w.actions.map(a=>({...a,current:a.count,eligible:true})),dailyReady:true,claimedIn:null,pendingDays:[],weeklySteps:w.weeklyLabels.map(label=>({label,done:true})),weeklyDays:3,weeklyReady:true,weeklyClaimed:false,pendingWeeks:[],awards:[],pool:w.rewards.filter(r=>!r.retired).map(r=>({...r,eligible:true})),cosmetics:[],showcases:[]};
   window.chrome={webview:{addEventListener:(_,cb)=>listeners.push(cb),postMessage:r=>{
    let result=null,ok=true,error;
    if(r.command==='bootstrap')result={profile:{id:'activities-test',gameName:'Player',kind:'hub'},settings:{root:'D:\\Content',contentDirectoryConfigured:true,memory:{m3e:8192,dc2:8192,mb:8192,vw:4096},java:{},jvm:{},width:1280,height:720,fullscreen:false,windowBehavior:'keep',concurrency:4,limitMiB:0,proxy:'',reducedMotion:false,theme:'dark',selectedRoutes:{}},installs:{}};
@@ -34,12 +34,17 @@ try{
  await page.getByRole('button',{name:'使用 1 张抽奖券'}).click();await expect(page.getByRole('alert')).toContainText('连接暂时中断');
  await page.getByRole('button',{name:'使用 1 张抽奖券'}).click();await expect(page.locator('.draw-result')).toContainText('稀有推进奖励');
  const attempts=await page.evaluate(()=>window.activityRequests.filter(r=>r.action==='draw'));expect(attempts[0].operationId).toBe(attempts[1].operationId);
- await page.getByRole('button',{name:'选择这份材料'}).first().click();await expect(page.locator('.award-list')).toContainText('待入服领取');
- await page.getByText('查看奖池与领取条件',{exact:true}).click();
+ await page.getByRole('button',{name:'选择此奖励'}).first().click();await expect(page.locator('.award-list')).toContainText('待入服领取');
+ await expect(page.locator('.pool-tier')).toHaveCount(3);
  await expect(page.locator('.activity-item').first()).toBeVisible();
  await expect(page.locator('.supply-chest')).toBeVisible();
  await page.screenshot({path:'../.local/activities-draw.png',animations:'disabled'});
- for(const world of catalogue.worlds){await page.locator('.activity-worlds').getByRole('button',{name:world.name,exact:true}).click();await expect(page.locator('.activity-draw')).toBeVisible();}
+ for(const world of catalogue.worlds){await page.locator('.activity-worlds').getByRole('button',{name:world.name,exact:true}).click();await expect(page.locator('.pool-entry')).toHaveCount(world.rewards.filter(r=>!r.retired&&r.tier!=='daily').length);await expect(page.locator('.pool-rare')).toContainText('整套');
+  await expect(page.locator('.pool-condition[open]')).toHaveCount(0);
+  await page.locator('.pool-rare').scrollIntoViewIfNeeded();await page.screenshot({path:`../.local/reward-pool-${world.id}.png`,animations:'disabled'});
+  await page.setViewportSize({width:1024,height:720});expect(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth)).toBe(false);await page.setViewportSize({width:1280,height:820});
+  expect(await page.locator('.reward-pool img').evaluateAll(images=>images.filter(i=>!i.complete||i.naturalWidth===0).map(i=>i.src))).toEqual([]);
+ }
  await page.getByRole('button',{name:'纪念兑换',exact:true}).click();await expect(page.locator('.cosmetic-art')).toHaveCount(3);
  await page.screenshot({path:'../.local/activities-shop.png'});
  await page.setViewportSize({width:1024,height:720});expect(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth)).toBe(false);

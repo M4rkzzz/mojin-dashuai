@@ -2,10 +2,11 @@
 Does not edit a quest, completion, recipe, world or player file.
 """
 from pathlib import Path
-import json, re, uuid
+import json, re, uuid, os
 
 ROOT = Path(__file__).resolve().parents[1]
-INSTANCES = ROOT / '.local/complete-client-qa/全新整包安装/instances'
+SOURCE = Path(os.environ.get('ACTIVITY_SOURCE_ROOT', str(ROOT)))
+INSTANCES = SOURCE / '.local/complete-client-qa/全新整包安装/instances'
 OUT = ROOT / 'activities'
 
 def condition(all=(), any=(), none=()):
@@ -161,7 +162,9 @@ for world in names:
     definition=dict(id=world,name=name,dailyName=daily,weeklyName=weekly,monthlyName=monthly,stages=stages,actions=actions,
                     weeklySteps=[['craft','supply'],['challenge','quest'],['craft','supply']],weeklyLabels=['准备补给或材料','参与挑战或推进任务','完成后补充物资'],questIds=sorted(set(questids)),trackedItems=sorted(tracked),trackedKills=sorted(set(kills)),rewards=rewards)
     worlds.append(definition)
+from activity_reward_revision import revise
+worlds, audit = revise(worlds, audit, INSTANCES, ROOT, bq, snbt)
 OUT.mkdir(exist_ok=True)
-(OUT/'catalog.json').write_text(json.dumps(dict(version=1,worlds=worlds),ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
+(OUT/'catalog.json').write_text(json.dumps(dict(version=2,worlds=worlds),ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
 (OUT/'reward-audit.json').write_text(json.dumps(audit,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
 print('Activity catalogue:',', '.join(f"{w['id']} {len(w['questIds'])} quests / {len(w['rewards'])} rewards" for w in worlds))

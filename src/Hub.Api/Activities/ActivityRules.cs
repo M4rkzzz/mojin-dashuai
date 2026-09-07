@@ -13,13 +13,18 @@ public static class ActivityRules
     }
     public static string Month(DateTimeOffset time) => Day(time)[..7];
     public static ActivityStage Stage(ActivityWorld definition, ActivityWorldState state) => definition.Stages.Last(s => s.Requires.Matches(state.Facts));
-    public static bool DailyDone(ActivityWorld definition, ActivityWorldState state, string day) => state.Days.TryGetValue(day, out var counts) && definition.Actions.Any(a => counts.GetValueOrDefault(a.Id) >= a.Count);
+    public static ActivityWorld EffectiveGoals(ActivityWorld definition,ActivityWorldState state,string week) => state.GoalPeriods.TryGetValue(week,out var goals)?definition with{Actions=goals.Actions,WeeklySteps=goals.WeeklySteps,WeeklyLabels=goals.WeeklyLabels}:definition;
+    public static void PreserveLegacyGoals(ActivityWorld original,ActivityWorldState state)
+    {
+        foreach(var week in state.Days.Keys.Select(Week).Concat(state.Weeks.Keys).Distinct())state.GoalPeriods.TryAdd(week,new(original.Actions,original.WeeklySteps,original.WeeklyLabels));
+    }
+    public static bool DailyDone(ActivityWorld definition, ActivityWorldState state, string day) => state.Days.TryGetValue(day, out var counts) && EffectiveGoals(definition,state,Week(day)).Actions.Any(a => counts.GetValueOrDefault(a.Id) >= a.Count);
     public static bool WeeklyDone(ActivityWorld definition, ActivityWorldState state, string week) => state.Weeks.GetValueOrDefault(week) >= 3 || state.Days.Keys.Count(d => Week(d) == week && DailyDone(definition, state, d)) >= 3;
     public static void Observe(ActivityWorld definition, ActivityWorldState state, ActivityEvent e, DateTimeOffset now)
     {
         if (e.EventId == Guid.Empty || e.OccurredAt > now.AddMinutes(5) || e.Count is < 1 or > 4096) throw new HubError("活动事件无效。", 400);
         state.LastSeen = now;
-        var allowed = definition.QuestIds.SelectMany(q => new[] { "quest:" + q, "unlocked:" + q }).Concat(definition.TrackedItems.Select(i => "craft:" + i)).Concat(definition.TrackedKills.Select(k => "kill:" + k)).ToHashSet();
+        var allowed = definition.QuestIds.SelectMany(q => new[] { "quest:" + q, "unlocked:" + q }).Concat(definition.TrackedItems.Select(i => "craft:" + i)).Concat(definition.TrackedKills.Select(k => "kill:" + k)).Concat((definition.TrackedControllers ?? []).Select(k => "owned:" + k)).ToHashSet();
         foreach (var fact in e.Facts ?? [])
         {
             if (!allowed.Contains(fact)) throw new HubError("未登记的活动进度。", 400);
@@ -27,9 +32,11 @@ public static class ActivityRules
         }
         if (e.Kind == "snapshot") return; // Existing quest history unlocks pools, never retroactively signs in.
         var key = e.Kind + ":" + e.Key;
-        if (!allowed.Contains(key)) throw new HubError("未登记的活动事件。", 400);
+        if (e.Kind == "owned" || !allowed.Contains(key)) throw new HubError("未登记的活动事件。", 400);
         state.Facts.Add(key);
         var day = Day(e.OccurredAt);
+        state.GoalPeriods.TryAdd(Week(day),new(definition.Actions,definition.WeeklySteps,definition.WeeklyLabels));
+        definition=EffectiveGoals(definition,state,Week(day));
         if (!state.Days.TryGetValue(day, out var counts)) state.Days[day] = counts = [];
         var matched = new HashSet<string>();
         foreach (var a in definition.Actions)
@@ -69,13 +76,14 @@ public static class ActivityRules
         var award = new ActivityAward { Tier = tier, Source = "抽奖", CreatedAt = now };
         state.Awards.Add(award); return award;
     }
-    public static ActivityReward[] Eligible(ActivityWorld definition, ActivityWorldState state, ActivityAward award) => definition.Rewards.Where(r => r.Tier == award.Tier && r.Requires.Matches(state.Facts)
-        && (r.Goal is null || state.GoalBudgets.GetValueOrDefault(r.Goal) + r.BasisPoints <= 3000)).ToArray();
+    public static ActivityReward[] Eligible(ActivityWorld definition, ActivityWorldState state, ActivityAward award) => definition.Rewards.Where(r => !r.Retired && r.Tier == award.Tier && r.Requires.Matches(state.Facts)
+        && (r.CompleteSet ? !state.ClaimedSets.Contains(r.Goal!) : r.Goal is null || state.GoalBudgets.GetValueOrDefault(r.Goal) + r.BasisPoints <= 3000)).ToArray();
     public static ActivityReward Select(ActivityWorld definition, ActivityWorldState state, ActivityAward award, string rewardId)
     {
         if (award.RewardId is not null) throw new HubError("这份奖励已经选择。", 409);
         var reward = Eligible(definition, state, award).SingleOrDefault(r => r.Id == rewardId) ?? throw new HubError("尚未满足这份奖励的领取条件。", 409);
-        if (reward.Goal is not null) state.GoalBudgets[reward.Goal] = state.GoalBudgets.GetValueOrDefault(reward.Goal) + reward.BasisPoints;
+        if (reward.CompleteSet) state.ClaimedSets.Add(reward.Goal!);
+        if (reward.Goal is not null) state.GoalBudgets[reward.Goal] = reward.CompleteSet ? 10000 : state.GoalBudgets.GetValueOrDefault(reward.Goal) + reward.BasisPoints;
         award.RewardId = reward.Id; return reward;
     }
     public static int CosmeticPrice(string id) => id switch { "title" => 8, "frame" => 20, "background" => 40, _ => throw new HubError("未知装饰。", 400) };

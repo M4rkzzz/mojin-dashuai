@@ -63,22 +63,55 @@ public sealed class ActivityTests
         Assert.Equal("rare", ActivityRules.Draw(afterRestart, Now, 0).Tier); Assert.Equal(0, afterRestart.Misses);
         Assert.Throws<HubError>(() => ActivityRules.Draw(new(), Now));
     }
-    [Fact] public void RareNeedsUnlockedUnfinishedGoalAndProvenProductionAndCannotExceedThirtyPercent()
+    [Fact] public void WholeStructureRequiresItsOriginalGateAndPartsAndCanOnlyBeClaimedOnce()
     {
         foreach (var w in Catalogue().Worlds)
         {
-            var r = w.Rewards.First(r => r.Tier == "rare"); var s = new ActivityWorldState(); var award = new ActivityAward { Tier = "rare" };
+            var r = w.Rewards.First(r => r.CompleteSet); var s = new ActivityWorldState(); var award = new ActivityAward { Tier = "rare" };
             Assert.Empty(ActivityRules.Eligible(w, s, award));
             s.Facts.UnionWith(r.Requires.All); if (r.Requires.Any.Length > 0) s.Facts.Add(r.Requires.Any[0]);
             Assert.Contains(r, ActivityRules.Eligible(w, s, award));
             ActivityRules.Select(w, s, award, r.Id);
             Assert.Throws<HubError>(() => ActivityRules.Select(w, s, award, r.Id));
-            while (s.GoalBudgets.GetValueOrDefault(r.Goal!) + r.BasisPoints <= 3000) ActivityRules.Select(w, s, new() { Tier = "rare" }, r.Id);
+            s = ActivityJson.Read<ActivityWorldState>(ActivityJson.Write(s));
             Assert.Throws<HubError>(() => ActivityRules.Select(w, s, new() { Tier = "rare" }, r.Id));
-            Assert.InRange(s.GoalBudgets[r.Goal!], 1000, 3000);
-            s.GoalBudgets.Clear(); s.Facts.Add("quest:" + r.Goal);
-            Assert.DoesNotContain(r, ActivityRules.Eligible(w, s, new() { Tier = "rare" }));
+            Assert.Equal(10000,s.GoalBudgets[r.Goal!]);
+            var completed = new ActivityWorldState();completed.Facts.UnionWith(r.Requires.All);completed.Facts.Add("quest:"+r.Goal);
+            Assert.Contains(r, ActivityRules.Eligible(w, completed, new() { Tier = "rare" }));
+            completed.Facts.Remove(r.Requires.All.First(f=>f.StartsWith("craft:")));
+            Assert.DoesNotContain(r, ActivityRules.Eligible(w, completed, new() { Tier = "rare" }));
         }
+    }
+    [Fact] public void PreviousPartialRewardsAndDeliveriesArePreservedButNoLongerDrawn()
+    {
+        var w=Catalogue().Worlds.Single(w=>w.Id=="vw");var old=w.Rewards.Single(r=>r.Id=="tower-wall");
+        Assert.True(old.Retired);Assert.Equal(10,old.Items.Single().Count);
+        var set=w.Rewards.Single(r=>r.Id=="v2-set-tower");var state=new ActivityWorldState();
+        state.Facts.UnionWith(old.Requires.All.Concat(set.Requires.All));state.Facts.Add("quest:"+set.Goal);
+        state.GoalBudgets[set.Goal!]=3000;
+        Assert.DoesNotContain(old,ActivityRules.Eligible(w,state,new(){Tier="rare"}));
+        Assert.Contains(set,ActivityRules.Eligible(w,state,new(){Tier="rare"}));
+        ActivityRules.Select(w,state,new(){Tier="rare"},set.Id);
+        Assert.DoesNotContain(set,ActivityRules.Eligible(w,state,new(){Tier="rare"}));
+    }
+    [Fact] public void FullTowerDeliveryContainsAllEightyOneBlocksAcrossLegalStacks()
+    {
+        var tower=Catalogue().Worlds.Single(w=>w.Id=="vw").Rewards.Single(r=>r.Id=="v2-set-tower");
+        var stacks=ActivityService.DeliveryItems(tower.Items);
+        Assert.Equal(81,stacks.Sum(i=>i.Count));Assert.All(stacks,i=>Assert.InRange(i.Count,1,64));
+        Assert.Equal(new[]{64,7},stacks.Where(i=>i.Meta==18102).Select(i=>i.Count));
+        Assert.Equal(9,stacks.Single(i=>i.Meta==18101).Count);Assert.Equal(1,stacks.Single(i=>i.Meta==17101).Count);
+        foreach(var w in Catalogue().Worlds)foreach(var r in w.Rewards.Where(r=>!r.Retired))Assert.Equal(r.Items.Sum(i=>i.Count),ActivityService.DeliveryItems(r.Items).Sum(i=>i.Count));
+    }
+    [Fact] public void OwningAControllerUnlocksOnlyThatCoreAndNeverCountsAsProductionOrADaily()
+    {
+        var w=Catalogue().Worlds.Single(w=>w.Id=="vw");var s=new ActivityWorldState();var key="gregtech:gt.multitileentity@17101";
+        ActivityRules.Observe(w,s,Event("snapshot","",facts:["owned:"+key]),Now);
+        Assert.Contains("owned:"+key,s.Facts);Assert.DoesNotContain("craft:"+key,s.Facts);
+        Assert.False(ActivityRules.DailyDone(w,s,ActivityRules.Day(Now)));
+        Assert.Throws<HubError>(()=>ActivityRules.Observe(w,s,Event("owned",key,99),Now));
+        Assert.Throws<HubError>(()=>ActivityRules.Observe(w,s,Event("snapshot","",facts:["owned:minecraft:diamond@0"]),Now));
+        Assert.Empty(ActivityRules.Eligible(w,s,new(){Tier="rare"}));
     }
     [Fact] public void PendingRareAndWalletArePreservedWhenNoRewardQualifiesAndCosmeticCannotBeBoughtTwice()
     {
@@ -87,5 +120,29 @@ public sealed class ActivityTests
         foreach(var id in new[]{"title","frame","background"})ActivityRules.BuyCosmetic(s,id);
         Assert.Equal(0,s.Medals);Assert.Equal(3,s.Cosmetics.Count);Assert.Throws<HubError>(()=>ActivityRules.BuyCosmetic(s,"title"));
         var restored=ActivityJson.Read<ActivityWorldState>(ActivityJson.Write(s));Assert.Null(restored.Awards.Single().RewardId);Assert.Equal("title",restored.EquippedTitle);
+    }
+    [Fact] public void LiveConfigRetiresRemovedPrizesButCannotRewriteAlreadyAwardedItems()
+    {
+        var before=Catalogue();var w=before.Worlds[0];var removed=w.Rewards.First(r=>!r.Retired);
+        var next=before with{Version=before.Version+1,Worlds=before.Worlds.Select(p=>p.Id==w.Id?p with{Rewards=p.Rewards.Where(r=>r.Id!=removed.Id).ToArray()}:p).ToArray()};
+        var merged=ActivityCatalog.Merge(before,next);
+        var retained=merged.Worlds[0].Rewards.Single(r=>r.Id==removed.Id);
+        Assert.True(retained.Retired);Assert.Equal(ActivityJson.Write(removed.Items),ActivityJson.Write(retained.Items));
+        var changed=before with{Worlds=before.Worlds.Select(p=>p.Id==w.Id?p with{Rewards=p.Rewards.Select(r=>r.Id==removed.Id?r with{Items=[r.Items[0] with{Count=r.Items[0].Count+1}]}:r).ToArray()}:p).ToArray()};
+        Assert.Throws<InvalidDataException>(()=>ActivityCatalog.Merge(before,changed));
+    }
+    [Fact] public void StartedWeeklyGoalsAndUnclaimedDaysSurviveLiveChangesNewWeekUsesNewGoals()
+    {
+        var w=Catalogue().Worlds[0];var s=new ActivityWorldState();
+        ActivityRules.Observe(w,s,Event("craft","minecraft:torch@0",8),Now);
+        var changed=w with{Actions=w.Actions.Select(a=>a with{Id="next-"+a.Id,Count=20}).ToArray(),WeeklySteps=w.WeeklySteps.Select(step=>step.Select(id=>"next-"+id).ToArray()).ToArray()};
+        Assert.True(ActivityRules.DailyDone(changed,s,ActivityRules.Day(Now)));
+        Assert.Equal(w.Actions,ActivityRules.EffectiveGoals(changed,s,ActivityRules.Week(Now)).Actions);
+        var nextWeek=Now.AddDays(7);ActivityRules.Observe(changed,s,Event("craft","minecraft:torch@0",8,nextWeek),nextWeek);
+        Assert.False(ActivityRules.DailyDone(changed,s,ActivityRules.Day(nextWeek)));
+        var restored=ActivityJson.Read<ActivityWorldState>(ActivityJson.Write(s));
+        Assert.True(ActivityRules.DailyDone(changed,restored,ActivityRules.Day(Now)));
+        ActivityRules.Observe(changed,restored,Event("craft","minecraft:torch@0",12,nextWeek),nextWeek);
+        Assert.True(ActivityRules.DailyDone(changed,restored,ActivityRules.Day(nextWeek)));
     }
 }

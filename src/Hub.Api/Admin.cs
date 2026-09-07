@@ -10,6 +10,7 @@ public static class Admin
         var db = scope.ServiceProvider.GetRequiredService<HubDb>();
         if (args.Length == 0) throw new ArgumentException("admin init | invite-create single|super [exactGameName|-] [days] | invite-revoke id | invite-list | invite-uses id | protect gameName | protect-conflict variant1 variant2 | disable loginName | reset loginName");
         switch (args[0]) {
+            case "activities-config": Activities.ActivityConfigAdmin.Run(scope.ServiceProvider.GetRequiredService<Activities.ActivityCatalog>(),args[1..]);break;
             case "activities-init": await Activities.ActivityData.Initialize(db); Console.WriteLine("Activity schema ready."); break;
             case "activities-review": {
                 if (args.Length == 1) {

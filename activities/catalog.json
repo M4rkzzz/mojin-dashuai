@@ -1,5 +1,5 @@
 {
-  "version": 1,
+  "version": 2,
   "worlds": [
     {
       "id": "m3e",
@@ -410,17 +410,981 @@
         "ffd1eddd-1bf6-494c-93da-5fc097beb624"
       ],
       "trackedItems": [
+        "manametalmod:BLOCKCrystalPillars@0",
+        "manametalmod:BLOCKManaMetalInjection@0",
+        "manametalmod:BlockMagicUpdates@0",
+        "manametalmod:BlockTileEntityHumanReforms@0",
+        "manametalmod:BlockTileEntityManaEnchantings@0",
+        "manametalmod:ManaCoal@0",
         "manametalmod:ManaCrystal@0",
+        "manametalmod:ManaRuneE@0",
+        "manametalmod:MetalEnergy02@0",
+        "manametalmod:dustMana@0",
+        "manametalmod:ingotManaS@0",
         "manametalmod:magicStone1@0",
+        "manametalmod:magicStone2@0",
         "manametalmod:magicStone3@0",
+        "manametalmod:magicStone4@0",
         "minecraft:arrow@0",
+        "minecraft:brick_block@0",
+        "minecraft:chest@0",
         "minecraft:coal@1",
+        "minecraft:glass@0",
+        "minecraft:golden_rail@0",
+        "minecraft:hopper@0",
+        "minecraft:ladder@0",
+        "minecraft:paper@0",
+        "minecraft:piston@0",
+        "minecraft:rail@0",
+        "minecraft:repeater@0",
+        "minecraft:stonebrick@0",
         "minecraft:torch@0"
       ],
       "trackedKills": [
         "manametalmod.EntityBossMasadabah"
       ],
       "rewards": [
+        {
+          "id": "v2-daily-torches",
+          "name": "火把",
+          "tier": "daily",
+          "items": [
+            {
+              "id": "minecraft:torch",
+              "meta": 0,
+              "count": 8,
+              "nbt": "{}"
+            }
+          ],
+          "purpose": "补充已掌握工艺的日常用料。",
+          "requires": {
+            "all": [
+              "craft:minecraft:torch@0"
+            ],
+            "any": [],
+            "none": []
+          },
+          "goal": null,
+          "basisPoints": 0,
+          "completeSet": false
+        },
+        {
+          "id": "v2-daily-fuel",
+          "name": "木炭",
+          "tier": "daily",
+          "items": [
+            {
+              "id": "minecraft:coal",
+              "meta": 1,
+              "count": 8,
+              "nbt": "{}"
+            }
+          ],
+          "purpose": "补充已掌握工艺的日常用料。",
+          "requires": {
+            "all": [
+              "craft:minecraft:coal@1"
+            ],
+            "any": [],
+            "none": []
+          },
+          "goal": null,
+          "basisPoints": 0,
+          "completeSet": false
+        },
+        {
+          "id": "v2-daily-glass",
+          "name": "玻璃",
+          "tier": "daily",
+          "items": [
+            {
+              "id": "minecraft:glass",
+              "meta": 0,
+              "count": 8,
+              "nbt": "{}"
+            }
+          ],
+          "purpose": "补充已掌握工艺的日常用料。",
+          "requires": {
+            "all": [
+              "craft:minecraft:glass@0"
+            ],
+            "any": [],
+            "none": []
+          },
+          "goal": null,
+          "basisPoints": 0,
+          "completeSet": false
+        },
+        {
+          "id": "v2-daily-ladder",
+          "name": "梯子",
+          "tier": "daily",
+          "items": [
+            {
+              "id": "minecraft:ladder",
+              "meta": 0,
+              "count": 8,
+              "nbt": "{}"
+            }
+          ],
+          "purpose": "补充已掌握工艺的日常用料。",
+          "requires": {
+            "all": [
+              "craft:minecraft:ladder@0"
+            ],
+            "any": [],
+            "none": []
+          },
+          "goal": null,
+          "basisPoints": 0,
+          "completeSet": false
+        },
+        {
+          "id": "v2-ordinary-torches",
+          "name": "火把",
+          "tier": "ordinary",
+          "items": [
+            {
+              "id": "minecraft:torch",
+              "meta": 0,
+              "count": 32,
+              "nbt": "{}"
+            }
+          ],
+          "purpose": "补充已掌握工艺的日常用料。",
+          "requires": {
+            "all": [
+              "craft:minecraft:torch@0"
+            ],
+            "any": [],
+            "none": []
+          },
+          "goal": null,
+          "basisPoints": 0,
+          "completeSet": false
+        },
+        {
+          "id": "v2-ordinary-fuel",
+          "name": "木炭",
+          "tier": "ordinary",
+          "items": [
+            {
+              "id": "minecraft:coal",
+              "meta": 1,
+              "count": 24,
+              "nbt": "{}"
+            }
+          ],
+          "purpose": "补充已掌握工艺的日常用料。",
+          "requires": {
+            "all": [
+              "craft:minecraft:coal@1"
+            ],
+            "any": [],
+            "none": []
+          },
+          "goal": null,
+          "basisPoints": 0,
+          "completeSet": false
+        },
+        {
+          "id": "v2-ordinary-glass",
+          "name": "玻璃",
+          "tier": "ordinary",
+          "items": [
+            {
+              "id": "minecraft:glass",
+              "meta": 0,
+              "count": 32,
+              "nbt": "{}"
+            }
+          ],
+          "purpose": "补充已掌握工艺的日常用料。",
+          "requires": {
+            "all": [
+              "craft:minecraft:glass@0"
+            ],
+            "any": [],
+            "none": []
+          },
+          "goal": null,
+          "basisPoints": 0,
+          "completeSet": false
+        },
+        {
+          "id": "v2-ordinary-ladder",
+          "name": "梯子",
+          "tier": "ordinary",
+          "items": [
+            {
+              "id": "minecraft:ladder",
+              "meta": 0,
+              "count": 24,
+              "nbt": "{}"
+            }
+          ],
+          "purpose": "补充已掌握工艺的日常用料。",
+          "requires": {
+            "all": [
+              "craft:minecraft:ladder@0"
+            ],
+            "any": [],
+            "none": []
+          },
+          "goal": null,
+          "basisPoints": 0,
+          "completeSet": false
+        },
+        {
+          "id": "v2-ordinary-storage",
+          "name": "箱子",
+          "tier": "ordinary",
+          "items": [
+            {
+              "id": "minecraft:chest",
+              "meta": 0,
+              "count": 4,
+              "nbt": "{}"
+            }
+          ],
+          "purpose": "补充已掌握工艺的日常用料。",
+          "requires": {
+            "all": [
+              "craft:minecraft:chest@0"
+            ],
+            "any": [],
+            "none": []
+          },
+          "goal": null,
+          "basisPoints": 0,
+          "completeSet": false
+        },
+        {
+          "id": "v2-ordinary-rail",
+          "name": "铁轨",
+          "tier": "ordinary",
+          "items": [
+            {
+              "id": "minecraft:rail",
+              "meta": 0,
+              "count": 32,
+              "nbt": "{}"
+            }
+          ],
+          "purpose": "补充已掌握工艺的日常用料。",
+          "requires": {
+            "all": [
+              "craft:minecraft:rail@0"
+            ],
+            "any": [],
+            "none": []
+          },
+          "goal": null,
+          "basisPoints": 0,
+          "completeSet": false
+        },
+        {
+          "id": "v2-ordinary-paper",
+          "name": "纸",
+          "tier": "ordinary",
+          "items": [
+            {
+              "id": "minecraft:paper",
+              "meta": 0,
+              "count": 32,
+              "nbt": "{}"
+            }
+          ],
+          "purpose": "补充已掌握工艺的日常用料。",
+          "requires": {
+            "all": [
+              "craft:minecraft:paper@0"
+            ],
+            "any": [],
+            "none": []
+          },
+          "goal": null,
+          "basisPoints": 0,
+          "completeSet": false
+        },
+        {
+          "id": "v2-ordinary-bricks",
+          "name": "砖块",
+          "tier": "ordinary",
+          "items": [
+            {
+              "id": "minecraft:brick_block",
+              "meta": 0,
+              "count": 24,
+              "nbt": "{}"
+            }
+          ],
+          "purpose": "补充已掌握工艺的日常用料。",
+          "requires": {
+            "all": [
+              "craft:minecraft:brick_block@0"
+            ],
+            "any": [],
+            "none": []
+          },
+          "goal": null,
+          "basisPoints": 0,
+          "completeSet": false
+        },
+        {
+          "id": "v2-selected-exploration",
+          "name": "照明与燃料",
+          "tier": "selected",
+          "items": [
+            {
+              "id": "minecraft:torch",
+              "meta": 0,
+              "count": 64,
+              "nbt": "{}"
+            },
+            {
+              "id": "minecraft:coal",
+              "meta": 1,
+              "count": 64,
+              "nbt": "{}"
+            }
+          ],
+          "purpose": "补充已掌握工艺的日常用料。",
+          "requires": {
+            "all": [
+              "craft:minecraft:torch@0",
+              "craft:minecraft:coal@1"
+            ],
+            "any": [],
+            "none": []
+          },
+          "goal": null,
+          "basisPoints": 0,
+          "completeSet": false
+        },
+        {
+          "id": "v2-selected-building",
+          "name": "建筑材料",
+          "tier": "selected",
+          "items": [
+            {
+              "id": "minecraft:glass",
+              "meta": 0,
+              "count": 64,
+              "nbt": "{}"
+            },
+            {
+              "id": "minecraft:stonebrick",
+              "meta": 0,
+              "count": 64,
+              "nbt": "{}"
+            }
+          ],
+          "purpose": "补充已掌握工艺的日常用料。",
+          "requires": {
+            "all": [
+              "craft:minecraft:glass@0",
+              "craft:minecraft:stonebrick@0"
+            ],
+            "any": [],
+            "none": []
+          },
+          "goal": null,
+          "basisPoints": 0,
+          "completeSet": false
+        },
+        {
+          "id": "v2-selected-railway",
+          "name": "铁路材料",
+          "tier": "selected",
+          "items": [
+            {
+              "id": "minecraft:rail",
+              "meta": 0,
+              "count": 64,
+              "nbt": "{}"
+            },
+            {
+              "id": "minecraft:golden_rail",
+              "meta": 0,
+              "count": 8,
+              "nbt": "{}"
+            }
+          ],
+          "purpose": "补充已掌握工艺的日常用料。",
+          "requires": {
+            "all": [
+              "craft:minecraft:rail@0",
+              "craft:minecraft:golden_rail@0"
+            ],
+            "any": [],
+            "none": []
+          },
+          "goal": null,
+          "basisPoints": 0,
+          "completeSet": false
+        },
+        {
+          "id": "v2-selected-warehouse",
+          "name": "仓储材料",
+          "tier": "selected",
+          "items": [
+            {
+              "id": "minecraft:chest",
+              "meta": 0,
+              "count": 8,
+              "nbt": "{}"
+            },
+            {
+              "id": "minecraft:hopper",
+              "meta": 0,
+              "count": 4,
+              "nbt": "{}"
+            }
+          ],
+          "purpose": "补充已掌握工艺的日常用料。",
+          "requires": {
+            "all": [
+              "craft:minecraft:chest@0",
+              "craft:minecraft:hopper@0"
+            ],
+            "any": [],
+            "none": []
+          },
+          "goal": null,
+          "basisPoints": 0,
+          "completeSet": false
+        },
+        {
+          "id": "v2-selected-automation",
+          "name": "红石配件",
+          "tier": "selected",
+          "items": [
+            {
+              "id": "minecraft:repeater",
+              "meta": 0,
+              "count": 8,
+              "nbt": "{}"
+            },
+            {
+              "id": "minecraft:piston",
+              "meta": 0,
+              "count": 8,
+              "nbt": "{}"
+            }
+          ],
+          "purpose": "补充已掌握工艺的日常用料。",
+          "requires": {
+            "all": [
+              "craft:minecraft:repeater@0",
+              "craft:minecraft:piston@0"
+            ],
+            "any": [],
+            "none": []
+          },
+          "goal": null,
+          "basisPoints": 0,
+          "completeSet": false
+        },
+        {
+          "id": "v2-selected-worksite",
+          "name": "场地搭建",
+          "tier": "selected",
+          "items": [
+            {
+              "id": "minecraft:ladder",
+              "meta": 0,
+              "count": 64,
+              "nbt": "{}"
+            },
+            {
+              "id": "minecraft:glass",
+              "meta": 0,
+              "count": 64,
+              "nbt": "{}"
+            }
+          ],
+          "purpose": "补充已掌握工艺的日常用料。",
+          "requires": {
+            "all": [
+              "craft:minecraft:ladder@0",
+              "craft:minecraft:glass@0"
+            ],
+            "any": [],
+            "none": []
+          },
+          "goal": null,
+          "basisPoints": 0,
+          "completeSet": false
+        },
+        {
+          "id": "v2-ordinary-arrows",
+          "name": "箭矢",
+          "tier": "ordinary",
+          "items": [
+            {
+              "id": "minecraft:arrow",
+              "meta": 0,
+              "count": 32,
+              "nbt": "{}"
+            }
+          ],
+          "purpose": "补充已掌握工艺的日常用料。",
+          "requires": {
+            "all": [
+              "craft:minecraft:arrow@0"
+            ],
+            "any": [],
+            "none": []
+          },
+          "goal": null,
+          "basisPoints": 0,
+          "completeSet": false
+        },
+        {
+          "id": "v2-selected-arrows",
+          "name": "箭矢",
+          "tier": "selected",
+          "items": [
+            {
+              "id": "minecraft:arrow",
+              "meta": 0,
+              "count": 64,
+              "nbt": "{}"
+            }
+          ],
+          "purpose": "补充已掌握工艺的日常用料。",
+          "requires": {
+            "all": [
+              "craft:minecraft:arrow@0"
+            ],
+            "any": [],
+            "none": []
+          },
+          "goal": null,
+          "basisPoints": 0,
+          "completeSet": false
+        },
+        {
+          "id": "v2-ordinary-mana",
+          "name": "魔法粉",
+          "tier": "ordinary",
+          "items": [
+            {
+              "id": "manametalmod:dustMana",
+              "meta": 0,
+              "count": 16,
+              "nbt": "{}"
+            }
+          ],
+          "purpose": "补充已掌握工艺的日常用料。",
+          "requires": {
+            "all": [
+              "craft:manametalmod:dustMana@0"
+            ],
+            "any": [],
+            "none": []
+          },
+          "goal": null,
+          "basisPoints": 0,
+          "completeSet": false
+        },
+        {
+          "id": "v2-selected-mana",
+          "name": "魔法粉",
+          "tier": "selected",
+          "items": [
+            {
+              "id": "manametalmod:dustMana",
+              "meta": 0,
+              "count": 48,
+              "nbt": "{}"
+            }
+          ],
+          "purpose": "补充已掌握工艺的日常用料。",
+          "requires": {
+            "all": [
+              "craft:manametalmod:dustMana@0"
+            ],
+            "any": [],
+            "none": []
+          },
+          "goal": null,
+          "basisPoints": 0,
+          "completeSet": false
+        },
+        {
+          "id": "v2-ordinary-mana-fuel",
+          "name": "灵炭",
+          "tier": "ordinary",
+          "items": [
+            {
+              "id": "manametalmod:ManaCoal",
+              "meta": 0,
+              "count": 8,
+              "nbt": "{}"
+            }
+          ],
+          "purpose": "补充已掌握工艺的日常用料。",
+          "requires": {
+            "all": [
+              "craft:manametalmod:ManaCoal@0"
+            ],
+            "any": [],
+            "none": []
+          },
+          "goal": null,
+          "basisPoints": 0,
+          "completeSet": false
+        },
+        {
+          "id": "v2-selected-mana-fuel",
+          "name": "灵炭",
+          "tier": "selected",
+          "items": [
+            {
+              "id": "manametalmod:ManaCoal",
+              "meta": 0,
+              "count": 24,
+              "nbt": "{}"
+            }
+          ],
+          "purpose": "补充已掌握工艺的日常用料。",
+          "requires": {
+            "all": [
+              "craft:manametalmod:ManaCoal@0"
+            ],
+            "any": [],
+            "none": []
+          },
+          "goal": null,
+          "basisPoints": 0,
+          "completeSet": false
+        },
+        {
+          "id": "v2-ordinary-metal-energy",
+          "name": "中级金属能量",
+          "tier": "ordinary",
+          "items": [
+            {
+              "id": "manametalmod:MetalEnergy02",
+              "meta": 0,
+              "count": 4,
+              "nbt": "{}"
+            }
+          ],
+          "purpose": "补充已掌握工艺的日常用料。",
+          "requires": {
+            "all": [
+              "craft:manametalmod:MetalEnergy02@0"
+            ],
+            "any": [],
+            "none": []
+          },
+          "goal": null,
+          "basisPoints": 0,
+          "completeSet": false
+        },
+        {
+          "id": "v2-selected-metal-energy",
+          "name": "中级金属能量",
+          "tier": "selected",
+          "items": [
+            {
+              "id": "manametalmod:MetalEnergy02",
+              "meta": 0,
+              "count": 12,
+              "nbt": "{}"
+            }
+          ],
+          "purpose": "补充已掌握工艺的日常用料。",
+          "requires": {
+            "all": [
+              "craft:manametalmod:MetalEnergy02@0"
+            ],
+            "any": [],
+            "none": []
+          },
+          "goal": null,
+          "basisPoints": 0,
+          "completeSet": false
+        },
+        {
+          "id": "v2-ordinary-mana-steel",
+          "name": "魔法钢锭",
+          "tier": "ordinary",
+          "items": [
+            {
+              "id": "manametalmod:ingotManaS",
+              "meta": 0,
+              "count": 4,
+              "nbt": "{}"
+            }
+          ],
+          "purpose": "补充已掌握工艺的日常用料。",
+          "requires": {
+            "all": [
+              "craft:manametalmod:ingotManaS@0"
+            ],
+            "any": [],
+            "none": []
+          },
+          "goal": null,
+          "basisPoints": 0,
+          "completeSet": false
+        },
+        {
+          "id": "v2-selected-mana-steel",
+          "name": "魔法钢锭",
+          "tier": "selected",
+          "items": [
+            {
+              "id": "manametalmod:ingotManaS",
+              "meta": 0,
+              "count": 12,
+              "nbt": "{}"
+            }
+          ],
+          "purpose": "补充已掌握工艺的日常用料。",
+          "requires": {
+            "all": [
+              "craft:manametalmod:ingotManaS@0"
+            ],
+            "any": [],
+            "none": []
+          },
+          "goal": null,
+          "basisPoints": 0,
+          "completeSet": false
+        },
+        {
+          "id": "v2-set-enchantment",
+          "name": "法力附魔台整套",
+          "tier": "rare",
+          "items": [
+            {
+              "id": "manametalmod:BlockTileEntityManaEnchantings",
+              "meta": 0,
+              "count": 1,
+              "nbt": "{}"
+            },
+            {
+              "id": "manametalmod:magicStone1",
+              "meta": 0,
+              "count": 9,
+              "nbt": "{}"
+            },
+            {
+              "id": "manametalmod:magicStone3",
+              "meta": 0,
+              "count": 24,
+              "nbt": "{}"
+            },
+            {
+              "id": "manametalmod:ManaCrystal",
+              "meta": 0,
+              "count": 8,
+              "nbt": "{}"
+            }
+          ],
+          "purpose": "包含全部结构件；供能、加工耗材和实际搭建按原流程完成。",
+          "requires": {
+            "all": [
+              "owned:manametalmod:BlockTileEntityManaEnchantings@0",
+              "craft:manametalmod:magicStone1@0",
+              "craft:manametalmod:magicStone3@0",
+              "craft:manametalmod:ManaCrystal@0"
+            ],
+            "any": [
+              "unlocked:6992b597-f070-4726-8e7b-3642b2152698",
+              "quest:6992b597-f070-4726-8e7b-3642b2152698"
+            ],
+            "none": []
+          },
+          "goal": "6992b597-f070-4726-8e7b-3642b2152698",
+          "basisPoints": 10000,
+          "completeSet": true
+        },
+        {
+          "id": "v2-set-infusion",
+          "name": "魔力灌注整套",
+          "tier": "rare",
+          "items": [
+            {
+              "id": "manametalmod:BLOCKManaMetalInjection",
+              "meta": 0,
+              "count": 1,
+              "nbt": "{}"
+            },
+            {
+              "id": "manametalmod:BLOCKCrystalPillars",
+              "meta": 0,
+              "count": 8,
+              "nbt": "{}"
+            },
+            {
+              "id": "manametalmod:magicStone3",
+              "meta": 0,
+              "count": 12,
+              "nbt": "{}"
+            },
+            {
+              "id": "manametalmod:ManaCrystal",
+              "meta": 0,
+              "count": 4,
+              "nbt": "{}"
+            },
+            {
+              "id": "manametalmod:ManaRuneE",
+              "meta": 0,
+              "count": 16,
+              "nbt": "{}"
+            }
+          ],
+          "purpose": "包含全部结构件；供能、加工耗材和实际搭建按原流程完成。",
+          "requires": {
+            "all": [
+              "owned:manametalmod:BLOCKManaMetalInjection@0",
+              "craft:manametalmod:BLOCKCrystalPillars@0",
+              "craft:manametalmod:magicStone3@0",
+              "craft:manametalmod:ManaCrystal@0",
+              "craft:manametalmod:ManaRuneE@0"
+            ],
+            "any": [
+              "unlocked:65e670a6-d0f1-4c45-bc71-fb092dc74a60",
+              "quest:65e670a6-d0f1-4c45-bc71-fb092dc74a60"
+            ],
+            "none": []
+          },
+          "goal": "65e670a6-d0f1-4c45-bc71-fb092dc74a60",
+          "basisPoints": 10000,
+          "completeSet": true
+        },
+        {
+          "id": "v2-set-wand",
+          "name": "法杖融合整套",
+          "tier": "rare",
+          "items": [
+            {
+              "id": "manametalmod:BlockMagicUpdates",
+              "meta": 0,
+              "count": 1,
+              "nbt": "{}"
+            },
+            {
+              "id": "manametalmod:magicStone1",
+              "meta": 0,
+              "count": 21,
+              "nbt": "{}"
+            },
+            {
+              "id": "manametalmod:magicStone2",
+              "meta": 0,
+              "count": 24,
+              "nbt": "{}"
+            },
+            {
+              "id": "manametalmod:magicStone3",
+              "meta": 0,
+              "count": 28,
+              "nbt": "{}"
+            },
+            {
+              "id": "manametalmod:magicStone4",
+              "meta": 0,
+              "count": 8,
+              "nbt": "{}"
+            },
+            {
+              "id": "manametalmod:ManaRuneE",
+              "meta": 0,
+              "count": 24,
+              "nbt": "{}"
+            },
+            {
+              "id": "manametalmod:ManaCrystal",
+              "meta": 0,
+              "count": 8,
+              "nbt": "{}"
+            }
+          ],
+          "purpose": "包含全部结构件；供能、加工耗材和实际搭建按原流程完成。",
+          "requires": {
+            "all": [
+              "owned:manametalmod:BlockMagicUpdates@0",
+              "craft:manametalmod:magicStone1@0",
+              "craft:manametalmod:magicStone2@0",
+              "craft:manametalmod:magicStone3@0",
+              "craft:manametalmod:magicStone4@0",
+              "craft:manametalmod:ManaRuneE@0",
+              "craft:manametalmod:ManaCrystal@0"
+            ],
+            "any": [
+              "unlocked:6a10a5dc-b383-4774-b72b-37509af1ca8f",
+              "quest:6a10a5dc-b383-4774-b72b-37509af1ca8f"
+            ],
+            "none": []
+          },
+          "goal": "6a10a5dc-b383-4774-b72b-37509af1ca8f",
+          "basisPoints": 10000,
+          "completeSet": true
+        },
+        {
+          "id": "v2-set-reform",
+          "name": "人体改造整套",
+          "tier": "rare",
+          "items": [
+            {
+              "id": "manametalmod:BlockTileEntityHumanReforms",
+              "meta": 0,
+              "count": 1,
+              "nbt": "{}"
+            },
+            {
+              "id": "manametalmod:magicStone1",
+              "meta": 0,
+              "count": 9,
+              "nbt": "{}"
+            },
+            {
+              "id": "manametalmod:magicStone3",
+              "meta": 0,
+              "count": 24,
+              "nbt": "{}"
+            },
+            {
+              "id": "manametalmod:ManaRuneE",
+              "meta": 0,
+              "count": 24,
+              "nbt": "{}"
+            },
+            {
+              "id": "manametalmod:ManaCrystal",
+              "meta": 0,
+              "count": 8,
+              "nbt": "{}"
+            }
+          ],
+          "purpose": "包含全部结构件；供能、加工耗材和实际搭建按原流程完成。",
+          "requires": {
+            "all": [
+              "owned:manametalmod:BlockTileEntityHumanReforms@0",
+              "craft:manametalmod:magicStone1@0",
+              "craft:manametalmod:magicStone3@0",
+              "craft:manametalmod:ManaRuneE@0",
+              "craft:manametalmod:ManaCrystal@0"
+            ],
+            "any": [
+              "unlocked:f4d9e08c-9e86-4714-9c25-6e14ff328d73",
+              "quest:f4d9e08c-9e86-4714-9c25-6e14ff328d73"
+            ],
+            "none": []
+          },
+          "goal": "f4d9e08c-9e86-4714-9c25-6e14ff328d73",
+          "basisPoints": 10000,
+          "completeSet": true
+        },
         {
           "id": "daily-torches",
           "name": "照明补给",
@@ -442,7 +1406,8 @@
             "none": []
           },
           "goal": null,
-          "basisPoints": 0
+          "basisPoints": 0,
+          "retired": true
         },
         {
           "id": "ordinary-torches",
@@ -465,7 +1430,8 @@
             "none": []
           },
           "goal": null,
-          "basisPoints": 0
+          "basisPoints": 0,
+          "retired": true
         },
         {
           "id": "selected-charcoal",
@@ -488,7 +1454,8 @@
             "none": []
           },
           "goal": null,
-          "basisPoints": 0
+          "basisPoints": 0,
+          "retired": true
         },
         {
           "id": "daily-field-supplies",
@@ -511,7 +1478,8 @@
             "none": []
           },
           "goal": null,
-          "basisPoints": 0
+          "basisPoints": 0,
+          "retired": true
         },
         {
           "id": "ordinary-field-supplies",
@@ -534,7 +1502,8 @@
             "none": []
           },
           "goal": null,
-          "basisPoints": 0
+          "basisPoints": 0,
+          "retired": true
         },
         {
           "id": "mana-enchantment-foundation",
@@ -560,7 +1529,8 @@
             ]
           },
           "goal": "6992b597-f070-4726-8e7b-3642b2152698",
-          "basisPoints": 1250
+          "basisPoints": 1250,
+          "retired": true
         },
         {
           "id": "mana-pillars",
@@ -586,7 +1556,8 @@
             ]
           },
           "goal": "6992b597-f070-4726-8e7b-3642b2152698",
-          "basisPoints": 1111
+          "basisPoints": 1111,
+          "retired": true
         },
         {
           "id": "mana-crystals",
@@ -612,8 +1583,15 @@
             ]
           },
           "goal": "6992b597-f070-4726-8e7b-3642b2152698",
-          "basisPoints": 1250
+          "basisPoints": 1250,
+          "retired": true
         }
+      ],
+      "trackedControllers": [
+        "manametalmod:BlockTileEntityManaEnchantings@0",
+        "manametalmod:BLOCKManaMetalInjection@0",
+        "manametalmod:BlockMagicUpdates@0",
+        "manametalmod:BlockTileEntityHumanReforms@0"
       ]
     },
     {
@@ -1000,6 +1978,7 @@
         "5285CFF062ADCC60",
         "543A7B198274CC4B",
         "55055E45DEEAC9D8",
+        "55C8C614C6ADE563",
         "57F2ACC64D83B33D",
         "580F2313892539A9",
         "58323F8B0D12E7CB",
@@ -1064,12 +2043,33 @@
       ],
       "trackedItems": [
         "immersiveengineering:blastbrick@0",
+        "immersiveengineering:cokebrick@0",
+        "immersiveengineering:conveyor_basic@0",
         "immersiveengineering:fluid_pipe@0",
+        "immersiveengineering:heavy_engineering@0",
+        "immersiveengineering:ingot_steel@0",
+        "immersiveengineering:light_engineering@0",
+        "immersiveengineering:plate_iron@0",
+        "immersiveengineering:rs_engineering@0",
         "immersiveengineering:sheetmetal_iron@0",
+        "immersiveengineering:steel_fence@0",
         "immersiveengineering:steel_scaffolding_standard@0",
+        "immersiveengineering:wooden_barrel@0",
         "legendarysurvivaloverhaul:bandage@0",
         "legendarysurvivaloverhaul:purified_water_bottle@0",
+        "minecraft:bricks@0",
+        "minecraft:cauldron@0",
         "minecraft:charcoal@0",
+        "minecraft:chest@0",
+        "minecraft:glass@0",
+        "minecraft:hopper@0",
+        "minecraft:ladder@0",
+        "minecraft:paper@0",
+        "minecraft:piston@0",
+        "minecraft:powered_rail@0",
+        "minecraft:rail@0",
+        "minecraft:repeater@0",
+        "minecraft:stone_bricks@0",
         "minecraft:torch@0"
       ],
       "trackedKills": [
@@ -1078,6 +2078,1070 @@
         "minecraft:zombie"
       ],
       "rewards": [
+        {
+          "id": "v2-daily-torches",
+          "name": "火把",
+          "tier": "daily",
+          "items": [
+            {
+              "id": "minecraft:torch",
+              "meta": 0,
+              "count": 8,
+              "nbt": "{}"
+            }
+          ],
+          "purpose": "补充已掌握工艺的日常用料。",
+          "requires": {
+            "all": [
+              "craft:minecraft:torch@0"
+            ],
+            "any": [],
+            "none": []
+          },
+          "goal": null,
+          "basisPoints": 0,
+          "completeSet": false
+        },
+        {
+          "id": "v2-daily-fuel",
+          "name": "木炭",
+          "tier": "daily",
+          "items": [
+            {
+              "id": "minecraft:charcoal",
+              "meta": 0,
+              "count": 8,
+              "nbt": "{}"
+            }
+          ],
+          "purpose": "补充已掌握工艺的日常用料。",
+          "requires": {
+            "all": [
+              "craft:minecraft:charcoal@0"
+            ],
+            "any": [],
+            "none": []
+          },
+          "goal": null,
+          "basisPoints": 0,
+          "completeSet": false
+        },
+        {
+          "id": "v2-daily-glass",
+          "name": "玻璃",
+          "tier": "daily",
+          "items": [
+            {
+              "id": "minecraft:glass",
+              "meta": 0,
+              "count": 8,
+              "nbt": "{}"
+            }
+          ],
+          "purpose": "补充已掌握工艺的日常用料。",
+          "requires": {
+            "all": [
+              "craft:minecraft:glass@0"
+            ],
+            "any": [],
+            "none": []
+          },
+          "goal": null,
+          "basisPoints": 0,
+          "completeSet": false
+        },
+        {
+          "id": "v2-daily-ladder",
+          "name": "梯子",
+          "tier": "daily",
+          "items": [
+            {
+              "id": "minecraft:ladder",
+              "meta": 0,
+              "count": 8,
+              "nbt": "{}"
+            }
+          ],
+          "purpose": "补充已掌握工艺的日常用料。",
+          "requires": {
+            "all": [
+              "craft:minecraft:ladder@0"
+            ],
+            "any": [],
+            "none": []
+          },
+          "goal": null,
+          "basisPoints": 0,
+          "completeSet": false
+        },
+        {
+          "id": "v2-ordinary-torches",
+          "name": "火把",
+          "tier": "ordinary",
+          "items": [
+            {
+              "id": "minecraft:torch",
+              "meta": 0,
+              "count": 32,
+              "nbt": "{}"
+            }
+          ],
+          "purpose": "补充已掌握工艺的日常用料。",
+          "requires": {
+            "all": [
+              "craft:minecraft:torch@0"
+            ],
+            "any": [],
+            "none": []
+          },
+          "goal": null,
+          "basisPoints": 0,
+          "completeSet": false
+        },
+        {
+          "id": "v2-ordinary-fuel",
+          "name": "木炭",
+          "tier": "ordinary",
+          "items": [
+            {
+              "id": "minecraft:charcoal",
+              "meta": 0,
+              "count": 24,
+              "nbt": "{}"
+            }
+          ],
+          "purpose": "补充已掌握工艺的日常用料。",
+          "requires": {
+            "all": [
+              "craft:minecraft:charcoal@0"
+            ],
+            "any": [],
+            "none": []
+          },
+          "goal": null,
+          "basisPoints": 0,
+          "completeSet": false
+        },
+        {
+          "id": "v2-ordinary-glass",
+          "name": "玻璃",
+          "tier": "ordinary",
+          "items": [
+            {
+              "id": "minecraft:glass",
+              "meta": 0,
+              "count": 32,
+              "nbt": "{}"
+            }
+          ],
+          "purpose": "补充已掌握工艺的日常用料。",
+          "requires": {
+            "all": [
+              "craft:minecraft:glass@0"
+            ],
+            "any": [],
+            "none": []
+          },
+          "goal": null,
+          "basisPoints": 0,
+          "completeSet": false
+        },
+        {
+          "id": "v2-ordinary-ladder",
+          "name": "梯子",
+          "tier": "ordinary",
+          "items": [
+            {
+              "id": "minecraft:ladder",
+              "meta": 0,
+              "count": 24,
+              "nbt": "{}"
+            }
+          ],
+          "purpose": "补充已掌握工艺的日常用料。",
+          "requires": {
+            "all": [
+              "craft:minecraft:ladder@0"
+            ],
+            "any": [],
+            "none": []
+          },
+          "goal": null,
+          "basisPoints": 0,
+          "completeSet": false
+        },
+        {
+          "id": "v2-ordinary-storage",
+          "name": "箱子",
+          "tier": "ordinary",
+          "items": [
+            {
+              "id": "minecraft:chest",
+              "meta": 0,
+              "count": 4,
+              "nbt": "{}"
+            }
+          ],
+          "purpose": "补充已掌握工艺的日常用料。",
+          "requires": {
+            "all": [
+              "craft:minecraft:chest@0"
+            ],
+            "any": [],
+            "none": []
+          },
+          "goal": null,
+          "basisPoints": 0,
+          "completeSet": false
+        },
+        {
+          "id": "v2-ordinary-rail",
+          "name": "铁轨",
+          "tier": "ordinary",
+          "items": [
+            {
+              "id": "minecraft:rail",
+              "meta": 0,
+              "count": 32,
+              "nbt": "{}"
+            }
+          ],
+          "purpose": "补充已掌握工艺的日常用料。",
+          "requires": {
+            "all": [
+              "craft:minecraft:rail@0"
+            ],
+            "any": [],
+            "none": []
+          },
+          "goal": null,
+          "basisPoints": 0,
+          "completeSet": false
+        },
+        {
+          "id": "v2-ordinary-paper",
+          "name": "纸",
+          "tier": "ordinary",
+          "items": [
+            {
+              "id": "minecraft:paper",
+              "meta": 0,
+              "count": 32,
+              "nbt": "{}"
+            }
+          ],
+          "purpose": "补充已掌握工艺的日常用料。",
+          "requires": {
+            "all": [
+              "craft:minecraft:paper@0"
+            ],
+            "any": [],
+            "none": []
+          },
+          "goal": null,
+          "basisPoints": 0,
+          "completeSet": false
+        },
+        {
+          "id": "v2-ordinary-bricks",
+          "name": "砖块",
+          "tier": "ordinary",
+          "items": [
+            {
+              "id": "minecraft:bricks",
+              "meta": 0,
+              "count": 24,
+              "nbt": "{}"
+            }
+          ],
+          "purpose": "补充已掌握工艺的日常用料。",
+          "requires": {
+            "all": [
+              "craft:minecraft:bricks@0"
+            ],
+            "any": [],
+            "none": []
+          },
+          "goal": null,
+          "basisPoints": 0,
+          "completeSet": false
+        },
+        {
+          "id": "v2-selected-exploration",
+          "name": "照明与燃料",
+          "tier": "selected",
+          "items": [
+            {
+              "id": "minecraft:torch",
+              "meta": 0,
+              "count": 64,
+              "nbt": "{}"
+            },
+            {
+              "id": "minecraft:charcoal",
+              "meta": 0,
+              "count": 64,
+              "nbt": "{}"
+            }
+          ],
+          "purpose": "补充已掌握工艺的日常用料。",
+          "requires": {
+            "all": [
+              "craft:minecraft:torch@0",
+              "craft:minecraft:charcoal@0"
+            ],
+            "any": [],
+            "none": []
+          },
+          "goal": null,
+          "basisPoints": 0,
+          "completeSet": false
+        },
+        {
+          "id": "v2-selected-building",
+          "name": "建筑材料",
+          "tier": "selected",
+          "items": [
+            {
+              "id": "minecraft:glass",
+              "meta": 0,
+              "count": 64,
+              "nbt": "{}"
+            },
+            {
+              "id": "minecraft:stone_bricks",
+              "meta": 0,
+              "count": 64,
+              "nbt": "{}"
+            }
+          ],
+          "purpose": "补充已掌握工艺的日常用料。",
+          "requires": {
+            "all": [
+              "craft:minecraft:glass@0",
+              "craft:minecraft:stone_bricks@0"
+            ],
+            "any": [],
+            "none": []
+          },
+          "goal": null,
+          "basisPoints": 0,
+          "completeSet": false
+        },
+        {
+          "id": "v2-selected-railway",
+          "name": "铁路材料",
+          "tier": "selected",
+          "items": [
+            {
+              "id": "minecraft:rail",
+              "meta": 0,
+              "count": 64,
+              "nbt": "{}"
+            },
+            {
+              "id": "minecraft:powered_rail",
+              "meta": 0,
+              "count": 8,
+              "nbt": "{}"
+            }
+          ],
+          "purpose": "补充已掌握工艺的日常用料。",
+          "requires": {
+            "all": [
+              "craft:minecraft:rail@0",
+              "craft:minecraft:powered_rail@0"
+            ],
+            "any": [],
+            "none": []
+          },
+          "goal": null,
+          "basisPoints": 0,
+          "completeSet": false
+        },
+        {
+          "id": "v2-selected-warehouse",
+          "name": "仓储材料",
+          "tier": "selected",
+          "items": [
+            {
+              "id": "minecraft:chest",
+              "meta": 0,
+              "count": 8,
+              "nbt": "{}"
+            },
+            {
+              "id": "minecraft:hopper",
+              "meta": 0,
+              "count": 4,
+              "nbt": "{}"
+            }
+          ],
+          "purpose": "补充已掌握工艺的日常用料。",
+          "requires": {
+            "all": [
+              "craft:minecraft:chest@0",
+              "craft:minecraft:hopper@0"
+            ],
+            "any": [],
+            "none": []
+          },
+          "goal": null,
+          "basisPoints": 0,
+          "completeSet": false
+        },
+        {
+          "id": "v2-selected-automation",
+          "name": "红石配件",
+          "tier": "selected",
+          "items": [
+            {
+              "id": "minecraft:repeater",
+              "meta": 0,
+              "count": 8,
+              "nbt": "{}"
+            },
+            {
+              "id": "minecraft:piston",
+              "meta": 0,
+              "count": 8,
+              "nbt": "{}"
+            }
+          ],
+          "purpose": "补充已掌握工艺的日常用料。",
+          "requires": {
+            "all": [
+              "craft:minecraft:repeater@0",
+              "craft:minecraft:piston@0"
+            ],
+            "any": [],
+            "none": []
+          },
+          "goal": null,
+          "basisPoints": 0,
+          "completeSet": false
+        },
+        {
+          "id": "v2-selected-worksite",
+          "name": "场地搭建",
+          "tier": "selected",
+          "items": [
+            {
+              "id": "minecraft:ladder",
+              "meta": 0,
+              "count": 64,
+              "nbt": "{}"
+            },
+            {
+              "id": "minecraft:glass",
+              "meta": 0,
+              "count": 64,
+              "nbt": "{}"
+            }
+          ],
+          "purpose": "补充已掌握工艺的日常用料。",
+          "requires": {
+            "all": [
+              "craft:minecraft:ladder@0",
+              "craft:minecraft:glass@0"
+            ],
+            "any": [],
+            "none": []
+          },
+          "goal": null,
+          "basisPoints": 0,
+          "completeSet": false
+        },
+        {
+          "id": "v2-ordinary-steel",
+          "name": "钢锭",
+          "tier": "ordinary",
+          "items": [
+            {
+              "id": "immersiveengineering:ingot_steel",
+              "meta": 0,
+              "count": 4,
+              "nbt": "{}"
+            }
+          ],
+          "purpose": "补充已掌握工艺的日常用料。",
+          "requires": {
+            "all": [
+              "craft:immersiveengineering:ingot_steel@0"
+            ],
+            "any": [],
+            "none": []
+          },
+          "goal": null,
+          "basisPoints": 0,
+          "completeSet": false
+        },
+        {
+          "id": "v2-selected-steel",
+          "name": "钢锭",
+          "tier": "selected",
+          "items": [
+            {
+              "id": "immersiveengineering:ingot_steel",
+              "meta": 0,
+              "count": 12,
+              "nbt": "{}"
+            }
+          ],
+          "purpose": "补充已掌握工艺的日常用料。",
+          "requires": {
+            "all": [
+              "craft:immersiveengineering:ingot_steel@0"
+            ],
+            "any": [],
+            "none": []
+          },
+          "goal": null,
+          "basisPoints": 0,
+          "completeSet": false
+        },
+        {
+          "id": "v2-ordinary-plate",
+          "name": "铁板",
+          "tier": "ordinary",
+          "items": [
+            {
+              "id": "immersiveengineering:plate_iron",
+              "meta": 0,
+              "count": 8,
+              "nbt": "{}"
+            }
+          ],
+          "purpose": "补充已掌握工艺的日常用料。",
+          "requires": {
+            "all": [
+              "craft:immersiveengineering:plate_iron@0"
+            ],
+            "any": [],
+            "none": []
+          },
+          "goal": null,
+          "basisPoints": 0,
+          "completeSet": false
+        },
+        {
+          "id": "v2-selected-plate",
+          "name": "铁板",
+          "tier": "selected",
+          "items": [
+            {
+              "id": "immersiveengineering:plate_iron",
+              "meta": 0,
+              "count": 24,
+              "nbt": "{}"
+            }
+          ],
+          "purpose": "补充已掌握工艺的日常用料。",
+          "requires": {
+            "all": [
+              "craft:immersiveengineering:plate_iron@0"
+            ],
+            "any": [],
+            "none": []
+          },
+          "goal": null,
+          "basisPoints": 0,
+          "completeSet": false
+        },
+        {
+          "id": "v2-ordinary-pipe",
+          "name": "流体管道",
+          "tier": "ordinary",
+          "items": [
+            {
+              "id": "immersiveengineering:fluid_pipe",
+              "meta": 0,
+              "count": 8,
+              "nbt": "{}"
+            }
+          ],
+          "purpose": "补充已掌握工艺的日常用料。",
+          "requires": {
+            "all": [
+              "craft:immersiveengineering:fluid_pipe@0"
+            ],
+            "any": [],
+            "none": []
+          },
+          "goal": null,
+          "basisPoints": 0,
+          "completeSet": false
+        },
+        {
+          "id": "v2-selected-pipe",
+          "name": "流体管道",
+          "tier": "selected",
+          "items": [
+            {
+              "id": "immersiveengineering:fluid_pipe",
+              "meta": 0,
+              "count": 24,
+              "nbt": "{}"
+            }
+          ],
+          "purpose": "补充已掌握工艺的日常用料。",
+          "requires": {
+            "all": [
+              "craft:immersiveengineering:fluid_pipe@0"
+            ],
+            "any": [],
+            "none": []
+          },
+          "goal": null,
+          "basisPoints": 0,
+          "completeSet": false
+        },
+        {
+          "id": "v2-ordinary-scaffold",
+          "name": "钢脚手架",
+          "tier": "ordinary",
+          "items": [
+            {
+              "id": "immersiveengineering:steel_scaffolding_standard",
+              "meta": 0,
+              "count": 8,
+              "nbt": "{}"
+            }
+          ],
+          "purpose": "补充已掌握工艺的日常用料。",
+          "requires": {
+            "all": [
+              "craft:immersiveengineering:steel_scaffolding_standard@0"
+            ],
+            "any": [],
+            "none": []
+          },
+          "goal": null,
+          "basisPoints": 0,
+          "completeSet": false
+        },
+        {
+          "id": "v2-selected-scaffold",
+          "name": "钢脚手架",
+          "tier": "selected",
+          "items": [
+            {
+              "id": "immersiveengineering:steel_scaffolding_standard",
+              "meta": 0,
+              "count": 24,
+              "nbt": "{}"
+            }
+          ],
+          "purpose": "补充已掌握工艺的日常用料。",
+          "requires": {
+            "all": [
+              "craft:immersiveengineering:steel_scaffolding_standard@0"
+            ],
+            "any": [],
+            "none": []
+          },
+          "goal": null,
+          "basisPoints": 0,
+          "completeSet": false
+        },
+        {
+          "id": "v2-ordinary-water",
+          "name": "净水",
+          "tier": "ordinary",
+          "items": [
+            {
+              "id": "legendarysurvivaloverhaul:purified_water_bottle",
+              "meta": 0,
+              "count": 4,
+              "nbt": "{}"
+            }
+          ],
+          "purpose": "补充已掌握工艺的日常用料。",
+          "requires": {
+            "all": [
+              "craft:legendarysurvivaloverhaul:purified_water_bottle@0"
+            ],
+            "any": [],
+            "none": []
+          },
+          "goal": null,
+          "basisPoints": 0,
+          "completeSet": false
+        },
+        {
+          "id": "v2-selected-water",
+          "name": "净水",
+          "tier": "selected",
+          "items": [
+            {
+              "id": "legendarysurvivaloverhaul:purified_water_bottle",
+              "meta": 0,
+              "count": 12,
+              "nbt": "{}"
+            }
+          ],
+          "purpose": "补充已掌握工艺的日常用料。",
+          "requires": {
+            "all": [
+              "craft:legendarysurvivaloverhaul:purified_water_bottle@0"
+            ],
+            "any": [],
+            "none": []
+          },
+          "goal": null,
+          "basisPoints": 0,
+          "completeSet": false
+        },
+        {
+          "id": "v2-ordinary-bandage",
+          "name": "绷带",
+          "tier": "ordinary",
+          "items": [
+            {
+              "id": "legendarysurvivaloverhaul:bandage",
+              "meta": 0,
+              "count": 4,
+              "nbt": "{}"
+            }
+          ],
+          "purpose": "补充已掌握工艺的日常用料。",
+          "requires": {
+            "all": [
+              "craft:legendarysurvivaloverhaul:bandage@0"
+            ],
+            "any": [],
+            "none": []
+          },
+          "goal": null,
+          "basisPoints": 0,
+          "completeSet": false
+        },
+        {
+          "id": "v2-selected-bandage",
+          "name": "绷带",
+          "tier": "selected",
+          "items": [
+            {
+              "id": "legendarysurvivaloverhaul:bandage",
+              "meta": 0,
+              "count": 12,
+              "nbt": "{}"
+            }
+          ],
+          "purpose": "补充已掌握工艺的日常用料。",
+          "requires": {
+            "all": [
+              "craft:legendarysurvivaloverhaul:bandage@0"
+            ],
+            "any": [],
+            "none": []
+          },
+          "goal": null,
+          "basisPoints": 0,
+          "completeSet": false
+        },
+        {
+          "id": "v2-set-coke_oven",
+          "name": "焦炉整套",
+          "tier": "rare",
+          "items": [
+            {
+              "id": "immersiveengineering:cokebrick",
+              "meta": 0,
+              "count": 27,
+              "nbt": "{}"
+            }
+          ],
+          "purpose": "包含全部结构件；供能、加工耗材和实际搭建按原流程完成。",
+          "requires": {
+            "all": [
+              "craft:immersiveengineering:cokebrick@0"
+            ],
+            "any": [
+              "unlocked:55C8C614C6ADE563",
+              "quest:55C8C614C6ADE563"
+            ],
+            "none": []
+          },
+          "goal": "55C8C614C6ADE563",
+          "basisPoints": 10000,
+          "completeSet": true
+        },
+        {
+          "id": "v2-set-blast_furnace",
+          "name": "高炉整套",
+          "tier": "rare",
+          "items": [
+            {
+              "id": "immersiveengineering:blastbrick",
+              "meta": 0,
+              "count": 27,
+              "nbt": "{}"
+            }
+          ],
+          "purpose": "包含全部结构件；供能、加工耗材和实际搭建按原流程完成。",
+          "requires": {
+            "all": [
+              "craft:immersiveengineering:blastbrick@0"
+            ],
+            "any": [
+              "unlocked:741526AA7D74D11C",
+              "quest:741526AA7D74D11C"
+            ],
+            "none": []
+          },
+          "goal": "741526AA7D74D11C",
+          "basisPoints": 10000,
+          "completeSet": true
+        },
+        {
+          "id": "v2-set-metal_press",
+          "name": "金属冲压机整套",
+          "tier": "rare",
+          "items": [
+            {
+              "id": "immersiveengineering:rs_engineering",
+              "meta": 0,
+              "count": 1,
+              "nbt": "{}"
+            },
+            {
+              "id": "minecraft:piston",
+              "meta": 0,
+              "count": 1,
+              "nbt": "{}"
+            },
+            {
+              "id": "immersiveengineering:heavy_engineering",
+              "meta": 0,
+              "count": 1,
+              "nbt": "{}"
+            },
+            {
+              "id": "immersiveengineering:steel_scaffolding_standard",
+              "meta": 0,
+              "count": 2,
+              "nbt": "{}"
+            },
+            {
+              "id": "immersiveengineering:conveyor_basic",
+              "meta": 0,
+              "count": 2,
+              "nbt": "{}"
+            }
+          ],
+          "purpose": "包含全部结构件；供能、加工耗材和实际搭建按原流程完成。",
+          "requires": {
+            "all": [
+              "craft:immersiveengineering:rs_engineering@0",
+              "craft:minecraft:piston@0",
+              "craft:immersiveengineering:heavy_engineering@0",
+              "craft:immersiveengineering:steel_scaffolding_standard@0",
+              "craft:immersiveengineering:conveyor_basic@0"
+            ],
+            "any": [
+              "unlocked:4A1A36DD335F7F72",
+              "quest:4A1A36DD335F7F72"
+            ],
+            "none": []
+          },
+          "goal": "4A1A36DD335F7F72",
+          "basisPoints": 10000,
+          "completeSet": true
+        },
+        {
+          "id": "v2-set-refinery",
+          "name": "炼油厂整套",
+          "tier": "rare",
+          "items": [
+            {
+              "id": "immersiveengineering:light_engineering",
+              "meta": 0,
+              "count": 2,
+              "nbt": "{}"
+            },
+            {
+              "id": "immersiveengineering:heavy_engineering",
+              "meta": 0,
+              "count": 2,
+              "nbt": "{}"
+            },
+            {
+              "id": "immersiveengineering:sheetmetal_iron",
+              "meta": 0,
+              "count": 16,
+              "nbt": "{}"
+            },
+            {
+              "id": "immersiveengineering:rs_engineering",
+              "meta": 0,
+              "count": 1,
+              "nbt": "{}"
+            },
+            {
+              "id": "immersiveengineering:steel_scaffolding_standard",
+              "meta": 0,
+              "count": 8,
+              "nbt": "{}"
+            },
+            {
+              "id": "immersiveengineering:fluid_pipe",
+              "meta": 0,
+              "count": 5,
+              "nbt": "{}"
+            }
+          ],
+          "purpose": "包含全部结构件；供能、加工耗材和实际搭建按原流程完成。",
+          "requires": {
+            "all": [
+              "craft:immersiveengineering:light_engineering@0",
+              "craft:immersiveengineering:heavy_engineering@0",
+              "craft:immersiveengineering:sheetmetal_iron@0",
+              "craft:immersiveengineering:rs_engineering@0",
+              "craft:immersiveengineering:steel_scaffolding_standard@0",
+              "craft:immersiveengineering:fluid_pipe@0"
+            ],
+            "any": [
+              "unlocked:7EE0809A9B220503",
+              "quest:7EE0809A9B220503"
+            ],
+            "none": []
+          },
+          "goal": "7EE0809A9B220503",
+          "basisPoints": 10000,
+          "completeSet": true
+        },
+        {
+          "id": "v2-set-fermenter",
+          "name": "工业发酵机整套",
+          "tier": "rare",
+          "items": [
+            {
+              "id": "immersiveengineering:light_engineering",
+              "meta": 0,
+              "count": 2,
+              "nbt": "{}"
+            },
+            {
+              "id": "immersiveengineering:rs_engineering",
+              "meta": 0,
+              "count": 1,
+              "nbt": "{}"
+            },
+            {
+              "id": "immersiveengineering:sheetmetal_iron",
+              "meta": 0,
+              "count": 4,
+              "nbt": "{}"
+            },
+            {
+              "id": "immersiveengineering:steel_scaffolding_standard",
+              "meta": 0,
+              "count": 6,
+              "nbt": "{}"
+            },
+            {
+              "id": "minecraft:cauldron",
+              "meta": 0,
+              "count": 4,
+              "nbt": "{}"
+            },
+            {
+              "id": "immersiveengineering:fluid_pipe",
+              "meta": 0,
+              "count": 2,
+              "nbt": "{}"
+            }
+          ],
+          "purpose": "包含全部结构件；供能、加工耗材和实际搭建按原流程完成。",
+          "requires": {
+            "all": [
+              "craft:immersiveengineering:light_engineering@0",
+              "craft:immersiveengineering:rs_engineering@0",
+              "craft:immersiveengineering:sheetmetal_iron@0",
+              "craft:immersiveengineering:steel_scaffolding_standard@0",
+              "craft:minecraft:cauldron@0",
+              "craft:immersiveengineering:fluid_pipe@0"
+            ],
+            "any": [
+              "unlocked:2B768F061791A736",
+              "quest:2B768F061791A736"
+            ],
+            "none": []
+          },
+          "goal": "2B768F061791A736",
+          "basisPoints": 10000,
+          "completeSet": true
+        },
+        {
+          "id": "v2-set-squeezer",
+          "name": "榨油机整套",
+          "tier": "rare",
+          "items": [
+            {
+              "id": "immersiveengineering:light_engineering",
+              "meta": 0,
+              "count": 2,
+              "nbt": "{}"
+            },
+            {
+              "id": "immersiveengineering:rs_engineering",
+              "meta": 0,
+              "count": 1,
+              "nbt": "{}"
+            },
+            {
+              "id": "minecraft:piston",
+              "meta": 0,
+              "count": 1,
+              "nbt": "{}"
+            },
+            {
+              "id": "immersiveengineering:steel_scaffolding_standard",
+              "meta": 0,
+              "count": 6,
+              "nbt": "{}"
+            },
+            {
+              "id": "immersiveengineering:steel_fence",
+              "meta": 0,
+              "count": 3,
+              "nbt": "{}"
+            },
+            {
+              "id": "immersiveengineering:fluid_pipe",
+              "meta": 0,
+              "count": 2,
+              "nbt": "{}"
+            },
+            {
+              "id": "immersiveengineering:wooden_barrel",
+              "meta": 0,
+              "count": 4,
+              "nbt": "{}"
+            }
+          ],
+          "purpose": "包含全部结构件；供能、加工耗材和实际搭建按原流程完成。",
+          "requires": {
+            "all": [
+              "craft:immersiveengineering:light_engineering@0",
+              "craft:immersiveengineering:rs_engineering@0",
+              "craft:minecraft:piston@0",
+              "craft:immersiveengineering:steel_scaffolding_standard@0",
+              "craft:immersiveengineering:steel_fence@0",
+              "craft:immersiveengineering:fluid_pipe@0",
+              "craft:immersiveengineering:wooden_barrel@0"
+            ],
+            "any": [
+              "unlocked:4B2AE0D4F169F58E",
+              "quest:4B2AE0D4F169F58E"
+            ],
+            "none": []
+          },
+          "goal": "4B2AE0D4F169F58E",
+          "basisPoints": 10000,
+          "completeSet": true
+        },
         {
           "id": "daily-torches",
           "name": "照明补给",
@@ -1099,7 +3163,8 @@
             "none": []
           },
           "goal": null,
-          "basisPoints": 0
+          "basisPoints": 0,
+          "retired": true
         },
         {
           "id": "ordinary-torches",
@@ -1122,7 +3187,8 @@
             "none": []
           },
           "goal": null,
-          "basisPoints": 0
+          "basisPoints": 0,
+          "retired": true
         },
         {
           "id": "selected-charcoal",
@@ -1145,7 +3211,8 @@
             "none": []
           },
           "goal": null,
-          "basisPoints": 0
+          "basisPoints": 0,
+          "retired": true
         },
         {
           "id": "daily-净水",
@@ -1168,7 +3235,8 @@
             "none": []
           },
           "goal": null,
-          "basisPoints": 0
+          "basisPoints": 0,
+          "retired": true
         },
         {
           "id": "ordinary-净水",
@@ -1191,7 +3259,8 @@
             "none": []
           },
           "goal": null,
-          "basisPoints": 0
+          "basisPoints": 0,
+          "retired": true
         },
         {
           "id": "selected-净水",
@@ -1214,7 +3283,8 @@
             "none": []
           },
           "goal": null,
-          "basisPoints": 0
+          "basisPoints": 0,
+          "retired": true
         },
         {
           "id": "daily-绷带",
@@ -1237,7 +3307,8 @@
             "none": []
           },
           "goal": null,
-          "basisPoints": 0
+          "basisPoints": 0,
+          "retired": true
         },
         {
           "id": "ordinary-绷带",
@@ -1260,7 +3331,8 @@
             "none": []
           },
           "goal": null,
-          "basisPoints": 0
+          "basisPoints": 0,
+          "retired": true
         },
         {
           "id": "selected-绷带",
@@ -1283,7 +3355,8 @@
             "none": []
           },
           "goal": null,
-          "basisPoints": 0
+          "basisPoints": 0,
+          "retired": true
         },
         {
           "id": "refinery-plates",
@@ -1310,7 +3383,8 @@
             ]
           },
           "goal": "7EE0809A9B220503",
-          "basisPoints": 1250
+          "basisPoints": 1250,
+          "retired": true
         },
         {
           "id": "refinery-scaffold",
@@ -1337,7 +3411,8 @@
             ]
           },
           "goal": "7EE0809A9B220503",
-          "basisPoints": 1250
+          "basisPoints": 1250,
+          "retired": true
         },
         {
           "id": "refinery-pipe",
@@ -1364,7 +3439,8 @@
             ]
           },
           "goal": "7EE0809A9B220503",
-          "basisPoints": 2000
+          "basisPoints": 2000,
+          "retired": true
         },
         {
           "id": "blast-furnace-bricks",
@@ -1390,9 +3466,11 @@
             ]
           },
           "goal": "741526AA7D74D11C",
-          "basisPoints": 1111
+          "basisPoints": 1111,
+          "retired": true
         }
-      ]
+      ],
+      "trackedControllers": []
     },
     {
       "id": "mb",
@@ -2702,7 +4780,11 @@
         "2050",
         "2052397510",
         "2053473508",
+        "20573",
         "206",
+        "20610",
+        "20618",
+        "20619",
         "2066003189",
         "207",
         "2070436398",
@@ -3280,8 +5362,29 @@
         "aoa3:emberstone_block@0",
         "divinerpg:purple_steel@0",
         "erebus:planks_petrified_wood@0",
+        "immersiveengineering:metal@39",
+        "immersiveengineering:metal@8",
+        "immersiveengineering:metal_decoration0@3",
+        "immersiveengineering:metal_decoration0@4",
+        "immersiveengineering:metal_decoration0@5",
+        "immersiveengineering:metal_decoration1@1",
+        "immersiveengineering:metal_device1@6",
+        "immersiveengineering:sheetmetal@9",
+        "immersiveengineering:stone_decoration@0",
+        "immersiveengineering:stone_decoration@1",
+        "minecraft:brick_block@0",
+        "minecraft:cauldron@0",
+        "minecraft:chest@0",
         "minecraft:coal@1",
+        "minecraft:glass@0",
+        "minecraft:golden_rail@0",
+        "minecraft:hopper@0",
         "minecraft:ladder@0",
+        "minecraft:paper@0",
+        "minecraft:piston@0",
+        "minecraft:rail@0",
+        "minecraft:repeater@0",
+        "minecraft:stonebrick@0",
         "minecraft:torch@0"
       ],
       "trackedKills": [
@@ -3290,6 +5393,853 @@
         "minecraft:zombie"
       ],
       "rewards": [
+        {
+          "id": "v2-daily-torches",
+          "name": "火把",
+          "tier": "daily",
+          "items": [
+            {
+              "id": "minecraft:torch",
+              "meta": 0,
+              "count": 8,
+              "nbt": "{}"
+            }
+          ],
+          "purpose": "补充已掌握工艺的日常用料。",
+          "requires": {
+            "all": [
+              "craft:minecraft:torch@0"
+            ],
+            "any": [],
+            "none": []
+          },
+          "goal": null,
+          "basisPoints": 0,
+          "completeSet": false
+        },
+        {
+          "id": "v2-daily-fuel",
+          "name": "木炭",
+          "tier": "daily",
+          "items": [
+            {
+              "id": "minecraft:coal",
+              "meta": 1,
+              "count": 8,
+              "nbt": "{}"
+            }
+          ],
+          "purpose": "补充已掌握工艺的日常用料。",
+          "requires": {
+            "all": [
+              "craft:minecraft:coal@1"
+            ],
+            "any": [],
+            "none": []
+          },
+          "goal": null,
+          "basisPoints": 0,
+          "completeSet": false
+        },
+        {
+          "id": "v2-daily-glass",
+          "name": "玻璃",
+          "tier": "daily",
+          "items": [
+            {
+              "id": "minecraft:glass",
+              "meta": 0,
+              "count": 8,
+              "nbt": "{}"
+            }
+          ],
+          "purpose": "补充已掌握工艺的日常用料。",
+          "requires": {
+            "all": [
+              "craft:minecraft:glass@0"
+            ],
+            "any": [],
+            "none": []
+          },
+          "goal": null,
+          "basisPoints": 0,
+          "completeSet": false
+        },
+        {
+          "id": "v2-daily-ladder",
+          "name": "梯子",
+          "tier": "daily",
+          "items": [
+            {
+              "id": "minecraft:ladder",
+              "meta": 0,
+              "count": 8,
+              "nbt": "{}"
+            }
+          ],
+          "purpose": "补充已掌握工艺的日常用料。",
+          "requires": {
+            "all": [
+              "craft:minecraft:ladder@0"
+            ],
+            "any": [],
+            "none": []
+          },
+          "goal": null,
+          "basisPoints": 0,
+          "completeSet": false
+        },
+        {
+          "id": "v2-ordinary-torches",
+          "name": "火把",
+          "tier": "ordinary",
+          "items": [
+            {
+              "id": "minecraft:torch",
+              "meta": 0,
+              "count": 32,
+              "nbt": "{}"
+            }
+          ],
+          "purpose": "补充已掌握工艺的日常用料。",
+          "requires": {
+            "all": [
+              "craft:minecraft:torch@0"
+            ],
+            "any": [],
+            "none": []
+          },
+          "goal": null,
+          "basisPoints": 0,
+          "completeSet": false
+        },
+        {
+          "id": "v2-ordinary-fuel",
+          "name": "木炭",
+          "tier": "ordinary",
+          "items": [
+            {
+              "id": "minecraft:coal",
+              "meta": 1,
+              "count": 24,
+              "nbt": "{}"
+            }
+          ],
+          "purpose": "补充已掌握工艺的日常用料。",
+          "requires": {
+            "all": [
+              "craft:minecraft:coal@1"
+            ],
+            "any": [],
+            "none": []
+          },
+          "goal": null,
+          "basisPoints": 0,
+          "completeSet": false
+        },
+        {
+          "id": "v2-ordinary-glass",
+          "name": "玻璃",
+          "tier": "ordinary",
+          "items": [
+            {
+              "id": "minecraft:glass",
+              "meta": 0,
+              "count": 32,
+              "nbt": "{}"
+            }
+          ],
+          "purpose": "补充已掌握工艺的日常用料。",
+          "requires": {
+            "all": [
+              "craft:minecraft:glass@0"
+            ],
+            "any": [],
+            "none": []
+          },
+          "goal": null,
+          "basisPoints": 0,
+          "completeSet": false
+        },
+        {
+          "id": "v2-ordinary-ladder",
+          "name": "梯子",
+          "tier": "ordinary",
+          "items": [
+            {
+              "id": "minecraft:ladder",
+              "meta": 0,
+              "count": 24,
+              "nbt": "{}"
+            }
+          ],
+          "purpose": "补充已掌握工艺的日常用料。",
+          "requires": {
+            "all": [
+              "craft:minecraft:ladder@0"
+            ],
+            "any": [],
+            "none": []
+          },
+          "goal": null,
+          "basisPoints": 0,
+          "completeSet": false
+        },
+        {
+          "id": "v2-ordinary-storage",
+          "name": "箱子",
+          "tier": "ordinary",
+          "items": [
+            {
+              "id": "minecraft:chest",
+              "meta": 0,
+              "count": 4,
+              "nbt": "{}"
+            }
+          ],
+          "purpose": "补充已掌握工艺的日常用料。",
+          "requires": {
+            "all": [
+              "craft:minecraft:chest@0"
+            ],
+            "any": [],
+            "none": []
+          },
+          "goal": null,
+          "basisPoints": 0,
+          "completeSet": false
+        },
+        {
+          "id": "v2-ordinary-rail",
+          "name": "铁轨",
+          "tier": "ordinary",
+          "items": [
+            {
+              "id": "minecraft:rail",
+              "meta": 0,
+              "count": 32,
+              "nbt": "{}"
+            }
+          ],
+          "purpose": "补充已掌握工艺的日常用料。",
+          "requires": {
+            "all": [
+              "craft:minecraft:rail@0"
+            ],
+            "any": [],
+            "none": []
+          },
+          "goal": null,
+          "basisPoints": 0,
+          "completeSet": false
+        },
+        {
+          "id": "v2-ordinary-paper",
+          "name": "纸",
+          "tier": "ordinary",
+          "items": [
+            {
+              "id": "minecraft:paper",
+              "meta": 0,
+              "count": 32,
+              "nbt": "{}"
+            }
+          ],
+          "purpose": "补充已掌握工艺的日常用料。",
+          "requires": {
+            "all": [
+              "craft:minecraft:paper@0"
+            ],
+            "any": [],
+            "none": []
+          },
+          "goal": null,
+          "basisPoints": 0,
+          "completeSet": false
+        },
+        {
+          "id": "v2-ordinary-bricks",
+          "name": "砖块",
+          "tier": "ordinary",
+          "items": [
+            {
+              "id": "minecraft:brick_block",
+              "meta": 0,
+              "count": 24,
+              "nbt": "{}"
+            }
+          ],
+          "purpose": "补充已掌握工艺的日常用料。",
+          "requires": {
+            "all": [
+              "craft:minecraft:brick_block@0"
+            ],
+            "any": [],
+            "none": []
+          },
+          "goal": null,
+          "basisPoints": 0,
+          "completeSet": false
+        },
+        {
+          "id": "v2-selected-exploration",
+          "name": "照明与燃料",
+          "tier": "selected",
+          "items": [
+            {
+              "id": "minecraft:torch",
+              "meta": 0,
+              "count": 64,
+              "nbt": "{}"
+            },
+            {
+              "id": "minecraft:coal",
+              "meta": 1,
+              "count": 64,
+              "nbt": "{}"
+            }
+          ],
+          "purpose": "补充已掌握工艺的日常用料。",
+          "requires": {
+            "all": [
+              "craft:minecraft:torch@0",
+              "craft:minecraft:coal@1"
+            ],
+            "any": [],
+            "none": []
+          },
+          "goal": null,
+          "basisPoints": 0,
+          "completeSet": false
+        },
+        {
+          "id": "v2-selected-building",
+          "name": "建筑材料",
+          "tier": "selected",
+          "items": [
+            {
+              "id": "minecraft:glass",
+              "meta": 0,
+              "count": 64,
+              "nbt": "{}"
+            },
+            {
+              "id": "minecraft:stonebrick",
+              "meta": 0,
+              "count": 64,
+              "nbt": "{}"
+            }
+          ],
+          "purpose": "补充已掌握工艺的日常用料。",
+          "requires": {
+            "all": [
+              "craft:minecraft:glass@0",
+              "craft:minecraft:stonebrick@0"
+            ],
+            "any": [],
+            "none": []
+          },
+          "goal": null,
+          "basisPoints": 0,
+          "completeSet": false
+        },
+        {
+          "id": "v2-selected-railway",
+          "name": "铁路材料",
+          "tier": "selected",
+          "items": [
+            {
+              "id": "minecraft:rail",
+              "meta": 0,
+              "count": 64,
+              "nbt": "{}"
+            },
+            {
+              "id": "minecraft:golden_rail",
+              "meta": 0,
+              "count": 8,
+              "nbt": "{}"
+            }
+          ],
+          "purpose": "补充已掌握工艺的日常用料。",
+          "requires": {
+            "all": [
+              "craft:minecraft:rail@0",
+              "craft:minecraft:golden_rail@0"
+            ],
+            "any": [],
+            "none": []
+          },
+          "goal": null,
+          "basisPoints": 0,
+          "completeSet": false
+        },
+        {
+          "id": "v2-selected-warehouse",
+          "name": "仓储材料",
+          "tier": "selected",
+          "items": [
+            {
+              "id": "minecraft:chest",
+              "meta": 0,
+              "count": 8,
+              "nbt": "{}"
+            },
+            {
+              "id": "minecraft:hopper",
+              "meta": 0,
+              "count": 4,
+              "nbt": "{}"
+            }
+          ],
+          "purpose": "补充已掌握工艺的日常用料。",
+          "requires": {
+            "all": [
+              "craft:minecraft:chest@0",
+              "craft:minecraft:hopper@0"
+            ],
+            "any": [],
+            "none": []
+          },
+          "goal": null,
+          "basisPoints": 0,
+          "completeSet": false
+        },
+        {
+          "id": "v2-selected-automation",
+          "name": "红石配件",
+          "tier": "selected",
+          "items": [
+            {
+              "id": "minecraft:repeater",
+              "meta": 0,
+              "count": 8,
+              "nbt": "{}"
+            },
+            {
+              "id": "minecraft:piston",
+              "meta": 0,
+              "count": 8,
+              "nbt": "{}"
+            }
+          ],
+          "purpose": "补充已掌握工艺的日常用料。",
+          "requires": {
+            "all": [
+              "craft:minecraft:repeater@0",
+              "craft:minecraft:piston@0"
+            ],
+            "any": [],
+            "none": []
+          },
+          "goal": null,
+          "basisPoints": 0,
+          "completeSet": false
+        },
+        {
+          "id": "v2-selected-worksite",
+          "name": "场地搭建",
+          "tier": "selected",
+          "items": [
+            {
+              "id": "minecraft:ladder",
+              "meta": 0,
+              "count": 64,
+              "nbt": "{}"
+            },
+            {
+              "id": "minecraft:glass",
+              "meta": 0,
+              "count": 64,
+              "nbt": "{}"
+            }
+          ],
+          "purpose": "补充已掌握工艺的日常用料。",
+          "requires": {
+            "all": [
+              "craft:minecraft:ladder@0",
+              "craft:minecraft:glass@0"
+            ],
+            "any": [],
+            "none": []
+          },
+          "goal": null,
+          "basisPoints": 0,
+          "completeSet": false
+        },
+        {
+          "id": "v2-ordinary-steel",
+          "name": "钢锭",
+          "tier": "ordinary",
+          "items": [
+            {
+              "id": "immersiveengineering:metal",
+              "meta": 8,
+              "count": 4,
+              "nbt": "{}"
+            }
+          ],
+          "purpose": "补充已掌握工艺的日常用料。",
+          "requires": {
+            "all": [
+              "craft:immersiveengineering:metal@8"
+            ],
+            "any": [],
+            "none": []
+          },
+          "goal": null,
+          "basisPoints": 0,
+          "completeSet": false
+        },
+        {
+          "id": "v2-selected-steel",
+          "name": "钢锭",
+          "tier": "selected",
+          "items": [
+            {
+              "id": "immersiveengineering:metal",
+              "meta": 8,
+              "count": 12,
+              "nbt": "{}"
+            }
+          ],
+          "purpose": "补充已掌握工艺的日常用料。",
+          "requires": {
+            "all": [
+              "craft:immersiveengineering:metal@8"
+            ],
+            "any": [],
+            "none": []
+          },
+          "goal": null,
+          "basisPoints": 0,
+          "completeSet": false
+        },
+        {
+          "id": "v2-ordinary-plate",
+          "name": "铁板",
+          "tier": "ordinary",
+          "items": [
+            {
+              "id": "immersiveengineering:metal",
+              "meta": 39,
+              "count": 8,
+              "nbt": "{}"
+            }
+          ],
+          "purpose": "补充已掌握工艺的日常用料。",
+          "requires": {
+            "all": [
+              "craft:immersiveengineering:metal@39"
+            ],
+            "any": [],
+            "none": []
+          },
+          "goal": null,
+          "basisPoints": 0,
+          "completeSet": false
+        },
+        {
+          "id": "v2-selected-plate",
+          "name": "铁板",
+          "tier": "selected",
+          "items": [
+            {
+              "id": "immersiveengineering:metal",
+              "meta": 39,
+              "count": 24,
+              "nbt": "{}"
+            }
+          ],
+          "purpose": "补充已掌握工艺的日常用料。",
+          "requires": {
+            "all": [
+              "craft:immersiveengineering:metal@39"
+            ],
+            "any": [],
+            "none": []
+          },
+          "goal": null,
+          "basisPoints": 0,
+          "completeSet": false
+        },
+        {
+          "id": "v2-ordinary-pipe",
+          "name": "流体管道",
+          "tier": "ordinary",
+          "items": [
+            {
+              "id": "immersiveengineering:metal_device1",
+              "meta": 6,
+              "count": 8,
+              "nbt": "{}"
+            }
+          ],
+          "purpose": "补充已掌握工艺的日常用料。",
+          "requires": {
+            "all": [
+              "craft:immersiveengineering:metal_device1@6"
+            ],
+            "any": [],
+            "none": []
+          },
+          "goal": null,
+          "basisPoints": 0,
+          "completeSet": false
+        },
+        {
+          "id": "v2-selected-pipe",
+          "name": "流体管道",
+          "tier": "selected",
+          "items": [
+            {
+              "id": "immersiveengineering:metal_device1",
+              "meta": 6,
+              "count": 24,
+              "nbt": "{}"
+            }
+          ],
+          "purpose": "补充已掌握工艺的日常用料。",
+          "requires": {
+            "all": [
+              "craft:immersiveengineering:metal_device1@6"
+            ],
+            "any": [],
+            "none": []
+          },
+          "goal": null,
+          "basisPoints": 0,
+          "completeSet": false
+        },
+        {
+          "id": "v2-ordinary-scaffold",
+          "name": "钢脚手架",
+          "tier": "ordinary",
+          "items": [
+            {
+              "id": "immersiveengineering:metal_decoration1",
+              "meta": 1,
+              "count": 8,
+              "nbt": "{}"
+            }
+          ],
+          "purpose": "补充已掌握工艺的日常用料。",
+          "requires": {
+            "all": [
+              "craft:immersiveengineering:metal_decoration1@1"
+            ],
+            "any": [],
+            "none": []
+          },
+          "goal": null,
+          "basisPoints": 0,
+          "completeSet": false
+        },
+        {
+          "id": "v2-selected-scaffold",
+          "name": "钢脚手架",
+          "tier": "selected",
+          "items": [
+            {
+              "id": "immersiveengineering:metal_decoration1",
+              "meta": 1,
+              "count": 24,
+              "nbt": "{}"
+            }
+          ],
+          "purpose": "补充已掌握工艺的日常用料。",
+          "requires": {
+            "all": [
+              "craft:immersiveengineering:metal_decoration1@1"
+            ],
+            "any": [],
+            "none": []
+          },
+          "goal": null,
+          "basisPoints": 0,
+          "completeSet": false
+        },
+        {
+          "id": "v2-set-coke",
+          "name": "焦炉整套",
+          "tier": "rare",
+          "items": [
+            {
+              "id": "immersiveengineering:stone_decoration",
+              "meta": 0,
+              "count": 27,
+              "nbt": "{}"
+            }
+          ],
+          "purpose": "包含全部结构件；供能、加工耗材和实际搭建按原流程完成。",
+          "requires": {
+            "all": [
+              "craft:immersiveengineering:stone_decoration@0"
+            ],
+            "any": [
+              "unlocked:20610",
+              "quest:20610"
+            ],
+            "none": []
+          },
+          "goal": "20610",
+          "basisPoints": 10000,
+          "completeSet": true
+        },
+        {
+          "id": "v2-set-blast",
+          "name": "高炉整套",
+          "tier": "rare",
+          "items": [
+            {
+              "id": "immersiveengineering:stone_decoration",
+              "meta": 1,
+              "count": 27,
+              "nbt": "{}"
+            }
+          ],
+          "purpose": "包含全部结构件；供能、加工耗材和实际搭建按原流程完成。",
+          "requires": {
+            "all": [
+              "quest:482221128",
+              "craft:immersiveengineering:stone_decoration@1"
+            ],
+            "any": [
+              "unlocked:20573",
+              "quest:20573"
+            ],
+            "none": []
+          },
+          "goal": "20573",
+          "basisPoints": 10000,
+          "completeSet": true
+        },
+        {
+          "id": "v2-set-fermenter",
+          "name": "工业发酵机整套",
+          "tier": "rare",
+          "items": [
+            {
+              "id": "immersiveengineering:metal_decoration1",
+              "meta": 1,
+              "count": 6,
+              "nbt": "{}"
+            },
+            {
+              "id": "immersiveengineering:metal_device1",
+              "meta": 6,
+              "count": 2,
+              "nbt": "{}"
+            },
+            {
+              "id": "immersiveengineering:metal_decoration0",
+              "meta": 3,
+              "count": 1,
+              "nbt": "{}"
+            },
+            {
+              "id": "immersiveengineering:metal_decoration0",
+              "meta": 4,
+              "count": 2,
+              "nbt": "{}"
+            },
+            {
+              "id": "minecraft:cauldron",
+              "meta": 0,
+              "count": 4,
+              "nbt": "{}"
+            },
+            {
+              "id": "immersiveengineering:sheetmetal",
+              "meta": 9,
+              "count": 4,
+              "nbt": "{}"
+            }
+          ],
+          "purpose": "包含全部结构件；供能、加工耗材和实际搭建按原流程完成。",
+          "requires": {
+            "all": [
+              "quest:482221128",
+              "craft:immersiveengineering:metal_decoration1@1",
+              "craft:immersiveengineering:metal_device1@6",
+              "craft:immersiveengineering:metal_decoration0@3",
+              "craft:immersiveengineering:metal_decoration0@4",
+              "craft:minecraft:cauldron@0",
+              "craft:immersiveengineering:sheetmetal@9"
+            ],
+            "any": [
+              "unlocked:20618",
+              "quest:20618"
+            ],
+            "none": []
+          },
+          "goal": "20618",
+          "basisPoints": 10000,
+          "completeSet": true
+        },
+        {
+          "id": "v2-set-refinery",
+          "name": "炼油厂整套",
+          "tier": "rare",
+          "items": [
+            {
+              "id": "immersiveengineering:metal_decoration1",
+              "meta": 1,
+              "count": 8,
+              "nbt": "{}"
+            },
+            {
+              "id": "immersiveengineering:metal_device1",
+              "meta": 6,
+              "count": 5,
+              "nbt": "{}"
+            },
+            {
+              "id": "immersiveengineering:metal_decoration0",
+              "meta": 3,
+              "count": 1,
+              "nbt": "{}"
+            },
+            {
+              "id": "immersiveengineering:metal_decoration0",
+              "meta": 4,
+              "count": 2,
+              "nbt": "{}"
+            },
+            {
+              "id": "immersiveengineering:metal_decoration0",
+              "meta": 5,
+              "count": 2,
+              "nbt": "{}"
+            },
+            {
+              "id": "immersiveengineering:sheetmetal",
+              "meta": 9,
+              "count": 16,
+              "nbt": "{}"
+            }
+          ],
+          "purpose": "包含全部结构件；供能、加工耗材和实际搭建按原流程完成。",
+          "requires": {
+            "all": [
+              "quest:482221128",
+              "craft:immersiveengineering:metal_decoration1@1",
+              "craft:immersiveengineering:metal_device1@6",
+              "craft:immersiveengineering:metal_decoration0@3",
+              "craft:immersiveengineering:metal_decoration0@4",
+              "craft:immersiveengineering:metal_decoration0@5",
+              "craft:immersiveengineering:sheetmetal@9"
+            ],
+            "any": [
+              "unlocked:20619",
+              "quest:20619"
+            ],
+            "none": []
+          },
+          "goal": "20619",
+          "basisPoints": 10000,
+          "completeSet": true
+        },
         {
           "id": "daily-torches",
           "name": "照明补给",
@@ -3311,7 +6261,8 @@
             "none": []
           },
           "goal": null,
-          "basisPoints": 0
+          "basisPoints": 0,
+          "retired": true
         },
         {
           "id": "ordinary-torches",
@@ -3334,7 +6285,8 @@
             "none": []
           },
           "goal": null,
-          "basisPoints": 0
+          "basisPoints": 0,
+          "retired": true
         },
         {
           "id": "selected-charcoal",
@@ -3357,7 +6309,8 @@
             "none": []
           },
           "goal": null,
-          "basisPoints": 0
+          "basisPoints": 0,
+          "retired": true
         },
         {
           "id": "daily-field-supplies",
@@ -3380,7 +6333,8 @@
             "none": []
           },
           "goal": null,
-          "basisPoints": 0
+          "basisPoints": 0,
+          "retired": true
         },
         {
           "id": "ordinary-field-supplies",
@@ -3403,7 +6357,8 @@
             "none": []
           },
           "goal": null,
-          "basisPoints": 0
+          "basisPoints": 0,
+          "retired": true
         },
         {
           "id": "petrified-foundation",
@@ -3430,7 +6385,8 @@
             ]
           },
           "goal": "179",
-          "basisPoints": 1154
+          "basisPoints": 1154,
+          "retired": true
         },
         {
           "id": "emberstone-building",
@@ -3456,7 +6412,8 @@
             ]
           },
           "goal": "163",
-          "basisPoints": 1250
+          "basisPoints": 1250,
+          "retired": true
         },
         {
           "id": "purple-steel-building",
@@ -3482,9 +6439,11 @@
             ]
           },
           "goal": "164",
-          "basisPoints": 1250
+          "basisPoints": 1250,
+          "retired": true
         }
-      ]
+      ],
+      "trackedControllers": []
     },
     {
       "id": "vw",
@@ -4286,6 +7245,7 @@
         "gregtech:gt.meta.ring@8217",
         "gregtech:gt.meta.rockGt@8500",
         "gregtech:gt.meta.scrapGt@9107",
+        "gregtech:gt.meta.screw@260",
         "gregtech:gt.meta.stick@260",
         "gregtech:gt.meta.stick@8217",
         "gregtech:gt.meta.stick@8218",
@@ -4304,15 +7264,888 @@
         "gregtech:gt.meta.storage.solid@8640",
         "gregtech:gt.meta.storage.solid@8660",
         "gregtech:gt.meta.storage.solid@8745",
+        "gregtech:gt.multitileentity@17000",
+        "gregtech:gt.multitileentity@17101",
+        "gregtech:gt.multitileentity@17103",
+        "gregtech:gt.multitileentity@17112",
         "gregtech:gt.multitileentity@18000",
+        "gregtech:gt.multitileentity@18022",
         "gregtech:gt.multitileentity@18101",
         "gregtech:gt.multitileentity@18102",
+        "gregtech:gt.multitileentity@18105",
+        "minecraft:brick_block@0",
+        "minecraft:chest@0",
         "minecraft:coal@1",
+        "minecraft:glass@0",
+        "minecraft:golden_rail@0",
+        "minecraft:hopper@0",
         "minecraft:ladder@0",
+        "minecraft:paper@0",
+        "minecraft:piston@0",
+        "minecraft:rail@0",
+        "minecraft:repeater@0",
+        "minecraft:stonebrick@0",
         "minecraft:torch@0"
       ],
       "trackedKills": [],
       "rewards": [
+        {
+          "id": "v2-daily-torches",
+          "name": "火把",
+          "tier": "daily",
+          "items": [
+            {
+              "id": "minecraft:torch",
+              "meta": 0,
+              "count": 8,
+              "nbt": "{}"
+            }
+          ],
+          "purpose": "补充已掌握工艺的日常用料。",
+          "requires": {
+            "all": [
+              "craft:minecraft:torch@0"
+            ],
+            "any": [],
+            "none": []
+          },
+          "goal": null,
+          "basisPoints": 0,
+          "completeSet": false
+        },
+        {
+          "id": "v2-daily-fuel",
+          "name": "木炭",
+          "tier": "daily",
+          "items": [
+            {
+              "id": "minecraft:coal",
+              "meta": 1,
+              "count": 8,
+              "nbt": "{}"
+            }
+          ],
+          "purpose": "补充已掌握工艺的日常用料。",
+          "requires": {
+            "all": [
+              "craft:minecraft:coal@1"
+            ],
+            "any": [],
+            "none": []
+          },
+          "goal": null,
+          "basisPoints": 0,
+          "completeSet": false
+        },
+        {
+          "id": "v2-daily-glass",
+          "name": "玻璃",
+          "tier": "daily",
+          "items": [
+            {
+              "id": "minecraft:glass",
+              "meta": 0,
+              "count": 8,
+              "nbt": "{}"
+            }
+          ],
+          "purpose": "补充已掌握工艺的日常用料。",
+          "requires": {
+            "all": [
+              "craft:minecraft:glass@0"
+            ],
+            "any": [],
+            "none": []
+          },
+          "goal": null,
+          "basisPoints": 0,
+          "completeSet": false
+        },
+        {
+          "id": "v2-daily-ladder",
+          "name": "梯子",
+          "tier": "daily",
+          "items": [
+            {
+              "id": "minecraft:ladder",
+              "meta": 0,
+              "count": 8,
+              "nbt": "{}"
+            }
+          ],
+          "purpose": "补充已掌握工艺的日常用料。",
+          "requires": {
+            "all": [
+              "craft:minecraft:ladder@0"
+            ],
+            "any": [],
+            "none": []
+          },
+          "goal": null,
+          "basisPoints": 0,
+          "completeSet": false
+        },
+        {
+          "id": "v2-ordinary-torches",
+          "name": "火把",
+          "tier": "ordinary",
+          "items": [
+            {
+              "id": "minecraft:torch",
+              "meta": 0,
+              "count": 32,
+              "nbt": "{}"
+            }
+          ],
+          "purpose": "补充已掌握工艺的日常用料。",
+          "requires": {
+            "all": [
+              "craft:minecraft:torch@0"
+            ],
+            "any": [],
+            "none": []
+          },
+          "goal": null,
+          "basisPoints": 0,
+          "completeSet": false
+        },
+        {
+          "id": "v2-ordinary-fuel",
+          "name": "木炭",
+          "tier": "ordinary",
+          "items": [
+            {
+              "id": "minecraft:coal",
+              "meta": 1,
+              "count": 24,
+              "nbt": "{}"
+            }
+          ],
+          "purpose": "补充已掌握工艺的日常用料。",
+          "requires": {
+            "all": [
+              "craft:minecraft:coal@1"
+            ],
+            "any": [],
+            "none": []
+          },
+          "goal": null,
+          "basisPoints": 0,
+          "completeSet": false
+        },
+        {
+          "id": "v2-ordinary-glass",
+          "name": "玻璃",
+          "tier": "ordinary",
+          "items": [
+            {
+              "id": "minecraft:glass",
+              "meta": 0,
+              "count": 32,
+              "nbt": "{}"
+            }
+          ],
+          "purpose": "补充已掌握工艺的日常用料。",
+          "requires": {
+            "all": [
+              "craft:minecraft:glass@0"
+            ],
+            "any": [],
+            "none": []
+          },
+          "goal": null,
+          "basisPoints": 0,
+          "completeSet": false
+        },
+        {
+          "id": "v2-ordinary-ladder",
+          "name": "梯子",
+          "tier": "ordinary",
+          "items": [
+            {
+              "id": "minecraft:ladder",
+              "meta": 0,
+              "count": 24,
+              "nbt": "{}"
+            }
+          ],
+          "purpose": "补充已掌握工艺的日常用料。",
+          "requires": {
+            "all": [
+              "craft:minecraft:ladder@0"
+            ],
+            "any": [],
+            "none": []
+          },
+          "goal": null,
+          "basisPoints": 0,
+          "completeSet": false
+        },
+        {
+          "id": "v2-ordinary-storage",
+          "name": "箱子",
+          "tier": "ordinary",
+          "items": [
+            {
+              "id": "minecraft:chest",
+              "meta": 0,
+              "count": 4,
+              "nbt": "{}"
+            }
+          ],
+          "purpose": "补充已掌握工艺的日常用料。",
+          "requires": {
+            "all": [
+              "craft:minecraft:chest@0"
+            ],
+            "any": [],
+            "none": []
+          },
+          "goal": null,
+          "basisPoints": 0,
+          "completeSet": false
+        },
+        {
+          "id": "v2-ordinary-rail",
+          "name": "铁轨",
+          "tier": "ordinary",
+          "items": [
+            {
+              "id": "minecraft:rail",
+              "meta": 0,
+              "count": 32,
+              "nbt": "{}"
+            }
+          ],
+          "purpose": "补充已掌握工艺的日常用料。",
+          "requires": {
+            "all": [
+              "craft:minecraft:rail@0"
+            ],
+            "any": [],
+            "none": []
+          },
+          "goal": null,
+          "basisPoints": 0,
+          "completeSet": false
+        },
+        {
+          "id": "v2-ordinary-paper",
+          "name": "纸",
+          "tier": "ordinary",
+          "items": [
+            {
+              "id": "minecraft:paper",
+              "meta": 0,
+              "count": 32,
+              "nbt": "{}"
+            }
+          ],
+          "purpose": "补充已掌握工艺的日常用料。",
+          "requires": {
+            "all": [
+              "craft:minecraft:paper@0"
+            ],
+            "any": [],
+            "none": []
+          },
+          "goal": null,
+          "basisPoints": 0,
+          "completeSet": false
+        },
+        {
+          "id": "v2-ordinary-bricks",
+          "name": "砖块",
+          "tier": "ordinary",
+          "items": [
+            {
+              "id": "minecraft:brick_block",
+              "meta": 0,
+              "count": 24,
+              "nbt": "{}"
+            }
+          ],
+          "purpose": "补充已掌握工艺的日常用料。",
+          "requires": {
+            "all": [
+              "craft:minecraft:brick_block@0"
+            ],
+            "any": [],
+            "none": []
+          },
+          "goal": null,
+          "basisPoints": 0,
+          "completeSet": false
+        },
+        {
+          "id": "v2-selected-exploration",
+          "name": "照明与燃料",
+          "tier": "selected",
+          "items": [
+            {
+              "id": "minecraft:torch",
+              "meta": 0,
+              "count": 64,
+              "nbt": "{}"
+            },
+            {
+              "id": "minecraft:coal",
+              "meta": 1,
+              "count": 64,
+              "nbt": "{}"
+            }
+          ],
+          "purpose": "补充已掌握工艺的日常用料。",
+          "requires": {
+            "all": [
+              "craft:minecraft:torch@0",
+              "craft:minecraft:coal@1"
+            ],
+            "any": [],
+            "none": []
+          },
+          "goal": null,
+          "basisPoints": 0,
+          "completeSet": false
+        },
+        {
+          "id": "v2-selected-building",
+          "name": "建筑材料",
+          "tier": "selected",
+          "items": [
+            {
+              "id": "minecraft:glass",
+              "meta": 0,
+              "count": 64,
+              "nbt": "{}"
+            },
+            {
+              "id": "minecraft:stonebrick",
+              "meta": 0,
+              "count": 64,
+              "nbt": "{}"
+            }
+          ],
+          "purpose": "补充已掌握工艺的日常用料。",
+          "requires": {
+            "all": [
+              "craft:minecraft:glass@0",
+              "craft:minecraft:stonebrick@0"
+            ],
+            "any": [],
+            "none": []
+          },
+          "goal": null,
+          "basisPoints": 0,
+          "completeSet": false
+        },
+        {
+          "id": "v2-selected-railway",
+          "name": "铁路材料",
+          "tier": "selected",
+          "items": [
+            {
+              "id": "minecraft:rail",
+              "meta": 0,
+              "count": 64,
+              "nbt": "{}"
+            },
+            {
+              "id": "minecraft:golden_rail",
+              "meta": 0,
+              "count": 8,
+              "nbt": "{}"
+            }
+          ],
+          "purpose": "补充已掌握工艺的日常用料。",
+          "requires": {
+            "all": [
+              "craft:minecraft:rail@0",
+              "craft:minecraft:golden_rail@0"
+            ],
+            "any": [],
+            "none": []
+          },
+          "goal": null,
+          "basisPoints": 0,
+          "completeSet": false
+        },
+        {
+          "id": "v2-selected-warehouse",
+          "name": "仓储材料",
+          "tier": "selected",
+          "items": [
+            {
+              "id": "minecraft:chest",
+              "meta": 0,
+              "count": 8,
+              "nbt": "{}"
+            },
+            {
+              "id": "minecraft:hopper",
+              "meta": 0,
+              "count": 4,
+              "nbt": "{}"
+            }
+          ],
+          "purpose": "补充已掌握工艺的日常用料。",
+          "requires": {
+            "all": [
+              "craft:minecraft:chest@0",
+              "craft:minecraft:hopper@0"
+            ],
+            "any": [],
+            "none": []
+          },
+          "goal": null,
+          "basisPoints": 0,
+          "completeSet": false
+        },
+        {
+          "id": "v2-selected-automation",
+          "name": "红石配件",
+          "tier": "selected",
+          "items": [
+            {
+              "id": "minecraft:repeater",
+              "meta": 0,
+              "count": 8,
+              "nbt": "{}"
+            },
+            {
+              "id": "minecraft:piston",
+              "meta": 0,
+              "count": 8,
+              "nbt": "{}"
+            }
+          ],
+          "purpose": "补充已掌握工艺的日常用料。",
+          "requires": {
+            "all": [
+              "craft:minecraft:repeater@0",
+              "craft:minecraft:piston@0"
+            ],
+            "any": [],
+            "none": []
+          },
+          "goal": null,
+          "basisPoints": 0,
+          "completeSet": false
+        },
+        {
+          "id": "v2-selected-worksite",
+          "name": "场地搭建",
+          "tier": "selected",
+          "items": [
+            {
+              "id": "minecraft:ladder",
+              "meta": 0,
+              "count": 64,
+              "nbt": "{}"
+            },
+            {
+              "id": "minecraft:glass",
+              "meta": 0,
+              "count": 64,
+              "nbt": "{}"
+            }
+          ],
+          "purpose": "补充已掌握工艺的日常用料。",
+          "requires": {
+            "all": [
+              "craft:minecraft:ladder@0",
+              "craft:minecraft:glass@0"
+            ],
+            "any": [],
+            "none": []
+          },
+          "goal": null,
+          "basisPoints": 0,
+          "completeSet": false
+        },
+        {
+          "id": "v2-ordinary-brick",
+          "name": "耐火砖块",
+          "tier": "ordinary",
+          "items": [
+            {
+              "id": "gregtech:gt.multitileentity",
+              "meta": 18000,
+              "count": 4,
+              "nbt": "{}"
+            }
+          ],
+          "purpose": "补充已掌握工艺的日常用料。",
+          "requires": {
+            "all": [
+              "craft:gregtech:gt.multitileentity@18000"
+            ],
+            "any": [],
+            "none": []
+          },
+          "goal": null,
+          "basisPoints": 0,
+          "completeSet": false
+        },
+        {
+          "id": "v2-selected-brick",
+          "name": "耐火砖块",
+          "tier": "selected",
+          "items": [
+            {
+              "id": "gregtech:gt.multitileentity",
+              "meta": 18000,
+              "count": 12,
+              "nbt": "{}"
+            }
+          ],
+          "purpose": "补充已掌握工艺的日常用料。",
+          "requires": {
+            "all": [
+              "craft:gregtech:gt.multitileentity@18000"
+            ],
+            "any": [],
+            "none": []
+          },
+          "goal": null,
+          "basisPoints": 0,
+          "completeSet": false
+        },
+        {
+          "id": "v2-ordinary-plate",
+          "name": "铁板",
+          "tier": "ordinary",
+          "items": [
+            {
+              "id": "gregtech:gt.meta.plate",
+              "meta": 260,
+              "count": 8,
+              "nbt": "{}"
+            }
+          ],
+          "purpose": "补充已掌握工艺的日常用料。",
+          "requires": {
+            "all": [
+              "craft:gregtech:gt.meta.plate@260"
+            ],
+            "any": [],
+            "none": []
+          },
+          "goal": null,
+          "basisPoints": 0,
+          "completeSet": false
+        },
+        {
+          "id": "v2-selected-plate",
+          "name": "铁板",
+          "tier": "selected",
+          "items": [
+            {
+              "id": "gregtech:gt.meta.plate",
+              "meta": 260,
+              "count": 24,
+              "nbt": "{}"
+            }
+          ],
+          "purpose": "补充已掌握工艺的日常用料。",
+          "requires": {
+            "all": [
+              "craft:gregtech:gt.meta.plate@260"
+            ],
+            "any": [],
+            "none": []
+          },
+          "goal": null,
+          "basisPoints": 0,
+          "completeSet": false
+        },
+        {
+          "id": "v2-ordinary-rod",
+          "name": "铁杆",
+          "tier": "ordinary",
+          "items": [
+            {
+              "id": "gregtech:gt.meta.stick",
+              "meta": 260,
+              "count": 16,
+              "nbt": "{}"
+            }
+          ],
+          "purpose": "补充已掌握工艺的日常用料。",
+          "requires": {
+            "all": [
+              "craft:gregtech:gt.meta.stick@260"
+            ],
+            "any": [],
+            "none": []
+          },
+          "goal": null,
+          "basisPoints": 0,
+          "completeSet": false
+        },
+        {
+          "id": "v2-selected-rod",
+          "name": "铁杆",
+          "tier": "selected",
+          "items": [
+            {
+              "id": "gregtech:gt.meta.stick",
+              "meta": 260,
+              "count": 48,
+              "nbt": "{}"
+            }
+          ],
+          "purpose": "补充已掌握工艺的日常用料。",
+          "requires": {
+            "all": [
+              "craft:gregtech:gt.meta.stick@260"
+            ],
+            "any": [],
+            "none": []
+          },
+          "goal": null,
+          "basisPoints": 0,
+          "completeSet": false
+        },
+        {
+          "id": "v2-ordinary-screw",
+          "name": "铁螺丝",
+          "tier": "ordinary",
+          "items": [
+            {
+              "id": "gregtech:gt.meta.screw",
+              "meta": 260,
+              "count": 32,
+              "nbt": "{}"
+            }
+          ],
+          "purpose": "补充已掌握工艺的日常用料。",
+          "requires": {
+            "all": [
+              "craft:gregtech:gt.meta.screw@260"
+            ],
+            "any": [],
+            "none": []
+          },
+          "goal": null,
+          "basisPoints": 0,
+          "completeSet": false
+        },
+        {
+          "id": "v2-selected-screw",
+          "name": "铁螺丝",
+          "tier": "selected",
+          "items": [
+            {
+              "id": "gregtech:gt.meta.screw",
+              "meta": 260,
+              "count": 64,
+              "nbt": "{}"
+            }
+          ],
+          "purpose": "补充已掌握工艺的日常用料。",
+          "requires": {
+            "all": [
+              "craft:gregtech:gt.meta.screw@260"
+            ],
+            "any": [],
+            "none": []
+          },
+          "goal": null,
+          "basisPoints": 0,
+          "completeSet": false
+        },
+        {
+          "id": "v2-ordinary-stainless",
+          "name": "不锈钢板",
+          "tier": "ordinary",
+          "items": [
+            {
+              "id": "gregtech:gt.meta.plate",
+              "meta": 8636,
+              "count": 4,
+              "nbt": "{}"
+            }
+          ],
+          "purpose": "补充已掌握工艺的日常用料。",
+          "requires": {
+            "all": [
+              "craft:gregtech:gt.meta.plate@8636"
+            ],
+            "any": [],
+            "none": []
+          },
+          "goal": null,
+          "basisPoints": 0,
+          "completeSet": false
+        },
+        {
+          "id": "v2-selected-stainless",
+          "name": "不锈钢板",
+          "tier": "selected",
+          "items": [
+            {
+              "id": "gregtech:gt.meta.plate",
+              "meta": 8636,
+              "count": 12,
+              "nbt": "{}"
+            }
+          ],
+          "purpose": "补充已掌握工艺的日常用料。",
+          "requires": {
+            "all": [
+              "craft:gregtech:gt.meta.plate@8636"
+            ],
+            "any": [],
+            "none": []
+          },
+          "goal": null,
+          "basisPoints": 0,
+          "completeSet": false
+        },
+        {
+          "id": "v2-set-coke",
+          "name": "焦炉整套",
+          "tier": "rare",
+          "items": [
+            {
+              "id": "gregtech:gt.multitileentity",
+              "meta": 17000,
+              "count": 1,
+              "nbt": "{}"
+            },
+            {
+              "id": "gregtech:gt.multitileentity",
+              "meta": 18000,
+              "count": 25,
+              "nbt": "{}"
+            }
+          ],
+          "purpose": "包含全部结构件；供能、加工耗材和实际搭建按原流程完成。",
+          "requires": {
+            "all": [
+              "owned:gregtech:gt.multitileentity@17000",
+              "craft:gregtech:gt.multitileentity@18000"
+            ],
+            "any": [
+              "unlocked:4f47e96c-b410-4bd2-a44f-674389e5d03f",
+              "quest:4f47e96c-b410-4bd2-a44f-674389e5d03f"
+            ],
+            "none": []
+          },
+          "goal": "4f47e96c-b410-4bd2-a44f-674389e5d03f",
+          "basisPoints": 10000,
+          "completeSet": true
+        },
+        {
+          "id": "v2-set-tower",
+          "name": "蒸馏塔整套",
+          "tier": "rare",
+          "items": [
+            {
+              "id": "gregtech:gt.multitileentity",
+              "meta": 17101,
+              "count": 1,
+              "nbt": "{}"
+            },
+            {
+              "id": "gregtech:gt.multitileentity",
+              "meta": 18102,
+              "count": 71,
+              "nbt": "{}"
+            },
+            {
+              "id": "gregtech:gt.multitileentity",
+              "meta": 18101,
+              "count": 9,
+              "nbt": "{}"
+            }
+          ],
+          "purpose": "包含全部结构件；供能、加工耗材和实际搭建按原流程完成。",
+          "requires": {
+            "all": [
+              "owned:gregtech:gt.multitileentity@17101",
+              "craft:gregtech:gt.multitileentity@18102",
+              "craft:gregtech:gt.multitileentity@18101"
+            ],
+            "any": [
+              "unlocked:6434aee3-1470-4810-9fe7-b9bd98a6c2c7",
+              "quest:6434aee3-1470-4810-9fe7-b9bd98a6c2c7"
+            ],
+            "none": []
+          },
+          "goal": "6434aee3-1470-4810-9fe7-b9bd98a6c2c7",
+          "basisPoints": 10000,
+          "completeSet": true
+        },
+        {
+          "id": "v2-set-autoclave",
+          "name": "大型高压釜整套",
+          "tier": "rare",
+          "items": [
+            {
+              "id": "gregtech:gt.multitileentity",
+              "meta": 17112,
+              "count": 1,
+              "nbt": "{}"
+            },
+            {
+              "id": "gregtech:gt.multitileentity",
+              "meta": 18022,
+              "count": 25,
+              "nbt": "{}"
+            }
+          ],
+          "purpose": "包含全部结构件；供能、加工耗材和实际搭建按原流程完成。",
+          "requires": {
+            "all": [
+              "owned:gregtech:gt.multitileentity@17112",
+              "craft:gregtech:gt.multitileentity@18022"
+            ],
+            "any": [
+              "unlocked:ad907086-701b-44fd-8561-fc812dc2eefc",
+              "quest:ad907086-701b-44fd-8561-fc812dc2eefc"
+            ],
+            "none": []
+          },
+          "goal": "ad907086-701b-44fd-8561-fc812dc2eefc",
+          "basisPoints": 10000,
+          "completeSet": true
+        },
+        {
+          "id": "v2-set-electrolyzer",
+          "name": "大型电解器整套",
+          "tier": "rare",
+          "items": [
+            {
+              "id": "gregtech:gt.multitileentity",
+              "meta": 17103,
+              "count": 1,
+              "nbt": "{}"
+            },
+            {
+              "id": "gregtech:gt.multitileentity",
+              "meta": 18105,
+              "count": 17,
+              "nbt": "{}"
+            }
+          ],
+          "purpose": "包含全部结构件；供能、加工耗材和实际搭建按原流程完成。",
+          "requires": {
+            "all": [
+              "owned:gregtech:gt.multitileentity@17103",
+              "craft:gregtech:gt.multitileentity@18105"
+            ],
+            "any": [
+              "unlocked:0c76ee99-40e9-4378-b975-2574bd86ed48",
+              "quest:0c76ee99-40e9-4378-b975-2574bd86ed48"
+            ],
+            "none": []
+          },
+          "goal": "0c76ee99-40e9-4378-b975-2574bd86ed48",
+          "basisPoints": 10000,
+          "completeSet": true
+        },
         {
           "id": "daily-torches",
           "name": "照明补给",
@@ -4334,7 +8167,8 @@
             "none": []
           },
           "goal": null,
-          "basisPoints": 0
+          "basisPoints": 0,
+          "retired": true
         },
         {
           "id": "ordinary-torches",
@@ -4357,7 +8191,8 @@
             "none": []
           },
           "goal": null,
-          "basisPoints": 0
+          "basisPoints": 0,
+          "retired": true
         },
         {
           "id": "selected-charcoal",
@@ -4380,7 +8215,8 @@
             "none": []
           },
           "goal": null,
-          "basisPoints": 0
+          "basisPoints": 0,
+          "retired": true
         },
         {
           "id": "daily-field-supplies",
@@ -4403,7 +8239,8 @@
             "none": []
           },
           "goal": null,
-          "basisPoints": 0
+          "basisPoints": 0,
+          "retired": true
         },
         {
           "id": "ordinary-field-supplies",
@@ -4426,7 +8263,8 @@
             "none": []
           },
           "goal": null,
-          "basisPoints": 0
+          "basisPoints": 0,
+          "retired": true
         },
         {
           "id": "tower-wall",
@@ -4453,7 +8291,8 @@
             ]
           },
           "goal": "6434aee3-1470-4810-9fe7-b9bd98a6c2c7",
-          "basisPoints": 1408
+          "basisPoints": 1408,
+          "retired": true
         },
         {
           "id": "tower-base",
@@ -4480,7 +8319,8 @@
             ]
           },
           "goal": "6434aee3-1470-4810-9fe7-b9bd98a6c2c7",
-          "basisPoints": 1111
+          "basisPoints": 1111,
+          "retired": true
         },
         {
           "id": "coke-wall",
@@ -4506,8 +8346,15 @@
             ]
           },
           "goal": "4f47e96c-b410-4bd2-a44f-674389e5d03f",
-          "basisPoints": 1200
+          "basisPoints": 1200,
+          "retired": true
         }
+      ],
+      "trackedControllers": [
+        "gregtech:gt.multitileentity@17000",
+        "gregtech:gt.multitileentity@17101",
+        "gregtech:gt.multitileentity@17112",
+        "gregtech:gt.multitileentity@17103"
       ]
     }
   ]

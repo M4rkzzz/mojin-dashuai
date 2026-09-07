@@ -145,9 +145,51 @@ def status():
   except Exception:state['online']=None
   values.append(state)
  print(json.dumps(values))
-parser=argparse.ArgumentParser();parser.add_argument('action',choices=['prepare','activate','disable','status','enable']);parser.add_argument('value',nargs='?');args=parser.parse_args()
+
+def upgrade(w,agent,version):
+ if not re.fullmatch(r'\d+\.\d+\.\d+',version):raise ValueError('Invalid observer version')
+ root=HOST/WORLDS[w][0];script=root/WORLDS[w][1];private=root/'.activities'
+ target=ROOT/'staging'/('activities-'+version)/w;target.mkdir(parents=True,exist_ok=True);os.chmod(target,0o700)
+ jar=private/'mojin-activities-server-agent.jar';source=pathlib.Path(agent)
+ if not source.is_file() or not jar.is_file() or not (private/'server.properties').is_file():raise RuntimeError('Existing observer or candidate missing')
+ if (target/'active.json').exists() and java_processes(w):
+  try:
+   runtime=json.loads((private/'spool/status.json').read_text())
+   if runtime['version']==version and (dt.datetime.now(dt.timezone.utc)-dt.datetime.fromisoformat(runtime['rulesLoadedAt'].replace('Z','+00:00'))).total_seconds()<150:
+    print(json.dumps({'world':w,'alreadyActive':True,'version':version,**online(w)}),flush=True);return
+  except (OSError,ValueError,KeyError):pass
+ if '-Dmojin.activities.config=' not in script.read_text():raise RuntimeError('Observer not enabled in existing startup script')
+ # Confirm the process controller works before stopping any game.
+ run('docker','exec','gsmanager','test','-f','/root/server/gsmanager-api.mjs')
+ current=online(w)
+ if current['online']!=0:print(json.dumps({'world':w,'deferred':True,**current}),flush=True);return
+ result=online(w,stop=True)
+ if not result['stopRequested']:print(json.dumps({'world':w,'deferred':True,**result}),flush=True);return
+ print(json.dumps({'world':w,'stoppingEmptyServer':True}),flush=True)
+ deadline=time.monotonic()+300
+ while java_processes(w) and time.monotonic()<deadline:time.sleep(1)
+ if java_processes(w):raise RuntimeError('Game did not exit normally; no forced kill')
+ try:gsm(w,'close-terminal')
+ except subprocess.CalledProcessError:pass
+ backup=target/'observer.before.jar'
+ if not backup.exists():shutil.copy2(jar,backup)
+ temporary=jar.with_suffix('.new');shutil.copy2(source,temporary);os.chown(temporary,jar.stat().st_uid,jar.stat().st_gid);os.replace(temporary,jar)
+ started=dt.datetime.now(dt.timezone.utc);gsm(w,'start');deadline=time.monotonic()+420;ready=False
+ while time.monotonic()<deadline:
+  try:
+   state=json.loads((private/'spool/status.json').read_text())
+   fresh=dt.datetime.fromisoformat(state['rulesLoadedAt'].replace('Z','+00:00'))>=started
+   if state['version']==version and fresh and 'Done (' in (root/'logs/latest.log').read_text(errors='replace') and java_processes(w) and online(w)['online']>=0:ready=True;break
+  except Exception:pass
+  time.sleep(3)
+ if not ready:raise RuntimeError('Observer readiness failed; previous JAR saved at '+str(backup))
+ state.update(world=w,ready=True,online=online(w)['online'],activatedAt=started.isoformat())
+ atomic(target/'active.json',json.dumps(state));print(json.dumps(state),flush=True)
+
+parser=argparse.ArgumentParser();parser.add_argument('action',choices=['prepare','activate','upgrade','disable','status','enable']);parser.add_argument('value',nargs='?');parser.add_argument('--agent');parser.add_argument('--version',default='1.0.4');args=parser.parse_args()
 if args.action=='prepare':prepare(args.value)
 elif args.action=='activate':activate(args.value)
+elif args.action=='upgrade':upgrade(args.value,args.agent,args.version)
 elif args.action=='disable':disable(args.value)
 elif args.action=='enable':enable()
 else:status()

@@ -154,5 +154,578 @@
     "name": "耐火砖块",
     "block": true,
     "overlay": "./activities/items/overlay-vw-gregtech_gt.multitileentity_18000.png"
+  },
+  "m3e:manametalmod:BLOCKCrystalPillars@0": {
+    "src": "./activities/items/m3e-manametalmod_BLOCKCrystalPillars_0.png",
+    "name": "魔力石柱",
+    "block": true,
+    "overlay": null
+  },
+  "m3e:manametalmod:BLOCKManaMetalInjection@0": {
+    "src": "./activities/items/m3e-manametalmod_BLOCKManaMetalInjection_0.png",
+    "name": "魔力灌注核心",
+    "block": true,
+    "overlay": null
+  },
+  "m3e:manametalmod:BlockMagicUpdates@0": {
+    "src": "./activities/items/m3e-manametalmod_BlockMagicUpdates_0.png",
+    "name": "法杖融合台",
+    "block": true,
+    "overlay": null
+  },
+  "m3e:manametalmod:BlockTileEntityHumanReforms@0": {
+    "src": "./activities/items/m3e-manametalmod_BlockTileEntityHumanReforms_0.png",
+    "name": "人体改造仪",
+    "block": true,
+    "overlay": null
+  },
+  "m3e:manametalmod:BlockTileEntityManaEnchantings@0": {
+    "src": "./activities/items/m3e-manametalmod_BlockTileEntityManaEnchantings_0.png",
+    "name": "法力附魔台",
+    "block": true,
+    "overlay": null
+  },
+  "m3e:manametalmod:ManaCoal@0": {
+    "src": "./activities/items/m3e-manametalmod_ManaCoal_0.png",
+    "name": "灵炭",
+    "block": false,
+    "overlay": null,
+    "atlas": {
+      "x": 0,
+      "y": 0,
+      "width": 16,
+      "height": 16,
+      "size": 16
+    }
+  },
+  "m3e:manametalmod:ManaRuneE@0": {
+    "src": "./activities/items/m3e-manametalmod_ManaRuneE_0.png",
+    "name": "魔导符文",
+    "block": false,
+    "overlay": null,
+    "atlas": {
+      "x": 0,
+      "y": 0,
+      "width": 16,
+      "height": 16,
+      "size": 16
+    }
+  },
+  "m3e:manametalmod:MetalEnergy02@0": {
+    "src": "./activities/items/m3e-manametalmod_MetalEnergy02_0.png",
+    "name": "中级金属能量",
+    "block": false,
+    "overlay": null,
+    "atlas": {
+      "x": 0,
+      "y": 0,
+      "width": 16,
+      "height": 16,
+      "size": 16
+    }
+  },
+  "m3e:manametalmod:dustMana@0": {
+    "src": "./activities/items/m3e-manametalmod_dustMana_0.png",
+    "name": "魔法粉",
+    "block": false,
+    "overlay": null,
+    "atlas": {
+      "x": 0,
+      "y": 0,
+      "width": 16,
+      "height": 16,
+      "size": 16
+    }
+  },
+  "m3e:manametalmod:ingotManaS@0": {
+    "src": "./activities/items/m3e-manametalmod_ingotManaS_0.png",
+    "name": "魔法钢锭",
+    "block": false,
+    "overlay": null,
+    "atlas": {
+      "x": 0,
+      "y": 0,
+      "width": 16,
+      "height": 16,
+      "size": 16
+    }
+  },
+  "m3e:manametalmod:magicStone2@0": {
+    "src": "./activities/items/m3e-manametalmod_magicStone2_0.png",
+    "name": "祭坛符文石",
+    "block": true,
+    "overlay": null
+  },
+  "m3e:manametalmod:magicStone4@0": {
+    "src": "./activities/items/m3e-manametalmod_magicStone4_0.png",
+    "name": "祭坛符文石核心",
+    "block": true,
+    "overlay": null
+  },
+  "m3e:minecraft:brick_block@0": {
+    "src": "./activities/items/m3e-minecraft_brick_block_0.png",
+    "name": "砖块",
+    "block": true,
+    "overlay": null
+  },
+  "m3e:minecraft:chest@0": {
+    "src": "./activities/items/m3e-minecraft_chest_0.png",
+    "name": "箱子",
+    "block": false,
+    "overlay": null,
+    "atlas": {
+      "x": 14,
+      "y": 33,
+      "width": 14,
+      "height": 10,
+      "size": 64
+    }
+  },
+  "m3e:minecraft:glass@0": {
+    "src": "./activities/items/m3e-minecraft_glass_0.png",
+    "name": "玻璃",
+    "block": true,
+    "overlay": null
+  },
+  "m3e:minecraft:golden_rail@0": {
+    "src": "./activities/items/m3e-minecraft_golden_rail_0.png",
+    "name": "动力铁轨",
+    "block": true,
+    "overlay": null
+  },
+  "m3e:minecraft:hopper@0": {
+    "src": "./activities/items/m3e-minecraft_hopper_0.png",
+    "name": "漏斗",
+    "block": false,
+    "overlay": null
+  },
+  "m3e:minecraft:ladder@0": {
+    "src": "./activities/items/m3e-minecraft_ladder_0.png",
+    "name": "梯子",
+    "block": true,
+    "overlay": null
+  },
+  "m3e:minecraft:paper@0": {
+    "src": "./activities/items/m3e-minecraft_paper_0.png",
+    "name": "纸",
+    "block": false,
+    "overlay": null
+  },
+  "m3e:minecraft:piston@0": {
+    "src": "./activities/items/m3e-minecraft_piston_0.png",
+    "name": "活塞",
+    "block": true,
+    "overlay": null
+  },
+  "m3e:minecraft:rail@0": {
+    "src": "./activities/items/m3e-minecraft_rail_0.png",
+    "name": "铁轨",
+    "block": true,
+    "overlay": null
+  },
+  "m3e:minecraft:repeater@0": {
+    "src": "./activities/items/m3e-minecraft_repeater_0.png",
+    "name": "红石中继器",
+    "block": false,
+    "overlay": null
+  },
+  "m3e:minecraft:stonebrick@0": {
+    "src": "./activities/items/m3e-minecraft_stonebrick_0.png",
+    "name": "石砖",
+    "block": true,
+    "overlay": null
+  },
+  "dc2:immersiveengineering:cokebrick@0": {
+    "src": "./activities/items/dc2-immersiveengineering_cokebrick_0.png",
+    "name": "焦炉砖",
+    "block": true,
+    "overlay": null
+  },
+  "dc2:immersiveengineering:conveyor_basic@0": {
+    "src": "./activities/items/dc2-immersiveengineering_conveyor_basic_0.png",
+    "name": "传送带",
+    "block": true,
+    "overlay": null
+  },
+  "dc2:immersiveengineering:heavy_engineering@0": {
+    "src": "./activities/items/dc2-immersiveengineering_heavy_engineering_0.png",
+    "name": "重型工程块",
+    "block": true,
+    "overlay": null
+  },
+  "dc2:immersiveengineering:ingot_steel@0": {
+    "src": "./activities/items/dc2-immersiveengineering_ingot_steel_0.png",
+    "name": "钢锭",
+    "block": false,
+    "overlay": null
+  },
+  "dc2:immersiveengineering:light_engineering@0": {
+    "src": "./activities/items/dc2-immersiveengineering_light_engineering_0.png",
+    "name": "轻型工程块",
+    "block": true,
+    "overlay": null
+  },
+  "dc2:immersiveengineering:plate_iron@0": {
+    "src": "./activities/items/dc2-immersiveengineering_plate_iron_0.png",
+    "name": "铁板",
+    "block": false,
+    "overlay": null
+  },
+  "dc2:immersiveengineering:rs_engineering@0": {
+    "src": "./activities/items/dc2-immersiveengineering_rs_engineering_0.png",
+    "name": "红石工程块",
+    "block": true,
+    "overlay": null
+  },
+  "dc2:immersiveengineering:steel_fence@0": {
+    "src": "./activities/items/dc2-immersiveengineering_steel_fence_0.png",
+    "name": "钢栅栏",
+    "block": true,
+    "overlay": null
+  },
+  "dc2:immersiveengineering:wooden_barrel@0": {
+    "src": "./activities/items/dc2-immersiveengineering_wooden_barrel_0.png",
+    "name": "木桶",
+    "block": true,
+    "overlay": null
+  },
+  "dc2:minecraft:bricks@0": {
+    "src": "./activities/items/dc2-minecraft_bricks_0.png",
+    "name": "砖块",
+    "block": true,
+    "overlay": null
+  },
+  "dc2:minecraft:cauldron@0": {
+    "src": "./activities/items/dc2-minecraft_cauldron_0.png",
+    "name": "炼药锅",
+    "block": false,
+    "overlay": null
+  },
+  "dc2:minecraft:chest@0": {
+    "src": "./activities/items/dc2-minecraft_chest_0.png",
+    "name": "箱子",
+    "block": false,
+    "overlay": null,
+    "atlas": {
+      "x": 14,
+      "y": 33,
+      "width": 14,
+      "height": 10,
+      "size": 64
+    }
+  },
+  "dc2:minecraft:glass@0": {
+    "src": "./activities/items/dc2-minecraft_glass_0.png",
+    "name": "玻璃",
+    "block": true,
+    "overlay": null
+  },
+  "dc2:minecraft:hopper@0": {
+    "src": "./activities/items/dc2-minecraft_hopper_0.png",
+    "name": "漏斗",
+    "block": false,
+    "overlay": null
+  },
+  "dc2:minecraft:ladder@0": {
+    "src": "./activities/items/dc2-minecraft_ladder_0.png",
+    "name": "梯子",
+    "block": true,
+    "overlay": null
+  },
+  "dc2:minecraft:paper@0": {
+    "src": "./activities/items/dc2-minecraft_paper_0.png",
+    "name": "纸",
+    "block": false,
+    "overlay": null
+  },
+  "dc2:minecraft:piston@0": {
+    "src": "./activities/items/dc2-minecraft_piston_0.png",
+    "name": "活塞",
+    "block": true,
+    "overlay": null
+  },
+  "dc2:minecraft:powered_rail@0": {
+    "src": "./activities/items/dc2-minecraft_powered_rail_0.png",
+    "name": "动力铁轨",
+    "block": true,
+    "overlay": null
+  },
+  "dc2:minecraft:rail@0": {
+    "src": "./activities/items/dc2-minecraft_rail_0.png",
+    "name": "铁轨",
+    "block": true,
+    "overlay": null
+  },
+  "dc2:minecraft:repeater@0": {
+    "src": "./activities/items/dc2-minecraft_repeater_0.png",
+    "name": "红石中继器",
+    "block": false,
+    "overlay": null
+  },
+  "dc2:minecraft:stone_bricks@0": {
+    "src": "./activities/items/dc2-minecraft_stone_bricks_0.png",
+    "name": "石砖",
+    "block": true,
+    "overlay": null
+  },
+  "mb:immersiveengineering:metal@39": {
+    "src": "./activities/items/mb-immersiveengineering_metal_39.png",
+    "name": "铁板",
+    "block": false,
+    "overlay": null
+  },
+  "mb:immersiveengineering:metal@8": {
+    "src": "./activities/items/mb-immersiveengineering_metal_8.png",
+    "name": "钢锭",
+    "block": false,
+    "overlay": null
+  },
+  "mb:immersiveengineering:metal_decoration0@3": {
+    "src": "./activities/items/mb-immersiveengineering_metal_decoration0_3.png",
+    "name": "红石工程块",
+    "block": true,
+    "overlay": null
+  },
+  "mb:immersiveengineering:metal_decoration0@4": {
+    "src": "./activities/items/mb-immersiveengineering_metal_decoration0_4.png",
+    "name": "轻型工程块",
+    "block": true,
+    "overlay": null
+  },
+  "mb:immersiveengineering:metal_decoration0@5": {
+    "src": "./activities/items/mb-immersiveengineering_metal_decoration0_5.png",
+    "name": "重型工程块",
+    "block": true,
+    "overlay": null
+  },
+  "mb:immersiveengineering:metal_decoration1@1": {
+    "src": "./activities/items/mb-immersiveengineering_metal_decoration1_1.png",
+    "name": "钢脚手架",
+    "block": true,
+    "overlay": null
+  },
+  "mb:immersiveengineering:metal_device1@6": {
+    "src": "./activities/items/mb-immersiveengineering_metal_device1_6.png",
+    "name": "流体管道",
+    "block": true,
+    "overlay": null
+  },
+  "mb:immersiveengineering:sheetmetal@9": {
+    "src": "./activities/items/mb-immersiveengineering_sheetmetal_9.png",
+    "name": "铁钣金块",
+    "block": true,
+    "overlay": null
+  },
+  "mb:immersiveengineering:stone_decoration@0": {
+    "src": "./activities/items/mb-immersiveengineering_stone_decoration_0.png",
+    "name": "焦炉砖",
+    "block": true,
+    "overlay": null
+  },
+  "mb:immersiveengineering:stone_decoration@1": {
+    "src": "./activities/items/mb-immersiveengineering_stone_decoration_1.png",
+    "name": "高炉砖",
+    "block": true,
+    "overlay": null
+  },
+  "mb:minecraft:brick_block@0": {
+    "src": "./activities/items/mb-minecraft_brick_block_0.png",
+    "name": "砖块",
+    "block": true,
+    "overlay": null
+  },
+  "mb:minecraft:cauldron@0": {
+    "src": "./activities/items/mb-minecraft_cauldron_0.png",
+    "name": "炼药锅",
+    "block": false,
+    "overlay": null
+  },
+  "mb:minecraft:chest@0": {
+    "src": "./activities/items/mb-minecraft_chest_0.png",
+    "name": "箱子",
+    "block": false,
+    "overlay": null,
+    "atlas": {
+      "x": 14,
+      "y": 33,
+      "width": 14,
+      "height": 10,
+      "size": 64
+    }
+  },
+  "mb:minecraft:glass@0": {
+    "src": "./activities/items/mb-minecraft_glass_0.png",
+    "name": "玻璃",
+    "block": true,
+    "overlay": null
+  },
+  "mb:minecraft:golden_rail@0": {
+    "src": "./activities/items/mb-minecraft_golden_rail_0.png",
+    "name": "动力铁轨",
+    "block": true,
+    "overlay": null
+  },
+  "mb:minecraft:hopper@0": {
+    "src": "./activities/items/mb-minecraft_hopper_0.png",
+    "name": "漏斗",
+    "block": false,
+    "overlay": null
+  },
+  "mb:minecraft:paper@0": {
+    "src": "./activities/items/mb-minecraft_paper_0.png",
+    "name": "纸",
+    "block": false,
+    "overlay": null
+  },
+  "mb:minecraft:piston@0": {
+    "src": "./activities/items/mb-minecraft_piston_0.png",
+    "name": "活塞",
+    "block": true,
+    "overlay": null
+  },
+  "mb:minecraft:rail@0": {
+    "src": "./activities/items/mb-minecraft_rail_0.png",
+    "name": "铁轨",
+    "block": true,
+    "overlay": null
+  },
+  "mb:minecraft:repeater@0": {
+    "src": "./activities/items/mb-minecraft_repeater_0.png",
+    "name": "红石中继器",
+    "block": false,
+    "overlay": null
+  },
+  "mb:minecraft:stonebrick@0": {
+    "src": "./activities/items/mb-minecraft_stonebrick_0.png",
+    "name": "石砖",
+    "block": true,
+    "overlay": null
+  },
+  "vw:gregtech:gt.meta.plate@260": {
+    "src": "./activities/items/vw-gregtech_gt.meta.plate_260.png",
+    "name": "铁板",
+    "block": false,
+    "overlay": "./activities/items/overlay-vw-gregtech_gt.meta.plate_260.png"
+  },
+  "vw:gregtech:gt.meta.plate@8636": {
+    "src": "./activities/items/vw-gregtech_gt.meta.plate_8636.png",
+    "name": "不锈钢板",
+    "block": false,
+    "overlay": "./activities/items/overlay-vw-gregtech_gt.meta.plate_8636.png"
+  },
+  "vw:gregtech:gt.meta.screw@260": {
+    "src": "./activities/items/vw-gregtech_gt.meta.screw_260.png",
+    "name": "铁螺丝",
+    "block": false,
+    "overlay": "./activities/items/overlay-vw-gregtech_gt.meta.screw_260.png"
+  },
+  "vw:gregtech:gt.meta.stick@260": {
+    "src": "./activities/items/vw-gregtech_gt.meta.stick_260.png",
+    "name": "铁杆",
+    "block": false,
+    "overlay": "./activities/items/overlay-vw-gregtech_gt.meta.stick_260.png"
+  },
+  "vw:gregtech:gt.multitileentity@17000": {
+    "src": "./activities/items/vw-gregtech_gt.multitileentity_17000.png",
+    "name": "焦炉核心",
+    "block": true,
+    "overlay": "./activities/items/overlay-vw-gregtech_gt.multitileentity_17000.png"
+  },
+  "vw:gregtech:gt.multitileentity@17101": {
+    "src": "./activities/items/vw-gregtech_gt.multitileentity_17101.png",
+    "name": "蒸馏塔核心",
+    "block": true,
+    "overlay": "./activities/items/overlay-vw-gregtech_gt.multitileentity_17101.png"
+  },
+  "vw:gregtech:gt.multitileentity@17103": {
+    "src": "./activities/items/vw-gregtech_gt.multitileentity_17103.png",
+    "name": "大型电解器核心",
+    "block": true,
+    "overlay": "./activities/items/overlay-vw-gregtech_gt.multitileentity_17103.png"
+  },
+  "vw:gregtech:gt.multitileentity@17112": {
+    "src": "./activities/items/vw-gregtech_gt.multitileentity_17112.png",
+    "name": "大型高压釜核心",
+    "block": true,
+    "overlay": "./activities/items/overlay-vw-gregtech_gt.multitileentity_17112.png"
+  },
+  "vw:gregtech:gt.multitileentity@18022": {
+    "src": "./activities/items/vw-gregtech_gt.multitileentity_18022.png",
+    "name": "高强度不锈钢墙壁",
+    "block": true,
+    "overlay": "./activities/items/overlay-vw-gregtech_gt.multitileentity_18022.png"
+  },
+  "vw:gregtech:gt.multitileentity@18105": {
+    "src": "./activities/items/vw-gregtech_gt.multitileentity_18105.png",
+    "name": "电解器部件",
+    "block": true,
+    "overlay": "./activities/items/overlay-vw-gregtech_gt.multitileentity_18105.png"
+  },
+  "vw:minecraft:brick_block@0": {
+    "src": "./activities/items/vw-minecraft_brick_block_0.png",
+    "name": "砖块",
+    "block": true,
+    "overlay": null
+  },
+  "vw:minecraft:chest@0": {
+    "src": "./activities/items/vw-minecraft_chest_0.png",
+    "name": "箱子",
+    "block": false,
+    "overlay": null,
+    "atlas": {
+      "x": 14,
+      "y": 33,
+      "width": 14,
+      "height": 10,
+      "size": 64
+    }
+  },
+  "vw:minecraft:glass@0": {
+    "src": "./activities/items/vw-minecraft_glass_0.png",
+    "name": "玻璃",
+    "block": true,
+    "overlay": null
+  },
+  "vw:minecraft:golden_rail@0": {
+    "src": "./activities/items/vw-minecraft_golden_rail_0.png",
+    "name": "动力铁轨",
+    "block": true,
+    "overlay": null
+  },
+  "vw:minecraft:hopper@0": {
+    "src": "./activities/items/vw-minecraft_hopper_0.png",
+    "name": "漏斗",
+    "block": false,
+    "overlay": null
+  },
+  "vw:minecraft:paper@0": {
+    "src": "./activities/items/vw-minecraft_paper_0.png",
+    "name": "纸",
+    "block": false,
+    "overlay": null
+  },
+  "vw:minecraft:piston@0": {
+    "src": "./activities/items/vw-minecraft_piston_0.png",
+    "name": "活塞",
+    "block": true,
+    "overlay": null
+  },
+  "vw:minecraft:rail@0": {
+    "src": "./activities/items/vw-minecraft_rail_0.png",
+    "name": "铁轨",
+    "block": true,
+    "overlay": null
+  },
+  "vw:minecraft:repeater@0": {
+    "src": "./activities/items/vw-minecraft_repeater_0.png",
+    "name": "红石中继器",
+    "block": false,
+    "overlay": null
+  },
+  "vw:minecraft:stonebrick@0": {
+    "src": "./activities/items/vw-minecraft_stonebrick_0.png",
+    "name": "石砖",
+    "block": true,
+    "overlay": null
   }
 }

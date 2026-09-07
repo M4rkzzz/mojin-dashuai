@@ -16,7 +16,11 @@ public static class ActivityEndpoints
             ctx.RequestServices.GetRequiredService<ActivityService>().AuthorizeServer(instance, Bearer(ctx));
             return await next(context);
         });
-        group.MapGet("/definition", (string instance, ActivityCatalog catalog) => catalog.World(instance));
+        group.MapGet("/definition", (string instance, ActivityCatalog catalog,HttpContext ctx) => {
+            ctx.Response.Headers["X-Activities-Revision"]=catalog.Value.Version.ToString();
+            ctx.Response.Headers.CacheControl="no-store";
+            return catalog.World(instance);
+        });
         group.MapPost("/events", (string instance, ActivityEvent e, ActivityService service, HttpContext ctx) => service.Observe(instance, e, ctx.RequestAborted));
         group.MapGet("/deliveries/{gameUuid}", (string instance, string gameUuid, ActivityService service, HttpContext ctx) => service.Deliveries(instance, gameUuid, ctx.RequestAborted));
         group.MapPost("/deliveries/{gameUuid}/{id:guid}/ack", (string instance, string gameUuid, Guid id, ActivityService service, HttpContext ctx) => service.Acknowledge(instance, gameUuid, id, ctx.RequestAborted));

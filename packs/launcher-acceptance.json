@@ -8,12 +8,15 @@
   "gameWindowsOpened": 0,
   "authorization": "existing encrypted Microsoft authorization",
   "checkedAt": "2026-09-06T09:28:19.440449+00:00",
-  "authFingerprint": "28faf9769cc812cee8b9733ca0ee0626fedfd96540fe33bdb67cfcc0097b7a4e",
+  "authFingerprint": "2568de9a540ecd707bd86fa39c98f633056929fd3a4a5fcb0bb35a87af0436a5",
   "provider": "cmllib-windows",
   "interactiveAuthorizationReusedFrom": "2026-09-05T06:16:33.700548+00:00",
-  "validation": "1.0.1 final source: restored existing encrypted Microsoft session in an isolated directory; silent reauthentication and matching game session passed. No interactive login or game was opened. 1.0.3 carries forward that actual authentication result: Accounts.cs only changes class to partial; all login/refresh/session method bodies remain unchanged. New activity authentication is separately covered by scoped API integration tests. Preserves published 1.0.2 network fixes; same authentication methods, internal project dependency label updated.",
-  "inheritedAuthFingerprint": "1af07fae3cc5a485571b7baa9cc8a9e0c9a9281e6977fad342642dd64a4b46b1",
+  "validation": "1.0.1 final source: restored existing encrypted Microsoft session in an isolated directory; silent reauthentication and matching game session passed. No interactive login or game was opened. 1.0.3 carries forward that actual authentication result: Accounts.cs only changes class to partial; all login/refresh/session method bodies remain unchanged. New activity authentication is separately covered by scoped API integration tests. Preserves published 1.0.2 network fixes; same authentication methods, internal project dependency label updated. 1.0.4: reviewed all authentication inputs; only lock-file internal Launcher.Shared reference label changes to 1.0.4. Authentication methods and configuration unchanged; carries forward actual silent-auth verification.",
+  "inheritedAuthFingerprint": "28faf9769cc812cee8b9733ca0ee0626fedfd96540fe33bdb67cfcc0097b7a4e",
   "networkBase": "91b9bae",
   "nativeActivitiesLiveVerified": true,
-  "nativeActivitiesWorldsVerified": 4
+  "nativeActivitiesWorldsVerified": 4,
+  "nativeActivitiesCheckedAt": "2026-09-07T00:21:10.266783+00:00",
+  "nativeActivityDrawRewards": 114,
+  "nativeActivityCompleteSets": 18
 }

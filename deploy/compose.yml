@@ -31,6 +31,7 @@ services:
       InitializeDatabase: 'true'
       TrustCloudflareTunnel: 'true'
       DataProtectionPath: /data/keys
+      Activities__CatalogPath: /data/activities-live/catalog.json
       SkinPath: /data/skins
       PublicPath: /public
     ports: ['127.0.0.1:18081:8080']

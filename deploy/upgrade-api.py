@@ -27,11 +27,17 @@ original=config.read_text()
 updated,count=re.subn(r'image: boshan/hub-api:\d+\.\d+\.\d+','image: boshan/hub-api:'+version,original)
 if count!=1: raise SystemExit('Unexpected API image configuration')
 if 'SkinPath:' not in updated: updated=updated.replace('      DataProtectionPath: /data/keys','      DataProtectionPath: /data/keys\n      SkinPath: /data/skins')
+if tuple(map(int,version.split('.'))) >= (1,2,3) and 'Activities__CatalogPath:' not in updated:
+    updated=updated.replace('      DataProtectionPath: /data/keys','      DataProtectionPath: /data/keys\n      Activities__CatalogPath: /data/activities-live/catalog.json')
 shutil.copy2(config,snapshots/'compose.yml')
 run('install','-d','-o','1654','-g','1654','-m','755','/vol1/mc-client-hub/api/skins')
 staged=root/('api-staged-'+stamp)
 shutil.copytree(release/'api',staged)
 old_api=root/'api'
+if (old_api/'activities-live').exists():shutil.copytree(old_api/'activities-live',staged/'activities-live')
+run('install','-d','-o','1654','-g','1654','-m','755',str(staged/'activities-live'))
+# Keep published activity revisions and their rollback history on later API upgrades.
+run('chown','-R','1654:1654',str(staged/'activities-live'))
 previous=root/'releases'/('api-before-'+stamp)
 old_api.rename(previous)
 staged.rename(old_api)
